@@ -1,0 +1,23 @@
+---
+import type { Lesson } from '@entities/tutorial';
+import ContentNavCard from './ContentNavCard.astro';
+
+interface Props {
+  lesson: Lesson;
+}
+
+const {
+  lesson: { Markdown, prev, next },
+} = Astro.props;
+---
+
+<Markdown />
+
+<div class="grid grid-cols-[1fr_1fr] gap-4">
+  <div class="flex">
+    {prev && <ContentNavCard lesson={prev} type="prev" />}
+  </div>
+  <div class="flex">
+    {next && <ContentNavCard lesson={next} type="next" />}
+  </div>
+</div>

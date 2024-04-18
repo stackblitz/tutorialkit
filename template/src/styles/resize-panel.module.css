@@ -1,0 +1,26 @@
+.PanelResizeHandle {
+  position: relative;
+}
+
+.PanelResizeHandle[data-panel-group-direction='horizontal']:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -5px;
+  right: -5px;
+}
+
+.PanelResizeHandle[data-panel-group-direction='vertical']:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -5px;
+  bottom: -5px;
+}
+
+.PanelResizeHandle[data-resize-handle-state='hover']:after,
+.PanelResizeHandle[data-resize-handle-state='drag']:after {
+  background-color: #8882;
+}

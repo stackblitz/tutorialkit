@@ -1,0 +1,17 @@
+---
+import { getTutorial } from '../utils/content';
+
+const tutorial = await getTutorial();
+
+const parts = Object.values(tutorial);
+const part = parts[0];
+const chapter = part.chapters[1];
+const lesson = chapter.lessons[1];
+
+const redirect = `/${part.slug}/${chapter.slug}/${lesson.slug}`;
+---
+
+<!doctype html>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>Redirecting to {redirect}</title>
+<meta http-equiv="refresh" content=`0;url=${redirect}` />

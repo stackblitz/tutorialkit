@@ -1,0 +1,23 @@
+---
+import type { LessonLink } from '@entities/tutorial';
+
+interface Props {
+  lesson: LessonLink;
+  type: 'next' | 'prev';
+}
+
+const { lesson, type } = Astro.props;
+---
+
+<a
+  class:list={[
+    'flex flex-col flex-1 p-4 border rounded-md hover:border-primary cursor-pointer',
+    { 'text-right items-end': type === 'next' },
+  ]}
+  href={lesson.href}
+>
+  <span
+    class=`${type === 'prev' ? 'i-ph-arrow-left' : 'i-ph-arrow-right' } pointer-events-none h-7 w-7 mb-2 text-primary`
+  ></span>
+  <span class="line-clamp-2">{lesson.data.title}</span>
+</a>

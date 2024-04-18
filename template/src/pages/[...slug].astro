@@ -1,0 +1,37 @@
+---
+import Header from '@components/internal/Header.astro';
+import ResizablePanel from '@components/internal/ResizablePanel.astro';
+import TutorialContent from '@components/internal/TutorialContent.astro';
+import WorkspacePanel from '@components/internal/WorkspacePanel';
+import Layout from '@layouts/Layout.astro';
+import { RESIZABLE_PANELS } from '@utils/constants';
+import { getTutorial } from '@utils/content';
+import { generateStaticRoutes } from '@utils/routes';
+import type { InferGetStaticPropsType } from 'astro';
+
+export async function getStaticPaths() {
+  const tutorial = await getTutorial();
+
+  return generateStaticRoutes(tutorial);
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { lesson } = Astro.props as Props;
+---
+
+<Layout title={lesson.title}>
+  <main class="max-w-full flex flex-col h-screen overflow-hidden">
+    <Header />
+    <ResizablePanel classList="h-full overflow-hidden" id={RESIZABLE_PANELS.Main} type="horizontal" min="20%" max="60%">
+      <div class="overflow-auto h-full p-5" slot="a">
+        <TutorialContent lesson={lesson} />
+      </div>
+      <div class="h-full border-l border-border-gray" slot="b">
+        <WorkspacePanel client:load transition:persist />
+      </div>
+    </ResizablePanel>
+  </main>
+</Layout>
+
+<script></script>

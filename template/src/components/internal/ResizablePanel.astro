@@ -1,0 +1,272 @@
+---
+export type Type = 'horizontal' | 'vertical';
+export type Priority = 'min' | 'max';
+
+interface Props {
+  id: string;
+  type?: Type;
+  pos?: string;
+  min?: string;
+  max?: string;
+  priority?: 'min' | 'max';
+  classList?: string;
+}
+
+const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority = 'min', classList } = Astro.props;
+---
+
+<resizable-panel
+  class={classList ?? ''}
+  data-id={id}
+  data-type={type}
+  data-pos={pos}
+  data-min={min}
+  data-priority={priority}
+  data-max={max}
+>
+  <div class=`container max-w-full ${type}` style=`--pos: ${pos}`>
+    <!-- It's important to keep the inline script here because it restores the position and blocks rendering to avoid flickering -->
+    <script is:inline define:vars={{ id }}>
+      const sessionStorageKey = `__resizable-panel-${id}__`;
+
+      const $container = document.querySelector(`resizable-panel[data-id="${id}"] > .container`);
+      const pos = sessionStorage.getItem(sessionStorageKey);
+
+      if (pos) {
+        $container.style.setProperty('--pos', pos);
+      }
+    </script>
+    <div class="panel">
+      <slot name="a" />
+    </div>
+    <div class="panel">
+      <slot name="b" />
+    </div>
+    <div class="divider"></div>
+  </div>
+</resizable-panel>
+
+<script>
+  import type { Priority, Type } from './ResizablePanel.astro';
+
+  class ResizablePanel extends HTMLElement {
+    readonly #id = this.dataset.id as string;
+    readonly #type = this.dataset.type as Type;
+    readonly #priority = this.dataset.min as Priority;
+    readonly #min = this.dataset.min as string;
+    readonly #max = this.dataset.max as string;
+
+    #pos = this.dataset.pos as string;
+    #width = 0;
+    #height = 0;
+    #dragging = false;
+
+    #container: HTMLElement;
+    #divider: HTMLElement;
+
+    constructor() {
+      super();
+
+      this.#container = this.querySelector(':scope > .container') as HTMLElement;
+      this.#divider = this.#container.querySelector(':scope > .divider') as HTMLElement;
+
+      this.#width = this.#container.clientWidth;
+      this.#height = this.#container.clientHeight;
+
+      const resizeObserver = new ResizeObserver((entries) => {
+        const { clientWidth, clientHeight } = entries[0].target;
+
+        this.#width = clientWidth;
+        this.#height = clientHeight;
+      });
+
+      resizeObserver.observe(this.#container);
+
+      this.#pos = sessionStorage.getItem(`__resizable-panel-${this.#id}__`) ?? this.#pos;
+
+      this.#setPosition(this.#pos);
+    }
+
+    connectedCallback() {
+      this.#divider.addEventListener('mousedown', this.#onMouseDown.bind(this));
+      this.#divider.addEventListener('touchstart', this.#onMouseDown.bind(this));
+    }
+
+    disconnectedCallback() {
+      this.#divider.removeEventListener('mousedown', this.#onMouseDown.bind(this));
+
+      window.removeEventListener('mouseup', this.#onMouseUp);
+      window.removeEventListener('mousemove', this.#onMouseMove);
+
+      window.removeEventListener('touchend', this.#onMouseUp);
+      window.removeEventListener('touchmove', this.#onTouchMove);
+    }
+
+    #onMouseMove(mouseMoveEvent: MouseEvent) {
+      if (!this.#dragging) {
+        return;
+      }
+
+      this.#updatePosition(mouseMoveEvent.clientX, mouseMoveEvent.clientY);
+    }
+
+    #onTouchMove(event: TouchEvent) {
+      if (!this.#dragging) {
+        return;
+      }
+
+      this.#updatePosition(event.touches[0].clientX, event.touches[0].clientY);
+    }
+
+    #onMouseUp() {
+      this.#dragging = false;
+
+      sessionStorage.setItem(`__resizable-panel-${this.#id}__`, this.#pos);
+
+      window.removeEventListener('mouseup', this.#onMouseUp);
+      window.removeEventListener('mousemove', this.#onMouseMove);
+    }
+
+    #onMouseDown(event: MouseEvent | TouchEvent) {
+      if ('button' in event && event.button !== 0) {
+        return;
+      }
+
+      event.preventDefault();
+
+      this.#dragging = true;
+
+      window.addEventListener('mousemove', this.#onMouseMove.bind(this));
+      window.addEventListener('mouseup', this.#onMouseUp.bind(this));
+
+      window.addEventListener('touchmove', this.#onTouchMove.bind(this));
+      window.addEventListener('touchend', this.#onMouseUp.bind(this));
+    }
+
+    #updatePosition(x: number, y: number) {
+      const { top, left } = this.#container.getBoundingClientRect();
+
+      const posPx = this.#type === 'horizontal' ? x - left : y - top;
+      const size = this.#type === 'horizontal' ? this.#width : this.#height;
+
+      const pos = `${(100 * posPx) / size}%`;
+
+      this.#setPosition(pos);
+    }
+
+    #setPosition(pos: string) {
+      const priority = this.#priority;
+      const size = this.#type === 'horizontal' ? this.#width : this.#height;
+
+      let minPx = parseFloat(this.#min);
+      let maxPx = parseFloat(this.#max);
+      let posPx = parseFloat(pos);
+
+      minPx = (size * minPx) / 100;
+      maxPx = (size * maxPx) / 100;
+      posPx = (size * posPx) / 100;
+
+      if (minPx < 0) {
+        minPx += size;
+      }
+
+      if (maxPx < 0) {
+        maxPx += size;
+      }
+
+      posPx = priority === 'min' ? Math.max(minPx, Math.min(maxPx, posPx)) : Math.min(maxPx, Math.max(minPx, posPx));
+
+      this.#pos = `${(100 * posPx) / size}%`;
+
+      this.#container.style.setProperty('--pos', this.#pos);
+    }
+  }
+
+  customElements.define('resizable-panel', ResizablePanel);
+</script>
+
+<style>
+  .container {
+    --divider-thickness: var(--thickness, 10px);
+    --divider-after-size: 10px;
+
+    display: grid;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .container .panel {
+    overflow: hidden;
+  }
+
+  .container > .divider:hover {
+    background-color: #8882;
+  }
+
+  .container.horizontal > .panel {
+    height: 100%;
+  }
+
+  .container.vertical {
+    grid-template-rows: var(--pos) 1fr;
+  }
+
+  .container.horizontal {
+    grid-template-columns: var(--pos) 1fr;
+  }
+
+  .divider {
+    position: absolute;
+    z-index: 999;
+  }
+
+  .divider::after {
+    content: '';
+    position: absolute;
+    background-color: var(--divider-color, transparent);
+    transition: background-color 0.2s ease;
+  }
+
+  .horizontal > .divider {
+    width: 0;
+    height: 100%;
+    left: var(--pos);
+    cursor: ew-resize;
+    padding: 0 calc(0.5 * var(--divider-thickness));
+    transform: translate(calc(-0.5 * var(--divider-thickness)), 0);
+  }
+
+  .vertical > .divider {
+    width: 100%;
+    height: 0;
+    top: var(--pos);
+    cursor: ns-resize;
+    padding: calc(0.5 * var(--divider-thickness)) 0;
+    transform: translate(0, calc(-0.5 * var(--divider-thickness)));
+  }
+
+  .horizontal > .divider::after {
+    left: 50%;
+    top: 0;
+    width: 0px;
+    height: 100%;
+  }
+
+  .vertical > .divider::after {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+  }
+
+  .horizontal > .divider:hover:after {
+    left: calc(50% - var(--divider-after-size) / 2);
+    width: var(--divider-after-size);
+  }
+
+  .vertical > .divider:hover:after {
+    top: calc(50% - var(--divider-after-size) / 2);
+    height: var(--divider-after-size);
+  }
+</style>
