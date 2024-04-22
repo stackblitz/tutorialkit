@@ -5,6 +5,8 @@ import { type ContentEntryMap } from 'astro:content';
 export type TutorialCollection = ContentEntryMap['tutorial'];
 export type CollectionEntry = TutorialCollection[keyof TutorialCollection];
 
+export type Files = Record<string, string>;
+
 export interface Part {
   slug: string;
   data: PartSchema;
@@ -28,6 +30,8 @@ export interface Lesson {
   part: number;
   chapter: number;
   slug: string;
+  files: Files;
+  solution: Files;
   next?: LessonLink;
   prev?: LessonLink;
   Markdown: AstroComponentFactory;

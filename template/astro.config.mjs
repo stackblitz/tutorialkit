@@ -6,10 +6,16 @@ import expressiveCode from 'astro-expressive-code';
 import { defineConfig } from 'astro/config';
 import remarkDirective from 'remark-directive';
 import UnoCSS from 'unocss/astro';
-import { remarkAsides } from './src/remark';
 import ViteRestart from 'vite-plugin-restart';
+import { remarkAsides } from './src/remark';
 
 export default defineConfig({
+  server: {
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+    },
+  },
   vite: {
     plugins: [ViteRestart({ restart: './src/remark/**' })],
   },
@@ -29,6 +35,7 @@ export default defineConfig({
     }),
     mdx(),
     UnoCSS({
+      configDeps: ['./theme.ts'],
       injectReset: true,
     }),
   ],

@@ -16,5 +16,6 @@
       "@utils/*": ["src/utils/*"],
       "@styles/*": ["src/styles/*"]
     }
-  }
+  },
+  "exclude": ["dist"]
 }

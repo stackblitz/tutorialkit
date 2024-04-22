@@ -1,7 +1,12 @@
-import type { Chapter, CollectionEntry, Lesson, Part, Tutorial } from '@entities/tutorial';
+import type { Chapter, CollectionEntry, Files, Lesson, Part, Tutorial } from '@entities/tutorial';
 import { getCollection } from 'astro:content';
+import glob from 'fast-glob';
+import fs from 'node:fs';
+import path from 'node:path';
 
 let _tutorial: Tutorial | undefined;
+
+const CONTENT_DIR = path.join(import.meta.dirname, '../content/tutorial');
 
 export async function getTutorial() {
   if (_tutorial) {
@@ -55,6 +60,13 @@ export async function getTutorial() {
 
       const { Content } = await entry.render();
 
+      const lessonDir = path.join(CONTENT_DIR, path.dirname(entry.id));
+      const filesDir = path.join(lessonDir, '_files');
+      const solutionDir = path.join(lessonDir, '_solution');
+
+      const files = await createFileMap(filesDir);
+      const solution = await createFileMap(solutionDir);
+
       const lesson: Lesson = {
         data,
         id: Number(lessonId),
@@ -62,6 +74,8 @@ export async function getTutorial() {
         chapter: Number(chapterId),
         Markdown: Content,
         slug: getSlug(entry),
+        files,
+        solution,
       };
 
       lessons.push(lesson);
@@ -137,4 +151,18 @@ function getSlug(entry: CollectionEntry) {
   }
 
   return slug;
+}
+
+async function createFileMap(dir: string) {
+  const filePaths = await glob(`${dir}/**/*`, {
+    onlyFiles: true,
+  });
+
+  const files: Files = {};
+
+  for (const filePath of filePaths) {
+    files[path.relative(dir, filePath)] = fs.readFileSync(filePath, 'utf8');
+  }
+
+  return files;
 }

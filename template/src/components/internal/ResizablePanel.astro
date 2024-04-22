@@ -89,7 +89,7 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
 
     connectedCallback() {
       this.#divider.addEventListener('mousedown', this.#onMouseDown.bind(this));
-      this.#divider.addEventListener('touchstart', this.#onMouseDown.bind(this));
+      this.#divider.addEventListener('touchstart', this.#onMouseDown.bind(this), { passive: true });
     }
 
     disconnectedCallback() {
@@ -224,7 +224,7 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
   .divider::after {
     content: '';
     position: absolute;
-    background-color: var(--divider-color, transparent);
+    background-color: transparent;
     transition: background-color 0.2s ease;
   }
 

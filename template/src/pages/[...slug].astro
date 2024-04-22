@@ -27,11 +27,9 @@ const { lesson } = Astro.props as Props;
       <div class="overflow-auto h-full p-5" slot="a">
         <TutorialContent lesson={lesson} />
       </div>
-      <div class="h-full border-l border-border-gray" slot="b">
-        <WorkspacePanel client:load transition:persist />
+      <div class="h-full border-l border-panel-border" slot="b">
+        <WorkspacePanel lesson={lesson} client:load transition:persist />
       </div>
     </ResizablePanel>
   </main>
 </Layout>
-
-<script></script>

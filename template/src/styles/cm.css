@@ -1,0 +1,8 @@
+html:not(.dark) {
+  --cm-bg: theme('colors.editor.light.background');
+  --cm-gutter-fg: theme('colors.editor.light.gutter.foreground');
+  --cm-active-line: theme('colors.editor.light.activeLine');
+  --cm-cursor-color: theme('colors.editor.light.cursor.width');
+  --cm-cursor-width: theme('colors.editor.light.cursor.background');
+  --cm-selection-bg: theme('colors.editor.light.selection');
+}
