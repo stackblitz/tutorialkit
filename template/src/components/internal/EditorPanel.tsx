@@ -1,25 +1,66 @@
+import type { Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import { useEffect, useRef } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import CodeMirrorEditor, { type EditorDocument } from '../CodeMirrorEditor/CodeMirrorEditor';
+import FileTree from '../FileTree';
+
+const DEFAULT_FILE_TREE_SIZE = 25;
 
 interface Props {
+  lesson: Lesson;
   showFileTree?: boolean;
   editorDocument?: EditorDocument;
-  onEditorReady?: (value?: unknown) => void;
+  onEditorReady?: () => void;
+  onFileClick?: (value?: string) => void;
 }
 
-export default function EditorPanel({ showFileTree = true, editorDocument, onEditorReady }: Props) {
+export default function EditorPanel({
+  showFileTree = true,
+  editorDocument,
+  lesson,
+  onEditorReady,
+  onFileClick,
+}: Props) {
+  const fileTreePanelRef = useRef<ImperativePanelHandle>(null);
+
+  useEffect(() => {
+    const { current: fileTreePanel } = fileTreePanelRef;
+
+    if (!fileTreePanel) {
+      return;
+    }
+
+    if (showFileTree) {
+      if (fileTreePanel.isCollapsed()) {
+        fileTreePanel.resize(DEFAULT_FILE_TREE_SIZE);
+      }
+    } else if (!showFileTree) {
+      fileTreePanel.collapse();
+    }
+  }, [lesson]);
+
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="horizontal">
-      {showFileTree && (
-        <Panel defaultSize={30} minSize={0}>
-          File Tree
-        </Panel>
-      )}
-      <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 5, coarse: 5 }} />
-      <Panel className="flex flex-col" defaultSize={70} minSize={10}>
+      <Panel collapsible defaultSize={DEFAULT_FILE_TREE_SIZE} minSize={10} ref={fileTreePanelRef}>
+        <div className="panel-header border-r border-b border-panel-border">Files</div>
+        <FileTree
+          className="h-full py-2 border-r border-panel-border"
+          selectedFile={lesson.data.focus}
+          hideRoot={lesson.data.hideRoot ?? true}
+          files={lesson.files}
+          scope={lesson.data.scope}
+          onFileClick={(filePath) => onFileClick?.(filePath)}
+        />
+      </Panel>
+      <PanelResizeHandle
+        disabled={!showFileTree}
+        className={resizePanelStyles.PanelResizeHandle}
+        hitAreaMargins={{ fine: 5, coarse: 5 }}
+      />
+      <Panel className="flex flex-col" defaultSize={75} minSize={10}>
         <div>{editorDocument && <FileTab editorDocument={editorDocument} />}</div>
-        <div className="h-full flex-1 border-l border-panel-border overflow-hidden">
+        <div className="h-full flex-1 overflow-hidden">
           <CodeMirrorEditor doc={editorDocument} onReady={onEditorReady} />
         </div>
       </Panel>
@@ -45,14 +86,12 @@ function FileTab({ editorDocument }: FileTabProps) {
     return (
       <div className="flex items-center gap-2">
         <div className={icon ? `text-6 ${icon}` : ''}></div>
-        <span className="text-3.5">{filePath}</span>
+        <span className="text-3.5">{fileName}</span>
       </div>
     );
   };
 
-  return (
-    <div className="panel-header border-b border-l border-panel-border">{renderFile(editorDocument.filePath)}</div>
-  );
+  return <div className="panel-header border-b border-panel-border">{renderFile(editorDocument.filePath)}</div>;
 }
 
 function getFileIcon(fileName: string) {

@@ -26,7 +26,7 @@ export interface EditorDocument {
 
 interface Props {
   doc?: EditorDocument;
-  onReady?: (value?: unknown) => void;
+  onReady?: () => void;
 }
 
 export default function CodeMirrorEditor({ doc, onReady }: Props) {

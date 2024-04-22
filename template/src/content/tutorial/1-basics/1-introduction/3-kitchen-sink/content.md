@@ -1,6 +1,7 @@
 ---
 type: lesson
 title: Foo from part 1
+fileTree: false
 ---
 
 :::tip{noBorder=true title="Foo"}

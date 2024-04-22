@@ -69,8 +69,6 @@ export function themeIsDark() {
   return currentTheme === 'dark' || currentTheme === 'systemPreferred' ? prefersDarkTheme() : false;
 }
 
-console.log(themeIsDark());
-
 export function theme(): Extension {
   return [
     editorTheme,

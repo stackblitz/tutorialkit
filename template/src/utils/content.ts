@@ -161,7 +161,7 @@ async function createFileMap(dir: string) {
   const files: Files = {};
 
   for (const filePath of filePaths) {
-    files[path.relative(dir, filePath)] = fs.readFileSync(filePath, 'utf8');
+    files[`/${path.relative(dir, filePath)}`] = fs.readFileSync(filePath, 'utf8');
   }
 
   return files;
