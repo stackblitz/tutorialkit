@@ -1,7 +1,7 @@
 import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { Compartment, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { themeStore } from '@stores/theme-store';
+import { prefersDarkTheme, themeStore } from '@stores/theme-store';
 import '@styles/cm.css';
 
 export const dummyDarkTheme = EditorView.theme({}, { dark: true });
@@ -64,9 +64,9 @@ export const editorTheme = EditorView.theme({
 });
 
 export function themeIsDark() {
-  return themeStore.get() === 'systemPreferred'
-    ? 'matchMedia' in globalThis && globalThis.matchMedia('(prefers-color-scheme: dark)').matches
-    : false;
+  const currentTheme = themeStore.get();
+
+  return currentTheme === 'dark' || currentTheme === 'systemPreferred' ? prefersDarkTheme() : false;
 }
 
 console.log(themeIsDark());
