@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot, scope, className }) => {
-  const fileList = useMemo(() => buildFileList(files, hideRoot), [files, hideRoot]);
+  const fileList = useMemo(() => buildFileList(files, hideRoot, scope), [files, hideRoot, scope]);
 
   const [collapsedFolders, setCollapsedFolders] = useState(() => new Set<number>());
 
@@ -160,12 +160,16 @@ interface FolderNode extends BaseNode {
   kind: 'folder';
 }
 
-function buildFileList(files: Files, hideRoot: boolean): Node[] {
+function buildFileList(files: Files, hideRoot: boolean, scope?: string): Node[] {
   const fileList: Node[] = [];
 
   const folderPaths = new Set<string>();
 
   for (const fileName of Object.keys(files).sort()) {
+    if (scope && !fileName.startsWith(scope)) {
+      continue;
+    }
+
     const segments = fileName.split('/').filter((s) => s);
 
     let currentPath = '';
