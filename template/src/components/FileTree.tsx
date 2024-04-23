@@ -2,6 +2,7 @@ import type { Files } from '@entities/tutorial';
 import { useEffect, useMemo, useState, type FC, type ReactNode } from 'react';
 
 const NODE_PADDING_LEFT = 12;
+const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 
 interface Props {
   files: Files;
@@ -9,11 +10,16 @@ interface Props {
   onFileClick: (filePath: string) => void;
   hideRoot: boolean;
   scope?: string;
+  hiddenFiles?: Array<string | RegExp>;
   className?: string;
 }
 
-export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot, scope, className }) => {
-  const fileList = useMemo(() => buildFileList(files, hideRoot, scope), [files, hideRoot, scope]);
+export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot, scope, hiddenFiles, className }) => {
+  const computedHiddenFiles = useMemo(() => [...DEFAULT_HIDDEN_FILES, ...(hiddenFiles ?? [])], [hiddenFiles]);
+  const fileList = useMemo(
+    () => buildFileList(files, hideRoot, scope, computedHiddenFiles),
+    [files, hideRoot, scope, computedHiddenFiles]
+  );
 
   const [collapsedFolders, setCollapsedFolders] = useState(() => new Set<number>());
 
@@ -160,17 +166,27 @@ interface FolderNode extends BaseNode {
   kind: 'folder';
 }
 
-function buildFileList(files: Files, hideRoot: boolean, scope?: string): Node[] {
+function buildFileList(
+  files: Files,
+  hideRoot: boolean,
+  scope: string | undefined,
+  hiddenFiles: Array<string | RegExp>
+): Node[] {
   const fileList: Node[] = [];
 
   const folderPaths = new Set<string>();
 
-  for (const fileName of Object.keys(files).sort()) {
-    if (scope && !fileName.startsWith(scope)) {
+  for (const filePath of Object.keys(files).sort()) {
+    if (scope && !filePath.startsWith(scope)) {
       continue;
     }
 
-    const segments = fileName.split('/').filter((s) => s);
+    const segments = filePath.split('/').filter((s) => s);
+    const fileName = segments.at(-1);
+
+    if (!fileName || isHiddenFile(filePath, fileName, hiddenFiles)) {
+      continue;
+    }
 
     let currentPath = '';
 
@@ -207,4 +223,14 @@ function buildFileList(files: Files, hideRoot: boolean, scope?: string): Node[] 
   }
 
   return fileList;
+}
+
+function isHiddenFile(filePath: string, fileName: string, hiddenFiles: Array<string | RegExp>) {
+  return hiddenFiles.some((pathOrRegex) => {
+    if (typeof pathOrRegex === 'string') {
+      return fileName === pathOrRegex;
+    }
+
+    return pathOrRegex.test(filePath);
+  });
 }
