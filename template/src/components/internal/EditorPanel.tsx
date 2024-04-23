@@ -42,7 +42,7 @@ export default function EditorPanel({
 
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="horizontal">
-      <Panel collapsible defaultSize={DEFAULT_FILE_TREE_SIZE} minSize={10} ref={fileTreePanelRef}>
+      <Panel collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
         <div className="panel-header border-r border-b border-panel-border">Files</div>
         <FileTree
           className="h-full py-2 border-r border-panel-border"
@@ -58,7 +58,7 @@ export default function EditorPanel({
         className={resizePanelStyles.PanelResizeHandle}
         hitAreaMargins={{ fine: 5, coarse: 5 }}
       />
-      <Panel className="flex flex-col" defaultSize={75} minSize={10}>
+      <Panel className="flex flex-col" defaultSize={100} minSize={10}>
         <div>{editorDocument && <FileTab editorDocument={editorDocument} />}</div>
         <div className="h-full flex-1 overflow-hidden">
           <CodeMirrorEditor doc={editorDocument} onReady={onEditorReady} />
