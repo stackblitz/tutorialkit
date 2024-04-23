@@ -1,9 +1,9 @@
 import type { Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import CodeMirrorEditor, { type EditorDocument } from '../CodeMirrorEditor/CodeMirrorEditor';
-import FileTree from '../FileTree';
+import { FileTree } from '../FileTree';
 
 const DEFAULT_FILE_TREE_SIZE = 25;
 
@@ -23,6 +23,20 @@ export default function EditorPanel({
   onFileClick,
 }: Props) {
   const fileTreePanelRef = useRef<ImperativePanelHandle>(null);
+  const [selectedFile, setSelectedFile] = useState(lesson.data.focus);
+
+  const onFileClickWrapped = useCallback(
+    (fullPath: string) => {
+      setSelectedFile(fullPath);
+      onFileClick?.(fullPath);
+    },
+    [onFileClick]
+  );
+
+  // when the lesson change reset the selected file to that one
+  useEffect(() => {
+    setSelectedFile(lesson.data.focus);
+  }, [lesson]);
 
   useEffect(() => {
     const { current: fileTreePanel } = fileTreePanelRef;
@@ -46,11 +60,11 @@ export default function EditorPanel({
         <div className="panel-header border-r border-b border-panel-border">Files</div>
         <FileTree
           className="h-full py-2 border-r border-panel-border"
-          selectedFile={lesson.data.focus}
+          selectedFile={selectedFile}
           hideRoot={lesson.data.hideRoot ?? true}
           files={lesson.files}
           scope={lesson.data.scope}
-          onFileClick={(filePath) => onFileClick?.(filePath)}
+          onFileClick={onFileClickWrapped}
         />
       </Panel>
       <PanelResizeHandle

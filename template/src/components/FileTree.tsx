@@ -1,267 +1,200 @@
 import type { Files } from '@entities/tutorial';
-import { createContext, useContext, useEffect, useState, type HTMLAttributes } from 'react';
+import { useEffect, useMemo, useState, type FC, type ReactNode } from 'react';
 
 const NODE_PADDING_LEFT = 12;
-const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 
-type OnFileClickCallback = (filePath: string) => void;
-
-interface FileTreeProps {
+interface Props {
   files: Files;
   selectedFile?: string;
-  hideRoot?: boolean;
+  onFileClick: (filePath: string) => void;
+  hideRoot: boolean;
   scope?: string;
-  hiddenFiles?: Array<string | RegExp>;
-  onFileClick?: OnFileClickCallback;
+  className?: string;
 }
 
-interface TreeNodeProps {
-  node: File | Directory;
-  depth: number;
-}
+export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot, scope, className }) => {
+  const fileList = useMemo(() => buildFileList(files), [files]);
 
-interface DirectoryTreeNodeProps {
-  node: Directory;
-  depth: number;
-}
+  const [collapsedFolders, setCollapsedFolders] = useState(() => new Set<number>());
 
-interface FileTreeNodeProps {
-  node: File;
-  depth: number;
-  children: JSX.Element | string;
-}
-
-interface TreeNodeButtonProps {
-  depth: number;
-  icon: string;
-  children: JSX.Element | string;
-  onClick?: () => void;
-}
-
-type FileTree = Directory;
-
-interface File {
-  type: 'file';
-  name: string;
-  path: string;
-}
-
-interface Directory {
-  type: 'directory';
-  name: string;
-  children: Record<string, File | Directory>;
-}
-
-interface FileTreeContext {
-  selectedFile?: string;
-  setSelectedFile: (filePath: string) => void;
-}
-
-export const FileTreeContext = createContext<FileTreeContext>({
-  setSelectedFile: (filePath: string) => {},
-});
-
-function TreeNodeButton({
-  depth,
-  icon,
-  onClick,
-  children,
-  className,
-  ...props
-}: TreeNodeButtonProps & HTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      className={`flex items-center gap-2 w-full pr-2 border-2 border-transparent text-faded ${className ?? ''}`}
-      style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
-      onClick={() => onClick?.()}
-      {...props}
-    >
-      <div className={`${icon} scale-120 shrink-0`}></div>
-      <span>{children}</span>
-    </button>
-  );
-}
-
-function FileTreeNode({ node, depth, children }: FileTreeNodeProps) {
-  const { setSelectedFile } = useContext(FileTreeContext);
-
-  return (
-    <TreeNodeButton
-      depth={depth}
-      icon="i-ph-file-duotone"
-      onClick={() => {
-        setSelectedFile(node.path);
-      }}
-    >
-      {children}
-    </TreeNodeButton>
-  );
-}
-
-function DirectoryTreeNode({ node, depth }: DirectoryTreeNodeProps) {
-  const [collapsed, setCollapsed] = useState(false);
-  const fileTreeContext = useContext(FileTreeContext);
-
-  return (
-    <>
-      <TreeNodeButton
-        className="hover:bg-gray-50"
-        depth={depth}
-        icon={collapsed ? 'i-ph-folder-simple-duotone' : 'i-ph-folder-open-duotone'}
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {node.name}
-      </TreeNodeButton>
-      {!collapsed && (
-        <ul>
-          {Object.values(node.children).map((childNode, index) => {
-            return (
-              <li
-                key={index}
-                className={` ${
-                  childNode.type === 'file' && fileTreeContext.selectedFile === childNode.path
-                    ? 'bg-primary-100 text-primary-700'
-                    : 'hover:bg-gray-50'
-                }`}
-              >
-                <TreeNode node={childNode} depth={depth} />
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </>
-  );
-}
-
-function TreeNode({ node, depth }: TreeNodeProps) {
-  const _depth = depth + 1;
-
-  return (
-    <>
-      {node.type === 'file' ? (
-        <FileTreeNode node={node} depth={_depth}>
-          {node.name}
-        </FileTreeNode>
-      ) : (
-        <DirectoryTreeNode node={node} depth={_depth} />
-      )}
-    </>
-  );
-}
-
-/**
- * TODO: Add ability to specify where files and what files can be created per lesson.
- */
-export default function FileTree({
-  hiddenFiles,
-  selectedFile,
-  files,
-  scope,
-  hideRoot,
-  onFileClick,
-  ...props
-}: FileTreeProps & HTMLAttributes<HTMLDivElement>) {
-  const [fileTree, setFileTree] = useState<FileTree>();
-  const [_selectedFile, setSelectedFile] = useState(selectedFile);
-
+  // reset collapsed folders when the list of files changes
   useEffect(() => {
-    const _fileTree = createFileTree(files, scope, hiddenFiles);
-    setFileTree(_fileTree);
-  }, [files, scope, hiddenFiles]);
+    setCollapsedFolders(new Set<number>());
+  }, [files]);
 
-  return (
-    <FileTreeContext.Provider
-      value={{
-        selectedFile: _selectedFile,
-        setSelectedFile: (filePath) => {
-          setSelectedFile(filePath);
-          onFileClick?.(filePath);
-        },
-      }}
-    >
-      <div {...props}>
-        {fileTree ? (
-          hideRoot ? (
-            Object.values(fileTree.children).map((childNode, index) => {
-              return (
-                <div key={index}>
-                  <TreeNode node={childNode} depth={-1} />
-                </div>
-              );
-            })
-          ) : (
-            <DirectoryTreeNode node={fileTree} depth={0} />
-          )
-        ) : null}
-      </div>
-    </FileTreeContext.Provider>
-  );
-}
+  const filteredFileList = useMemo(() => {
+    const list = [];
 
-export function createFileTree(files: Files, scope?: string, hiddenFiles?: Array<string | RegExp>) {
-  const root: FileTree = { type: 'directory', name: '/', children: {} };
+    let lastDepth = Number.MAX_SAFE_INTEGER;
+    for (let i = 0; i < fileList.length; i++) {
+      const fileOrFolder = fileList[i];
+      const depth = fileOrFolder.depth;
 
-  let _hiddenFiles: Array<string | RegExp> = DEFAULT_HIDDEN_FILES;
+      // if the depth is equal we reached the end of the collaped group
+      if (lastDepth == depth) {
+        lastDepth = Number.MAX_SAFE_INTEGER;
+      }
 
-  if (hiddenFiles && hiddenFiles.length > 0) {
-    _hiddenFiles.push(...hiddenFiles);
-  }
+      // ignore collapsed folders
+      if (collapsedFolders.has(i)) {
+        lastDepth = Math.min(lastDepth, depth);
+      }
 
-  for (const filePath in files) {
-    if (scope && !filePath.startsWith(scope)) {
-      continue;
-    }
-
-    const parts = filePath.split('/');
-    const fileName = parts.at(-1);
-
-    if (!fileName) {
-      continue;
-    }
-
-    if (isHiddenFile(filePath, fileName, _hiddenFiles)) {
-      continue;
-    }
-
-    let current: Directory = root;
-
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-
-      if (!part) {
+      // ignore files and folders below the last collapsed folder
+      if (lastDepth < depth) {
         continue;
       }
 
-      if (i === parts.length - 1) {
-        current.children[part] = {
-          type: 'file',
-          name: part,
-          path: filePath,
-        };
-      } else {
-        if (!current.children[part]) {
-          current.children![part] = {
-            type: 'directory',
-            name: part,
-            children: {},
-          };
-        }
+      list.push(fileOrFolder);
+    }
 
-        current = current.children[part] as Directory;
+    return list;
+  }, [fileList, collapsedFolders]);
+
+  function toggleCollapseState(id: number) {
+    setCollapsedFolders((prevSet) => {
+      const newSet = new Set(prevSet);
+
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+
+      return newSet;
+    });
+  }
+
+  return (
+    <div className={className}>
+      {filteredFileList.map((fileOrFolder) => {
+        switch (fileOrFolder.kind) {
+          case 'file':
+            return (
+              <File
+                key={fileOrFolder.id}
+                selected={selectedFile === fileOrFolder.fullPath}
+                file={fileOrFolder}
+                onClick={() => onFileClick(fileOrFolder.fullPath)}
+              />
+            );
+          case 'folder':
+            return (
+              <Folder
+                key={fileOrFolder.id}
+                folder={fileOrFolder}
+                collapsed={collapsedFolders.has(fileOrFolder.id)}
+                onClick={() => toggleCollapseState(fileOrFolder.id)}
+              />
+            );
+        }
+      })}
+    </div>
+  );
+};
+
+const Folder: FC<{ folder: FolderNode; collapsed: boolean; onClick: () => void }> = ({
+  folder: { depth, name },
+  collapsed,
+  onClick,
+}) => (
+  <NodeButton
+    className="hover:bg-gray-50"
+    depth={depth}
+    icon={collapsed ? 'i-ph-folder-simple-duotone' : 'i-ph-folder-open-duotone'}
+    onClick={onClick}
+  >
+    {name}
+  </NodeButton>
+);
+
+interface FileProps {
+  file: FileNode;
+  selected: boolean;
+  onClick: () => void;
+}
+
+const File: FC<FileProps> = ({ file: { depth, name }, onClick, selected }) => (
+  <NodeButton
+    className={selected ? 'bg-primary-100 text-primary-700' : 'hover:bg-gray-50'}
+    depth={depth}
+    icon="i-ph-file-duotone"
+    onClick={onClick}
+  >
+    {name}
+  </NodeButton>
+);
+
+interface ButtonProps {
+  depth: number;
+  icon: string;
+  children: ReactNode;
+  className?: string;
+  onClick?: () => void;
+}
+
+const NodeButton: FC<ButtonProps> = ({ depth, icon, onClick, className, children }) => (
+  <button
+    className={`flex items-center gap-2 w-full pr-2 border-2 border-transparent text-faded ${className ?? ''}`}
+    style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
+    onClick={() => onClick?.()}
+  >
+    <div className={`${icon} scale-120 shrink-0`}></div>
+    <span>{children}</span>
+  </button>
+);
+
+type Node = FileNode | FolderNode;
+
+interface BaseNode {
+  id: number;
+  depth: number;
+  name: string;
+}
+
+interface FileNode extends BaseNode {
+  kind: 'file';
+  fullPath: string;
+}
+
+interface FolderNode extends BaseNode {
+  kind: 'folder';
+}
+
+function buildFileList(files: Files): Node[] {
+  const fileList: Node[] = [];
+
+  const folderPaths = new Set<string>();
+
+  for (const fileName of Object.keys(files).sort()) {
+    const segments = fileName.split('/').filter((s) => s);
+
+    let currentPath = '';
+
+    for (let depth = 0; depth < segments.length; ++depth) {
+      const name = segments[depth];
+      const fullPath = (currentPath += `/${name}`);
+
+      if (depth === segments.length - 1) {
+        fileList.push({
+          kind: 'file',
+          id: fileList.length,
+          name,
+          fullPath,
+          depth,
+        });
+      } else if (!folderPaths.has(fullPath)) {
+        folderPaths.add(fullPath);
+
+        fileList.push({
+          kind: 'folder',
+          id: fileList.length,
+          name,
+          depth,
+        });
       }
     }
   }
 
-  return root;
-}
-
-function isHiddenFile(filePath: string, fileName: string, hiddenFiles: Array<string | RegExp>) {
-  return hiddenFiles.some((pathOrRegex) => {
-    if (typeof pathOrRegex === 'string') {
-      return fileName === pathOrRegex;
-    }
-
-    return pathOrRegex.test(filePath);
-  });
+  return fileList;
 }
