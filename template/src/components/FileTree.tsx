@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot, scope, className }) => {
-  const fileList = useMemo(() => buildFileList(files), [files]);
+  const fileList = useMemo(() => buildFileList(files, hideRoot), [files, hideRoot]);
 
   const [collapsedFolders, setCollapsedFolders] = useState(() => new Set<number>());
 
@@ -26,8 +26,7 @@ export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot
     const list = [];
 
     let lastDepth = Number.MAX_SAFE_INTEGER;
-    for (let i = 0; i < fileList.length; i++) {
-      const fileOrFolder = fileList[i];
+    for (const fileOrFolder of fileList) {
       const depth = fileOrFolder.depth;
 
       // if the depth is equal we reached the end of the collaped group
@@ -36,7 +35,7 @@ export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot
       }
 
       // ignore collapsed folders
-      if (collapsedFolders.has(i)) {
+      if (collapsedFolders.has(fileOrFolder.id)) {
         lastDepth = Math.min(lastDepth, depth);
       }
 
@@ -161,7 +160,7 @@ interface FolderNode extends BaseNode {
   kind: 'folder';
 }
 
-function buildFileList(files: Files): Node[] {
+function buildFileList(files: Files, hideRoot: boolean): Node[] {
   const fileList: Node[] = [];
 
   const folderPaths = new Set<string>();
@@ -194,6 +193,13 @@ function buildFileList(files: Files): Node[] {
         });
       }
     }
+  }
+
+  // if we hide the roots then we decrease the depth by one of everything and filter the one that have a depth of -1
+  if (hideRoot) {
+    fileList.forEach((node) => (node.depth -= 1));
+
+    return fileList.filter((node) => node.depth !== -1);
   }
 
   return fileList;

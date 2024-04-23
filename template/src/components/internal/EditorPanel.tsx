@@ -61,7 +61,7 @@ export default function EditorPanel({
         <FileTree
           className="h-full py-2 border-r border-panel-border"
           selectedFile={selectedFile}
-          hideRoot={lesson.data.hideRoot ?? true}
+          hideRoot={lesson.data.hideRoot ?? false}
           files={lesson.files}
           scope={lesson.data.scope}
           onFileClick={onFileClickWrapped}
