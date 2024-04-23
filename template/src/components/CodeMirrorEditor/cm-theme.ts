@@ -1,7 +1,7 @@
 import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { Compartment, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { prefersDarkTheme, themeStore } from '@stores/theme-store';
+import { themeIsDark } from '@stores/theme-store';
 import '@styles/cm.css';
 
 export const dummyDarkTheme = EditorView.theme({}, { dark: true });
@@ -62,12 +62,6 @@ export const editorTheme = EditorView.theme({
     },
   },
 });
-
-export function themeIsDark() {
-  const currentTheme = themeStore.get();
-
-  return currentTheme === 'dark' || currentTheme === 'systemPreferred' ? prefersDarkTheme() : false;
-}
 
 export function theme(): Extension {
   return [

@@ -21,9 +21,11 @@ export default function WorkspacePanel({ lesson }: Props) {
 
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
   const [editorDocument, setEditorDocument] = useState<EditorDocument | undefined>();
+  const terminalExpanded = useRef(false);
 
   const updateDocument = (filePath?: string) => {
     if (!filePath) {
+      setEditorDocument(undefined);
       return;
     }
 
@@ -49,7 +51,12 @@ export default function WorkspacePanel({ lesson }: Props) {
     }
 
     if (terminal.isCollapsed()) {
-      terminal.expand();
+      if (!terminalExpanded.current) {
+        terminalExpanded.current = true;
+        terminal.resize(DEFAULT_TERMINAL_SIZE);
+      } else {
+        terminal.expand();
+      }
     } else {
       terminal.collapse();
     }
@@ -70,7 +77,15 @@ export default function WorkspacePanel({ lesson }: Props) {
         <PreviewPanel toggleTerminal={toggleTerminal} />
       </Panel>
       <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 8, coarse: 8 }} />
-      <Panel defaultSize={DEFAULT_TERMINAL_SIZE} minSize={10} collapsible ref={terminalPanelRef}>
+      <Panel
+        defaultSize={25}
+        minSize={10}
+        collapsible
+        ref={terminalPanelRef}
+        onExpand={() => {
+          terminalExpanded.current = true;
+        }}
+      >
         <TerminalPanel />
       </Panel>
     </PanelGroup>

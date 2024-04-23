@@ -1,3 +1,5 @@
+import Preview from '../Preview';
+
 interface Props {
   toggleTerminal?: () => void;
 }
@@ -16,7 +18,9 @@ export default function PreviewPanel({ toggleTerminal }: Props) {
           <div className="i-ph-terminal-window-duotone panel-icon-size"></div>
         </button>
       </div>
-      <div className="h-full">Preview Here</div>
+      <div className="h-full">
+        <Preview />
+      </div>
     </div>
   );
 }

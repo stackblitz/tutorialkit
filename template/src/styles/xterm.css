@@ -2,4 +2,5 @@
 
 .xterm {
   --at-apply: h-full;
+  --at-apply: p-3;
 }

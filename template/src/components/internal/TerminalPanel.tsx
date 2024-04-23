@@ -15,7 +15,7 @@ export default function TerminalPanel() {
         <div className="i-ph-terminal-window-duotone panel-icon-size"></div>
         <span>Terminal</span>
       </div>
-      <div className="h-full">
+      <div className="h-full overflow-hidden">
         {domLoaded && (
           <Suspense>
             <Terminal />

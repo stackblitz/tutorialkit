@@ -125,6 +125,15 @@ CodeMirrorEditor.displayName = 'CodeMirrorEditor';
 
 function setEditorDocument(view: EditorView, languageExtension: Compartment, doc?: EditorDocument) {
   if (!doc) {
+    view.dispatch({
+      selection: { anchor: 0 },
+      changes: {
+        from: 0,
+        to: view.state.doc.length,
+        insert: '',
+      },
+    });
+
     return;
   }
 
@@ -135,16 +144,12 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, doc
 
     view.dispatch({
       effects: languageExtension.reconfigure([languageSupport]),
+      selection: { anchor: 0 },
       changes: {
         from: 0,
         to: view.state.doc.length,
         insert: doc.value,
       },
-    });
-
-    requestAnimationFrame(() => {
-      view.scrollDOM.scrollTo(0, 0);
-      view.dispatch({ selection: { anchor: 0 } });
     });
   });
 }

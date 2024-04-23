@@ -86,7 +86,7 @@ function FileTab({ editorDocument }: FileTabProps) {
     return (
       <div className="flex items-center gap-2">
         <div className={icon ? `text-6 ${icon}` : ''}></div>
-        <span className="text-3.5">{fileName}</span>
+        <span className="text-3.5 text-gray-600">{fileName}</span>
       </div>
     );
   };

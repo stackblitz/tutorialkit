@@ -22,3 +22,26 @@ export const darkTheme: ITheme = {
   brightWhite: '#f1f1f0',
   selectionBackground: '#97979b33',
 };
+
+export const lightTheme = {
+  cursor: '#333333',
+  cursorAccent: '#00000000',
+  foreground: '#333333',
+  background: '#ffffff',
+  red: '#cd3131',
+  green: '#00bc00',
+  yellow: '#949800',
+  blue: '#0451a5',
+  magenta: '#bc05bc',
+  cyan: '#0598bc',
+  white: '#555555',
+  brightBlack: '#686868',
+  brightRed: '#cd3131',
+  brightGreen: '#00bc00',
+  brightYellow: '#949800',
+  brightBlue: '#0451a5',
+  brightMagenta: '#bc05bc',
+  brightCyan: '#0598bc',
+  brightWhite: '#a5a5a5',
+  selectionBackground: '#00000040',
+};

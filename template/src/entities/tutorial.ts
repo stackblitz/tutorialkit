@@ -32,6 +32,7 @@ export interface Lesson {
   slug: string;
   files: Files;
   solution: Files;
+  template: Files;
   next?: LessonLink;
   prev?: LessonLink;
   Markdown: AstroComponentFactory;

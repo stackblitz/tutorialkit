@@ -43,9 +43,15 @@ importers:
       '@codemirror/view':
         specifier: ^6.26.3
         version: 6.26.3
+      '@webcontainer/api':
+        specifier: ^1.1.9
+        version: 1.1.9
       '@xterm/addon-fit':
         specifier: ^0.10.0
         version: 0.10.0(@xterm/xterm@5.5.0)
+      '@xterm/addon-web-links':
+        specifier: ^0.11.0
+        version: 0.11.0(@xterm/xterm@5.5.0)
       '@xterm/xterm':
         specifier: ^5.5.0
         version: 5.5.0
@@ -2007,8 +2013,20 @@ packages:
     resolution: {integrity: sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==}
     dev: true
 
+  /@webcontainer/api@1.1.9:
+    resolution: {integrity: sha512-Sp6PV0K9D/3f8fSbCubqhfmBFH8XbngZCBOCF+aExyGqnz2etmw+KYvbQ/JxYvYX5KPaSxM+asFQwoP2RHl5cg==}
+    dev: false
+
   /@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0):
     resolution: {integrity: sha512-UFYkDm4HUahf2lnEyHvio51TNGiLK66mqP2JoATy7hRZeXaGMRDr00JiSF7m63vR5WKATF605yEggJKsw0JpMQ==}
+    peerDependencies:
+      '@xterm/xterm': ^5.0.0
+    dependencies:
+      '@xterm/xterm': 5.5.0
+    dev: false
+
+  /@xterm/addon-web-links@0.11.0(@xterm/xterm@5.5.0):
+    resolution: {integrity: sha512-nIHQ38pQI+a5kXnRaTgwqSHnX7KE6+4SVoceompgHL26unAxdfP6IPqUTSYPQgSwM56hsElfoNrrW5V7BUED/Q==}
     peerDependencies:
       '@xterm/xterm': ^5.0.0
     dependencies:

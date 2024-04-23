@@ -7,6 +7,7 @@ import path from 'node:path';
 let _tutorial: Tutorial | undefined;
 
 const CONTENT_DIR = path.join(import.meta.dirname, '../content/tutorial');
+const TEMPLATES_DIR = path.join(import.meta.dirname, '../templates');
 
 export async function getTutorial() {
   if (_tutorial) {
@@ -14,8 +15,6 @@ export async function getTutorial() {
   }
 
   const collection = await getCollection('tutorial');
-
-  console.log('build tutorial');
 
   _tutorial = {};
 
@@ -64,7 +63,11 @@ export async function getTutorial() {
       const filesDir = path.join(lessonDir, '_files');
       const solutionDir = path.join(lessonDir, '_solution');
 
+      // we currently only support a single template
+      const templateDir = path.join(TEMPLATES_DIR, 'default');
+
       const files = await createFileMap(filesDir);
+      const templateFiles = await createFileMap(templateDir);
       const solution = await createFileMap(solutionDir);
 
       const lesson: Lesson = {
@@ -76,6 +79,7 @@ export async function getTutorial() {
         slug: getSlug(entry),
         files,
         solution,
+        template: templateFiles,
       };
 
       lessons.push(lesson);
