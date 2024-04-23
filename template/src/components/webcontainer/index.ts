@@ -6,7 +6,7 @@ interface WebContainerContext {
   loaded: boolean;
 }
 
-const webcontainer = WebContainer.boot({ workdirName: 'tutorial' });
+export const webcontainer = WebContainer.boot({ workdirName: 'tutorial' });
 
 const webcontainerContext: WebContainerContext = {
   loaded: false,
