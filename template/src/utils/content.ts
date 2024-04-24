@@ -1,4 +1,5 @@
 import type { Chapter, CollectionEntry, Files, Lesson, Part, Tutorial } from '@entities/tutorial';
+import type { TutorialSchema } from '@schemas';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import fs from 'node:fs';
@@ -18,6 +19,8 @@ export async function getTutorial() {
 
   _tutorial = {};
 
+  let tutorialMetaData: TutorialSchema | undefined;
+
   const lessons: Lesson[] = [];
 
   for (const entry of collection) {
@@ -26,7 +29,9 @@ export async function getTutorial() {
 
     const [partId, chapterId, lessonId] = parseId(id);
 
-    if (type === 'part') {
+    if (type === 'tutorial') {
+      tutorialMetaData = data;
+    } else if (type === 'part') {
       _tutorial[partId] = {
         data,
         slug: getSlug(entry),
@@ -106,6 +111,14 @@ export async function getTutorial() {
     const prevLesson = i > 0 ? lessons.at(i - 1) : undefined;
     const nextLesson = lessons.at(i + 1);
 
+    const partMetadata = _tutorial[lesson.part].data;
+    const chapterMetadata = _tutorial[lesson.part].chapters[lesson.chapter].data;
+
+    lesson.data = {
+      ...pick([lesson.data, chapterMetadata, partMetadata, tutorialMetaData], ['mainCommand', 'prepareCommands']),
+      ...lesson.data,
+    };
+
     if (prevLesson) {
       lesson.prev = {
         data: prevLesson.data,
@@ -128,6 +141,21 @@ export async function getTutorial() {
   // console.log(inspect(_tutorial, undefined, Infinity, true));
 
   return _tutorial;
+}
+
+function pick<T extends Record<any, any>>(objects: (T | undefined)[], properties: (keyof T)[]) {
+  const newObject = {} as any;
+
+  for (const property of properties) {
+    for (const object of objects) {
+      if (object?.hasOwnProperty(property)) {
+        newObject[property] = object[property];
+        break;
+      }
+    }
+  }
+
+  return newObject;
 }
 
 function parseId(id: string) {

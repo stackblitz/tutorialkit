@@ -1,9 +1,9 @@
-import { chapterSchema, lessonSchema, partSchema } from '@schemas';
+import { chapterSchema, lessonSchema, partSchema, tutorialSchema } from '@schemas';
 import { defineCollection } from 'astro:content';
 
 const tutorial = defineCollection({
   type: 'content',
-  schema: partSchema.or(lessonSchema).or(chapterSchema),
+  schema: tutorialSchema.or(partSchema).or(chapterSchema).or(lessonSchema),
 });
 
 export const collections = { tutorial };

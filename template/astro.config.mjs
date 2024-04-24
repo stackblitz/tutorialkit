@@ -17,7 +17,19 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [ViteRestart({ restart: './src/remark/**' })],
+    plugins: [
+      ViteRestart({ restart: './src/remark/**' }),
+      {
+        name: 'reloadWebContainer',
+        handleHotUpdate(ctx) {
+          if (ctx.file.endsWith('/webcontainer/index.ts')) {
+            ctx.server.hot.send({ type: 'full-reload' });
+          }
+
+          return [];
+        },
+      },
+    ],
   },
   markdown: {
     remarkPlugins: [remarkDirective, remarkAsides()],
