@@ -1,7 +1,13 @@
 import type { WebContainerProcess } from '@webcontainer/api';
 import { webcontainer as webcontainerPromise } from './index';
-import { newShellProcess, type ITerminal } from './shell';
-import { newTask, type Task } from './utils';
+import { newTask, type Task } from './utils/promises';
+import { areFilesEqual, toFileTree } from './utils/files';
+import type { Files } from '@entities/tutorial';
+
+interface LoadFilesOptions {
+  files: Files;
+  template?: Files;
+}
 
 /**
  * There should be only a single instance of this class.
@@ -11,44 +17,24 @@ import { newTask, type Task } from './utils';
  * to every component of TutorialKit.
  */
 export class TutorialRunner {
-  private _mainProcess: WebContainerProcess | null = null;
+  private _currentProcess: WebContainerProcess | null = null;
+  private _currentTemplate: Files | null = null;
 
-  installDependencies(options: { packageManager: 'npm' | 'yarn' | 'pnpm' }): Task<number> {
+  loadFiles({ files, template }: LoadFilesOptions): Task<void> {
     return newTask(async (signal) => {
       const webcontainer = await webcontainerPromise;
 
       signal.throwIfAborted();
 
-      const process = await webcontainer.spawn(options.packageManager, ['install'], {
-        output: false,
-      });
-
-      signal.throwIfAborted();
-
-      const abortListener = () => process.kill();
-
-      // if the task is aborted we kill the process
-      signal.addEventListener('abort', abortListener, { once: true });
-
-      const result = await process.exit;
-
-      signal.removeEventListener('abort', abortListener);
-
-      return result;
-    });
-  }
-
-  newShell(isMainProcess: boolean, terminal: ITerminal): Task<void> {
-    return newTask(async (signal) => {
-      const webcontainer = await webcontainerPromise;
-
-      signal.throwIfAborted();
-
-      if (isMainProcess && this._mainProcess != null) {
-        this._mainProcess.kill();
+      // check if the template was changed
+      if (template && (this._currentTemplate === null || !areFilesEqual(template, this._currentTemplate))) {
+        this._currentTemplate = template;
+        await webcontainer.mount(toFileTree(template));
       }
 
-      this._mainProcess = await newShellProcess(webcontainer, signal, terminal);
+      signal.throwIfAborted();
+
+      await webcontainer.mount(toFileTree(files));
     });
   }
 }

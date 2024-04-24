@@ -1,5 +1,5 @@
 import type { WebContainer } from '@webcontainer/api';
-import { withResolvers } from './utils';
+import { withResolvers } from './utils/promises';
 
 export interface ITerminal {
   write: (data: string) => void;
