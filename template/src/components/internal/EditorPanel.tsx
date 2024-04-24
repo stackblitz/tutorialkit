@@ -33,7 +33,7 @@ export default function EditorPanel({
     [onFileClick]
   );
 
-  // when the lesson change reset the selected file to that one
+  // when the lesson changes we reset the selected file
   useEffect(() => {
     setSelectedFile(lesson.data.focus);
   }, [lesson]);

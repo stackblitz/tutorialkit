@@ -1,14 +1,14 @@
-import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
-import { newShellProcess, type ITerminal } from './shells';
+import type { WebContainerProcess } from '@webcontainer/api';
 import { webcontainer as webcontainerPromise } from './index';
+import { newShellProcess, type ITerminal } from './shell';
 import { newTask, type Task } from './utils';
 
 /**
  * There should be only a single instance of this class.
  *
- * The idea behind this class is that this it manage the state
- * of webcontainer and expose an interface that makes sense
- * to every components in tutorialkit.
+ * The idea behind this class is that it manages the state
+ * of WebContainer and exposes an interface that makes sense
+ * to every component of TutorialKit.
  */
 export class TutorialRunner {
   private _mainProcess: WebContainerProcess | null = null;

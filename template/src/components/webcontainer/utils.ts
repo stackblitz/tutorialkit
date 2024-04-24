@@ -4,8 +4,12 @@ interface WithResolvers<T> {
   reject: (reason?: any) => void;
 }
 
-export function withResolvers<T>(): WithResolvers<T> {
-  let resolve!: (value: T) => void;
+export function withResolvers<T>(): PromiseWithResolvers<T> {
+  if (typeof Promise.withResolvers === 'function') {
+    return Promise.withResolvers();
+  }
+
+  let resolve!: (value: T | PromiseLike<T>) => void;
   let reject!: (reason?: any) => void;
 
   const promise = new Promise<T>((_resolve, _reject) => {
@@ -31,8 +35,8 @@ export class AbortError extends Error {}
  * A helper function to easily create "cancellable" promises where
  * once a promise is cancelled it is stopped and will never resolve.
  *
- * @param task A function that return a promise
- * @returns The newly created task
+ * @param task - A function that return a promise.
+ * @returns The newly created task.
  */
 export function newTask<T>(task: (abortSignal: AbortSignal) => Promise<T>): Task<T> {
   const abortController = new AbortController();

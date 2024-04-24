@@ -16,6 +16,7 @@ interface Props {
 
 export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot, scope, hiddenFiles, className }) => {
   const computedHiddenFiles = useMemo(() => [...DEFAULT_HIDDEN_FILES, ...(hiddenFiles ?? [])], [hiddenFiles]);
+
   const fileList = useMemo(
     () => buildFileList(files, hideRoot, scope, computedHiddenFiles),
     [files, hideRoot, scope, computedHiddenFiles]
@@ -32,11 +33,12 @@ export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot
     const list = [];
 
     let lastDepth = Number.MAX_SAFE_INTEGER;
+
     for (const fileOrFolder of fileList) {
       const depth = fileOrFolder.depth;
 
       // if the depth is equal we reached the end of the collaped group
-      if (lastDepth == depth) {
+      if (lastDepth === depth) {
         lastDepth = Number.MAX_SAFE_INTEGER;
       }
 
@@ -215,7 +217,7 @@ function buildFileList(
     }
   }
 
-  // if we hide the roots then we decrease the depth by one of everything and filter the one that have a depth of -1
+  // if we hide the root then we decrease the depth by one of everything and filter the one that has a depth of -1
   if (hideRoot) {
     fileList.forEach((node) => (node.depth -= 1));
 
