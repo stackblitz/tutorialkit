@@ -14,7 +14,7 @@ interface Props {
   className?: string;
 }
 
-export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot, scope, hiddenFiles, className }) => {
+export function FileTree({ files, onFileClick, selectedFile, hideRoot, scope, hiddenFiles, className }: Props) {
   const computedHiddenFiles = useMemo(() => [...DEFAULT_HIDDEN_FILES, ...(hiddenFiles ?? [])], [hiddenFiles]);
 
   const fileList = useMemo(
@@ -98,22 +98,26 @@ export const FileTree: FC<Props> = ({ files, onFileClick, selectedFile, hideRoot
       })}
     </div>
   );
-};
+}
 
-const Folder: FC<{ folder: FolderNode; collapsed: boolean; onClick: () => void }> = ({
-  folder: { depth, name },
-  collapsed,
-  onClick,
-}) => (
-  <NodeButton
-    className="hover:bg-gray-50"
-    depth={depth}
-    icon={collapsed ? 'i-ph-folder-simple-duotone' : 'i-ph-folder-open-duotone'}
-    onClick={onClick}
-  >
-    {name}
-  </NodeButton>
-);
+interface FolderProps {
+  folder: FolderNode;
+  collapsed: boolean;
+  onClick: () => void;
+}
+
+function Folder({ folder: { depth, name }, collapsed, onClick }: FolderProps) {
+  return (
+    <NodeButton
+      className="hover:bg-gray-50"
+      depth={depth}
+      icon={collapsed ? 'i-ph-folder-simple-duotone' : 'i-ph-folder-open-duotone'}
+      onClick={onClick}
+    >
+      {name}
+    </NodeButton>
+  );
+}
 
 interface FileProps {
   file: FileNode;
@@ -121,16 +125,18 @@ interface FileProps {
   onClick: () => void;
 }
 
-const File: FC<FileProps> = ({ file: { depth, name }, onClick, selected }) => (
-  <NodeButton
-    className={selected ? 'bg-primary-100 text-primary-700' : 'hover:bg-gray-50'}
-    depth={depth}
-    icon="i-ph-file-duotone"
-    onClick={onClick}
-  >
-    {name}
-  </NodeButton>
-);
+function File({ file: { depth, name }, onClick, selected }: FileProps) {
+  return (
+    <NodeButton
+      className={selected ? 'bg-primary-100 text-primary-700' : 'hover:bg-gray-50'}
+      depth={depth}
+      icon="i-ph-file-duotone"
+      onClick={onClick}
+    >
+      {name}
+    </NodeButton>
+  );
+}
 
 interface ButtonProps {
   depth: number;
@@ -140,16 +146,18 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-const NodeButton: FC<ButtonProps> = ({ depth, icon, onClick, className, children }) => (
-  <button
-    className={`flex items-center gap-2 w-full pr-2 border-2 border-transparent text-faded ${className ?? ''}`}
-    style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
-    onClick={() => onClick?.()}
-  >
-    <div className={`${icon} scale-120 shrink-0`}></div>
-    <span>{children}</span>
-  </button>
-);
+function NodeButton({ depth, icon, onClick, className, children }: ButtonProps) {
+  return (
+    <button
+      className={`flex items-center gap-2 w-full pr-2 border-2 border-transparent text-faded ${className ?? ''}`}
+      style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
+      onClick={() => onClick?.()}
+    >
+      <div className={`${icon} scale-120 shrink-0`}></div>
+      <span>{children}</span>
+    </button>
+  );
+}
 
 type Node = FileNode | FolderNode;
 
