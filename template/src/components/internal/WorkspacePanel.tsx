@@ -1,11 +1,12 @@
 import type { Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import { type EditorDocument } from '../CodeMirrorEditor/CodeMirrorEditor';
 import EditorPanel from './EditorPanel';
 import PreviewPanel from './PreviewPanel';
 import TerminalPanel from './TerminalPanel';
+import { TutorialRunnerContext } from '@components/webcontainer/tutorial-runner';
 
 const DEFAULT_TERMINAL_SIZE = 25;
 
@@ -22,6 +23,7 @@ export default function WorkspacePanel({ lesson }: Props) {
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
   const [editorDocument, setEditorDocument] = useState<EditorDocument | undefined>();
   const terminalExpanded = useRef(false);
+  const tutorialRunner = useContext(TutorialRunnerContext);
 
   const updateDocument = (filePath?: string) => {
     if (!filePath) {
@@ -41,6 +43,11 @@ export default function WorkspacePanel({ lesson }: Props) {
 
   useEffect(() => {
     updateDocument(lesson.data.focus);
+  }, [lesson]);
+
+  useEffect(() => {
+    tutorialRunner.loadFiles(lesson);
+    tutorialRunner.runCommands(lesson.data);
   }, [lesson]);
 
   const toggleTerminal = () => {

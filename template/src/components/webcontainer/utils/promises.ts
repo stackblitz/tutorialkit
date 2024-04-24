@@ -24,8 +24,10 @@ export function withResolvers<T>(): PromiseWithResolvers<T> {
   };
 }
 
+export const kTaskCancelled = Symbol('kTaskCancelled');
+
 export interface Task<T> {
-  promise: Promise<T>;
+  promise: Promise<T | typeof kTaskCancelled>;
   cancel(): void;
 }
 
@@ -33,7 +35,7 @@ export class AbortError extends Error {}
 
 /**
  * A helper function to easily create "cancellable" promises where
- * once a promise is cancelled it is stopped and will never resolve.
+ * once a promise is cancelled it is resolve to the "cancel" symbol
  *
  * @param task - A function that return a promise.
  * @returns The newly created task.
@@ -47,7 +49,7 @@ export function newTask<T>(task: (abortSignal: AbortSignal) => Promise<T>): Task
         throw reason;
       }
 
-      return new Promise<never>(() => {});
+      return kTaskCancelled;
     }),
     cancel() {
       abortController.abort(new AbortError());

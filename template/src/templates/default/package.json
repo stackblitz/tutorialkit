@@ -1,11 +1,9 @@
 {
-  "name": "my-lib",
-  "version": "1.0.0",
-  "description": "Example Library",
-  "license": "MIT",
-  "main": "src/index.js",
+  "private": true,
   "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "servor"
+  },
+  "dependencies": {
+    "servor": "4.0.2"
   }
 }

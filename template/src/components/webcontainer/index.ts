@@ -1,5 +1,4 @@
 import { WebContainer } from '@webcontainer/api';
-import { createContext } from 'react';
 
 interface WebContainerContext {
   webcontainer: Promise<WebContainer>;
@@ -8,15 +7,13 @@ interface WebContainerContext {
 
 export const webcontainer = WebContainer.boot({ workdirName: 'tutorial' });
 
-const webcontainerContext: WebContainerContext = {
+export const webcontainerContext: WebContainerContext = {
   loaded: false,
   webcontainer: webcontainer.then((webcontainer) => {
     webcontainerContext.loaded = true;
     return webcontainer;
   }),
 };
-
-export const WebContainerContext = createContext(webcontainerContext);
 
 export function isWebContainerSupported() {
   const hasSharedArrayBuffer = 'SharedArrayBuffer' in window;

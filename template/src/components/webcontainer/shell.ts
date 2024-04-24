@@ -2,6 +2,7 @@ import type { WebContainer } from '@webcontainer/api';
 import { withResolvers } from './utils/promises';
 
 export interface ITerminal {
+  reset: () => void;
   write: (data: string) => void;
   cols: number;
   rows: number;
