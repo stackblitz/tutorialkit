@@ -1,3 +1,25 @@
 {
-  "private": true
+  "private": true,
+  "scripts": {
+    "prepare": "is-ci || husky install"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@commitlint/config-conventional": "^19.2.2",
+    "commitlint": "^19.3.0",
+    "husky": "^9.0.11",
+    "is-ci": "^3.0.1"
+  },
+  "lint-staged": {},
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint --edit $1"
+    }
+  }
 }

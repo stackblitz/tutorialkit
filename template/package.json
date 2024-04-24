@@ -2,6 +2,7 @@
   "name": "tutorialkit-starter",
   "version": "0.0.1",
   "type": "module",
+  "private": true,
   "scripts": {
     "astro": "astro",
     "build": "astro check && astro build",
