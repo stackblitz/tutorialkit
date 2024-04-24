@@ -174,9 +174,13 @@ function buildFileList(
   scope: string | undefined,
   hiddenFiles: Array<string | RegExp>
 ): Node[] {
-  const fileList: Node[] = [];
-
   const folderPaths = new Set<string>();
+  const fileList: Node[] = [];
+  const defaultDepth = hideRoot ? 0 : 1;
+
+  if (!hideRoot) {
+    fileList.push({ kind: 'folder', name: '/', depth: 0, id: 0 });
+  }
 
   for (const filePath of Object.keys(files).sort()) {
     if (scope && !filePath.startsWith(scope)) {
@@ -202,7 +206,7 @@ function buildFileList(
           id: fileList.length,
           name,
           fullPath,
-          depth,
+          depth: depth + defaultDepth,
         });
       } else if (!folderPaths.has(fullPath)) {
         folderPaths.add(fullPath);
@@ -211,17 +215,10 @@ function buildFileList(
           kind: 'folder',
           id: fileList.length,
           name,
-          depth,
+          depth: depth + defaultDepth,
         });
       }
     }
-  }
-
-  // if we hide the root then we decrease the depth by one of everything and filter the one that has a depth of -1
-  if (hideRoot) {
-    fileList.forEach((node) => (node.depth -= 1));
-
-    return fileList.filter((node) => node.depth !== -1);
   }
 
   return fileList;
