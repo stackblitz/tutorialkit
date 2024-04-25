@@ -1,5 +1,7 @@
 import type { Files } from '@entities/tutorial';
-import type { FileSystemTree } from '@webcontainer/api';
+import type { DirectoryNode, FileNode, FileSystemTree } from '@webcontainer/api';
+
+type FileSystemTreeNode = DirectoryNode | FileNode | undefined;
 
 export function areFilesEqual(a: Files, b: Files) {
   const aFilePaths = Object.keys(a);
@@ -43,15 +45,28 @@ export function toFileTree(files: Files): FileSystemTree {
           },
         };
       } else {
-        const folder = {
-          directory: {},
-        };
+        let folder = currentTree[name] as FileSystemTreeNode;
 
-        currentTree[name] = folder;
+        assertDirectoryNode(folder);
+
+        if (!folder) {
+          folder = {
+            directory: {},
+          };
+
+          currentTree[name] = folder;
+        }
+
         currentTree = folder.directory;
       }
     }
   }
 
   return root;
+}
+
+function assertDirectoryNode(node: FileSystemTreeNode): asserts node is DirectoryNode | undefined {
+  if (node && !('directory' in node)) {
+    throw new Error('Expected directory node');
+  }
 }
