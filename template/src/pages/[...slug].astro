@@ -21,7 +21,12 @@ const { lesson } = Astro.props as Props;
 ---
 
 <Layout title={lesson.title}>
-  <main class="max-w-full flex flex-col h-screen overflow-hidden">
+  <Fragment slot="head">
+    <script>
+      import '@components/custom_swap';
+    </script>
+  </Fragment>
+  <main class="max-w-full flex flex-col h-screen overflow-hidden" data-swap-root>
     <Header />
     <ResizablePanel classList="h-full overflow-hidden" id={RESIZABLE_PANELS.Main} type="horizontal" min="20%" max="60%">
       <div class="overflow-auto h-full p-5" slot="a">

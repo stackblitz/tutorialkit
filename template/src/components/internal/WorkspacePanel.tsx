@@ -57,6 +57,8 @@ export function WorkspacePanel({ lesson }: Props) {
 
       documentState.selection = update.state.selection;
       documentState.value = update.view.state.doc.toString();
+
+      tutorialRunner.updateFile(filePath, documentState.value);
     },
     [editorDocument, editorState]
   );
@@ -105,7 +107,7 @@ export function WorkspacePanel({ lesson }: Props) {
 
   useEffect(() => {
     setEditorState({});
-    tutorialRunner.loadFiles(lesson);
+    tutorialRunner.prepareFiles(lesson);
     tutorialRunner.runCommands(lesson.data);
   }, [lesson]);
 

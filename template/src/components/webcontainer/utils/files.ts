@@ -25,6 +25,40 @@ export function areFilesEqual(a: Files, b: Files) {
       return false;
     }
   }
+
+  return true;
+}
+
+interface FilesDiff {
+  addedOrModified: Files;
+  removed: string[];
+}
+
+export function filesDiff(before: Files, after: Files): FilesDiff {
+  const addedOrModified: Files = {};
+  const removed: string[] = [];
+
+  for (const filePath in before) {
+    const beforeFile = before[filePath];
+    const afterFile = after[filePath];
+
+    if (typeof afterFile == 'undefined') {
+      removed.push(filePath);
+    } else if (beforeFile !== afterFile) {
+      addedOrModified[filePath] = afterFile;
+    }
+  }
+
+  for (const filePath in after) {
+    if (!(filePath in before)) {
+      addedOrModified[filePath] = after[filePath];
+    }
+  }
+
+  return {
+    addedOrModified,
+    removed,
+  };
 }
 
 export function toFileTree(files: Files): FileSystemTree {

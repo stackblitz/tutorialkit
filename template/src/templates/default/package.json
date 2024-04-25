@@ -2,7 +2,7 @@
   "name": "example-lib",
   "private": true,
   "scripts": {
-    "start": "servor"
+    "start": "servor src/ --reload"
   },
   "dependencies": {
     "servor": "4.0.2"

@@ -1,7 +1,6 @@
 import { WebContainer } from '@webcontainer/api';
 
 interface WebContainerContext {
-  webcontainer: Promise<WebContainer>;
   loaded: boolean;
 }
 
@@ -9,14 +8,14 @@ export let webcontainer: Promise<WebContainer> = new Promise(() => {});
 
 if (!import.meta.env.SSR) {
   webcontainer = WebContainer.boot({ workdirName: 'tutorial' });
+
+  webcontainer.then((webcontainer) => {
+    webcontainerContext.loaded = true;
+  });
 }
 
 export const webcontainerContext: WebContainerContext = {
   loaded: false,
-  webcontainer: webcontainer.then((webcontainer) => {
-    webcontainerContext.loaded = true;
-    return webcontainer;
-  }),
 };
 
 export function isWebContainerSupported() {

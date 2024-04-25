@@ -6,7 +6,7 @@ import { createContext } from 'react';
 import { tick } from '../../utils/event-loop';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
 import type { ITerminal } from './shell';
-import { areFilesEqual, toFileTree } from './utils/files';
+import { areFilesEqual, filesDiff, toFileTree } from './utils/files';
 import { newTask, type Task } from './utils/promises';
 
 interface LoadFilesOptions {
@@ -35,7 +35,7 @@ interface LoadFilesOptions {
   abortPreviousLoad?: boolean;
 }
 
-interface RunCommandsOptions {
+interface Commands {
   /**
    * Main command to run. Typically a dev server, e.g. `npm run start`.
    */
@@ -45,7 +45,9 @@ interface RunCommandsOptions {
    * List of commands executed before the main command.
    */
   prepareCommands?: string[];
+}
 
+interface RunCommandsOptions extends Commands {
   /**
    * Abort the previous run commands operation.
    *
@@ -84,13 +86,37 @@ export class TutorialRunner {
 
   private _terminal: ITerminal | undefined = undefined;
   private _currentTemplate: Files | undefined = undefined;
-  private _lastRunCommands: RunCommandsOptions | undefined = undefined;
+
+  private _previousFiles: Files | undefined = undefined;
+  private _previousRunCommands: RunCommandsOptions | undefined = undefined;
+
+  private _packageJsonDirty = false;
+
+  // this strongly assumes that there's a single package json which might not be true
+  private _packageJsonContent = '';
 
   /**
    * Subscribe to this atom to be notified of command failures and whether or not a command
    * is running. The command is provided as well as whether or not this is the "main" command
    */
   status = atom<Status>({ type: 'idle' });
+
+  updateFile(filePath: string, content: string): void {
+    console.log('updateFile...', filePath);
+    const previousLoadPromise = this._currentLoadTask?.promise;
+
+    this._currentLoadTask = newTask(async (signal) => {
+      await previousLoadPromise;
+
+      const webcontainer = await webcontainerPromise;
+
+      signal.throwIfAborted();
+
+      await webcontainer.fs.writeFile(filePath, content);
+
+      this._updateDirtyState({ [filePath]: content });
+    });
+  }
 
   /**
    * Load the provided files into WebContainer.
@@ -100,7 +126,9 @@ export class TutorialRunner {
    *
    * @see {LoadFilesOptions}
    */
-  loadFiles({ files, template, abortPreviousLoad = true }: LoadFilesOptions): void {
+  prepareFiles({ files, template, abortPreviousLoad = true }: LoadFilesOptions): void {
+    console.log('prepareFiles request...');
+
     const previousLoadPromise = this._currentLoadTask?.promise;
 
     if (abortPreviousLoad) {
@@ -116,13 +144,26 @@ export class TutorialRunner {
 
       // check if the template changed
       if (template && (this._currentTemplate == null || !areFilesEqual(template, this._currentTemplate))) {
+        if (this._currentTemplate) {
+          await updateFiles(webcontainer, this._currentTemplate, template);
+        } else {
+          await webcontainer.mount(toFileTree(template));
+        }
+
         this._currentTemplate = template;
-        await webcontainer.mount(toFileTree(template));
+        this._updateDirtyState(template);
       }
 
       signal.throwIfAborted();
 
-      await webcontainer.mount(toFileTree(files));
+      if (this._previousFiles) {
+        await updateFiles(webcontainer, this._previousFiles, files);
+      } else {
+        await webcontainer.mount(toFileTree(files));
+      }
+
+      this._previousFiles = files;
+      this._updateDirtyState(files);
     });
   }
 
@@ -203,7 +244,15 @@ export class TutorialRunner {
    *
    * @see {LoadFilesOptions}
    */
-  runCommands({ prepareCommands, mainCommand, abortPreviousRun = true }: RunCommandsOptions): void {
+  runCommands({ abortPreviousRun = true, ...commands }: RunCommandsOptions): void {
+    const anyChange = this._changeDetection(commands);
+
+    if (!anyChange) {
+      return;
+    }
+
+    console.log('runCommands...', { abortPreviousRun, commands });
+
     const previousProcessPromise = this._currentProcessTask?.promise;
     const loadPromise = this._currentLoadTask?.promise;
 
@@ -211,7 +260,7 @@ export class TutorialRunner {
       this._currentProcessTask?.cancel();
     }
 
-    this._lastRunCommands = { prepareCommands, mainCommand };
+    this._previousRunCommands = commands;
 
     this._currentProcessTask = newTask(async (signal) => {
       await Promise.all([previousProcessPromise, loadPromise]);
@@ -220,19 +269,58 @@ export class TutorialRunner {
 
       signal.throwIfAborted();
 
-      let process: WebContainerProcess | undefined;
+      return this._runCommands(webcontainer, commands, signal);
+    });
+  }
 
-      const abortListener = () => process?.kill();
-      const commands = (prepareCommands ?? []).concat(mainCommand ? [mainCommand] : []).filter(Boolean);
+  /**
+   * Restart the last run commands that were submitted.
+   */
+  restartLastRunCommands() {
+    if (!this._previousRunCommands) {
+      return;
+    }
 
-      signal.addEventListener('abort', abortListener);
+    const previousRunCommands = this._previousRunCommands;
+    const previousProcessPromise = this._currentProcessTask?.promise;
+    const loadPromise = this._currentLoadTask?.promise;
 
-      for (const [index, command] of commands.entries()) {
-        this.status.set({ type: 'running', command, main: index === commands.length - 1 && !!mainCommand });
+    this._currentProcessTask?.cancel();
+
+    this._currentProcessTask = newTask(async (signal) => {
+      await Promise.all([previousProcessPromise, loadPromise]);
+
+      const webcontainer = await webcontainerPromise;
+
+      signal.throwIfAborted();
+
+      return this._runCommands(webcontainer, previousRunCommands, signal);
+    });
+  }
+
+  private async _runCommands(webcontainer: WebContainer, commands: Commands, signal: AbortSignal) {
+    let process: WebContainerProcess | undefined;
+
+    const abortListener = () => process?.kill();
+    signal.addEventListener('abort', abortListener);
+
+    const hasMainCommand = !!commands.mainCommand;
+
+    try {
+      const commandList = commandsToList(commands);
+
+      for (const [index, command] of commandList.entries()) {
+        const isMainCommand = index === commandList.length - 1 && !!commands.mainCommand;
+
+        this.status.set({ type: 'running', command, main: isMainCommand });
 
         process = await this._newProcess(webcontainer, command);
 
         signal.throwIfAborted();
+
+        if (isMainCommand) {
+          this._clearDirtyState();
+        }
 
         const exitCode = await process.exit;
 
@@ -243,23 +331,20 @@ export class TutorialRunner {
         signal.throwIfAborted();
       }
 
+      if (!hasMainCommand) {
+        this._clearDirtyState();
+      }
+
       this.status.set({ type: 'idle' });
-    });
-  }
-
-  /**
-   * Restart the last run command that was submitted.
-   */
-  restartLastRunCommands() {
-    if (!this._lastRunCommands) {
-      return;
+    } finally {
+      signal.removeEventListener('abort', abortListener);
     }
-
-    this.runCommands({ ...this._lastRunCommands, abortPreviousRun: true });
   }
 
   private async _newProcess(webcontainer: WebContainer, shellCommand: string) {
     const [command, ...args] = shellCommand.split(' ');
+
+    this._terminal?.write(`${escapeCodes.gray('$')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
 
     const process = await webcontainer.spawn(command, args, {
       terminal: this._terminal
@@ -274,6 +359,47 @@ export class TutorialRunner {
 
     return process;
   }
+
+  private _updateDirtyState(files: Files) {
+    console.log('updatedFiles', files);
+    for (const filePath in files) {
+      if (filePath.endsWith('/package.json') && files[filePath] != this._packageJsonContent) {
+        this._packageJsonContent = files[filePath];
+        this._packageJsonDirty = true;
+
+        return;
+      }
+    }
+  }
+
+  private _clearDirtyState() {
+    this._packageJsonDirty = false;
+  }
+
+  private _changeDetection(newCommands: Commands) {
+    if (this._packageJsonDirty) {
+      return true;
+    }
+
+    if (!this._previousRunCommands) {
+      return true;
+    }
+
+    const prevCommandList = commandsToList(this._previousRunCommands);
+    const newCommandList = commandsToList(newCommands);
+
+    if (prevCommandList.length !== newCommandList.length) {
+      return true;
+    }
+
+    for (let i = 0; i < prevCommandList.length; ++i) {
+      if (prevCommandList[i] !== newCommandList[i]) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
 
 export const TutorialRunnerContext = createContext(new TutorialRunner());
@@ -281,4 +407,18 @@ export const TutorialRunnerContext = createContext(new TutorialRunner());
 function clearTerminal(terminal: ITerminal) {
   terminal.reset();
   terminal.write(escapeCodes.clear);
+}
+
+function commandsToList({ prepareCommands, mainCommand }: Commands): string[] {
+  return (prepareCommands ?? []).concat(mainCommand ? [mainCommand] : []).filter(Boolean);
+}
+
+async function updateFiles(webcontainer: WebContainer, previousFiles: Files, newFiles: Files) {
+  const { removed, addedOrModified } = filesDiff(previousFiles, newFiles);
+
+  for (const filePath of removed) {
+    await webcontainer.fs.rm(filePath, { force: true });
+  }
+
+  await webcontainer.mount(toFileTree(addedOrModified));
 }
