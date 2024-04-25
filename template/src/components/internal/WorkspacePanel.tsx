@@ -82,28 +82,31 @@ export function WorkspacePanel({ lesson }: Props) {
     [editorDocument, editorState]
   );
 
-  const updateDocument = useCallback((filePath?: string) => {
-    if (!filePath) {
-      setSelectedFile(undefined);
-      return;
-    }
+  const updateDocument = useCallback(
+    (filePath?: string) => {
+      if (!filePath) {
+        setSelectedFile(undefined);
+        return;
+      }
 
-    setSelectedFile(filePath);
+      setSelectedFile(filePath);
 
-    if (editorDocument?.filePath !== filePath) {
-      setEditorState((editorState) => {
-        return {
-          ...editorState,
-          [filePath]: {
-            value: editorState[filePath]?.value ?? lesson.files[filePath] ?? '',
-            filePath: filePath,
-            scroll: editorState[filePath]?.scroll,
-            selection: editorState[filePath]?.selection,
-          },
-        };
-      });
-    }
-  }, []);
+      if (editorDocument?.filePath !== filePath) {
+        setEditorState((editorState) => {
+          return {
+            ...editorState,
+            [filePath]: {
+              value: editorState[filePath]?.value ?? lesson.files[filePath] ?? '',
+              filePath: filePath,
+              scroll: editorState[filePath]?.scroll,
+              selection: editorState[filePath]?.selection,
+            },
+          };
+        });
+      }
+    },
+    [lesson]
+  );
 
   useEffect(() => {
     setEditorState({});
