@@ -1,17 +1,17 @@
 import type { Files } from '@entities/tutorial';
 import { escapeCodes } from '@utils/terminal';
-import type { WebContainer, WebContainerProcess, ServerReadyListener } from '@webcontainer/api';
+import type { ServerReadyListener, WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom } from 'nanostores';
+import { createContext } from 'react';
+import { tick } from '../../utils/event-loop';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
 import type { ITerminal } from './shell';
 import { areFilesEqual, toFileTree } from './utils/files';
 import { newTask, type Task } from './utils/promises';
-import { tick } from '../../utils/event-loop';
-import { createContext } from 'react';
 
 interface LoadFilesOptions {
   /**
-   * The list of files to load in webcontainer.
+   * The list of files to load.
    */
   files: Files;
 
@@ -21,7 +21,7 @@ interface LoadFilesOptions {
   template?: Files;
 
   /**
-   * If true, all files will be removed (except for `node_modules`)
+   * If true, all files will be removed (except for `node_modules`).
    *
    * @default false
    */
@@ -37,12 +37,12 @@ interface LoadFilesOptions {
 
 interface RunCommandsOptions {
   /**
-   * Main command to run. Typically a dev server.
+   * Main command to run. Typically a dev server, e.g. `npm run start`.
    */
   mainCommand?: string;
 
   /**
-   * Prepare command to
+   * List of commands executed before the main command.
    */
   prepareCommands?: string[];
 
@@ -73,11 +73,10 @@ interface CommandError {
 }
 
 /**
- * There should be only a single instance of this class.
+ * The idea behind this class is that it manages the state of WebContainer and exposes
+ * an interface that makes sense to every component of TutorialKit.
  *
- * The idea behind this class is that it manages the state
- * of WebContainer and exposes an interface that makes sense
- * to every component of TutorialKit.
+ * There should be only a single instance of this class.
  */
 export class TutorialRunner {
   private _currentLoadTask: Task<void> | undefined = undefined;
@@ -94,10 +93,10 @@ export class TutorialRunner {
   status = atom<Status>({ type: 'idle' });
 
   /**
-   * Load the files to webcontainer.
+   * Load the provided files into WebContainer.
    *
    * This function always wait for any previous `loadFiles` call to have completed before sending the next one.
-   * It cancel the previous load operation if `options.abortPreviousLoad` was set to true.
+   * It will cancel the previous load operation if `options.abortPreviousLoad` was set to true.
    *
    * @see {LoadFilesOptions}
    */
@@ -115,7 +114,7 @@ export class TutorialRunner {
 
       signal.throwIfAborted();
 
-      // check if the template was changed
+      // check if the template changed
       if (template && (this._currentTemplate == null || !areFilesEqual(template, this._currentTemplate))) {
         this._currentTemplate = template;
         await webcontainer.mount(toFileTree(template));
@@ -134,10 +133,10 @@ export class TutorialRunner {
   }
 
   /**
-   * Connect a terminal to webcontainer in order to get output of processes executed by the
+   * Connect a terminal to WebContainer in order to get output of processes executed by the
    * `TutorialRunner`.
    *
-   * @param terminal Terminal to hook on webcontainer.
+   * @param terminal Terminal to hook up to WebContainer.
    */
   hookTerminal(terminal: ITerminal) {
     this._terminal = terminal;
@@ -192,15 +191,15 @@ export class TutorialRunner {
   }
 
   /**
-   * Run some commands in webcontainer.
+   * Runs a list of commands.
    *
    * This function always wait for any previous `runCommands` call to have completed before sending the next one.
-   * It cancel the previous load operation if `options.abortPreviousRun` was set to true.
+   * It will cancel the previous operation if `options.abortPreviousRun` was set to true.
    *
    * Commands are split into two:
    *
-   *  - `prepareCommands`: for things like `npm install`, `mkdir -p src/foobar`, etc..
-   *  - `mainCommand`: for a dev server or equivalent
+   *  - `prepareCommands`: For example commands like `npm install`, `mkdir -p src/foobar`, etc.
+   *  - `mainCommand`: Used to for example run a dev server or equivalent.
    *
    * @see {LoadFilesOptions}
    */
@@ -261,6 +260,7 @@ export class TutorialRunner {
 
   private async _newProcess(webcontainer: WebContainer, shellCommand: string) {
     const [command, ...args] = shellCommand.split(' ');
+
     const process = await webcontainer.spawn(command, args, {
       terminal: this._terminal
         ? {

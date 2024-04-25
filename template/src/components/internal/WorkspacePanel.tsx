@@ -3,10 +3,10 @@ import resizePanelStyles from '@styles/resize-panel.module.css';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import { type EditorDocument } from '../CodeMirrorEditor/CodeMirrorEditor';
+import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
 import EditorPanel from './EditorPanel';
 import PreviewPanel from './PreviewPanel';
 import TerminalPanel from './TerminalPanel';
-import { TutorialRunnerContext } from '@components/webcontainer/tutorial-runner';
 
 const DEFAULT_TERMINAL_SIZE = 25;
 

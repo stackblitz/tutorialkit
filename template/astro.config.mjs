@@ -24,9 +24,8 @@ export default defineConfig({
         handleHotUpdate(ctx) {
           if (ctx.file.endsWith('/webcontainer/index.ts')) {
             ctx.server.hot.send({ type: 'full-reload' });
+            return [];
           }
-
-          return [];
         },
       },
     ],

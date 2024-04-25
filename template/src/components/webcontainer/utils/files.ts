@@ -29,7 +29,7 @@ export function toFileTree(files: Files): FileSystemTree {
   const root: FileSystemTree = {};
 
   for (const filePath in files) {
-    const segments = filePath.split('/').filter((s) => s);
+    const segments = filePath.split('/').filter((segment) => segment);
 
     let currentTree: FileSystemTree = root;
 
@@ -46,6 +46,7 @@ export function toFileTree(files: Files): FileSystemTree {
         const folder = {
           directory: {},
         };
+
         currentTree[name] = folder;
         currentTree = folder.directory;
       }

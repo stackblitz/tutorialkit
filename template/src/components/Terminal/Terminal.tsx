@@ -1,6 +1,5 @@
 import { themeIsDark, themeStore } from '@stores/theme-store';
 import '@styles/xterm.css';
-import { escapeCodes } from '@utils/terminal';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';

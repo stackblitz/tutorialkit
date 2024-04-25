@@ -35,7 +35,7 @@ export class AbortError extends Error {}
 
 /**
  * A helper function to easily create "cancellable" promises where
- * once a promise is cancelled it is resolve to the "cancel" symbol
+ * once a promise is cancelled it resolves to the "cancel" symbol.
  *
  * @param task - A function that return a promise.
  * @returns The newly created task.

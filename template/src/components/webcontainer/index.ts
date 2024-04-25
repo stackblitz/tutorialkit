@@ -5,7 +5,11 @@ interface WebContainerContext {
   loaded: boolean;
 }
 
-export const webcontainer = WebContainer.boot({ workdirName: 'tutorial' });
+export let webcontainer: Promise<WebContainer> = new Promise(() => {});
+
+if (!import.meta.env.SSR) {
+  webcontainer = WebContainer.boot({ workdirName: 'tutorial' });
+}
 
 export const webcontainerContext: WebContainerContext = {
   loaded: false,
