@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 
 const Terminal = lazy(() => import('../Terminal/Terminal'));
 
-export default function TerminalPanel() {
+export function TerminalPanel() {
   const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {

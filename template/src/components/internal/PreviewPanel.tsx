@@ -1,10 +1,10 @@
-import Preview from '../Preview';
+import { Preview } from '../Preview';
 
 interface Props {
   toggleTerminal?: () => void;
 }
 
-export default function PreviewPanel({ toggleTerminal }: Props) {
+export function PreviewPanel({ toggleTerminal }: Props) {
   return (
     <div className="panel-container">
       <div className="panel-header border-y border-panel-border">

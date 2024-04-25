@@ -11,7 +11,7 @@ interface Props {
   readonly?: boolean;
 }
 
-export default function Terminal({ readonly = true }: Props) {
+export function Terminal({ readonly = true }: Props) {
   const terminalRef = useRef<HTMLDivElement>(null);
   const tutorialRunner = useContext(TutorialRunnerContext);
 
@@ -62,3 +62,5 @@ export default function Terminal({ readonly = true }: Props) {
 
   return <div className="h-full" ref={terminalRef} />;
 }
+
+export default Terminal;

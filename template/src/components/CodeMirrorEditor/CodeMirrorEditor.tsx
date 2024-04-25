@@ -2,9 +2,10 @@ import { acceptCompletion, autocompletion, closeBrackets } from '@codemirror/aut
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { bracketMatching, foldGutter, indentOnInput, indentUnit } from '@codemirror/language';
 import { searchKeymap } from '@codemirror/search';
-import { Compartment, EditorState } from '@codemirror/state';
+import { Compartment, EditorSelection, EditorState } from '@codemirror/state';
 import {
   EditorView,
+  ViewUpdate,
   drawSelection,
   dropCursor,
   highlightActiveLine,
@@ -13,6 +14,7 @@ import {
   lineNumbers,
   scrollPastEnd,
 } from '@codemirror/view';
+import { debounce } from '@utils/debounce';
 import { isTransitionBeforePreparationEvent, type TransitionBeforePreparationEvent } from 'astro:transitions/client';
 import { useEffect, useRef, useState } from 'react';
 import { theme } from './cm-theme';
@@ -22,23 +24,72 @@ import { getLanguage } from './languages';
 export interface EditorDocument {
   value: string;
   filePath: string;
+  scroll?: ScrollPosition;
+  selection?: EditorSelection;
 }
+
+export interface ScrollPosition {
+  top: number;
+  left: number;
+}
+
+export type OnChangeCallback = (update: ViewUpdate) => void;
+export type OnScrollCallback = (position: ScrollPosition) => void;
 
 interface Props {
   doc?: EditorDocument;
+  debounceChange?: number;
+  debounceScroll?: number;
+  onChange?: OnChangeCallback;
+  onScroll?: OnScrollCallback;
   onReady?: () => void;
 }
 
-export default function CodeMirrorEditor({ doc, onReady }: Props) {
+let id = 0;
+
+export function CodeMirrorEditor({
+  doc,
+  debounceScroll = 100,
+  debounceChange = 150,
+  onReady,
+  onScroll,
+  onChange,
+}: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewRef = useRef<EditorView>();
   const [language] = useState(new Compartment());
+  const onScrollRef = useRef(onScroll);
+  const onChangeRef = useRef(onChange);
+
+  onScrollRef.current = onScroll;
+  onChangeRef.current = onChange;
 
   useEffect(() => {
     if (!viewRef.current) {
       const editorState = EditorState.create({
         doc: '',
         extensions: [
+          EditorView.updateListener.of(
+            debounce((update) => {
+              onChangeRef.current?.(update);
+            }, debounceChange)
+          ),
+          EditorView.domEventHandlers({
+            scroll: debounce(() => {
+              if (!viewRef.current) {
+                return;
+              }
+
+              const { current: view } = viewRef;
+
+              onScrollRef.current?.({ left: view.scrollDOM.scrollLeft, top: view.scrollDOM.scrollTop });
+            }, debounceScroll),
+            keydown: (event) => {
+              if (event.code === 'KeyS' && (event.ctrlKey || event.metaKey)) {
+                event.preventDefault();
+              }
+            },
+          }),
           theme(),
           history(),
           keymap.of([
@@ -63,13 +114,6 @@ export default function CodeMirrorEditor({ doc, onReady }: Props) {
           indentOnInput(),
           highlightActiveLineGutter(),
           highlightActiveLine(),
-          EditorView.domEventHandlers({
-            keydown: (event) => {
-              if (event.code === 'KeyS' && (event.ctrlKey || event.metaKey)) {
-                event.preventDefault();
-              }
-            },
-          }),
           foldGutter({
             markerDOM: (open) => {
               const icon = document.createElement('div');
@@ -125,6 +169,8 @@ CodeMirrorEditor.displayName = 'CodeMirrorEditor';
 
 function setEditorDocument(view: EditorView, languageExtension: Compartment, doc?: EditorDocument) {
   if (!doc) {
+    view.scrollDOM.scrollTo(0, 0);
+
     view.dispatch({
       selection: { anchor: 0 },
       changes: {
@@ -143,13 +189,38 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, doc
     }
 
     view.dispatch({
-      effects: languageExtension.reconfigure([languageSupport]),
-      selection: { anchor: 0 },
+      effects: [languageExtension.reconfigure([languageSupport])],
+      selection: doc.selection ?? { anchor: 0 },
       changes: {
         from: 0,
         to: view.state.doc.length,
         insert: doc.value,
       },
+    });
+
+    requestAnimationFrame(() => {
+      const currentLeft = view.scrollDOM.scrollLeft;
+      const currentTop = view.scrollDOM.scrollTop;
+      const newLeft = doc.scroll?.left ?? 0;
+      const newTop = doc.scroll?.top ?? 0;
+
+      const needsScrolling = currentLeft !== newLeft || currentTop !== newTop;
+
+      if (needsScrolling) {
+        // we have to wait until the scroll position was changed before we can set the focus
+        view.scrollDOM.addEventListener(
+          'scroll',
+          () => {
+            view.focus();
+          },
+          { once: true }
+        );
+      } else {
+        // if the scroll position is still the same we can focus immediately
+        view.focus();
+      }
+
+      view.scrollDOM.scrollTo(newLeft, newTop);
     });
   });
 }

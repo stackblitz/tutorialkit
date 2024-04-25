@@ -21,7 +21,7 @@ export const editorTheme = EditorView.theme({
     lineHeight: '1.5',
   },
   '.cm-line': {
-    padding: '0',
+    padding: '0 0 0 4px',
   },
   '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground': {
     backgroundColor: 'var(--cm-selection-bg)',

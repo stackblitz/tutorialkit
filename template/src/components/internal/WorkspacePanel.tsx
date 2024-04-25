@@ -1,12 +1,16 @@
 import type { Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
-import { type EditorDocument } from '../CodeMirrorEditor/CodeMirrorEditor';
+import type {
+  EditorDocument,
+  OnChangeCallback as OnEditorChange,
+  OnScrollCallback as OnEditorScroll,
+} from '../CodeMirrorEditor/CodeMirrorEditor';
 import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
-import EditorPanel from './EditorPanel';
-import PreviewPanel from './PreviewPanel';
-import TerminalPanel from './TerminalPanel';
+import { EditorPanel } from './EditorPanel';
+import { PreviewPanel } from './PreviewPanel';
+import { TerminalPanel } from './TerminalPanel';
 
 const DEFAULT_TERMINAL_SIZE = 25;
 
@@ -14,41 +18,100 @@ interface Props {
   lesson: Lesson;
 }
 
+type EditorState = Record<string, EditorDocument>;
+
 /**
  * This component is the orchestrator between various interactive components.
  */
-export default function WorkspacePanel({ lesson }: Props) {
+export function WorkspacePanel({ lesson }: Props) {
   const { fileTree } = lesson.data;
 
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
-  const [editorDocument, setEditorDocument] = useState<EditorDocument | undefined>();
+  // const [editorDocument, setEditorDocument] = useState<EditorDocument | undefined>();
   const terminalExpanded = useRef(false);
   const tutorialRunner = useContext(TutorialRunnerContext);
 
-  const updateDocument = (filePath?: string) => {
+  const [editorState, setEditorState] = useState<EditorState>({});
+  const [selectedFile, setSelectedFile] = useState<string | undefined>();
+
+  const editorDocument = useMemo(() => {
+    if (!selectedFile) {
+      return undefined;
+    }
+
+    return editorState[selectedFile];
+  }, [editorState, selectedFile]);
+
+  const onEditorChange = useCallback<OnEditorChange>(
+    (update) => {
+      if (!update.view.hasFocus || !editorDocument) {
+        return;
+      }
+
+      const { filePath } = editorDocument;
+      const documentState = editorState[filePath];
+
+      if (!documentState) {
+        return;
+      }
+
+      documentState.selection = update.state.selection;
+      documentState.value = update.view.state.doc.toString();
+    },
+    [editorDocument, editorState]
+  );
+
+  const onEditorScroll = useCallback<OnEditorScroll>(
+    (position) => {
+      if (!editorDocument) {
+        return;
+      }
+
+      const { filePath } = editorDocument;
+
+      const documentState = editorState[filePath];
+
+      if (!documentState) {
+        return;
+      }
+
+      documentState.scroll = position;
+    },
+    [editorDocument, editorState]
+  );
+
+  const updateDocument = useCallback((filePath?: string) => {
     if (!filePath) {
-      setEditorDocument(undefined);
+      setSelectedFile(undefined);
       return;
     }
 
-    const fileContent = lesson.files[filePath];
+    setSelectedFile(filePath);
 
-    if (typeof fileContent === 'string' && editorDocument?.filePath !== filePath) {
-      setEditorDocument({
-        value: fileContent,
-        filePath: filePath,
+    if (editorDocument?.filePath !== filePath) {
+      setEditorState((editorState) => {
+        return {
+          ...editorState,
+          [filePath]: {
+            value: editorState[filePath]?.value ?? lesson.files[filePath] ?? '',
+            filePath: filePath,
+            scroll: editorState[filePath]?.scroll,
+            selection: editorState[filePath]?.selection,
+          },
+        };
       });
     }
-  };
+  }, []);
 
   useEffect(() => {
-    updateDocument(lesson.data.focus);
-  }, [lesson]);
-
-  useEffect(() => {
+    setEditorState({});
     tutorialRunner.loadFiles(lesson);
     tutorialRunner.runCommands(lesson.data);
   }, [lesson]);
+
+  useEffect(() => {
+    updateDocument(lesson.data.focus);
+  }, [lesson, updateDocument]);
 
   const toggleTerminal = () => {
     const { current: terminal } = terminalPanelRef;
@@ -77,6 +140,8 @@ export default function WorkspacePanel({ lesson }: Props) {
           editorDocument={editorDocument}
           lesson={lesson}
           onFileClick={updateDocument}
+          onEditorScroll={onEditorScroll}
+          onEditorChange={onEditorChange}
         />
       </Panel>
       <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 5, coarse: 5 }} />

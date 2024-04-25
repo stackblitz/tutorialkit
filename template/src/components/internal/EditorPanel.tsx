@@ -2,7 +2,12 @@ import type { Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
-import CodeMirrorEditor, { type EditorDocument } from '../CodeMirrorEditor/CodeMirrorEditor';
+import {
+  CodeMirrorEditor,
+  type EditorDocument,
+  type OnChangeCallback as OnEditorChange,
+  type OnScrollCallback as OnEditorScroll,
+} from '../CodeMirrorEditor/CodeMirrorEditor';
 import { FileTree } from '../FileTree';
 
 const DEFAULT_FILE_TREE_SIZE = 25;
@@ -11,15 +16,19 @@ interface Props {
   lesson: Lesson;
   showFileTree?: boolean;
   editorDocument?: EditorDocument;
+  onEditorChange?: OnEditorChange;
+  onEditorScroll?: OnEditorScroll;
   onEditorReady?: () => void;
   onFileClick?: (value?: string) => void;
 }
 
-export default function EditorPanel({
+export function EditorPanel({
   showFileTree = true,
   editorDocument,
   lesson,
   onEditorReady,
+  onEditorScroll,
+  onEditorChange,
   onFileClick,
 }: Props) {
   const fileTreePanelRef = useRef<ImperativePanelHandle>(null);
@@ -70,12 +79,17 @@ export default function EditorPanel({
       <PanelResizeHandle
         disabled={!showFileTree}
         className={resizePanelStyles.PanelResizeHandle}
-        hitAreaMargins={{ fine: 5, coarse: 5 }}
+        hitAreaMargins={{ fine: 8, coarse: 8 }}
       />
       <Panel className="flex flex-col" defaultSize={100} minSize={10}>
         <div>{editorDocument && <FileTab editorDocument={editorDocument} />}</div>
         <div className="h-full flex-1 overflow-hidden">
-          <CodeMirrorEditor doc={editorDocument} onReady={onEditorReady} />
+          <CodeMirrorEditor
+            doc={editorDocument}
+            onReady={onEditorReady}
+            onScroll={onEditorScroll}
+            onChange={onEditorChange}
+          />
         </div>
       </Panel>
     </PanelGroup>

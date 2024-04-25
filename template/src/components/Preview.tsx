@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { TutorialRunnerContext } from './webcontainer/tutorial-runner';
 
-export default function Preview() {
+export function Preview() {
   const [previewUrl, setPreviewUrl] = useState('');
   const tutorialRunner = useContext(TutorialRunnerContext);
 
