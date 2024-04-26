@@ -55,10 +55,16 @@ export function WorkspacePanel({ lesson }: Props) {
         return;
       }
 
-      documentState.selection = update.state.selection;
-      documentState.value = update.view.state.doc.toString();
+      const currentContent = documentState.value;
+      const newContent = update.view.state.doc.toString();
+      const contentChanged = currentContent !== newContent;
 
-      tutorialRunner.updateFile(filePath, documentState.value);
+      documentState.selection = update.state.selection;
+      documentState.value = newContent;
+
+      if (contentChanged) {
+        tutorialRunner.updateFile(filePath, documentState.value);
+      }
     },
     [editorDocument, editorState]
   );
