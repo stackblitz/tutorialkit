@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@astrojs/check':
         specifier: ^0.5.10
-        version: 0.5.10(typescript@5.4.5)
+        version: 0.5.10(prettier-plugin-astro@0.13.0)(typescript@5.4.5)
       '@astrojs/mdx':
         specifier: ^2.3.0
         version: 2.3.0(astro@4.6.0)
@@ -144,6 +144,9 @@ importers:
       mdast-util-to-markdown:
         specifier: ^2.1.0
         version: 2.1.0
+      prettier-plugin-astro:
+        specifier: ^0.13.0
+        version: 0.13.0
       remark:
         specifier: ^15.0.1
         version: 15.0.1
@@ -189,13 +192,13 @@ packages:
     resolution: {integrity: sha512-gFPqTG7otEJ8uP6wrhDv6mqwGWYZKNvAcCq6u9hOj0c+IKCEsY4L1oC9trPq2SaWIzAfHvqfBDxF591JkMf+kg==}
     dev: true
 
-  /@astrojs/check@0.5.10(typescript@5.4.5):
+  /@astrojs/check@0.5.10(prettier-plugin-astro@0.13.0)(typescript@5.4.5):
     resolution: {integrity: sha512-vliHXM9cu/viGeKiksUM4mXfO816ohWtawTl2ADPgTsd4nUMjFiyAl7xFZhF34yy4hq4qf7jvK1F2PlR3b5I5w==}
     hasBin: true
     peerDependencies:
       typescript: ^5.0.0
     dependencies:
-      '@astrojs/language-server': 2.8.4(typescript@5.4.5)
+      '@astrojs/language-server': 2.8.4(prettier-plugin-astro@0.13.0)(typescript@5.4.5)
       chokidar: 3.6.0
       fast-glob: 3.3.2
       kleur: 4.1.5
@@ -206,6 +209,10 @@ packages:
       - prettier-plugin-astro
     dev: true
 
+  /@astrojs/compiler@1.8.2:
+    resolution: {integrity: sha512-o/ObKgtMzl8SlpIdzaxFnt7SATKPxu4oIP/1NL+HDJRzxfJcAkOTAb/ZKMRyULbz4q+1t2/DAebs2Z1QairkZw==}
+    dev: true
+
   /@astrojs/compiler@2.7.1:
     resolution: {integrity: sha512-/POejAYuj8WEw7ZI0J8JBvevjfp9jQ9Wmu/Bg52RiNwGXkMV7JnYpsenVfHvvf1G7R5sXHGKlTcxlQWhoUTiGQ==}
     dev: true
@@ -214,7 +221,7 @@ packages:
     resolution: {integrity: sha512-6B13lz5n6BrbTqCTwhXjJXuR1sqiX/H6rTxzlXx+lN1NnV4jgnq/KJldCQaUWJzPL5SiWahQyinxAbxQtwgPHA==}
     dev: true
 
-  /@astrojs/language-server@2.8.4(typescript@5.4.5):
+  /@astrojs/language-server@2.8.4(prettier-plugin-astro@0.13.0)(typescript@5.4.5):
     resolution: {integrity: sha512-sJH5vGTBkhgA8+hdhzX78UUp4cFz4Mt7xkEkevD188OS5bDMkaue6hK+dtXWM47mnrXFveXA2u38K7S+5+IRjA==}
     hasBin: true
     peerDependencies:
@@ -234,6 +241,7 @@ packages:
       '@volar/language-service': 2.1.6
       '@volar/typescript': 2.1.6
       fast-glob: 3.3.2
+      prettier-plugin-astro: 0.13.0
       volar-service-css: 0.0.34(@volar/language-service@2.1.6)
       volar-service-emmet: 0.0.34(@volar/language-service@2.1.6)
       volar-service-html: 0.0.34(@volar/language-service@2.1.6)
@@ -5972,9 +5980,24 @@ packages:
       which-pm: 2.0.0
     dev: true
 
+  /prettier-plugin-astro@0.13.0:
+    resolution: {integrity: sha512-5HrJNnPmZqTUNoA97zn4gNQv9BgVhv+et03314WpQ9H9N8m2L9OSV798olwmG2YLXPl1iSstlJCR1zB3x5xG4g==}
+    engines: {node: ^14.15.0 || >=16.0.0}
+    dependencies:
+      '@astrojs/compiler': 1.8.2
+      prettier: 3.2.5
+      sass-formatter: 0.7.9
+    dev: true
+
   /prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
+
+  /prettier@3.2.5:
+    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+    engines: {node: '>=14'}
     hasBin: true
     dev: true
 
@@ -6374,6 +6397,10 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
+  /s.color@0.0.15:
+    resolution: {integrity: sha512-AUNrbEUHeKY8XsYr/DYpl+qk5+aM+DChopnWOPEzn8YKzOhv4l2zH6LzZms3tOZP3wwdOyc0RmTciyi46HLIuA==}
+    dev: true
+
   /safe-array-concat@1.1.2:
     resolution: {integrity: sha512-vj6RsCsWBCf19jIeHEfkRMw8DPiBb+DMXklQ/1SGDHOMlHdPUkZXFQ2YdplS23zESTijAcurb1aSgJA3AgMu1Q==}
     engines: {node: '>=0.4'}
@@ -6400,6 +6427,12 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    dev: true
+
+  /sass-formatter@0.7.9:
+    resolution: {integrity: sha512-CWZ8XiSim+fJVG0cFLStwDvft1VI7uvXdCNJYXhDvowiv+DsbD1nXLiQ4zrE5UBvj5DWZJ93cwN0NX5PMsr1Pw==}
+    dependencies:
+      suf-log: 2.5.3
     dev: true
 
   /scheduler@0.23.0:
@@ -6793,6 +6826,12 @@ packages:
     resolution: {integrity: sha512-khxq+Qm3xEyZfKd/y9L3oIWQimxuc4STrQKtQn8aSDRHb8mFgpukgX1hdzfrMEW6JCjyJ8p89x+IUMVnCBI1PA==}
     dependencies:
       inline-style-parser: 0.2.3
+    dev: true
+
+  /suf-log@2.5.3:
+    resolution: {integrity: sha512-KvC8OPjzdNOe+xQ4XWJV2whQA0aM1kGVczMQ8+dStAO6KfEB140JEVQ9dE76ONZ0/Ylf67ni4tILPJB41U0eow==}
+    dependencies:
+      s.color: 0.0.15
     dev: true
 
   /supports-color@5.5.0:

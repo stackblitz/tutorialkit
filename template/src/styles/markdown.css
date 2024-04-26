@@ -1,0 +1,361 @@
+@media (prefers-color-scheme: light) {
+  html:not(.dark) .markdown-content {
+    --ec-brdCol: #e5e5e5;
+    --ec-frm-edTabBarBrdCol: var(--ec-brdCol);
+    --ec-brdRad: var(--code-border-radius, 4px);
+    --ec-brdWd: 1px;
+  }
+}
+
+.markdown-content {
+  --ec-frm-edTabBrdRad: var(--code-border-radius);
+  --code-background: theme('colors.markdown.code.background');
+  --code-font-family: 'Roboto Mono', monospace;
+  --code-font-size: 14px;
+  --code-margin: 0 2px;
+  --code-padding: 4px 6px;
+  --code-color: theme('colors.markdown.code.text');
+  --code-border-radius: 4px;
+  --code-border-color: theme('colors.gray.100');
+  --code-border-width: 1px;
+  --code-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+  --link-color: theme('colors.primary.700');
+  --blockquote-border-color: theme('colors.gray.500');
+  --blockquote-background: var(--code-background);
+  --content-font-size: 16px;
+  --content-line-height: 1.8;
+  --heading-font-weight: 700;
+  --footnotes-border-color: theme('colors.gray.100');
+  --hr-border-width: 1px;
+  --hr-border-color: theme('colors.gray.100');
+
+  --table-border-width: 1px;
+  --table-border-color: theme('colors.gray.100');
+  --table-header-background: theme('colors.gray.50');
+  --table-header-font-size: theme('colors.markdown.table.header.textSize');
+  --table-header-font-weight: theme('colors.markdown.table.header.fontWeight');
+}
+
+/* Ignore top margin if it's the first element in the container */
+.markdown-content:first-child {
+  margin-block-start: 0;
+}
+
+/* Headings */
+
+.markdown-content :is(h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 32px;
+  margin-block-end: 16px;
+  font-weight: var(--heading-font-weight);
+  letter-spacing: -0.25px;
+  line-height: 1.15;
+}
+
+.markdown-content :is(h1, h2, h3, h4, h5, h6) :is(a, code) {
+  font-weight: 700;
+  padding: 2px 6px;
+}
+
+.markdown-content hr + :is(h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 0;
+}
+
+.markdown-content :is(h1, h2, h3, h4, h5, h6) + :is(h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 8px;
+}
+
+.markdown-content h1,
+.markdown-content h1 :is(code, a) {
+  font-size: 38px;
+}
+
+.markdown-content h2,
+.markdown-content h2 :is(code, a) {
+  font-size: 32px;
+}
+
+.markdown-content h3,
+.markdown-content h3 :is(code, a) {
+  font-size: 28px;
+}
+
+.markdown-content h4,
+.markdown-content h4 :is(code, a) {
+  font-size: 24px;
+}
+
+.markdown-content h5,
+.markdown-content h5 :is(code, a) {
+  font-size: 20px;
+}
+
+.markdown-content h6,
+.markdown-content h6 :is(code, a) {
+  font-size: 16px;
+}
+
+.markdown-content :is(h1, h2, h3, h4, h5, h6) code {
+  margin: 0;
+  padding: 0 8px;
+  line-height: 1;
+}
+
+.markdown-content h1 code,
+.markdown-content h2 code {
+  padding: 0 6px;
+  letter-spacing: -2px;
+}
+
+.markdown-content h3 code,
+.markdown-content h4 code {
+  margin: 0 2px;
+  padding: 0 6px;
+  letter-spacing: -1px;
+}
+
+.markdown-content h5 code,
+.markdown-content h6 code {
+  margin: 0 2px;
+  padding: 0 6px;
+  letter-spacing: -0.5px;
+}
+
+.markdown-content :is(h1, h2, h3) code a,
+.markdown-content :is(h1, h2, h3) a:has(code) {
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+.markdown-content h4 code a,
+.markdown-content h4 a:has(code) {
+  text-underline-offset: 3px;
+}
+
+/* Code */
+
+.markdown-content .callout a:has(> code):not(:hover) {
+  color: var(--code-color);
+}
+
+.markdown-content .callout-tip {
+  --code-color: theme('colors.callout.tip.text');
+}
+
+.markdown-content .callout-info {
+  --code-color: theme('colors.callout.info.text');
+}
+
+.markdown-content .callout-warn {
+  --code-color: theme('colors.callout.warn.text');
+}
+
+.markdown-content .callout-danger {
+  --code-color: theme('colors.callout.danger.text');
+}
+
+.markdown-content :is(div) + .expressive-code,
+.markdown-content .expressive-code + :is(div) {
+  margin-block-start: 16px;
+}
+
+.markdown-content :is(code, pre, .expressive-code) + :is(p, ul, ol, .expressive-code) {
+  margin-block-start: 16px;
+}
+
+.markdown-content :is(p, code, pre, .expressive-code) + :is(code, pre, .expressive-code) {
+  margin-block-start: 16px;
+}
+
+.markdown-content :is(pre, code) {
+  font-family: var(--code-font-family);
+  margin: var(--code-margin);
+  padding: var(--code-padding);
+  color: var(--code-color);
+  font-weight: 400;
+  line-height: 1.2;
+  border-radius: var(--code-border-radius);
+  background-color: var(--code-background);
+  border: var(--code-border-width) solid var(--code-border-color);
+}
+
+.markdown-content p code {
+  padding: 1px 6px;
+  font-size: var(--code-font-size);
+}
+
+.markdown-content pre {
+  align-self: stretch;
+  padding: 10px 14px;
+  padding-right: 32px;
+  line-height: 1.4;
+  font-size: var(--code-font-size);
+  white-space: pre-wrap;
+}
+
+/* Lists */
+
+.markdown-content ul,
+.markdown-content ol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: 0;
+  padding-left: 20px;
+}
+
+.markdown-content li ol,
+.markdown-content li ul {
+  margin-block-start: 6px;
+  margin-block-end: 2px;
+}
+
+.markdown-content :is(a, p) + :is(ul, ol) {
+  margin-block-start: 16px;
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+}
+
+.markdown-content ul ul {
+  list-style-type: circle;
+  padding-left: 28px;
+}
+
+.markdown-content ul ul ul {
+  list-style-type: square;
+  padding-left: 28px;
+}
+
+.markdown-content ol ol {
+  list-style-type: lower-alpha;
+  padding-left: 28px;
+}
+
+.markdown-content ol ol ol {
+  list-style-type: lower-roman;
+  padding-left: 28px;
+}
+
+.markdown-content :is(p, ul, ol) + .expressive-code {
+  margin-block-start: 16px;
+}
+
+/* Links */
+
+.markdown-content a {
+  color: var(--link-color);
+  text-decoration: underline;
+  transition: 0.1s ease;
+  transition-property: color;
+}
+
+.markdown-content a code,
+.markdown-content code a,
+.markdown-content a:hover {
+  color: unset;
+}
+
+/* Blockquotes */
+
+.markdown-content blockquote {
+  border-left: 3px solid var(--blockquote-border-color);
+  margin: 0;
+  padding: 16px 20px;
+  background-color: var(--blockquote-background);
+}
+
+.markdown-content :is(blockquote, p, ul, ol, table) + :is(blockquote, p, ul, ol, table) {
+  margin-block-start: 20px;
+}
+
+/* Paragraphs */
+
+.markdown-content p,
+.markdown-content a,
+.markdown-content li,
+.markdown-content blockquote {
+  font-size: var(--content-font-size);
+  line-height: var(--content-line-height);
+}
+
+.markdown-content p + p {
+  margin-block-start: 14px;
+}
+
+.markdown-content a + p,
+.markdown-content ul + p,
+.markdown-content ol + p {
+  margin-block-start: 16px;
+}
+
+.markdown-content p strong {
+  font-weight: 700;
+}
+
+/* Table */
+
+.markdown-content table {
+  display: block;
+  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+.markdown-content thead tr th {
+  border: var(--table-border-width) solid var(--table-border-color);
+  background-color: var(--table-header-background);
+  font-size: var(--table-header-font-size);
+  font-weight: var(--table-header-font-weight);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.markdown-content thead tr th[align='center'] {
+  text-align: center;
+}
+
+.markdown-content thead tr th[align='right'] {
+  text-align: right;
+}
+
+.markdown-content tbody tr {
+  border-top: var(--table-border-width) solid var(--table-border-color);
+}
+
+.markdown-content tbody tr td {
+  border: var(--table-border-width) solid var(--table-border-color);
+  padding: 8px 12px;
+  font-size: 0.9em;
+}
+
+.markdown-content tbody tr td code {
+  padding: 2px 4px;
+}
+
+/* Misc */
+
+.markdown-content hr {
+  width: 100%;
+  margin: 32px 0;
+  border: none;
+  border-bottom: var(--hr-border-width) solid var(--hr-border-color);
+}
+
+.markdown-content :is(ul, ol).contains-task-list {
+  list-style-type: none;
+  padding-left: 12px;
+}
+
+.markdown-content .footnotes {
+  border-top: 1px solid var(--footnotes-border-color);
+  padding-top: 24px;
+  margin-block-start: 56px;
+}
+
+.markdown-content sup a {
+  font-size: 12px;
+}

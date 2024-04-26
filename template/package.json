@@ -52,6 +52,7 @@
     "hastscript": "^9.0.0",
     "mdast-util-directive": "^3.0.0",
     "mdast-util-to-markdown": "^2.1.0",
+    "prettier-plugin-astro": "^0.13.0",
     "remark": "^15.0.1",
     "remark-directive": "^3.0.0",
     "typescript": "^5.4.5",

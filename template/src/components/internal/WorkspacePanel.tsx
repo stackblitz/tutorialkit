@@ -27,7 +27,6 @@ export function WorkspacePanel({ lesson }: Props) {
   const { fileTree } = lesson.data;
 
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
-  // const [editorDocument, setEditorDocument] = useState<EditorDocument | undefined>();
   const terminalExpanded = useRef(false);
   const tutorialRunner = useContext(TutorialRunnerContext);
 
@@ -124,7 +123,7 @@ export function WorkspacePanel({ lesson }: Props) {
     updateDocument(lesson.data.focus);
   }, [lesson, updateDocument]);
 
-  const toggleTerminal = () => {
+  const toggleTerminal = useCallback(() => {
     const { current: terminal } = terminalPanelRef;
 
     if (!terminal) {
@@ -141,7 +140,7 @@ export function WorkspacePanel({ lesson }: Props) {
     } else {
       terminal.collapse();
     }
-  };
+  }, [terminalPanelRef]);
 
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">

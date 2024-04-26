@@ -1,23 +1,16 @@
 ---
 import type { Lesson } from '@entities/tutorial';
-import ContentNavCard from './ContentNavCard.astro';
+import '@styles/markdown.css';
 
 interface Props {
   lesson: Lesson;
 }
 
 const {
-  lesson: { Markdown, prev, next },
+  lesson: { Markdown },
 } = Astro.props;
 ---
 
-<Markdown />
-
-<div class="grid grid-cols-[1fr_1fr] gap-4">
-  <div class="flex">
-    {prev && <ContentNavCard lesson={prev} type="prev" />}
-  </div>
-  <div class="flex">
-    {next && <ContentNavCard lesson={next} type="next" />}
-  </div>
+<div class="markdown-content">
+  <Markdown />
 </div>

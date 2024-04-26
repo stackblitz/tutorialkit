@@ -1,9 +1,11 @@
 ---
+import ContentNavCard from '@components/internal/ContentNavCard.astro';
 import Header from '@components/internal/Header.astro';
 import ResizablePanel from '@components/internal/ResizablePanel.astro';
 import TutorialContent from '@components/internal/TutorialContent.astro';
 import { WorkspacePanel } from '@components/internal/WorkspacePanel';
 import Layout from '@layouts/Layout.astro';
+import '@styles/base.css';
 import { RESIZABLE_PANELS } from '@utils/constants';
 import { getTutorial } from '@utils/content';
 import { generateStaticRoutes } from '@utils/routes';
@@ -18,6 +20,7 @@ export async function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { lesson } = Astro.props as Props;
+const { prev, next } = lesson;
 ---
 
 <Layout title={lesson.title}>
@@ -28,9 +31,24 @@ const { lesson } = Astro.props as Props;
   </Fragment>
   <main class="max-w-full flex flex-col h-screen overflow-hidden" data-swap-root>
     <Header />
-    <ResizablePanel classList="h-full overflow-hidden" id={RESIZABLE_PANELS.Main} type="horizontal" min="20%" max="60%">
-      <div class="overflow-auto h-full p-5" slot="a">
+    <ResizablePanel
+      classList="h-full overflow-hidden"
+      id={RESIZABLE_PANELS.Main}
+      type="horizontal"
+      min="20%"
+      pos="40%"
+      max="60%"
+    >
+      <div class="overflow-auto h-full p-8" slot="a">
         <TutorialContent lesson={lesson} />
+        <div class="grid grid-cols-[1fr_1fr] gap-4 mt-6">
+          <div class="flex">
+            {prev && <ContentNavCard lesson={prev} type="prev" />}
+          </div>
+          <div class="flex">
+            {next && <ContentNavCard lesson={next} type="next" />}
+          </div>
+        </div>
       </div>
       <div class="h-full border-l border-panel-border" slot="b">
         <WorkspacePanel lesson={lesson} client:load transition:persist />

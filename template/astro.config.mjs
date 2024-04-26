@@ -38,6 +38,9 @@ export default defineConfig({
     expressiveCode({
       plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
       themes: ['dark-plus', 'light-plus'],
+      defaultProps: {
+        showLineNumbers: false,
+      },
       styleOverrides: {
         frames: {
           shadowColor: 'none',

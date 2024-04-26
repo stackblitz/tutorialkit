@@ -66,7 +66,10 @@ export function EditorPanel({
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="horizontal">
       <Panel collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
-        <div className="panel-header border-r border-b border-panel-border">Files</div>
+        <div className="panel-header border-r border-b border-panel-border">
+          <div className="i-ph-tree-structure-duotone panel-icon-size"></div>
+          <span>Files</span>
+        </div>
         <FileTree
           className="h-full py-2 border-r border-panel-border"
           selectedFile={selectedFile}

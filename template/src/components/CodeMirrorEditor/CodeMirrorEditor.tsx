@@ -173,8 +173,6 @@ CodeMirrorEditor.displayName = 'CodeMirrorEditor';
 
 function setEditorDocument(view: EditorView, languageExtension: Compartment, doc?: EditorDocument) {
   if (!doc) {
-    view.scrollDOM.scrollTo(0, 0);
-
     view.dispatch({
       selection: { anchor: 0 },
       changes: {
@@ -183,6 +181,8 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, doc
         insert: '',
       },
     });
+
+    view.scrollDOM.scrollTo(0, 0);
 
     return;
   }
