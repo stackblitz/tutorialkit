@@ -6,4 +6,5 @@ export const escapeCodes = {
   red: (text: string) => `\x1b[1;31m${text}${reset}`,
   gray: (text: string) => `\x1b[37m${text}${reset}`,
   green: (text: string) => `\x1b[1;32m${text}${reset}`,
+  magenta: (text: string) => `\x1b[35m${text}${reset}`,
 };

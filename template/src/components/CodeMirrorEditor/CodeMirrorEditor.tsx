@@ -15,7 +15,11 @@ import {
   scrollPastEnd,
 } from '@codemirror/view';
 import { debounce } from '@utils/debounce';
-import { isTransitionBeforePreparationEvent, type TransitionBeforePreparationEvent } from 'astro:transitions/client';
+import {
+  TRANSITION_BEFORE_PREPARATION,
+  isTransitionBeforePreparationEvent,
+  type TransitionBeforePreparationEvent,
+} from 'astro:transitions/client';
 import { useEffect, useRef, useState } from 'react';
 import { theme } from './cm-theme';
 import { indentKeyBinding } from './indent';
@@ -142,7 +146,7 @@ export function CodeMirrorEditor({
       const codemirrorStyleTag = document.head.children[0];
       codemirrorStyleTag.setAttribute('data-astro-transition-persist', 'codemirror');
 
-      document.addEventListener('astro:before-preparation', transitionBeforePreparation);
+      document.addEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
 
       onReady?.();
 
@@ -156,7 +160,7 @@ export function CodeMirrorEditor({
 
   useEffect(() => {
     return () => {
-      document.removeEventListener('astro:before-preparation', transitionBeforePreparation);
+      document.removeEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
       viewRef.current?.destroy();
       viewRef.current = undefined;
     };

@@ -23,7 +23,7 @@ const { lesson } = Astro.props as Props;
 <Layout title={lesson.title}>
   <Fragment slot="head">
     <script>
-      import '@components/custom_swap';
+      import '@utils/custom-swap';
     </script>
   </Fragment>
   <main class="max-w-full flex flex-col h-screen overflow-hidden" data-swap-root>

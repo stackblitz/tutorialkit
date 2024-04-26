@@ -6,7 +6,7 @@ import { createContext } from 'react';
 import { tick } from '../../utils/event-loop';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
 import type { ITerminal } from './shell';
-import { areFilesEqual, filesDiff, toFileTree } from './utils/files';
+import { areFilesEqual, diffFiles, toFileTree } from './utils/files';
 import { newTask, type Task } from './utils/promises';
 
 interface LoadFilesOptions {
@@ -102,7 +102,6 @@ export class TutorialRunner {
   status = atom<Status>({ type: 'idle' });
 
   updateFile(filePath: string, content: string): void {
-    console.log('updateFile...', filePath);
     const previousLoadPromise = this._currentLoadTask?.promise;
 
     this._currentLoadTask = newTask(async (signal) => {
@@ -127,8 +126,6 @@ export class TutorialRunner {
    * @see {LoadFilesOptions}
    */
   prepareFiles({ files, template, abortPreviousLoad = true }: LoadFilesOptions): void {
-    console.log('prepareFiles request...');
-
     const previousLoadPromise = this._currentLoadTask?.promise;
 
     if (abortPreviousLoad) {
@@ -251,8 +248,6 @@ export class TutorialRunner {
       return;
     }
 
-    console.log('runCommands...', { abortPreviousRun, commands });
-
     const previousProcessPromise = this._currentProcessTask?.promise;
     const loadPromise = this._currentLoadTask?.promise;
 
@@ -314,6 +309,11 @@ export class TutorialRunner {
 
         this.status.set({ type: 'running', command, main: isMainCommand });
 
+        // print newlines between commands to visually separate them from one another
+        if (index > 0) {
+          this._terminal?.write('\n');
+        }
+
         process = await this._newProcess(webcontainer, command);
 
         signal.throwIfAborted();
@@ -344,7 +344,7 @@ export class TutorialRunner {
   private async _newProcess(webcontainer: WebContainer, shellCommand: string) {
     const [command, ...args] = shellCommand.split(' ');
 
-    this._terminal?.write(`${escapeCodes.gray('$')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
+    this._terminal?.write(`${escapeCodes.magenta('❯')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
 
     const process = await webcontainer.spawn(command, args, {
       terminal: this._terminal
@@ -361,7 +361,6 @@ export class TutorialRunner {
   }
 
   private _updateDirtyState(files: Files) {
-    console.log('updatedFiles', files);
     for (const filePath in files) {
       if (filePath.endsWith('/package.json') && files[filePath] != this._packageJsonContent) {
         this._packageJsonContent = files[filePath];
@@ -414,7 +413,7 @@ function commandsToList({ prepareCommands, mainCommand }: Commands): string[] {
 }
 
 async function updateFiles(webcontainer: WebContainer, previousFiles: Files, newFiles: Files) {
-  const { removed, addedOrModified } = filesDiff(previousFiles, newFiles);
+  const { removed, addedOrModified } = diffFiles(previousFiles, newFiles);
 
   for (const filePath of removed) {
     await webcontainer.fs.rm(filePath, { force: true });

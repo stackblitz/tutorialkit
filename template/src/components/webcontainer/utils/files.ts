@@ -34,7 +34,7 @@ interface FilesDiff {
   removed: string[];
 }
 
-export function filesDiff(before: Files, after: Files): FilesDiff {
+export function diffFiles(before: Files, after: Files): FilesDiff {
   const addedOrModified: Files = {};
   const removed: string[] = [];
 
