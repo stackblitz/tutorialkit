@@ -1,7 +1,6 @@
 ---
 type: lesson
 title: Foo from part 1
-fileTree: false
 ---
 
 # Kitchen Sink [Heading 1]
