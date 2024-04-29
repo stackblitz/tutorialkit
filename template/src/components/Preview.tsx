@@ -1,19 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { useStore } from '@nanostores/react';
 import { TutorialRunnerContext } from './webcontainer/tutorial-runner';
 
 export function Preview() {
-  const [previewUrl, setPreviewUrl] = useState('');
   const tutorialRunner = useContext(TutorialRunnerContext);
-
-  useEffect(() => {
-    const unsubribe = tutorialRunner.onPreviewURLChange((port, url) => {
-      setPreviewUrl(url);
-    });
-
-    return () => {
-      unsubribe.then((cancel) => cancel()).catch();
-    };
-  }, []);
+  const previewUrl = useStore(tutorialRunner.previewUrl);
 
   return (
     <div className="h-full">

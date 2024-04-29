@@ -104,10 +104,37 @@ export class TutorialRunner {
   private _packageJsonContent = '';
 
   /**
+   * Set the expected port for the preview to show. If this is not set, the first
+   * server that is ready
+   */
+  previewPort: number | undefined = undefined;
+
+  /**
    * Subscribe to this atom to be notified of command failures and whether or not a command
    * is running. The command is provided as well as whether or not this is the "main" command
    */
   status = atom<Status>({ type: 'idle' });
+
+  /**
+   * Atom representing the current preview url. If it's an empty string, no preview can
+   * be shown.
+   */
+  previewUrl = atom<string>('');
+
+  constructor() {
+    this._init();
+  }
+
+  private async _init() {
+    const webcontainer = await webcontainerPromise;
+
+    // TODO: if a port is configured filter server ready events based
+    return webcontainer.on('server-ready', (port, url) => {
+      if (this.previewPort === undefined || this.previewPort === port) {
+        this.previewUrl.set(url);
+      }
+    });
+  }
 
   updateFile(filePath: string, content: string): void {
     const previousLoadPromise = this._currentLoadTask?.promise;
@@ -170,12 +197,6 @@ export class TutorialRunner {
       this._previousFiles = files;
       this._updateDirtyState(files);
     });
-  }
-
-  async onPreviewURLChange(listener: ServerReadyListener) {
-    const webcontainer = await webcontainerPromise;
-
-    return webcontainer.on('server-ready', listener);
   }
 
   /**
