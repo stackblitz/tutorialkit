@@ -6,7 +6,6 @@ export const lessonSchema = baseSchema.extend({
   focus: z.string().optional(),
   scope: z.string().optional(),
   fileTree: z.boolean().optional(),
-  installDeps: z.boolean().optional(),
   hideRoot: z.boolean().optional(),
 });
 

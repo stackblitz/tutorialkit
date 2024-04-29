@@ -1,4 +1,4 @@
-import type { Chapter, CollectionEntry, Files, Lesson, Part, Tutorial } from '@entities/tutorial';
+import type { CollectionEntry, Files, Lesson, Tutorial } from '@entities/tutorial';
 import type { TutorialSchema } from '@schemas';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
@@ -15,7 +15,7 @@ export async function getTutorial() {
     return _tutorial;
   }
 
-  const collection = await getCollection('tutorial');
+  const collection = sortCollection(await getCollection('tutorial'));
 
   _tutorial = {};
 
@@ -33,33 +33,29 @@ export async function getTutorial() {
       tutorialMetaData = data;
     } else if (type === 'part') {
       _tutorial[partId] = {
+        id: partId,
         data,
         slug: getSlug(entry),
-        chapters: _tutorial[partId].chapters ?? {},
+        chapters: {},
       };
     } else if (type === 'chapter') {
       if (!_tutorial[partId]) {
-        _tutorial[partId] = {
-          chapters: {},
-        } as Part;
+        throw new Error(`Could not find part '${partId}'`);
       }
 
       _tutorial[partId].chapters[chapterId] = {
+        id: chapterId,
         data,
         slug: getSlug(entry),
-        lessons: _tutorial[partId].chapters[chapterId].lessons ?? [],
+        lessons: {},
       };
     } else if (type === 'lesson') {
       if (!_tutorial[partId]) {
-        _tutorial[partId] = {
-          chapters: {},
-        } as Part;
+        throw new Error(`Could not find part '${partId}'`);
       }
 
       if (!_tutorial[partId].chapters[chapterId]) {
-        _tutorial[partId].chapters[chapterId] = {
-          lessons: {},
-        } as unknown as Chapter;
+        throw new Error(`Could not find chapter '${partId}'`);
       }
 
       const { Content } = await entry.render();
@@ -77,9 +73,15 @@ export async function getTutorial() {
 
       const lesson: Lesson = {
         data,
-        id: Number(lessonId),
-        part: Number(partId),
-        chapter: Number(chapterId),
+        id: lessonId,
+        part: {
+          id: partId,
+          title: _tutorial[partId].data.title,
+        },
+        chapter: {
+          id: chapterId,
+          title: _tutorial[partId].chapters[chapterId].data.title,
+        },
         Markdown: Content,
         slug: getSlug(entry),
         files,
@@ -99,7 +101,7 @@ export async function getTutorial() {
 
     for (let i = 0; i < partsA.length; i++) {
       if (partsA[i] !== partsB[i]) {
-        return partsA[i] - partsB[i];
+        return Number(partsA[i]) - Number(partsB[i]);
       }
     }
 
@@ -111,8 +113,8 @@ export async function getTutorial() {
     const prevLesson = i > 0 ? lessons.at(i - 1) : undefined;
     const nextLesson = lessons.at(i + 1);
 
-    const partMetadata = _tutorial[lesson.part].data;
-    const chapterMetadata = _tutorial[lesson.part].chapters[lesson.chapter].data;
+    const partMetadata = _tutorial[lesson.part.id].data;
+    const chapterMetadata = _tutorial[lesson.part.id].chapters[lesson.chapter.id].data;
 
     lesson.data = {
       ...pick([lesson.data, chapterMetadata, partMetadata, tutorialMetaData], ['mainCommand', 'prepareCommands']),
@@ -120,20 +122,22 @@ export async function getTutorial() {
     };
 
     if (prevLesson) {
+      const partSlug = _tutorial[prevLesson.part.id].slug;
+      const chapterSlug = _tutorial[prevLesson.part.id].chapters[prevLesson.chapter.id].slug;
+
       lesson.prev = {
         data: prevLesson.data,
-        href: `/${_tutorial[prevLesson.part].slug}/${_tutorial[prevLesson.part].chapters[prevLesson.chapter].slug}/${
-          prevLesson.slug
-        }`,
+        href: `/${partSlug}/${chapterSlug}/${prevLesson.slug}`,
       };
     }
 
     if (nextLesson) {
+      const partSlug = _tutorial[nextLesson.part.id].slug;
+      const chapterSlug = _tutorial[nextLesson.part.id].chapters[nextLesson.chapter.id].slug;
+
       lesson.next = {
         data: nextLesson.data,
-        href: `/${_tutorial[nextLesson.part].slug}/${_tutorial[nextLesson.part].chapters[nextLesson.chapter].slug}/${
-          nextLesson.slug
-        }`,
+        href: `/${partSlug}/${chapterSlug}/${nextLesson.slug}`,
       };
     }
   }
@@ -156,6 +160,35 @@ function pick<T extends Record<any, any>>(objects: (T | undefined)[], properties
   }
 
   return newObject;
+}
+
+function sortCollection(collection: CollectionEntry[]) {
+  return collection.sort((a, b) => {
+    const splitA = a.id.split('/');
+    const splitB = b.id.split('/');
+
+    const depthA = splitA.length;
+    const depthB = splitB.length;
+
+    if (depthA !== depthB) {
+      return depthA - depthB;
+    }
+
+    for (let i = 0; i < splitA.length; i++) {
+      const numA = parseInt(splitA[i], 10);
+      const numB = parseInt(splitB[i], 10);
+
+      if (!isNaN(numA) && !isNaN(numB) && numA !== numB) {
+        return numA - numB;
+      } else {
+        if (splitA[i] !== splitB[i]) {
+          return splitA[i].localeCompare(splitB[i]);
+        }
+      }
+    }
+
+    return 0;
+  });
 }
 
 function parseId(id: string) {

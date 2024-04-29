@@ -1,4 +1,4 @@
 ---
 type: chapter
-title: The second chatper in part 2
+title: The second chapter in part 1
 ---

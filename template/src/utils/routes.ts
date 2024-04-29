@@ -1,11 +1,10 @@
-import type { Lesson, Tutorial } from '@entities/tutorial';
 import type { GetStaticPaths, GetStaticPathsItem } from 'astro';
+import { getTutorial } from './content';
+import { generateNavigationList } from './nav';
 
-export interface LessonRouteProps {
-  lesson: Lesson;
-}
+export async function generateStaticRoutes() {
+  const tutorial = await getTutorial();
 
-export function generateStaticRoutes(tutorial: Tutorial) {
   const routes = [];
 
   const parts = Object.values(tutorial);
@@ -22,10 +21,9 @@ export function generateStaticRoutes(tutorial: Tutorial) {
             slug: `/${parts.length > 1 ? `${part.slug}/` : ''}${chapter.slug}/${lesson.slug}`,
           },
           props: {
-            lesson: {
-              ...lesson,
-              title: `${parts.length > 1 ? `${part.data.title} / ` : ''}${chapter.data.title} / ${lesson.data.title}`,
-            },
+            navList: generateNavigationList(tutorial),
+            title: `${parts.length > 1 ? `${part.data.title} / ` : ''}${chapter.data.title} / ${lesson.data.title}`,
+            lesson,
           },
         } satisfies GetStaticPathsItem);
       }

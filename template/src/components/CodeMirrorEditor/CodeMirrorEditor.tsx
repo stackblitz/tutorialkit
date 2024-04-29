@@ -76,7 +76,7 @@ export function CodeMirrorEditor({
           EditorView.updateListener.of(
             debounce((update) => {
               onChangeRef.current?.(update);
-            }, debounceChange)
+            }, debounceChange),
           ),
           EditorView.domEventHandlers({
             scroll: debounce(() => {
@@ -217,7 +217,7 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, doc
           () => {
             view.focus();
           },
-          { once: true }
+          { once: true },
         );
       } else {
         // if the scroll position is still the same we can focus immediately

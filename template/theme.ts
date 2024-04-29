@@ -49,6 +49,10 @@ export const theme: ConfigBase['theme'] = {
         background: '#f5f6f6',
       },
     },
+    nav: {
+      background: BASE_COLORS.white,
+      textActive: BASE_COLORS.primary[700],
+    },
     panelBorder: BASE_COLORS.gray[200],
     editor: {
       light: {

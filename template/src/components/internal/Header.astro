@@ -2,18 +2,14 @@
 import { ThemeSwitch } from './ThemeSwitch';
 ---
 
-<div>
-  <header class="bg-white border-b border-panel-border">
-    <nav class="flex max-w-full items-center p-3 px-8" aria-label="">
-      <div class="flex flex-1">
-        <a href="#" class="-m-1.5 p-1.5">
-          <span class="sr-only">Your Company</span>
-          <img class="h-8 w-auto" src="/logo.svg" alt="" />
-        </a>
-      </div>
-      <div>
-        <ThemeSwitch />
-      </div>
-    </nav>
-  </header>
-</div>
+<nav class="bg-white border-b border-panel-border flex max-w-full items-center p-3 px-8" aria-label="">
+  <div class="flex flex-1">
+    <a href="#" class="-m-1.5 p-1.5">
+      <span class="sr-only">Your Company</span>
+      <img class="h-8 w-auto" src="/logo.svg" alt="" />
+    </a>
+  </div>
+  <div>
+    <ThemeSwitch />
+  </div>
+</nav>

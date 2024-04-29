@@ -1,5 +1,5 @@
 import type { Files } from '@entities/tutorial';
-import { useEffect, useMemo, useState, type FC, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 
 const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
@@ -19,7 +19,7 @@ export function FileTree({ files, onFileClick, selectedFile, hideRoot, scope, hi
 
   const fileList = useMemo(
     () => buildFileList(files, hideRoot, scope, computedHiddenFiles),
-    [files, hideRoot, scope, computedHiddenFiles]
+    [files, hideRoot, scope, computedHiddenFiles],
   );
 
   const [collapsedFolders, setCollapsedFolders] = useState(() => new Set<number>());
@@ -128,7 +128,7 @@ interface FileProps {
 function File({ file: { depth, name }, onClick, selected }: FileProps) {
   return (
     <NodeButton
-      className={selected ? 'bg-primary-100 text-primary-700' : 'hover:bg-gray-50'}
+      className={selected ? 'bg-primary-700/10 text-primary-700' : 'hover:bg-gray-50'}
       depth={depth}
       icon="i-ph-file-duotone"
       onClick={onClick}
@@ -180,7 +180,7 @@ function buildFileList(
   files: Files,
   hideRoot: boolean,
   scope: string | undefined,
-  hiddenFiles: Array<string | RegExp>
+  hiddenFiles: Array<string | RegExp>,
 ): Node[] {
   const folderPaths = new Set<string>();
   const fileList: Node[] = [];

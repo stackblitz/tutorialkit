@@ -7,18 +7,25 @@ import { theme } from './theme';
 
 const iconPaths = globSync('./icons/languages/*.svg');
 
-const customIconCollection = iconPaths.reduce((acc, iconPath) => {
-  const collectionName = basename(dirname(iconPath));
-  const [iconName] = basename(iconPath).split('.');
+const customIconCollection = iconPaths.reduce(
+  (acc, iconPath) => {
+    const collectionName = basename(dirname(iconPath));
+    const [iconName] = basename(iconPath).split('.');
 
-  acc[collectionName] ??= {};
-  acc[collectionName][iconName] = async () => fs.readFile(iconPath, 'utf8');
+    acc[collectionName] ??= {};
+    acc[collectionName][iconName] = async () => fs.readFile(iconPath, 'utf8');
 
-  return acc;
-}, {} as Record<string, Record<string, () => Promise<string>>>);
+    return acc;
+  },
+  {} as Record<string, Record<string, () => Promise<string>>>,
+);
 
 export default defineConfig({
   theme,
+  rules: [
+    ['scrollbar-transparent', { 'scrollbar-color': '#0000004d transparent' }],
+    ['nav-box-shadow', { 'box-shadow': '0px 0px 14px rgb(0 0 0 / 10%)' }],
+  ],
   shortcuts: {
     'panel-container': 'grid grid-rows-[min-content_1fr] h-full',
     'panel-header': 'flex gap-2 items-center p-1.5 pl-3 bg-gray-50',

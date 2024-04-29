@@ -37,7 +37,7 @@
 }
 
 /* Ignore top margin if it's the first element in the container */
-.markdown-content:first-child {
+.markdown-content :first-child {
   margin-block-start: 0;
 }
 

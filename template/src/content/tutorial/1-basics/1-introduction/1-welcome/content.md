@@ -1,6 +1,7 @@
 ---
 type: lesson
-title: Foo from part 1
+title: Welcome to TutorialKit
+focus: /src/index.js
 ---
 
 # Kitchen Sink [Heading 1]

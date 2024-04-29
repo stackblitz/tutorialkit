@@ -1,0 +1,33 @@
+.AccordionTrigger[data-state='open'] .AccordionTriggerIcon {
+  --un-rotate: 90deg;
+}
+
+.AccordionContent {
+  overflow: hidden;
+}
+
+.AccordionContent[data-state='open'] {
+  animation: slideDown 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.AccordionContent[data-state='closed'] {
+  animation: slideUp 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}

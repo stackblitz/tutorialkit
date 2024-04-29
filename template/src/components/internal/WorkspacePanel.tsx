@@ -65,7 +65,7 @@ export function WorkspacePanel({ lesson }: Props) {
         tutorialRunner.updateFile(filePath, documentState.value);
       }
     },
-    [editorDocument, editorState]
+    [editorDocument, editorState],
   );
 
   const onEditorScroll = useCallback<OnEditorScroll>(
@@ -84,7 +84,7 @@ export function WorkspacePanel({ lesson }: Props) {
 
       documentState.scroll = position;
     },
-    [editorDocument, editorState]
+    [editorDocument, editorState],
   );
 
   const updateDocument = useCallback(
@@ -110,7 +110,7 @@ export function WorkspacePanel({ lesson }: Props) {
         });
       }
     },
-    [lesson]
+    [lesson],
   );
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 ---
 type: chapter
-title: The first chatper in part 1
+title: The first chapter in part 1
 slug: custom-chapter-slug
 ---
