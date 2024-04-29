@@ -110,7 +110,7 @@ export function WorkspacePanel({ lesson }: Props) {
         });
       }
     },
-    [lesson],
+    [lesson, editorDocument]
   );
 
   useEffect(() => {

@@ -35,16 +35,24 @@ interface LoadFilesOptions {
   abortPreviousLoad?: boolean;
 }
 
+type Command =
+  | string
+  | [command: string, title: string]
+  | {
+      command: string;
+      title: string;
+    };
+
 interface Commands {
   /**
    * Main command to run. Typically a dev server, e.g. `npm run start`.
    */
-  mainCommand?: string;
+  mainCommand?: Command;
 
   /**
    * List of commands executed before the main command.
    */
-  prepareCommands?: string[];
+  prepareCommands?: Command[];
 }
 
 interface RunCommandsOptions extends Commands {
@@ -189,7 +197,7 @@ export class TutorialRunner {
           'Read more about browser support:',
           'https://webcontainers.io/guides/browser-support',
           '',
-        ].join('\n')
+        ].join('\n'),
       );
 
       return;
@@ -222,7 +230,7 @@ export class TutorialRunner {
               'Read more at:',
               'https://webcontainers.io/guides/browser-config',
               '',
-            ].join('\n')
+            ].join('\n'),
           );
         });
     }
@@ -392,7 +400,7 @@ export class TutorialRunner {
     }
 
     for (let i = 0; i < prevCommandList.length; ++i) {
-      if (prevCommandList[i] !== newCommandList[i]) {
+      if (!areCommandEqual(prevCommandList[i], newCommandList[i])) {
         return true;
       }
     }
@@ -408,8 +416,27 @@ function clearTerminal(terminal: ITerminal) {
   terminal.write(escapeCodes.clear);
 }
 
+function areCommandEqual(a: Command, b: Command) {
+  return toScript(a) === toScript(b);
+}
+
+function toScript(c: Command) {
+  if (typeof c === 'string') {
+    return c;
+  }
+
+  if (Array.isArray(c)) {
+    return c[0];
+  }
+
+  return c.command;
+}
+
 function commandsToList({ prepareCommands, mainCommand }: Commands): string[] {
-  return (prepareCommands ?? []).concat(mainCommand ? [mainCommand] : []).filter(Boolean);
+  return (prepareCommands ?? [])
+    .concat(mainCommand ? [mainCommand] : [])
+    .map(toScript)
+    .filter(Boolean);
 }
 
 async function updateFiles(webcontainer: WebContainer, previousFiles: Files, newFiles: Files) {
