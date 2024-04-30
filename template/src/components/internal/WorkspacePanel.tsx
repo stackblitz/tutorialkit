@@ -1,3 +1,4 @@
+import type { ImperativePreviewHandle } from '@components/Preview';
 import type { Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -27,6 +28,7 @@ export function WorkspacePanel({ lesson }: Props) {
   const { fileTree } = lesson.data;
 
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
+  const previewRef = useRef<ImperativePreviewHandle>(null);
   const terminalExpanded = useRef(false);
   const tutorialRunner = useContext(TutorialRunnerContext);
 
@@ -116,7 +118,11 @@ export function WorkspacePanel({ lesson }: Props) {
   useEffect(() => {
     setEditorState({});
     tutorialRunner.setPreviewPort(lesson.data.previewPort);
-    tutorialRunner.prepareFiles(lesson);
+    tutorialRunner.prepareFiles(lesson).then((cancelled) => {
+      if (!cancelled && lesson.data.autoReload) {
+        previewRef.current?.reload();
+      }
+    });
     tutorialRunner.runCommands(lesson.data);
   }, [lesson]);
 
@@ -157,7 +163,7 @@ export function WorkspacePanel({ lesson }: Props) {
       </Panel>
       <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 5, coarse: 5 }} />
       <Panel defaultSize={25} minSize={10}>
-        <PreviewPanel toggleTerminal={toggleTerminal} />
+        <PreviewPanel ref={previewRef} toggleTerminal={toggleTerminal} />
       </Panel>
       <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 8, coarse: 8 }} />
       <Panel

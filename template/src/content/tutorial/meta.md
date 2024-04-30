@@ -1,7 +1,8 @@
 ---
 type: tutorial
 previewPort: 8080
-mainCommand: npm start
+autoReload: true
+mainCommand: ['npm start', 'Starting HTTP server...']
 prepareCommands:
-  - npm install
+  - ['npm install', 'Installing dependencies']
 ---

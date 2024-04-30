@@ -26,6 +26,8 @@ export function withResolvers<T>(): PromiseWithResolvers<T> {
 
 export const kTaskCancelled = Symbol('kTaskCancelled');
 
+export type TaskCancelled = typeof kTaskCancelled;
+
 export interface Task<T> {
   promise: Promise<T | typeof kTaskCancelled>;
   cancel(): void;

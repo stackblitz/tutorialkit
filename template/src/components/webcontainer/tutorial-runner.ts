@@ -9,7 +9,7 @@ import { Command, Commands } from './command';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
 import type { ITerminal } from './shell';
 import { areFilesEqual, diffFiles, toFileTree } from './utils/files';
-import { newTask, type Task } from './utils/promises';
+import { newTask, type Task, type TaskCancelled } from './utils/promises';
 
 interface LoadFilesOptions {
   /**
@@ -44,24 +44,6 @@ interface RunCommandsOptions extends CommandsSchema {
    * @default true
    */
   abortPreviousRun?: boolean;
-}
-
-type Status = CommandRunning | CommandError | Idle;
-
-interface Idle {
-  type: 'idle';
-}
-
-interface CommandRunning {
-  type: 'running';
-  main: boolean;
-  command: string;
-}
-
-interface CommandError {
-  type: 'error';
-  command: string;
-  exitCode: number;
 }
 
 type Steps = Step[];
@@ -151,7 +133,7 @@ export class TutorialRunner {
    *
    * @see {LoadFilesOptions}
    */
-  prepareFiles({ files, template, abortPreviousLoad = true }: LoadFilesOptions): void {
+  prepareFiles({ files, template, abortPreviousLoad = true }: LoadFilesOptions): Promise<void | TaskCancelled> {
     const previousLoadPromise = this._currentLoadTask?.promise;
 
     if (abortPreviousLoad) {
@@ -188,6 +170,8 @@ export class TutorialRunner {
       this._previousFiles = files;
       this._updateDirtyState(files);
     });
+
+    return this._currentLoadTask.promise;
   }
 
   /**

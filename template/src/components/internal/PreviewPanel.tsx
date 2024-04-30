@@ -1,10 +1,11 @@
-import { Preview } from '../Preview';
+import { forwardRef } from 'react';
+import { Preview, type ImperativePreviewHandle } from '../Preview';
 
 interface Props {
   toggleTerminal?: () => void;
 }
 
-export function PreviewPanel({ toggleTerminal }: Props) {
+export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggleTerminal }, ref) => {
   return (
     <div className="panel-container">
       <div className="panel-header border-y border-panel-border">
@@ -19,8 +20,8 @@ export function PreviewPanel({ toggleTerminal }: Props) {
         </button>
       </div>
       <div className="h-full">
-        <Preview />
+        <Preview ref={ref} />
       </div>
     </div>
   );
-}
+});
