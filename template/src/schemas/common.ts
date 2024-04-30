@@ -25,7 +25,7 @@ export const webcontainerSchema = commandsSchema.extend({
   previewUrl: z.number().optional(),
 });
 
-export const baseSchema = commandsSchema.extend({
+export const baseSchema = webcontainerSchema.extend({
   title: z.string(),
   slug: z.optional(z.string()),
 });
