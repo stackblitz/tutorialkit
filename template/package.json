@@ -44,6 +44,7 @@
     "@expressive-code/plugin-collapsible-sections": "^0.35.1",
     "@expressive-code/plugin-line-numbers": "^0.35.1",
     "@iconify-json/ph": "^1.1.12",
+    "@iconify-json/svg-spinners": "^1.1.2",
     "@types/mdast": "^4.0.3",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.75",

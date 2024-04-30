@@ -2,17 +2,18 @@ import type { CommandSchema, CommandsSchema } from '@schemas';
 
 export class Commands implements Iterable<Command> {
   /**
-   * Main command to run. Typically a dev server, e.g. `npm run start`.
+   * List of commands executed before the main command.
    */
+
   readonly prepareCommands?: Command[];
 
   /**
-   * List of commands executed before the main command.
+   * Main command to run. Typically a dev server, e.g. `npm run start`.
    */
   readonly mainCommand?: Command;
 
   constructor({ prepareCommands, mainCommand }: CommandsSchema) {
-    this.prepareCommands = prepareCommands?.map((c) => new Command(c));
+    this.prepareCommands = prepareCommands?.map((command) => new Command(command));
     this.mainCommand = mainCommand ? new Command(mainCommand) : undefined;
   }
 
@@ -33,12 +34,12 @@ export class Commands implements Iterable<Command> {
 
 export class Command {
   /**
-   * The command as it would be entered if executed in a shell.
+   * The underlying shell command.
    */
   readonly shellCommand: string;
 
   /**
-   * Title describing what this command does, e.g. "Installing dependencies"
+   * Title describing what this command does, e.g., "Installing dependencies".
    */
   readonly title: string;
 
@@ -51,7 +52,7 @@ export class Command {
     return this.shellCommand !== '';
   }
 
-  static areEquals(a: Command, b: Command) {
+  static equals(a: Command, b: Command) {
     return a.shellCommand === b.shellCommand;
   }
 

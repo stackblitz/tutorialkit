@@ -329,6 +329,7 @@ export class TutorialRunner {
             title: command.title,
             status: 'skipped',
           });
+
           continue;
         }
 
@@ -338,7 +339,7 @@ export class TutorialRunner {
         });
 
         // print newlines between commands to visually separate them from one another
-        if (index > 0) {
+        if (index > 0 && this.steps.get()?.at(index - 1)?.status !== 'skipped') {
           this._terminal?.write('\n');
         }
 
@@ -357,7 +358,9 @@ export class TutorialRunner {
             title: command.title,
             status: 'errored',
           });
+
           const currentSteps = this.steps.value!;
+
           this.steps.set([
             ...currentSteps.slice(0, index),
             {
@@ -369,6 +372,7 @@ export class TutorialRunner {
               status: 'skipped' as const,
             })),
           ]);
+
           break;
         } else {
           updateStep(index, {
@@ -439,7 +443,7 @@ export class TutorialRunner {
     }
 
     for (let i = 0; i < prevCommandList.length; ++i) {
-      if (!Command.areEquals(prevCommandList[i], newCommandList[i])) {
+      if (!Command.equals(prevCommandList[i], newCommandList[i])) {
         return true;
       }
     }

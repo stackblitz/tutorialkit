@@ -3,8 +3,10 @@ import { z } from 'astro:content';
 export const commandSchema = z.union([
   // a single string, the command to run
   z.string(),
+
   // an array of two strings, the command followed by a title
   z.tuple([z.string(), z.string()]),
+
   z.strictObject({
     command: z.string(),
     title: z.string(),

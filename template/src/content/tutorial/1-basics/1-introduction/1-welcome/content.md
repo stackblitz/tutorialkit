@@ -5,9 +5,10 @@ focus: /src/index.js
 previewPort: 8080
 mainCommand: ['node -e setTimeout(()=>{},10_000)', 'Running dev server']
 prepareCommands:
+  - ['', 'This command will be skipped']
+  - ['node --version', 'Print Node.js version']
   - ['node -e setTimeout(()=>{},5000)', 'Installing dependencies']
-  - ['', 'Skipped nothing to do']
-  - ['node -e setTimeout(()=>{process.exit(1)},5000)', 'Preparing configuration']
+  - ['node -e setTimeout(()=>{process.exit(1)},5000)', 'This is going to fail']
 ---
 
 # Kitchen Sink [Heading 1]

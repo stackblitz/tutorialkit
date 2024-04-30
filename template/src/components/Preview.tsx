@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { useContext, forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
 import { TutorialRunnerContext, type Step } from './webcontainer/tutorial-runner';
 
 export type ImperativePreviewHandle = {
@@ -29,20 +29,20 @@ export const Preview = forwardRef<ImperativePreviewHandle>((_, ref) => {
       {previewUrl ? (
         <iframe ref={iframeRef} src={previewUrl} className="h-full w-full"></iframe>
       ) : steps ? (
-        <ul>
+        <ul className="space-y-1">
           {steps.map((step, index) => (
-            <li key={index} className={`flex items-center ${toTextcolor(step.status)}`}>
+            <li key={index} className={`flex items-center ${toTextColor(step.status)}`}>
               {step.status === 'idle' ? (
-                <div className="inline-block mr-2 i-ph-circle-duotone" />
+                <div className="inline-block mr-2 i-ph-circle-duotone scale-120" />
               ) : step.status === 'running' ? (
-                <div className="inline-block mr-2 animate-spin i-ph-spinner-duotone" />
+                <div className="inline-block mr-2 i-svg-spinners-90-ring-with-bg scale-105" />
               ) : step.status === 'completed' ? (
-                <div className="inline-block mr-2 i-ph-check-circle-duotone" />
+                <div className="inline-block mr-2 i-ph-check-circle-duotone scale-120" />
               ) : step.status === 'errored' ? (
-                <div className="inline-block mr-2 i-ph-x-circle-duotone" />
+                <div className="inline-block mr-2 i-ph-x-circle-duotone scale-120" />
               ) : (
-                /* step.status === 'skipped' */
-                <div className="inline-block mr-2 i-ph-warning-circle-duotone" />
+                // skipped step
+                <div className="inline-block mr-2 i-ph-warning-circle-duotone scale-120" />
               )}
               {step.title}
             </li>
@@ -55,17 +55,17 @@ export const Preview = forwardRef<ImperativePreviewHandle>((_, ref) => {
   );
 });
 
-function toTextcolor(status: Step['status']): string {
+function toTextColor(status: Step['status']): string {
   switch (status) {
     case 'completed':
-      return 'text-green-7';
+      return 'text-green-6';
     case 'errored':
       return 'text-red-6';
     case 'idle':
-      return 'text-gray-4';
+      return 'text-gray-500/25';
     case 'running':
       return '';
     case 'skipped':
-      return 'text-yellow-5';
+      return 'text-gray-500';
   }
 }

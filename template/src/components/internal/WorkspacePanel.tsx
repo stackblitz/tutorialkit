@@ -115,12 +115,15 @@ export function WorkspacePanel({ lesson }: Props) {
 
   useEffect(() => {
     setEditorState({});
+
     tutorialRunner.setPreviewPort(lesson.data.previewPort);
+
     tutorialRunner.prepareFiles(lesson).then((cancelled) => {
       if (!cancelled && lesson.data.autoReload) {
         previewRef.current?.reload();
       }
     });
+
     tutorialRunner.runCommands(lesson.data);
   }, [lesson]);
 
