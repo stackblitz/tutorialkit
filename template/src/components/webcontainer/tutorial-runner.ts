@@ -95,11 +95,8 @@ export class TutorialRunner {
   private _previewPort: number | undefined = undefined;
 
   /**
-   * Subscribe to this atom to be notified of command failures and whether or not a command
-   * is running. The command is provided as well as whether or not this is the "main" command
+   * Steps that the runner is or will be executing.
    */
-  status = atom<Status>({ type: 'idle' });
-
   steps = atom<Steps | undefined>(undefined);
 
   /**
@@ -115,10 +112,9 @@ export class TutorialRunner {
   private async _init() {
     const webcontainer = await webcontainerPromise;
 
-    // TODO: if a port is configured filter server ready events based
-    return webcontainer.on('server-ready', (port, url) => {
+    webcontainer.on('port', (port, type, url) => {
       if (this._previewPort === undefined || this._previewPort === port) {
-        this.previewUrl.set(url);
+        this.previewUrl.set(type === 'open' ? url : '');
       }
     });
   }
@@ -403,8 +399,6 @@ export class TutorialRunner {
       if (!hasMainCommand) {
         this._clearDirtyState();
       }
-
-      this.status.set({ type: 'idle' });
     } finally {
       signal.removeEventListener('abort', abortListener);
     }
