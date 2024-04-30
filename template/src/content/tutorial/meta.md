@@ -1,7 +1,7 @@
 ---
 type: tutorial
-mainCommand: npm start
 previewPort: 8080
+mainCommand: npm start
 prepareCommands:
   - npm install
 ---

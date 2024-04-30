@@ -3,6 +3,11 @@ type: lesson
 title: Welcome to TutorialKit
 focus: /src/index.js
 previewPort: 8080
+mainCommand: ['node -e setTimeout(()=>{},10_000)', 'Running dev server']
+prepareCommands:
+  - ['node -e setTimeout(()=>{},5000)', 'Installing dependencies']
+  - ['', 'Skipped nothing to do']
+  - ['node -e setTimeout(()=>{process.exit(1)},5000)', 'Preparing configuration']
 ---
 
 # Kitchen Sink [Heading 1]

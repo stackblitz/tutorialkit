@@ -1,6 +1,6 @@
 import { z } from 'astro:content';
 
-export const command = z.union([
+export const commandSchema = z.union([
   // a single string, the command to run
   z.string(),
   // an array of two strings, the command followed by a title
@@ -11,14 +11,21 @@ export const command = z.union([
   }),
 ]);
 
-export const webcontainerSchema = z.object({
-  mainCommand: command.optional(),
-  prepareCommands: command.array().optional(),
+export type CommandSchema = z.infer<typeof commandSchema>;
+
+export const commandsSchema = z.object({
+  mainCommand: commandSchema.optional(),
+  prepareCommands: commandSchema.array().optional(),
+});
+
+export type CommandsSchema = z.infer<typeof commandsSchema>;
+
+export const webcontainerSchema = commandsSchema.extend({
   previewPort: z.number().optional(),
   previewUrl: z.number().optional(),
 });
 
-export const baseSchema = webcontainerSchema.extend({
+export const baseSchema = commandsSchema.extend({
   title: z.string(),
   slug: z.optional(z.string()),
 });

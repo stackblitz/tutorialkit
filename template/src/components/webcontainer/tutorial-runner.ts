@@ -1,9 +1,11 @@
 import type { Files } from '@entities/tutorial';
+import type { CommandsSchema } from '@schemas';
 import { escapeCodes } from '@utils/terminal';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom } from 'nanostores';
 import { createContext } from 'react';
 import { tick } from '../../utils/event-loop';
+import { Command, Commands } from './command';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
 import type { ITerminal } from './shell';
 import { areFilesEqual, diffFiles, toFileTree } from './utils/files';
@@ -35,27 +37,7 @@ interface LoadFilesOptions {
   abortPreviousLoad?: boolean;
 }
 
-type Command =
-  | string
-  | [command: string, title: string]
-  | {
-      command: string;
-      title: string;
-    };
-
-interface Commands {
-  /**
-   * Main command to run. Typically a dev server, e.g. `npm run start`.
-   */
-  mainCommand?: Command;
-
-  /**
-   * List of commands executed before the main command.
-   */
-  prepareCommands?: Command[];
-}
-
-interface RunCommandsOptions extends Commands {
+interface RunCommandsOptions extends CommandsSchema {
   /**
    * Abort the previous run commands operation.
    *
@@ -82,6 +64,13 @@ interface CommandError {
   exitCode: number;
 }
 
+type Steps = Step[];
+
+interface Step {
+  title: string;
+  status: 'completed' | 'running' | 'errored' | 'skipped' | 'idle';
+}
+
 /**
  * The idea behind this class is that it manages the state of WebContainer and exposes
  * an interface that makes sense to every component of TutorialKit.
@@ -96,7 +85,7 @@ export class TutorialRunner {
   private _currentTemplate: Files | undefined = undefined;
 
   private _previousFiles: Files | undefined = undefined;
-  private _previousRunCommands: RunCommandsOptions | undefined = undefined;
+  private _previousRunCommands: Commands | undefined = undefined;
 
   private _packageJsonDirty = false;
 
@@ -111,6 +100,8 @@ export class TutorialRunner {
    */
   status = atom<Status>({ type: 'idle' });
 
+  steps = atom<Steps | undefined>(undefined);
+
   /**
    * Atom representing the current preview url. If it's an empty string, no preview can
    * be shown.
@@ -124,6 +115,7 @@ export class TutorialRunner {
   private async _init() {
     const webcontainer = await webcontainerPromise;
 
+    // TODO: if a port is configured filter server ready events based
     return webcontainer.on('server-ready', (port, url) => {
       if (this._previewPort === undefined || this._previewPort === port) {
         this.previewUrl.set(url);
@@ -287,7 +279,8 @@ export class TutorialRunner {
       this._currentProcessTask?.cancel();
     }
 
-    this._previousRunCommands = commands;
+    const newCommands = new Commands(commands);
+    this._previousRunCommands = newCommands;
 
     this._currentProcessTask = newTask(async (signal) => {
       await Promise.all([previousProcessPromise, loadPromise]);
@@ -296,7 +289,7 @@ export class TutorialRunner {
 
       signal.throwIfAborted();
 
-      return this._runCommands(webcontainer, commands, signal);
+      return this._runCommands(webcontainer, newCommands, signal);
     });
   }
 
@@ -334,19 +327,42 @@ export class TutorialRunner {
     const hasMainCommand = !!commands.mainCommand;
 
     try {
-      const commandList = commandsToList(commands);
+      const commandList = [...commands];
+
+      const updateStep = (index: number, step: Step) => {
+        const currentSteps = this.steps.value!;
+        this.steps.set([...currentSteps.slice(0, index), step, ...currentSteps.slice(index + 1)]);
+      };
+
+      this.steps.set(
+        commandList.map((command) => ({
+          title: command.title,
+          status: 'idle',
+        })),
+      );
 
       for (const [index, command] of commandList.entries()) {
         const isMainCommand = index === commandList.length - 1 && !!commands.mainCommand;
 
-        this.status.set({ type: 'running', command, main: isMainCommand });
+        if (!command.isRunnable()) {
+          updateStep(index, {
+            title: command.title,
+            status: 'skipped',
+          });
+          continue;
+        }
+
+        updateStep(index, {
+          title: command.title,
+          status: 'running',
+        });
 
         // print newlines between commands to visually separate them from one another
         if (index > 0) {
           this._terminal?.write('\n');
         }
 
-        process = await this._newProcess(webcontainer, command);
+        process = await this._newProcess(webcontainer, command.shellCommand);
 
         signal.throwIfAborted();
 
@@ -357,7 +373,28 @@ export class TutorialRunner {
         const exitCode = await process.exit;
 
         if (exitCode !== 0) {
-          this.status.set({ type: 'error', command, exitCode });
+          updateStep(index, {
+            title: command.title,
+            status: 'errored',
+          });
+          const currentSteps = this.steps.value!;
+          this.steps.set([
+            ...currentSteps.slice(0, index),
+            {
+              title: command.title,
+              status: 'errored',
+            },
+            ...currentSteps.slice(index + 1).map((step) => ({
+              ...step,
+              status: 'skipped' as const,
+            })),
+          ]);
+          break;
+        } else {
+          updateStep(index, {
+            title: command.title,
+            status: 'completed',
+          });
         }
 
         signal.throwIfAborted();
@@ -407,7 +444,7 @@ export class TutorialRunner {
     this._packageJsonDirty = false;
   }
 
-  private _changeDetection(newCommands: Commands) {
+  private _changeDetection(newCommands: CommandsSchema) {
     if (this._packageJsonDirty) {
       return true;
     }
@@ -424,7 +461,7 @@ export class TutorialRunner {
     }
 
     for (let i = 0; i < prevCommandList.length; ++i) {
-      if (!areCommandEqual(prevCommandList[i], newCommandList[i])) {
+      if (!Command.areEquals(prevCommandList[i], newCommandList[i])) {
         return true;
       }
     }
@@ -440,27 +477,12 @@ function clearTerminal(terminal: ITerminal) {
   terminal.write(escapeCodes.clear);
 }
 
-function areCommandEqual(a: Command, b: Command) {
-  return toScript(a) === toScript(b);
-}
-
-function toScript(c: Command) {
-  if (typeof c === 'string') {
-    return c;
+function commandsToList(commands: Commands | CommandsSchema) {
+  if (commands instanceof Commands) {
+    return [...commands].filter((command) => command.isRunnable());
   }
 
-  if (Array.isArray(c)) {
-    return c[0];
-  }
-
-  return c.command;
-}
-
-function commandsToList({ prepareCommands, mainCommand }: Commands): string[] {
-  return (prepareCommands ?? [])
-    .concat(mainCommand ? [mainCommand] : [])
-    .map(toScript)
-    .filter(Boolean);
+  return commandsToList(new Commands(commands));
 }
 
 async function updateFiles(webcontainer: WebContainer, previousFiles: Files, newFiles: Files) {
