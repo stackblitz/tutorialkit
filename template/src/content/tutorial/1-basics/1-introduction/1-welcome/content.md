@@ -2,6 +2,7 @@
 type: lesson
 title: Welcome to TutorialKit
 focus: /src/index.js
+previewPort: 8080
 ---
 
 # Kitchen Sink [Heading 1]

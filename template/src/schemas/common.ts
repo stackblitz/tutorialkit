@@ -11,12 +11,14 @@ export const command = z.union([
   }),
 ]);
 
-export const commandSchema = z.object({
+export const webcontainerSchema = z.object({
   mainCommand: command.optional(),
   prepareCommands: command.array().optional(),
+  previewPort: z.number().optional(),
+  previewUrl: z.number().optional(),
 });
 
-export const baseSchema = commandSchema.extend({
+export const baseSchema = webcontainerSchema.extend({
   title: z.string(),
   slug: z.optional(z.string()),
 });

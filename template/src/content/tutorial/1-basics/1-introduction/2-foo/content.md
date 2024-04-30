@@ -3,6 +3,7 @@ type: lesson
 title: Foo from part 1
 slug: foo
 focus: /src/index.html
+port: 1234
 ---
 
 # Foo

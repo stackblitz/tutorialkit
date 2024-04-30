@@ -117,7 +117,10 @@ export async function getTutorial() {
     const chapterMetadata = _tutorial[lesson.part.id].chapters[lesson.chapter.id].data;
 
     lesson.data = {
-      ...pick([lesson.data, chapterMetadata, partMetadata, tutorialMetaData], ['mainCommand', 'prepareCommands']),
+      ...pick(
+        [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
+        ['mainCommand', 'prepareCommands', 'previewPort', 'previewUrl'],
+      ),
       ...lesson.data,
     };
 

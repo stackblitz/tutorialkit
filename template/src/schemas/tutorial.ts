@@ -1,7 +1,7 @@
 import { z } from 'astro:content';
-import { commandSchema } from './common';
+import { webcontainerSchema } from './common';
 
-export const tutorialSchema = commandSchema.extend({
+export const tutorialSchema = webcontainerSchema.extend({
   type: z.literal('tutorial'),
 });
 

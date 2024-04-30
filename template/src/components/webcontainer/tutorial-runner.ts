@@ -1,6 +1,6 @@
 import type { Files } from '@entities/tutorial';
 import { escapeCodes } from '@utils/terminal';
-import type { ServerReadyListener, WebContainer, WebContainerProcess } from '@webcontainer/api';
+import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom } from 'nanostores';
 import { createContext } from 'react';
 import { tick } from '../../utils/event-loop';
@@ -103,11 +103,7 @@ export class TutorialRunner {
   // this strongly assumes that there's a single package json which might not be true
   private _packageJsonContent = '';
 
-  /**
-   * Set the expected port for the preview to show. If this is not set, the first
-   * server that is ready
-   */
-  previewPort: number | undefined = undefined;
+  private _previewPort: number | undefined = undefined;
 
   /**
    * Subscribe to this atom to be notified of command failures and whether or not a command
@@ -128,12 +124,19 @@ export class TutorialRunner {
   private async _init() {
     const webcontainer = await webcontainerPromise;
 
-    // TODO: if a port is configured filter server ready events based
     return webcontainer.on('server-ready', (port, url) => {
-      if (this.previewPort === undefined || this.previewPort === port) {
+      if (this._previewPort === undefined || this._previewPort === port) {
         this.previewUrl.set(url);
       }
     });
+  }
+
+  /**
+   * Set the expected port for the preview to show. If this is not set,
+   * the port of the first server that is ready will be used.
+   */
+  setPreviewPort(port: number | undefined) {
+    this._previewPort = port;
   }
 
   updateFile(filePath: string, content: string): void {

@@ -110,11 +110,12 @@ export function WorkspacePanel({ lesson }: Props) {
         });
       }
     },
-    [lesson, editorDocument]
+    [lesson, editorDocument],
   );
 
   useEffect(() => {
     setEditorState({});
+    tutorialRunner.setPreviewPort(lesson.data.previewPort);
     tutorialRunner.prepareFiles(lesson);
     tutorialRunner.runCommands(lesson.data);
   }, [lesson]);
