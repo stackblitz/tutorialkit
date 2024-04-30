@@ -66,7 +66,7 @@ interface CommandError {
 
 type Steps = Step[];
 
-interface Step {
+export interface Step {
   title: string;
   status: 'completed' | 'running' | 'errored' | 'skipped' | 'idle';
 }
