@@ -98,21 +98,19 @@ export function WorkspacePanel({ lesson }: Props) {
 
       setSelectedFile(filePath);
 
-      if (editorDocument?.filePath !== filePath) {
-        setEditorState((editorState) => {
-          return {
-            ...editorState,
-            [filePath]: {
-              value: editorState[filePath]?.value ?? lesson.files[filePath] ?? '',
-              filePath: filePath,
-              scroll: editorState[filePath]?.scroll,
-              selection: editorState[filePath]?.selection,
-            },
-          };
-        });
-      }
+      setEditorState((editorState) => {
+        return {
+          ...editorState,
+          [filePath]: {
+            value: editorState[filePath]?.value ?? lesson.files[filePath] ?? '',
+            filePath: filePath,
+            scroll: editorState[filePath]?.scroll,
+            selection: editorState[filePath]?.selection,
+          },
+        };
+      });
     },
-    [lesson, editorDocument],
+    [lesson],
   );
 
   useEffect(() => {
