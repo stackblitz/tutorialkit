@@ -62,12 +62,13 @@ export interface Step {
 export class TutorialRunner {
   private _currentLoadTask: Task<void> | undefined = undefined;
   private _currentProcessTask: Task<void> | undefined = undefined;
+  private _currentCommandProcess: WebContainerProcess | undefined = undefined;
+
+  private _currentTemplate: Files | undefined = undefined;
+  private _currentFiles: Files | undefined = undefined;
+  private _currentRunCommands: Commands | undefined = undefined;
 
   private _terminal: ITerminal | undefined = undefined;
-  private _currentTemplate: Files | undefined = undefined;
-
-  private _previousFiles: Files | undefined = undefined;
-  private _previousRunCommands: Commands | undefined = undefined;
 
   private _packageJsonDirty = false;
 
@@ -109,6 +110,12 @@ export class TutorialRunner {
     this._previewPort = port;
   }
 
+  /**
+   * Update the content of a single file in webcontainer.
+   *
+   * @param filePath path of the file
+   * @param content new content of the file
+   */
   updateFile(filePath: string, content: string): void {
     const previousLoadPromise = this._currentLoadTask?.promise;
 
@@ -121,15 +128,38 @@ export class TutorialRunner {
 
       await webcontainer.fs.writeFile(filePath, content);
 
-      this._updateDirtyState({ [filePath]: content });
+      this._updateCurrentFiles({ [filePath]: content });
     });
   }
 
   /**
-   * Load the provided files into WebContainer.
+   * Update the provided files in webcontainer.
    *
-   * This function always wait for any previous `loadFiles` call to have completed before sending the next one.
-   * It will cancel the previous load operation if `options.abortPreviousLoad` was set to true.
+   * @param files Files to update
+   */
+  updateFiles(files: Files): void {
+    const previousLoadPromise = this._currentLoadTask?.promise;
+
+    this._currentLoadTask = newTask(async (signal) => {
+      await previousLoadPromise;
+
+      const webcontainer = await webcontainerPromise;
+
+      signal.throwIfAborted();
+
+      await webcontainer.mount(toFileTree(files));
+
+      this._updateCurrentFiles(files);
+    });
+  }
+
+  /**
+   * Load the provided files into WebContainer and remove any other files that had been loaded previously.
+   *
+   * This function always wait for any previous `prepareFiles` or `updateFile(s)` call to have completed
+   * before sending the next one.
+   *
+   * Previous load operations will be cancelled if `options.abortPreviousLoad` was set to true.
    *
    * @see {LoadFilesOptions}
    */
@@ -161,13 +191,13 @@ export class TutorialRunner {
 
       signal.throwIfAborted();
 
-      if (this._previousFiles) {
-        await updateFiles(webcontainer, this._previousFiles, files);
+      if (this._currentFiles) {
+        await updateFiles(webcontainer, this._currentFiles, files);
       } else {
         await webcontainer.mount(toFileTree(files));
       }
 
-      this._previousFiles = files;
+      this._currentFiles = files;
       this._updateDirtyState(files);
     });
 
@@ -260,7 +290,7 @@ export class TutorialRunner {
     }
 
     const newCommands = new Commands(commands);
-    this._previousRunCommands = newCommands;
+    this._currentRunCommands = newCommands;
 
     this._currentProcessTask = newTask(async (signal) => {
       await Promise.all([previousProcessPromise, loadPromise]);
@@ -277,11 +307,11 @@ export class TutorialRunner {
    * Restart the last run commands that were submitted.
    */
   restartLastRunCommands() {
-    if (!this._previousRunCommands) {
+    if (!this._currentRunCommands) {
       return;
     }
 
-    const previousRunCommands = this._previousRunCommands;
+    const previousRunCommands = this._currentRunCommands;
     const previousProcessPromise = this._currentProcessTask?.promise;
     const loadPromise = this._currentLoadTask?.promise;
 
@@ -299,9 +329,7 @@ export class TutorialRunner {
   }
 
   private async _runCommands(webcontainer: WebContainer, commands: Commands, signal: AbortSignal) {
-    let process: WebContainerProcess | undefined;
-
-    const abortListener = () => process?.kill();
+    const abortListener = () => this._currentCommandProcess?.kill();
     signal.addEventListener('abort', abortListener);
 
     const hasMainCommand = !!commands.mainCommand;
@@ -343,7 +371,7 @@ export class TutorialRunner {
           this._terminal?.write('\n');
         }
 
-        process = await this._newProcess(webcontainer, command.shellCommand);
+        this._currentCommandProcess = await this._newProcess(webcontainer, command.shellCommand);
 
         signal.throwIfAborted();
 
@@ -351,7 +379,7 @@ export class TutorialRunner {
           this._clearDirtyState();
         }
 
-        const exitCode = await process.exit;
+        const exitCode = await this._currentCommandProcess.exit;
 
         if (exitCode !== 0) {
           updateStep(index, {
@@ -422,6 +450,19 @@ export class TutorialRunner {
     }
   }
 
+  private _updateCurrentFiles(files: Files) {
+    // if the file was not tracked by the existing list of files, add it
+    if (this._currentFiles) {
+      for (const filePath in files) {
+        this._currentFiles[filePath] = files[filePath];
+      }
+    } else {
+      this._currentFiles = files;
+    }
+
+    this._updateDirtyState(files);
+  }
+
   private _clearDirtyState() {
     this._packageJsonDirty = false;
   }
@@ -431,11 +472,11 @@ export class TutorialRunner {
       return true;
     }
 
-    if (!this._previousRunCommands) {
+    if (!this._currentRunCommands) {
       return true;
     }
 
-    const prevCommandList = commandsToList(this._previousRunCommands);
+    const prevCommandList = commandsToList(this._currentRunCommands);
     const newCommandList = commandsToList(newCommands);
 
     if (prevCommandList.length !== newCommandList.length) {
