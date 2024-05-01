@@ -29,7 +29,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
       <a
         className={classnames(
           'flex cursor-pointer h-full items-center justify-center w-[40px]',
-          !prev ? 'opacity-15' : undefined,
+          !prev ? 'opacity-15' : 'hover:text-primary-700',
         )}
         aria-disabled={!prev}
         href={prev?.href}
@@ -174,7 +174,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
       <a
         className={classnames(
           'flex cursor-pointer h-full items-center justify-center w-[40px]',
-          !next ? 'opacity-15' : undefined,
+          !next ? 'opacity-15' : 'hover:text-primary-700',
         )}
         aria-disabled={!next}
         href={next?.href}

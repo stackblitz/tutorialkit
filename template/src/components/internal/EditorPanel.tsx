@@ -65,7 +65,7 @@ export function EditorPanel({
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="horizontal">
       <Panel collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
         <div className="panel-header border-r border-b border-panel-border">
-          <div className="i-ph-tree-structure-duotone"></div>
+          <div className="i-ph-tree-structure-duotone shrink-0"></div>
           <span className="text-sm">Files</span>
         </div>
         <FileTree
