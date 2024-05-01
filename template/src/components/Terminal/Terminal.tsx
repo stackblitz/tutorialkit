@@ -49,6 +49,7 @@ export function Terminal({ readonly = true }: Props) {
 
     const resizeObserver = new ResizeObserver(() => {
       fitAddon.fit();
+      tutorialRunner.onTerminalResize();
     });
 
     resizeObserver.observe(element);

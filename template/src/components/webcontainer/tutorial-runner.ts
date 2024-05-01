@@ -262,6 +262,14 @@ export class TutorialRunner {
     }
   }
 
+  onTerminalResize() {
+    const { cols, rows } = this._terminal ?? {};
+
+    if (cols && rows) {
+      this._currentCommandProcess?.resize({ cols, rows });
+    }
+  }
+
   /**
    * Runs a list of commands.
    *
