@@ -28,7 +28,6 @@ export interface EditorDocument {
   value: string;
   filePath: string;
   scroll?: ScrollPosition;
-  selection?: EditorSelection;
 }
 
 export interface ScrollPosition {
@@ -89,11 +88,12 @@ export function CodeMirrorEditor({
         view.update(transactions);
 
         const newSelection = view.state.selection;
+
         const selectionChanged =
           newSelection !== previousSelection &&
           (newSelection === undefined || previousSelection === undefined || !newSelection.eq(previousSelection));
 
-        if (docRef.current && (transactions.some((tr) => tr.docChanged) || selectionChanged)) {
+        if (docRef.current && (transactions.some((transaction) => transaction.docChanged) || selectionChanged)) {
           onUpdate({
             selection: view.state.selection,
             content: view.state.doc.toString(),
@@ -128,11 +128,14 @@ export function CodeMirrorEditor({
     const view = viewRef.current!;
 
     if (doc) {
-      if (!editorStates.has(doc.filePath)) {
-        editorStates.set(doc.filePath, newEditorState(doc.value, onScrollRef, debounceScroll, language));
+      let state = editorStates.get(doc.filePath);
+
+      if (!state) {
+        state = newEditorState(doc.value, onScrollRef, debounceScroll, language);
+        editorStates.set(doc.filePath, state);
       }
 
-      view.setState(editorStates.get(doc.filePath)!);
+      view.setState(state);
     }
 
     setEditorDocument(view, language, doc);
@@ -222,30 +225,11 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, doc
 
     view.dispatch({
       effects: [languageExtension.reconfigure([languageSupport])],
-      selection: doc.selection ?? { anchor: 0 },
     });
 
     requestAnimationFrame(() => {
-      const currentLeft = view.scrollDOM.scrollLeft;
-      const currentTop = view.scrollDOM.scrollTop;
       const newLeft = doc.scroll?.left ?? 0;
       const newTop = doc.scroll?.top ?? 0;
-
-      const needsScrolling = currentLeft !== newLeft || currentTop !== newTop;
-
-      if (needsScrolling) {
-        // we have to wait until the scroll position was changed before we can set the focus
-        view.scrollDOM.addEventListener(
-          'scroll',
-          () => {
-            view.focus();
-          },
-          { once: true },
-        );
-      } else {
-        // if the scroll position is still the same we can focus immediately
-        view.focus();
-      }
 
       view.scrollDOM.scrollTo(newLeft, newTop);
     });

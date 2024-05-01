@@ -60,7 +60,6 @@ export function WorkspacePanel({ lesson }: Props) {
       const newContent = update.content;
       const contentChanged = currentContent !== newContent;
 
-      documentState.selection = update.selection;
       documentState.value = newContent;
 
       if (contentChanged) {
@@ -105,7 +104,6 @@ export function WorkspacePanel({ lesson }: Props) {
             value: editorState[filePath]?.value ?? lesson.files[filePath] ?? '',
             filePath: filePath,
             scroll: editorState[filePath]?.scroll,
-            selection: editorState[filePath]?.selection,
           },
         };
       });
