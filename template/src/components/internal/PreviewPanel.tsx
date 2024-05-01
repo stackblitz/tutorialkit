@@ -9,14 +9,14 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
   return (
     <div className="panel-container">
       <div className="panel-header border-y border-panel-border">
-        <div className="i-ph-globe-duotone panel-icon-size"></div>
-        <span>Preview</span>
+        <div className="i-ph-globe-duotone"></div>
+        <span className="text-sm">Preview</span>
         <button
-          className="ml-auto p-1 hover:bg-gray-100 rounded-sm"
+          className="ml-auto hover:bg-gray-100 rounded-sm"
           title="Hide Terminal"
           onClick={(event) => toggleTerminal?.()}
         >
-          <div className="i-ph-terminal-window-duotone panel-icon-size"></div>
+          <div className="i-ph-terminal-window-duotone"></div>
         </button>
       </div>
       <div className="h-full">

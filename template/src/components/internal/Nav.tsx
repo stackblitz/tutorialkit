@@ -51,7 +51,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
             className="flex-1 flex items-center text-left py-3 px-3 w-full overflow-hidden"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <div className="flex items-center gap-1 text-[14px] font-light truncate">
+            <div className="flex items-center gap-1 text-sm font-light truncate">
               <span>{currentLesson.part.title}</span>
               <span className="text-gray-200">/</span>
               <span>{currentLesson.chapter.title}</span>

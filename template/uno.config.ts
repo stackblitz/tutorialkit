@@ -28,8 +28,7 @@ export default defineConfig({
   ],
   shortcuts: {
     'panel-container': 'grid grid-rows-[min-content_1fr] h-full',
-    'panel-header': 'flex gap-2 items-center p-1.5 pl-3 bg-gray-50',
-    'panel-icon-size': 'text-5',
+    'panel-header': 'flex gap-2 items-center px-4 py-2 bg-gray-50/70',
   },
   transformers: [transformerDirectives()],
   presets: [

@@ -65,11 +65,11 @@ export function EditorPanel({
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="horizontal">
       <Panel collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
         <div className="panel-header border-r border-b border-panel-border">
-          <div className="i-ph-tree-structure-duotone panel-icon-size"></div>
-          <span>Files</span>
+          <div className="i-ph-tree-structure-duotone"></div>
+          <span className="text-sm">Files</span>
         </div>
         <FileTree
-          className="h-full py-2 border-r border-panel-border"
+          className="h-full py-2 border-r border-panel-border text-sm"
           selectedFile={selectedFile}
           hideRoot={lesson.data.hideRoot ?? true}
           files={lesson.files}
@@ -83,7 +83,7 @@ export function EditorPanel({
         hitAreaMargins={{ fine: 8, coarse: 8 }}
       />
       <Panel className="flex flex-col" defaultSize={100} minSize={10}>
-        <div>{editorDocument && <FileTab editorDocument={editorDocument} />}</div>
+        <FileTab editorDocument={editorDocument} />
         <div className="h-full flex-1 overflow-hidden">
           <CodeMirrorEditor reset={lesson} doc={editorDocument} onScroll={onEditorScroll} onChange={onEditorChange} />
         </div>
@@ -93,29 +93,22 @@ export function EditorPanel({
 }
 
 interface FileTabProps {
-  editorDocument: EditorDocument;
+  editorDocument: EditorDocument | undefined;
 }
 
 function FileTab({ editorDocument }: FileTabProps) {
-  const renderFile = (filePath: string) => {
-    const fileName = filePath.split('/').at(-1);
+  const filePath = editorDocument?.filePath;
+  const fileName = filePath?.split('/').at(-1) ?? '';
+  const icon = fileName ? getFileIcon(fileName) : '';
 
-    if (!fileName) {
-      console.error('Invalid file name');
-      return null;
-    }
-
-    const icon = getFileIcon(fileName);
-
-    return (
+  return (
+    <div className="panel-header border-b border-panel-border">
       <div className="flex items-center gap-2">
-        <div className={icon ? `text-6 ${icon}` : ''}></div>
-        <span className="text-3.5 text-gray-600">{fileName}</span>
+        <div className={`scale-125 ${icon}`}></div>
+        <span className="text-sm text-gray-600">{fileName}</span>
       </div>
-    );
-  };
-
-  return <div className="panel-header border-b border-panel-border">{renderFile(editorDocument.filePath)}</div>;
+    </div>
+  );
 }
 
 function getFileIcon(fileName: string) {
