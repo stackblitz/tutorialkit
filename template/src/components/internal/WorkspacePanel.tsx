@@ -45,7 +45,7 @@ export function WorkspacePanel({ lesson }: Props) {
 
   const onEditorChange = useCallback<OnEditorChange>(
     (update) => {
-      if (!update.view.hasFocus || !editorDocument) {
+      if (!editorDocument) {
         return;
       }
 
@@ -57,10 +57,10 @@ export function WorkspacePanel({ lesson }: Props) {
       }
 
       const currentContent = documentState.value;
-      const newContent = update.view.state.doc.toString();
+      const newContent = update.content;
       const contentChanged = currentContent !== newContent;
 
-      documentState.selection = update.state.selection;
+      documentState.selection = update.selection;
       documentState.value = newContent;
 
       if (contentChanged) {

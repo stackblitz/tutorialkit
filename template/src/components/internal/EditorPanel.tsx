@@ -18,7 +18,6 @@ interface Props {
   editorDocument?: EditorDocument;
   onEditorChange?: OnEditorChange;
   onEditorScroll?: OnEditorScroll;
-  onEditorReady?: () => void;
   onFileClick?: (value?: string) => void;
 }
 
@@ -26,7 +25,6 @@ export function EditorPanel({
   showFileTree = true,
   editorDocument,
   lesson,
-  onEditorReady,
   onEditorScroll,
   onEditorChange,
   onFileClick,
@@ -39,7 +37,7 @@ export function EditorPanel({
       setSelectedFile(fullPath);
       onFileClick?.(fullPath);
     },
-    [onFileClick]
+    [onFileClick],
   );
 
   // when the lesson changes we reset the selected file
@@ -87,12 +85,7 @@ export function EditorPanel({
       <Panel className="flex flex-col" defaultSize={100} minSize={10}>
         <div>{editorDocument && <FileTab editorDocument={editorDocument} />}</div>
         <div className="h-full flex-1 overflow-hidden">
-          <CodeMirrorEditor
-            doc={editorDocument}
-            onReady={onEditorReady}
-            onScroll={onEditorScroll}
-            onChange={onEditorChange}
-          />
+          <CodeMirrorEditor reset={lesson} doc={editorDocument} onScroll={onEditorScroll} onChange={onEditorChange} />
         </div>
       </Panel>
     </PanelGroup>

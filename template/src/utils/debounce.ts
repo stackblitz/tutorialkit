@@ -8,9 +8,7 @@ export function debounce<Args extends any[]>(fn: (...args: Args) => void, delay 
   return function <U>(this: U, ...args: Args) {
     const context = this;
 
-    if (timer) {
-      clearTimeout(timer);
-    }
+    clearTimeout(timer);
 
     timer = window.setTimeout(() => {
       fn.apply(context, args);

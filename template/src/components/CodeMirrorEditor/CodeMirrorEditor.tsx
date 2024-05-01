@@ -5,7 +5,6 @@ import { searchKeymap } from '@codemirror/search';
 import { Compartment, EditorSelection, EditorState } from '@codemirror/state';
 import {
   EditorView,
-  ViewUpdate,
   drawSelection,
   dropCursor,
   highlightActiveLine,
@@ -14,13 +13,13 @@ import {
   lineNumbers,
   scrollPastEnd,
 } from '@codemirror/view';
-import { debounce } from '@utils/debounce';
 import {
   TRANSITION_BEFORE_PREPARATION,
   isTransitionBeforePreparationEvent,
   type TransitionBeforePreparationEvent,
 } from 'astro:transitions/client';
-import { useEffect, useRef, useState } from 'react';
+import { debounce } from '@utils/debounce';
+import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { theme } from './cm-theme';
 import { indentKeyBinding } from './indent';
 import { getLanguage } from './languages';
@@ -37,128 +36,75 @@ export interface ScrollPosition {
   left: number;
 }
 
-export type OnChangeCallback = (update: ViewUpdate) => void;
+export interface EditorUpdate {
+  selection: EditorSelection;
+  content: string;
+}
+
+export type OnChangeCallback = (update: EditorUpdate) => void;
 export type OnScrollCallback = (position: ScrollPosition) => void;
 
 interface Props {
+  reset?: unknown;
   doc?: EditorDocument;
   debounceChange?: number;
   debounceScroll?: number;
   onChange?: OnChangeCallback;
   onScroll?: OnScrollCallback;
-  onReady?: () => void;
 }
 
-let id = 0;
+type EditorStates = Map<string, EditorState>;
 
 export function CodeMirrorEditor({
+  reset,
   doc,
   debounceScroll = 100,
   debounceChange = 150,
-  onReady,
   onScroll,
   onChange,
 }: Props) {
+  const [language] = useState(new Compartment());
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewRef = useRef<EditorView>();
-  const [language] = useState(new Compartment());
+  const docRef = useRef<EditorDocument>();
+  const editorStatesRef = useRef<EditorStates>();
   const onScrollRef = useRef(onScroll);
   const onChangeRef = useRef(onChange);
 
   onScrollRef.current = onScroll;
   onChangeRef.current = onChange;
+  docRef.current = doc;
 
   useEffect(() => {
-    if (!viewRef.current) {
-      const editorState = EditorState.create({
-        doc: '',
-        extensions: [
-          EditorView.updateListener.of(
-            debounce((update) => {
-              onChangeRef.current?.(update);
-            }, debounceChange),
-          ),
-          EditorView.domEventHandlers({
-            scroll: debounce(() => {
-              if (!viewRef.current) {
-                return;
-              }
+    const onUpdate = debounce((update: EditorUpdate) => {
+      onChangeRef.current?.(update);
+    }, debounceChange);
 
-              const { current: view } = viewRef;
+    const view = new EditorView({
+      parent: containerRef.current!,
+      dispatchTransactions(transactions) {
+        view.update(transactions);
 
-              onScrollRef.current?.({ left: view.scrollDOM.scrollLeft, top: view.scrollDOM.scrollTop });
-            }, debounceScroll),
-            keydown: (event) => {
-              if (event.code === 'KeyS' && (event.ctrlKey || event.metaKey)) {
-                event.preventDefault();
-              }
-            },
-          }),
-          theme(),
-          history(),
-          keymap.of([
-            ...defaultKeymap,
-            ...historyKeymap,
-            ...searchKeymap,
-            { key: 'Tab', run: acceptCompletion },
-            indentKeyBinding,
-          ]),
-          indentUnit.of('\t'),
-          language.of([]),
-          autocompletion({
-            closeOnBlur: false,
-          }),
-          closeBrackets(),
-          lineNumbers(),
-          scrollPastEnd(),
-          dropCursor(),
-          drawSelection(),
-          bracketMatching(),
-          EditorState.tabSize.of(2),
-          indentOnInput(),
-          highlightActiveLineGutter(),
-          highlightActiveLine(),
-          foldGutter({
-            markerDOM: (open) => {
-              const icon = document.createElement('div');
+        if (transactions.some((tr) => tr.docChanged) && docRef.current) {
+          onUpdate({
+            selection: view.state.selection,
+            content: view.state.doc.toString(),
+          });
 
-              icon.className = `fold-icon ${open ? 'i-ph-caret-down' : 'i-ph-caret-right'}`;
+          editorStatesRef.current!.set(docRef.current.filePath, view.state);
+        }
+      },
+    });
 
-              return icon;
-            },
-          }),
-        ],
-      });
+    viewRef.current = view;
 
-      if (!containerRef.current) {
-        console.error('Container reference undefined');
-        return;
-      }
+    // we grab the style tag that codemirror mounts
+    const codemirrorStyleTag = document.head.children[0];
+    codemirrorStyleTag.setAttribute('data-astro-transition-persist', 'codemirror');
 
-      const view = new EditorView({
-        state: editorState,
-        parent: containerRef.current,
-      });
+    document.addEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
 
-      viewRef.current = view;
-
-      // we grab the style tag that codemirror mounts
-      const codemirrorStyleTag = document.head.children[0];
-      codemirrorStyleTag.setAttribute('data-astro-transition-persist', 'codemirror');
-
-      document.addEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
-
-      onReady?.();
-
-      setEditorDocument(view, language, doc);
-    } else {
-      const { current: view } = viewRef;
-
-      setEditorDocument(view, language, doc);
-    }
-  }, [doc]);
-
-  useEffect(() => {
     return () => {
       document.removeEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
       viewRef.current?.destroy();
@@ -166,10 +112,85 @@ export function CodeMirrorEditor({
     };
   }, []);
 
+  useEffect(() => {
+    editorStatesRef.current = new Map<string, EditorState>();
+  }, [reset]);
+
+  useEffect(() => {
+    const editorStates = editorStatesRef.current!;
+    const view = viewRef.current!;
+
+    if (doc) {
+      if (!editorStates.has(doc.filePath)) {
+        editorStates.set(doc.filePath, newEditorState(doc.value, onScrollRef, debounceScroll, language));
+      }
+
+      view.setState(editorStates.get(doc.filePath)!);
+    }
+
+    setEditorDocument(view, language, doc);
+  }, [doc]);
+
   return <div className="h-full overflow-hidden" ref={containerRef} />;
 }
 
 CodeMirrorEditor.displayName = 'CodeMirrorEditor';
+
+function newEditorState(
+  content: string,
+  onScrollRef: MutableRefObject<OnScrollCallback | undefined>,
+  debounceScroll: number,
+  language: Compartment,
+) {
+  return EditorState.create({
+    doc: content,
+    extensions: [
+      EditorView.domEventHandlers({
+        scroll: debounce((_event, view) => {
+          onScrollRef.current?.({ left: view.scrollDOM.scrollLeft, top: view.scrollDOM.scrollTop });
+        }, debounceScroll),
+        keydown: (event) => {
+          if (event.code === 'KeyS' && (event.ctrlKey || event.metaKey)) {
+            event.preventDefault();
+          }
+        },
+      }),
+      theme(),
+      history(),
+      keymap.of([
+        ...defaultKeymap,
+        ...historyKeymap,
+        ...searchKeymap,
+        { key: 'Tab', run: acceptCompletion },
+        indentKeyBinding,
+      ]),
+      indentUnit.of('\t'),
+      language.of([]),
+      autocompletion({
+        closeOnBlur: false,
+      }),
+      closeBrackets(),
+      lineNumbers(),
+      scrollPastEnd(),
+      dropCursor(),
+      drawSelection(),
+      bracketMatching(),
+      EditorState.tabSize.of(2),
+      indentOnInput(),
+      highlightActiveLineGutter(),
+      highlightActiveLine(),
+      foldGutter({
+        markerDOM: (open) => {
+          const icon = document.createElement('div');
+
+          icon.className = `fold-icon ${open ? 'i-ph-caret-down' : 'i-ph-caret-right'}`;
+
+          return icon;
+        },
+      }),
+    ],
+  });
+}
 
 function setEditorDocument(view: EditorView, languageExtension: Compartment, doc?: EditorDocument) {
   if (!doc) {
@@ -195,11 +216,6 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, doc
     view.dispatch({
       effects: [languageExtension.reconfigure([languageSupport])],
       selection: doc.selection ?? { anchor: 0 },
-      changes: {
-        from: 0,
-        to: view.state.doc.length,
-        insert: doc.value,
-      },
     });
 
     requestAnimationFrame(() => {
