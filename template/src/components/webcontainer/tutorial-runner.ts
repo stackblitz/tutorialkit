@@ -50,7 +50,7 @@ type Steps = Step[];
 
 export interface Step {
   title: string;
-  status: 'completed' | 'running' | 'errored' | 'skipped' | 'idle';
+  status: 'completed' | 'running' | 'failed' | 'skipped' | 'idle';
 }
 
 /**
@@ -356,7 +356,7 @@ export class TutorialRunner {
         if (exitCode !== 0) {
           updateStep(index, {
             title: command.title,
-            status: 'errored',
+            status: 'failed',
           });
 
           const currentSteps = this.steps.value!;
@@ -365,7 +365,7 @@ export class TutorialRunner {
             ...currentSteps.slice(0, index),
             {
               title: command.title,
-              status: 'errored',
+              status: 'failed',
             },
             ...currentSteps.slice(index + 1).map((step) => ({
               ...step,

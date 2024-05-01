@@ -13,12 +13,12 @@ import {
   lineNumbers,
   scrollPastEnd,
 } from '@codemirror/view';
+import { debounce } from '@utils/debounce';
 import {
   TRANSITION_BEFORE_PREPARATION,
   isTransitionBeforePreparationEvent,
   type TransitionBeforePreparationEvent,
 } from 'astro:transitions/client';
-import { debounce } from '@utils/debounce';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { theme } from './cm-theme';
 import { indentKeyBinding } from './indent';

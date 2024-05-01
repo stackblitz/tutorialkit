@@ -25,7 +25,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
   useOutsideClick(menuRef, onOutsideClick);
 
   return (
-    <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] h-[77px] gap-0.5 py-4 px-1">
+    <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1">
       <a
         className={classnames(
           'flex cursor-pointer h-full items-center justify-center w-[40px]',
@@ -37,7 +37,16 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
         <span className="i-ph-arrow-left scale-120"></span>
       </a>
       <div className="relative">
-        <div className="absolute z-1 left-0 right-0 rounded-[8px] nav-box-shadow bg-nav-background" ref={menuRef}>
+        <div
+          className={classnames(
+            'absolute z-1 left-0 transition-[background,box-shadow] duration-200 right-0 rounded-[8px] border border-nav-borderColor hover:bg-nav-hoverBackground',
+            {
+              'bg-nav-background': !showDropdown,
+              'bg-nav-hoverBackground nav-box-shadow': showDropdown,
+            },
+          )}
+          ref={menuRef}
+        >
           <button
             className="flex-1 flex items-center text-left py-3 px-3 w-full overflow-hidden"
             onClick={() => setShowDropdown(!showDropdown)}
@@ -66,7 +75,12 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                 className=" overflow-hidden"
               >
                 <ul className="py-5 pl-5 border-t border-gray-100 overflow-auto max-h-[60dvh]">
-                  <Accordion.Root className="space-y-1" type="single" defaultValue={`part-${currentLesson.part.id}`}>
+                  <Accordion.Root
+                    className="space-y-1.5"
+                    type="single"
+                    collapsible
+                    defaultValue={`part-${currentLesson.part.id}`}
+                  >
                     {navList.map((part, partIndex) => {
                       const isPartActive = part.id === currentLesson.part.id;
 
@@ -74,15 +88,25 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                         <li key={partIndex}>
                           <Accordion.Item value={`part-${part.id}`}>
                             <Accordion.Trigger
-                              className={classnames(navStyles.AccordionTrigger, 'w-full text-left', {
-                                'text-nav-textActive font-medium': isPartActive,
-                              })}
-                            >{`Part ${partIndex + 1}: ${part.title}`}</Accordion.Trigger>
+                              className={classnames(
+                                navStyles.AccordionTrigger,
+                                'flex items-center gap-1 w-full hover:text-primary-700',
+                                {
+                                  'font-medium': isPartActive,
+                                },
+                              )}
+                            >
+                              <span
+                                className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80`}
+                              ></span>
+                              <span> {`Part ${partIndex + 1}: ${part.title}`}</span>
+                            </Accordion.Trigger>
                             <Accordion.Content className={navStyles.AccordionContent}>
-                              <ul className="pl-4.5 mt-0.5">
+                              <ul className="pl-4.5 mt-1.5">
                                 <Accordion.Root
-                                  className="mb-1 space-y-0.5 mt-0.5"
+                                  className="mb-1 space-y-1.5"
                                   type="single"
+                                  collapsible
                                   defaultValue={`chapter-${currentLesson.chapter.id}`}
                                 >
                                   {part.sections?.map((chapter, chapterIndex) => {
@@ -94,9 +118,9 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                                           <Accordion.Trigger
                                             className={classnames(
                                               navStyles.AccordionTrigger,
-                                              'flex items-center gap-1 w-full',
+                                              'flex items-center gap-1 w-full hover:text-primary-700',
                                               {
-                                                'text-nav-textActive font-medium': isChapterActive,
+                                                'font-medium': isChapterActive,
                                               },
                                             )}
                                           >
@@ -106,18 +130,18 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                                             <span>{chapter.title}</span>
                                           </Accordion.Trigger>
                                           <Accordion.Content className={navStyles.AccordionContent}>
-                                            <ul className="pl-9 mt-0.5">
+                                            <ul className="pl-9 mt-1.5">
                                               {chapter.sections?.map((lesson, lessonIndex) => {
                                                 const isActiveLesson =
                                                   isPartActive && isChapterActive && lesson.id === currentLesson.id;
 
                                                 return (
-                                                  <li key={lessonIndex}>
+                                                  <li key={lessonIndex} className="mr-3">
                                                     <a
                                                       className={classnames(
-                                                        'w-full inline-block border border-transparent pr-3 hover:underline',
+                                                        'w-full inline-block border border-transparent pr-3 hover:underline hover:text-primary-700 px-3 py-1 rounded-1',
                                                         {
-                                                          'text-nav-textActive font-medium': isActiveLesson,
+                                                          'font-medium bg-nav-activeLesson': isActiveLesson,
                                                         },
                                                       )}
                                                       href={lesson.href}

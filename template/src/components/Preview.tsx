@@ -38,11 +38,11 @@ export const Preview = forwardRef<ImperativePreviewHandle>((_, ref) => {
                 <div className="inline-block mr-2 i-svg-spinners-90-ring-with-bg scale-105" />
               ) : step.status === 'completed' ? (
                 <div className="inline-block mr-2 i-ph-check-circle-duotone scale-120" />
-              ) : step.status === 'errored' ? (
+              ) : step.status === 'failed' ? (
                 <div className="inline-block mr-2 i-ph-x-circle-duotone scale-120" />
               ) : (
                 // skipped step
-                <div className="inline-block mr-2 i-ph-warning-circle-duotone scale-120" />
+                <div className="inline-block mr-2 i-ph-minus-circle-duotone scale-120" />
               )}
               {step.title}
             </li>
@@ -57,15 +57,20 @@ export const Preview = forwardRef<ImperativePreviewHandle>((_, ref) => {
 
 function toTextColor(status: Step['status']): string {
   switch (status) {
-    case 'completed':
-      return 'text-green-6';
-    case 'errored':
-      return 'text-red-6';
-    case 'idle':
+    case 'completed': {
+      return 'text-bootscreen-success';
+    }
+    case 'failed': {
+      return 'text-bootscreen-failed';
+    }
+    case 'idle': {
       return 'text-gray-500/25';
-    case 'running':
+    }
+    case 'running': {
       return '';
-    case 'skipped':
-      return 'text-gray-500';
+    }
+    case 'skipped': {
+      return 'text-bootscreen-skipped';
+    }
   }
 }

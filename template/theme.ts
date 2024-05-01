@@ -50,8 +50,16 @@ export const theme: ConfigBase['theme'] = {
       },
     },
     nav: {
-      background: BASE_COLORS.white,
+      background: '#f6f8f9',
+      hoverBackground: BASE_COLORS.white,
+      borderColor: BASE_COLORS.gray[200],
       textActive: BASE_COLORS.primary[700],
+      activeLesson: '#f6f8f9',
+    },
+    bootscreen: {
+      success: '#109d7c',
+      failed: '#b73051',
+      skipped: '#6c737f',
     },
     panelBorder: BASE_COLORS.gray[200],
     editor: {

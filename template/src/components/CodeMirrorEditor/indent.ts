@@ -19,8 +19,8 @@ function indentMore({ state, dispatch }: EditorView) {
       changeBySelectedLine(state, (from, to, changes) => {
         changes.push({ from, to, insert: state.facet(indentUnit) });
       }),
-      { userEvent: 'input.indent' }
-    )
+      { userEvent: 'input.indent' },
+    ),
   );
 
   return true;
@@ -28,7 +28,7 @@ function indentMore({ state, dispatch }: EditorView) {
 
 function changeBySelectedLine(
   state: EditorState,
-  cb: (from: number, to: number | undefined, changes: ChangeSpec[], line: Line) => void
+  cb: (from: number, to: number | undefined, changes: ChangeSpec[], line: Line) => void,
 ) {
   return state.changeByRange((range) => {
     let changes: ChangeSpec[] = [];
