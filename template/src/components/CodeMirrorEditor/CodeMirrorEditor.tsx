@@ -84,9 +84,16 @@ export function CodeMirrorEditor({
     const view = new EditorView({
       parent: containerRef.current!,
       dispatchTransactions(transactions) {
+        const previousSelection = view.state.selection;
+
         view.update(transactions);
 
-        if (transactions.some((tr) => tr.docChanged) && docRef.current) {
+        const newSelection = view.state.selection;
+        const selectionChanged =
+          newSelection !== previousSelection &&
+          (newSelection === undefined || previousSelection === undefined || !newSelection.eq(previousSelection));
+
+        if (docRef.current && (transactions.some((tr) => tr.docChanged) || selectionChanged)) {
           onUpdate({
             selection: view.state.selection,
             content: view.state.doc.toString(),
