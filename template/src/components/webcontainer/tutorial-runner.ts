@@ -63,13 +63,10 @@ export class TutorialRunner {
   private _currentLoadTask: Task<void> | undefined = undefined;
   private _currentProcessTask: Task<void> | undefined = undefined;
   private _currentCommandProcess: WebContainerProcess | undefined = undefined;
-
   private _currentTemplate: Files | undefined = undefined;
   private _currentFiles: Files | undefined = undefined;
   private _currentRunCommands: Commands | undefined = undefined;
-
   private _terminal: ITerminal | undefined = undefined;
-
   private _packageJsonDirty = false;
 
   // this strongly assumes that there's a single package json which might not be true
@@ -111,7 +108,7 @@ export class TutorialRunner {
   }
 
   /**
-   * Update the content of a single file in webcontainer.
+   * Update the content of a single file in WebContainer.
    *
    * @param filePath path of the file
    * @param content new content of the file
@@ -133,9 +130,9 @@ export class TutorialRunner {
   }
 
   /**
-   * Update the provided files in webcontainer.
+   * Update the provided files in WebContainer.
    *
-   * @param files Files to update
+   * @param files Files to update.
    */
   updateFiles(files: Files): void {
     const previousLoadPromise = this._currentLoadTask?.promise;
@@ -156,7 +153,7 @@ export class TutorialRunner {
   /**
    * Load the provided files into WebContainer and remove any other files that had been loaded previously.
    *
-   * This function always wait for any previous `prepareFiles` or `updateFile(s)` call to have completed
+   * This function always waits for any previous `prepareFiles` or `updateFile(s)` call to have completed
    * before sending the next one.
    *
    * Previous load operations will be cancelled if `options.abortPreviousLoad` was set to true.

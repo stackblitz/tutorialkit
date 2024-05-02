@@ -24,7 +24,7 @@
   --blockquote-background: var(--code-background);
   --content-font-size: 16px;
   --content-line-height: 1.8;
-  --heading-font-weight: 700;
+  --heading-font-weight: 600;
   --footnotes-border-color: theme('colors.gray.100');
   --hr-border-width: 1px;
   --hr-border-color: theme('colors.gray.100');
@@ -52,7 +52,7 @@
 }
 
 .markdown-content :is(h1, h2, h3, h4, h5, h6) :is(a, code) {
-  font-weight: 700;
+  font-weight: var(--heading-font-weight);
   padding: 2px 6px;
 }
 
@@ -294,7 +294,7 @@
 }
 
 .markdown-content p strong {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* Table */

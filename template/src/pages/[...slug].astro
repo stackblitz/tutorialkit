@@ -35,7 +35,7 @@ const { lesson, navList, title } = Astro.props as Props;
       pos="40%"
       max="60%"
     >
-      <div class="h-full bg-primary-50/20 flex flex-col" slot="a">
+      <div class="h-full flex flex-col" slot="a">
         <Nav client:load lesson={lesson} navList={navList} />
         <TutorialContent lesson={lesson} slot="a" />
       </div>

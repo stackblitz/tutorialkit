@@ -25,7 +25,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
   useOutsideClick(menuRef, onOutsideClick);
 
   return (
-    <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1">
+    <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1 text-gray-800 text-sm">
       <a
         className={classnames(
           'flex cursor-pointer h-full items-center justify-center w-[40px]',
@@ -39,24 +39,20 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
       <div className="relative">
         <div
           className={classnames(
-            'absolute z-1 left-0 transition-[background,box-shadow] duration-200 right-0 rounded-[8px] border border-nav-borderColor hover:bg-nav-hoverBackground',
-            {
-              'bg-nav-background': !showDropdown,
-              'bg-nav-hoverBackground nav-box-shadow': showDropdown,
-            },
+            'absolute z-1 left-0 transition-[background,box-shadow] duration-200 right-0 rounded-[8px] border border-nav-borderColor bg-nav-background overflow-hidden',
           )}
           ref={menuRef}
         >
           <button
-            className="flex-1 flex items-center text-left py-3 px-3 w-full overflow-hidden"
+            className="flex-1 flex items-center text-left py-3 px-3 w-full overflow-hidden transition-background duration-200 hover:bg-nav-hoverBackground"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <div className="flex items-center gap-1 text-sm font-light truncate">
+            <div className="flex items-center gap-1 font-light truncate">
               <span>{currentLesson.part.title}</span>
               <span className="text-gray-200">/</span>
               <span>{currentLesson.chapter.title}</span>
               <span className="text-gray-200">/</span>
-              <strong className="text-primary-700 font-medium">{currentLesson.data.title}</strong>
+              <strong className="font-semibold">{currentLesson.data.title}</strong>
             </div>
             <div
               className={classnames('ml-auto w-[30px]', {
@@ -72,7 +68,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                 animate={{ height: 'auto', y: 0 }}
                 exit={{ height: 0, y: 0 }}
                 transition={{ duration: 0.2, ease: dropdownEasing }}
-                className=" overflow-hidden"
+                className=" overflow-hidden bg-white"
               >
                 <ul className="py-5 pl-5 border-t border-gray-100 overflow-auto max-h-[60dvh]">
                   <Accordion.Root
@@ -92,12 +88,12 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                                 navStyles.AccordionTrigger,
                                 'flex items-center gap-1 w-full hover:text-primary-700',
                                 {
-                                  'font-medium': isPartActive,
+                                  'font-semibold': isPartActive,
                                 },
                               )}
                             >
                               <span
-                                className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80`}
+                                className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80 text-gray-300`}
                               ></span>
                               <span> {`Part ${partIndex + 1}: ${part.title}`}</span>
                             </Accordion.Trigger>
@@ -120,12 +116,12 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                                               navStyles.AccordionTrigger,
                                               'flex items-center gap-1 w-full hover:text-primary-700',
                                               {
-                                                'font-medium': isChapterActive,
+                                                'font-semibold': isChapterActive,
                                               },
                                             )}
                                           >
                                             <span
-                                              className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80`}
+                                              className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80 text-gray-300`}
                                             ></span>
                                             <span>{chapter.title}</span>
                                           </Accordion.Trigger>
@@ -141,7 +137,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                                                       className={classnames(
                                                         'w-full inline-block border border-transparent pr-3 hover:underline hover:text-primary-700 px-3 py-1 rounded-1',
                                                         {
-                                                          'font-medium bg-nav-activeLesson': isActiveLesson,
+                                                          'font-semibold bg-nav-activeLesson': isActiveLesson,
                                                         },
                                                       )}
                                                       href={lesson.href}

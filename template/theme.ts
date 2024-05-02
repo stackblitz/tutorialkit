@@ -61,7 +61,13 @@ export const theme: ConfigBase['theme'] = {
       failed: '#b73051',
       skipped: '#6c737f',
     },
-    panelBorder: BASE_COLORS.gray[200],
+    panel: {
+      border: BASE_COLORS.gray[200],
+      headerBackground: '#f6f8f9',
+      buttonHover: BASE_COLORS.gray[100],
+      buttonText: BASE_COLORS.gray[500],
+      buttonTextHover: 'initial',
+    },
     editor: {
       light: {
         background: BASE_COLORS.white,

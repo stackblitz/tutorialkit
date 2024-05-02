@@ -1,7 +1,7 @@
 import { TutorialRunnerContext } from '@components/webcontainer/tutorial-runner';
 import type { Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { useCallback, useEffect, useRef, useState, useContext, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import {
   CodeMirrorEditor,
@@ -92,8 +92,10 @@ export function EditorPanel({
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="horizontal">
       <Panel collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
         <div className="panel-header border-r border-b border-panel-border">
-          <div className="i-ph-tree-structure-duotone shrink-0"></div>
-          <span className="text-sm">Files</span>
+          <div className="panel-title">
+            <div className="i-ph-tree-structure-duotone shrink-0"></div>
+            <span className="text-sm">Files</span>
+          </div>
         </div>
         <FileTree
           className="h-full py-2 border-r border-panel-border text-sm"
@@ -132,15 +134,12 @@ function FileTab({ editorDocument, helpAction, onHelpActionClick }: FileTabProps
 
   return (
     <div className="panel-header border-b border-panel-border flex justify-between">
-      <div className="flex items-center gap-2">
+      <div className="panel-title">
         <div className={`scale-125 ${icon}`}></div>
         <span className="text-sm text-gray-600">{fileName}</span>
       </div>
-      <button
-        onClick={onHelpActionClick}
-        className="flex justify-center items-center gap-2 text-sm rounded-md text-gray-500 hover:text-initial hover:bg-gray-100 px-2 -mr-3 py-1 -my-1"
-      >
-        {helpAction === 'solve' && <div className="i-ph-lightbulb-duotone" />}
+      <button onClick={onHelpActionClick} className="panel-button px-2 py-0.5 -mr-1 -my-1">
+        {helpAction === 'solve' && <div className="i-ph-lightbulb-duotone text-lg" />}
         {helpAction === 'solve' && 'Solve'}
         {helpAction === 'reset' && <div className="i-ph-clock-counter-clockwise-duotone" />}
         {helpAction === 'reset' && 'Reset'}
