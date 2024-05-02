@@ -72,6 +72,7 @@ export class TutorialRunner {
   // this strongly assumes that there's a single package json which might not be true
   private _packageJsonContent = '';
 
+  private _availablePreviews = new Map<number, string>();
   private _previewPort: number | undefined = undefined;
 
   /**
@@ -96,6 +97,11 @@ export class TutorialRunner {
       if (this._previewPort === undefined || this._previewPort === port) {
         this.previewUrl.set(type === 'open' ? url : '');
       }
+      if (type === 'open') {
+        this._availablePreviews.set(port, url);
+      } else {
+        this._availablePreviews.delete(port);
+      }
     });
   }
 
@@ -104,7 +110,23 @@ export class TutorialRunner {
    * the port of the first server that is ready will be used.
    */
   setPreviewPort(port: number | undefined) {
+    if (port === this._previewPort) {
+      return;
+    }
+
     this._previewPort = port;
+
+    /**
+     * If a port is provided and the preview is already ready we update the previewUrl.
+     * If no port is provided we default to the first preview ever to ready if there are any.
+     */
+    let previewUrl = port
+      ? this._availablePreviews.get(port)
+      : (this._availablePreviews.values().next().value as string | undefined);
+
+    if (previewUrl) {
+      this.previewUrl.set(previewUrl);
+    }
   }
 
   /**

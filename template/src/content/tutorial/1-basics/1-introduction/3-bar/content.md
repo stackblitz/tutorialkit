@@ -3,6 +3,7 @@ type: lesson
 title: Bar
 slug: bar
 focus: /src/index.js
+previewPort: 1
 ---
 
 # Bar
