@@ -114,7 +114,13 @@ export function EditorPanel({
       <Panel className="flex flex-col" defaultSize={100} minSize={10}>
         <FileTab editorDocument={editorDocument} onHelpActionClick={onHelpClick} helpAction={helpAction} />
         <div className="h-full flex-1 overflow-hidden">
-          <CodeMirrorEditor reset={lesson} doc={editorDocument} onScroll={onEditorScroll} onChange={onEditorChange} />
+          <CodeMirrorEditor
+            reset={lesson}
+            doc={editorDocument}
+            autoFocusOnDocumentChange={true}
+            onScroll={onEditorScroll}
+            onChange={onEditorChange}
+          />
         </div>
       </Panel>
     </PanelGroup>

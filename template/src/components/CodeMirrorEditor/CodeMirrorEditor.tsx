@@ -48,6 +48,7 @@ interface Props {
   doc?: EditorDocument;
   debounceChange?: number;
   debounceScroll?: number;
+  autoFocusOnDocumentChange?: boolean;
   onChange?: OnChangeCallback;
   onScroll?: OnScrollCallback;
 }
@@ -59,6 +60,7 @@ export function CodeMirrorEditor({
   doc,
   debounceScroll = 100,
   debounceChange = 150,
+  autoFocusOnDocumentChange = false,
   onScroll,
   onChange,
 }: Props) {
@@ -138,7 +140,7 @@ export function CodeMirrorEditor({
       view.setState(state);
     }
 
-    setEditorDocument(view, language, doc);
+    setEditorDocument(view, language, autoFocusOnDocumentChange, doc);
   }, [doc]);
 
   return <div className="h-full overflow-hidden" ref={containerRef} />;
@@ -202,7 +204,7 @@ function newEditorState(
   });
 }
 
-function setEditorDocument(view: EditorView, languageExtension: Compartment, doc?: EditorDocument) {
+function setEditorDocument(view: EditorView, languageExtension: Compartment, autoFocus: boolean, doc?: EditorDocument) {
   if (!doc) {
     view.dispatch({
       selection: { anchor: 0 },
@@ -228,8 +230,28 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, doc
     });
 
     requestAnimationFrame(() => {
+      const currentLeft = view.scrollDOM.scrollLeft;
+      const currentTop = view.scrollDOM.scrollTop;
       const newLeft = doc.scroll?.left ?? 0;
       const newTop = doc.scroll?.top ?? 0;
+
+      const needsScrolling = currentLeft !== newLeft || currentTop !== newTop;
+
+      if (autoFocus) {
+        if (needsScrolling) {
+          // we have to wait until the scroll position was changed before we can set the focus
+          view.scrollDOM.addEventListener(
+            'scroll',
+            () => {
+              view.focus();
+            },
+            { once: true },
+          );
+        } else {
+          // if the scroll position is still the same we can focus immediately
+          view.focus();
+        }
+      }
 
       view.scrollDOM.scrollTo(newLeft, newTop);
     });
