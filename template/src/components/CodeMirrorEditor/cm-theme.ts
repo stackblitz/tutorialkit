@@ -24,8 +24,11 @@ export const editorTheme = EditorView.theme({
     padding: '0 0 0 4px',
   },
   '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground': {
-    backgroundColor: 'var(--cm-selection-bg)',
+    backgroundColor: 'var(--cm-selection-bg-focus)',
     opacity: '0.3',
+  },
+  '&:not(.cm-focused) > .cm-scroller > .cm-selectionLayer .cm-selectionBackground': {
+    backgroundColor: 'var(--cm-selection-bg-blur)',
   },
   '.cm-activeLine': {
     background: 'var(--cm-active-line)',

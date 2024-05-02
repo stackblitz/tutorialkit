@@ -70,7 +70,8 @@ export const theme: ConfigBase['theme'] = {
           width: '2px',
         },
         activeLine: 'rgb(222 222 222 / 40%)',
-        selection: '#42b4ff',
+        selectionFocus: '#42b4ff',
+        selectionBlur: '#d9d9d9',
         gutter: {
           foreground: '#237893',
         },
