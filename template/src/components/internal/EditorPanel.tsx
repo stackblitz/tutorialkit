@@ -16,26 +16,27 @@ const DEFAULT_FILE_TREE_SIZE = 25;
 interface Props {
   lesson: Lesson;
   showFileTree?: boolean;
+  helpAction?: 'solve' | 'reset';
   editorDocument?: EditorDocument;
   onEditorChange?: OnEditorChange;
   onEditorScroll?: OnEditorScroll;
+  onHelpClick?: () => void;
   onFileClick?: (value?: string) => void;
 }
 
 export function EditorPanel({
   showFileTree = true,
   editorDocument,
+  helpAction,
   lesson,
   onEditorScroll,
   onEditorChange,
+  onHelpClick,
   onFileClick,
 }: Props) {
   const fileTreePanelRef = useRef<ImperativePanelHandle>(null);
   const [selectedFile, setSelectedFile] = useState(lesson.data.focus);
-  const [helpAction, setHelpAction] = useState<'solve' | 'reset'>('reset');
   const tutorialRunner = useContext(TutorialRunnerContext);
-
-  const hasASolution = useMemo(() => Object.keys(lesson.solution).length > 1, [lesson]);
 
   const onFileClickWrapped = useCallback(
     (fullPath: string) => {
@@ -45,31 +46,9 @@ export function EditorPanel({
     [onFileClick],
   );
 
-  const onHelpClick = useCallback(() => {
-    if (hasASolution) {
-      setHelpAction((action) => {
-        if (action === 'reset') {
-          tutorialRunner.updateFiles(lesson.files);
-
-          return 'solve';
-        } else {
-          tutorialRunner.updateFiles(lesson.solution);
-
-          return 'reset';
-        }
-      });
-    } else {
-      tutorialRunner.updateFiles(lesson.files);
-    }
-  }, [lesson]);
-
   // when the lesson changes we reset the selected file
   useEffect(() => {
     setSelectedFile(lesson.data.focus);
-
-    if (hasASolution) {
-      setHelpAction('solve');
-    }
   }, [lesson]);
 
   useEffect(() => {
@@ -112,7 +91,7 @@ export function EditorPanel({
         hitAreaMargins={{ fine: 8, coarse: 8 }}
       />
       <Panel className="flex flex-col" defaultSize={100} minSize={10}>
-        <FileTab editorDocument={editorDocument} onHelpActionClick={onHelpClick} helpAction={helpAction} />
+        <FileTab editorDocument={editorDocument} onHelpClick={onHelpClick} helpAction={helpAction} />
         <div className="h-full flex-1 overflow-hidden">
           <CodeMirrorEditor
             reset={lesson}
@@ -129,11 +108,11 @@ export function EditorPanel({
 
 interface FileTabProps {
   editorDocument: EditorDocument | undefined;
-  helpAction: 'reset' | 'solve';
-  onHelpActionClick: () => void;
+  helpAction?: 'reset' | 'solve';
+  onHelpClick?: () => void;
 }
 
-function FileTab({ editorDocument, helpAction, onHelpActionClick }: FileTabProps) {
+function FileTab({ editorDocument, helpAction, onHelpClick }: FileTabProps) {
   const filePath = editorDocument?.filePath;
   const fileName = filePath?.split('/').at(-1) ?? '';
   const icon = fileName ? getFileIcon(fileName) : '';
@@ -144,12 +123,14 @@ function FileTab({ editorDocument, helpAction, onHelpActionClick }: FileTabProps
         <div className={`scale-125 ${icon}`}></div>
         <span className="text-sm text-gray-600">{fileName}</span>
       </div>
-      <button onClick={onHelpActionClick} className="panel-button px-2 py-0.5 -mr-1 -my-1">
-        {helpAction === 'solve' && <div className="i-ph-lightbulb-duotone text-lg" />}
-        {helpAction === 'solve' && 'Solve'}
-        {helpAction === 'reset' && <div className="i-ph-clock-counter-clockwise-duotone" />}
-        {helpAction === 'reset' && 'Reset'}
-      </button>
+      {!!helpAction && (
+        <button onClick={onHelpClick} className="panel-button px-2 py-0.5 -mr-1 -my-1">
+          {helpAction === 'solve' && <div className="i-ph-lightbulb-duotone text-lg" />}
+          {helpAction === 'solve' && 'Solve'}
+          {helpAction === 'reset' && <div className="i-ph-clock-counter-clockwise-duotone" />}
+          {helpAction === 'reset' && 'Reset'}
+        </button>
+      )}
     </div>
   );
 }

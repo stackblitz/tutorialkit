@@ -216,7 +216,7 @@ export class TutorialRunner {
         await webcontainer.mount(toFileTree(files));
       }
 
-      this._currentFiles = files;
+      this._currentFiles = { ...files };
       this._updateDirtyState(files);
     });
 
@@ -484,7 +484,7 @@ export class TutorialRunner {
         this._currentFiles[filePath] = files[filePath];
       }
     } else {
-      this._currentFiles = files;
+      this._currentFiles = { ...files };
     }
 
     this._updateDirtyState(files);

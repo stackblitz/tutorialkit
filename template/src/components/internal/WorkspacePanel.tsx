@@ -1,5 +1,5 @@
 import type { ImperativePreviewHandle } from '@components/Preview';
-import type { Lesson } from '@entities/tutorial';
+import type { Files, Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
@@ -30,8 +30,10 @@ export function WorkspacePanel({ lesson }: Props) {
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
   const previewRef = useRef<ImperativePreviewHandle>(null);
   const terminalExpanded = useRef(false);
+
   const tutorialRunner = useContext(TutorialRunnerContext);
 
+  const [helpAction, setHelpAction] = useState<'solve' | 'reset'>('reset');
   const [editorState, setEditorState] = useState<EditorState>({});
   const [selectedFile, setSelectedFile] = useState<string | undefined>();
 
@@ -111,6 +113,40 @@ export function WorkspacePanel({ lesson }: Props) {
     [lesson],
   );
 
+  const onHelpClick = useCallback(() => {
+    const setFiles = (files: Files) => {
+      setEditorState((editorState) => {
+        const newEditorState = { ...editorState };
+
+        for (const filePath in files) {
+          newEditorState[filePath] = {
+            ...newEditorState[filePath],
+            value: files[filePath],
+          };
+        }
+
+        return newEditorState;
+      });
+      tutorialRunner.updateFiles(files);
+    };
+
+    if (hasSolution(lesson)) {
+      setHelpAction((action) => {
+        if (action === 'reset') {
+          setFiles(lesson.files);
+
+          return 'solve';
+        } else {
+          setFiles(lesson.solution);
+
+          return 'reset';
+        }
+      });
+    } else {
+      setFiles(lesson.files);
+    }
+  }, [lesson]);
+
   useEffect(() => {
     setEditorState({});
 
@@ -123,6 +159,12 @@ export function WorkspacePanel({ lesson }: Props) {
     });
 
     tutorialRunner.runCommands(lesson.data);
+
+    if (hasSolution(lesson)) {
+      setHelpAction('solve');
+    } else {
+      setHelpAction('reset');
+    }
   }, [lesson]);
 
   useEffect(() => {
@@ -155,6 +197,8 @@ export function WorkspacePanel({ lesson }: Props) {
           showFileTree={fileTree}
           editorDocument={editorDocument}
           lesson={lesson}
+          helpAction={helpAction}
+          onHelpClick={onHelpClick}
           onFileClick={updateDocument}
           onEditorScroll={onEditorScroll}
           onEditorChange={onEditorChange}
@@ -178,4 +222,8 @@ export function WorkspacePanel({ lesson }: Props) {
       </Panel>
     </PanelGroup>
   );
+}
+
+function hasSolution(lesson: Lesson): boolean {
+  return Object.keys(lesson.solution).length >= 1;
 }

@@ -218,6 +218,15 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, aut
     view.scrollDOM.scrollTo(0, 0);
 
     return;
+  } else if (doc.value !== view.state.doc.toString()) {
+    view.dispatch({
+      selection: { anchor: 0 },
+      changes: {
+        from: 0,
+        to: view.state.doc.length,
+        insert: doc.value,
+      },
+    });
   }
 
   getLanguage(doc.filePath).then((languageSupport) => {
