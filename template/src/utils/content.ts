@@ -119,7 +119,7 @@ export async function getTutorial() {
     lesson.data = {
       ...pick(
         [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
-        ['mainCommand', 'prepareCommands', 'previewPort', 'previewUrl', 'autoReload'],
+        ['mainCommand', 'prepareCommands', 'previewPort', 'autoReload'],
       ),
       ...lesson.data,
     };

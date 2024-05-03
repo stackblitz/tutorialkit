@@ -24,7 +24,6 @@ export type CommandsSchema = z.infer<typeof commandsSchema>;
 
 export const webcontainerSchema = commandsSchema.extend({
   previewPort: z.number().optional(),
-  previewUrl: z.number().optional(),
   autoReload: z.boolean().optional(),
 });
 
