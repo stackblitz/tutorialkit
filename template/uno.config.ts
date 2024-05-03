@@ -25,6 +25,7 @@ export default defineConfig({
   rules: [
     ['scrollbar-transparent', { 'scrollbar-color': '#0000004d transparent' }],
     ['nav-box-shadow', { 'box-shadow': '0 2px 4px -1px rgba(0, 0, 0, 0.1)' }],
+    ['transition-background', { 'transition-property': 'background' }],
   ],
   shortcuts: {
     'panel-container': 'grid grid-rows-[min-content_1fr] h-full',

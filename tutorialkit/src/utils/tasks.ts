@@ -13,6 +13,9 @@ interface Task {
 export function assertNotCanceled<T>(value: T | symbol, exitCode = 0): asserts value is T {
   if (prompts.isCancel(value)) {
     prompts.cancel('Command aborted');
+
+    console.log('Until next time!');
+
     return process.exit(exitCode);
   }
 }

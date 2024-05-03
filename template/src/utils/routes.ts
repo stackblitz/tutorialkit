@@ -18,11 +18,11 @@ export async function generateStaticRoutes() {
       for (const lesson of lessons) {
         routes.push({
           params: {
-            slug: `/${parts.length > 1 ? `${part.slug}/` : ''}${chapter.slug}/${lesson.slug}`,
+            slug: `/${part.slug}/${chapter.slug}/${lesson.slug}`,
           },
           props: {
             navList: generateNavigationList(tutorial),
-            title: `${parts.length > 1 ? `${part.data.title} / ` : ''}${chapter.data.title} / ${lesson.data.title}`,
+            title: `${part.slug} / ${chapter.data.title} / ${lesson.data.title}`,
             lesson,
           },
         } satisfies GetStaticPathsItem);
