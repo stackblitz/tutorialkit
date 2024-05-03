@@ -4,6 +4,7 @@
     "template:dev": "pnpm run --filter=tutorialkit-starter dev",
     "prepare": "is-ci || husky install"
   },
+  "license": "MIT",
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "@commitlint/config-conventional": "^19.2.2",
