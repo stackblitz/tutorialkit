@@ -173,7 +173,7 @@ function printNextSteps(dest: string, packageManager: PackageManager, dependenci
   const steps: Array<[command: string | undefined, text: string, render?: boolean]> = [
     [`cd ${dest}`, 'Navigate to project'],
     [`${packageManager} install`, 'Install dependencies', !dependenciesInstalled],
-    ['pnpm run dev', 'Start development server'],
+    [`${packageManager} run dev`, 'Start development server'],
     [, `Head over to ${chalk.underline('http://localhost:4321')}`],
   ];
 
