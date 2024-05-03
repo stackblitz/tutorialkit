@@ -68,6 +68,11 @@ async function _createTutorial(flags: CreateOptions) {
       const answer = await prompts.text({
         message: `What's the name of your tutorial?`,
         placeholder: randomName,
+        validate: (value) => {
+          if (!value) {
+            return 'Please provide a name!';
+          }
+        },
       });
 
       assertNotCanceled(answer);
