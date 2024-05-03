@@ -17,6 +17,9 @@ export default defineConfig({
     },
   },
   vite: {
+    optimizeDeps: {
+      entries: ['!**/src/(content|templates)/**'],
+    },
     plugins: [
       ViteRestart({ restart: './src/remark/**' }),
       {

@@ -1,4 +1,43 @@
 {
-  "name": "tutorialkit",
-  "version": "0.0.1"
+  "name": "@blitz/tutorialkit",
+  "version": "0.0.1-alpha.1",
+  "description": "Interactive tutorials powered by WebContainer API",
+  "type": "module",
+  "bugs": "https://github.com/stackblitz/tutorialkit/issues",
+  "homepage": "https://github.com/stackblitz/tutorialkit",
+  "license": "MIT",
+  "bin": {
+    "tutorialkit": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "prepublish": "node scripts/pre-publish.js",
+    "postpack": "node scripts/cleanup.js"
+  },
+  "files": [
+    "dist",
+    "template"
+  ],
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "chalk": "^5.3.0",
+    "ignore": "^5.3.1",
+    "lookpath": "^1.2.2",
+    "yargs-parser": "^21.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.12.7",
+    "@types/yargs-parser": "^21.0.3",
+    "esbuild": "^0.20.2",
+    "esbuild-node-externals": "^1.13.0",
+    "fs-extra": "^11.2.0"
+  },
+  "engines": {
+    "node": "^18.18.0"
+  }
 }

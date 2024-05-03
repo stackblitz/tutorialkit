@@ -22,5 +22,8 @@
       "pre-commit": "lint-staged",
       "commit-msg": "commitlint --edit $1"
     }
+  },
+  "engines": {
+    "node": "^18.18.0"
   }
 }

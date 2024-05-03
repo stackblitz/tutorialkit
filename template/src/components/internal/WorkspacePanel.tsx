@@ -127,6 +127,7 @@ export function WorkspacePanel({ lesson }: Props) {
 
         return newEditorState;
       });
+
       tutorialRunner.updateFiles(files);
     };
 
