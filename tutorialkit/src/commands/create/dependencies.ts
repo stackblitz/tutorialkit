@@ -22,7 +22,8 @@ export async function installDependencies(cwd: string, flags: CreateOptions) {
     installDeps = answer;
   }
 
-  let packageManagerUsed: PackageManager;
+  let dependenciesInstalled = false;
+  let selectedPackageManager = (flags.packageManager ?? DEFAULT_VALUES.packageManager) as PackageManager;
 
   if (installDeps) {
     let packageManager: PackageManager;
@@ -45,6 +46,8 @@ export async function installDependencies(cwd: string, flags: CreateOptions) {
       }
     }
 
+    selectedPackageManager = packageManager;
+
     await runTask({
       title: `Installing dependencies with ${packageManager}`,
       dryRun: flags.dryRun,
@@ -53,7 +56,7 @@ export async function installDependencies(cwd: string, flags: CreateOptions) {
         try {
           await runShellCommand(packageManager, ['install'], { cwd, stdio: 'ignore' });
 
-          packageManagerUsed = packageManager;
+          dependenciesInstalled = true;
 
           return 'Dependencies installed';
         } catch {
@@ -67,7 +70,7 @@ export async function installDependencies(cwd: string, flags: CreateOptions) {
     prompts.log.message(`${chalk.blue('dependencies [skip]')} Remember to install the dependencies after the setup.`);
   }
 
-  return packageManagerUsed;
+  return { selectedPackageManager, dependenciesInstalled };
 }
 
 async function getPackageManager() {

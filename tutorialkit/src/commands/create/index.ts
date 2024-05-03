@@ -117,17 +117,20 @@ async function _createTutorial(flags: CreateOptions) {
 
   await copyTemplate(resolvedDest, flags);
 
-  const packageManagerUsed = await installDependencies(resolvedDest, flags);
+  const { selectedPackageManager, dependenciesInstalled } = await installDependencies(resolvedDest, flags);
 
   updateProjectName(resolvedDest, tutorialName, flags);
+  updateReadme(resolvedDest, selectedPackageManager, flags);
 
   await initGitRepo(resolvedDest, flags);
 
   prompts.log.success(chalk.green('Tutorial successfully created!'));
 
-  printNextSteps(dest, packageManagerUsed);
+  printNextSteps(dest, selectedPackageManager, dependenciesInstalled);
 
   prompts.outro(`You're all set!`);
+
+  console.log('Until next time 👋');
 }
 
 async function getTutorialDirectory(projectName: string, flags: CreateOptions) {
@@ -157,14 +160,14 @@ async function getTutorialDirectory(projectName: string, flags: CreateOptions) {
   return promptResult;
 }
 
-function printNextSteps(dest: string, packageManager: PackageManager | undefined) {
+function printNextSteps(dest: string, packageManager: PackageManager, dependenciesInstalled: boolean) {
   let i = 0;
 
   prompts.log.message(chalk.bold.underline('Next Steps'));
 
   const steps: Array<[command: string | undefined, text: string, render?: boolean]> = [
     [`cd ${dest}`, 'Navigate to project'],
-    [`${packageManager} install`, 'Install dependencies', packageManager !== undefined],
+    [`${packageManager} install`, 'Install dependencies', !dependenciesInstalled],
     ['pnpm run dev', 'Start development server'],
     [, `Head over to ${chalk.underline('http://localhost:4321')}`],
   ];
@@ -192,6 +195,21 @@ function updateProjectName(dest: string, projectName: string, flags: CreateOptio
   pkgJson.name = projectName;
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, undefined, 2));
+}
+
+function updateReadme(dest: string, packageManager: PackageManager, flags: CreateOptions) {
+  if (flags.dryRun) {
+    return;
+  }
+
+  const readmePath = path.resolve(dest, 'README.md');
+
+  let readme = fs.readFileSync(readmePath, 'utf8');
+
+  // update placeholder for package manager
+  readme = readme.replaceAll('<% pkgManager %>', packageManager ?? DEFAULT_VALUES.packageManager);
+
+  fs.writeFileSync(readmePath, readme);
 }
 
 function exitEarly(exitCode = 0) {
