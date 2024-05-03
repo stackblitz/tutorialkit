@@ -138,6 +138,6 @@ A `Command` has the following shape:
 string | [command: string, title: string] | { command: string, title: string }
 ```
 
-The title is used as part of the boot screen (see UI Structure).
+The title is used as part of the boot screen (see [UI Structure](#ui-structure)).
 
 In most cases, metadata is inherited. For example, if you specify a `mainCommand` on a chapter without specifying it on any of its lessons, each lesson will use the `mainCommand` from its respective chapter. This extends to chapter and parts as well.
