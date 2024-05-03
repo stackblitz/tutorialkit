@@ -1,5 +1,6 @@
 import * as prompts from '@clack/prompts';
 import ignore from 'ignore';
+import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';
 import { warnLabel } from '../../utils/messages';
@@ -11,7 +12,7 @@ export async function copyTemplate(dest: string, flags: CreateOptions) {
     return;
   }
 
-  const gitignore = ignore().add(await fsPromises.readFile(path.resolve(templatePath, '.gitignore'), 'utf8'));
+  const gitignore = ignore().add(readIgnoreFile());
 
   const toCopy: string[] = [];
   const folders = await fsPromises.readdir(templatePath);
@@ -35,5 +36,14 @@ export async function copyTemplate(dest: string, flags: CreateOptions) {
     } else if (stats.isFile()) {
       await fsPromises.copyFile(sourceFilePath, destFilePath);
     }
+  }
+}
+
+function readIgnoreFile() {
+  try {
+    // we try to read the `.npmignore` first because npm unpacks `.gitignore` as `.npmignore`
+    return fs.readFileSync(path.resolve(templatePath, '.npmignore'), 'utf8');
+  } catch {
+    return fs.readFileSync(path.resolve(templatePath, '.gitignore'), 'utf8');
   }
 }
