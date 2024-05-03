@@ -1,13 +1,13 @@
 {
   "name": "@blitz/tutorialkit",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "Interactive tutorials powered by WebContainer API",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
   "bin": {
-    "tutorialkit": "./dist/index.js"
+    "tutorialkit": "dist/index.js"
   },
   "main": "./dist/index.js",
   "exports": {
@@ -15,12 +15,13 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "prepublish": "node scripts/pre-publish.js",
+    "prepack": "node scripts/pre-pack.js",
     "postpack": "node scripts/cleanup.js"
   },
   "files": [
     "dist",
-    "template"
+    "template",
+    "template/.gitignore"
   ],
   "dependencies": {
     "@clack/prompts": "^0.7.0",
