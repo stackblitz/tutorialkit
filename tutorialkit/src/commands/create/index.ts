@@ -138,7 +138,7 @@ async function _createTutorial(flags: CreateOptions) {
   console.log('Until next time 👋');
 }
 
-async function getTutorialDirectory(projectName: string, flags: CreateOptions) {
+async function getTutorialDirectory(tutorialName: string, flags: CreateOptions) {
   let dir = flags.dir;
 
   if (dir) {
@@ -146,12 +146,12 @@ async function getTutorialDirectory(projectName: string, flags: CreateOptions) {
   }
 
   if (flags.defaults) {
-    return `./${projectName}`;
+    return `./${tutorialName}`;
   }
 
   const promptResult = await prompts.text({
     message: 'Where should we create your new tutorial?',
-    initialValue: `./${projectName}`,
+    initialValue: `./${tutorialName}`,
     placeholder: './',
     validate(value) {
       if (!path.isAbsolute(value) && !value.startsWith('./')) {
