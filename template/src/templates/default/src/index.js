@@ -3,6 +3,7 @@ const { createServer } = require('http');
 
 createServer((_req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/html' });
+
   res.end(`
     <!DOCTYPE html>
     <html>
@@ -13,6 +14,7 @@ createServer((_req, res) => {
     </html>
   `);
 }).listen(1);
+
 createServer((_req, res) => res.end('Server 2')).listen(2);
 
 servor({

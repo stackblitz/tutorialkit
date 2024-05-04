@@ -6,10 +6,10 @@ import { atom } from 'nanostores';
 import { createContext } from 'react';
 import { tick } from '../../utils/event-loop';
 import { Command, Commands } from './command';
-import { PreviewInfo } from './preview-info';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
+import { PreviewInfo } from './preview-info';
 import type { ITerminal } from './shell';
-import { areFilesEqual, diffFiles, toFileTree } from './utils/files';
+import { diffFiles, toFileTree } from './utils/files';
 import { newTask, type Task, type TaskCancelled } from './utils/promises';
 
 interface LoadFilesOptions {
@@ -82,8 +82,8 @@ export class TutorialRunner {
   steps = atom<Steps | undefined>(undefined);
 
   /**
-   * Atom representing the current previews. If it's an empty array, or none of
-   * the preview included are ready then no preview can be shown.
+   * Atom representing the current previews. If it's an empty array or none of
+   * the previews are ready, then no preview can be shown.
    */
   previews = atom<PreviewInfo[]>([]);
 
@@ -119,13 +119,14 @@ export class TutorialRunner {
    * the port of the first server that is ready will be used.
    */
   setPreviews(previews: PreviewSchema[] = []) {
-    const previewInfos = previews.map((p) => {
-      const info = new PreviewInfo(p);
+    const previewInfos = previews.map((preview) => {
+      const info = new PreviewInfo(preview);
 
       let previewInfo = this._availablePreviews.get(info.port);
 
       if (!previewInfo) {
         previewInfo = info;
+
         this._availablePreviews.set(previewInfo.port, previewInfo);
       }
 

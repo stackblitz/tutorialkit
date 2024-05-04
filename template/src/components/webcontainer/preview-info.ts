@@ -1,15 +1,10 @@
 import type { PreviewSchema } from '@schemas';
 
 export class PreviewInfo {
-
   port: number;
-
   ready: boolean;
-
   title?: string;
-
   baseUrl?: string;
-
   pathname?: string;
 
   get url(): string | undefined {

@@ -2,9 +2,9 @@ import { BootScreen } from '@components/BootScreen';
 import type { PreviewInfo } from '@components/webcontainer/preview-info';
 import { useStore } from '@nanostores/react';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { Fragment, createElement, forwardRef, useContext, useImperativeHandle, useRef } from 'react';
-import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelGroupHandle } from 'react-resizable-panels';
-import { TutorialRunnerContext, type Step } from '../webcontainer/tutorial-runner';
+import { createElement, forwardRef, useContext, useImperativeHandle } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
 
 interface Props {
   toggleTerminal?: () => void;
@@ -18,13 +18,13 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
   const tutorialRunner = useContext(TutorialRunnerContext);
   const expectedPreviews = useStore(tutorialRunner.previews);
 
-  const hasPreviews = expectedPreviews.some((p) => p.ready);
+  const hasPreviews = expectedPreviews.some((preview) => preview.ready);
 
   useImperativeHandle(
     ref,
     () => ({
       reload: () => {
-        // can't use a ref because PanelGroup does not expose the underlying html element :(
+        // can't use a ref because PanelGroup does not expose the underlying html element
         const previewPanel = document.getElementById('preview-panel');
 
         if (previewPanel) {
@@ -45,7 +45,7 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
         <div className="panel-header border-y border-panel-border justify-between">
           <div className="panel-title">
             <div className="i-ph-lightning-duotone"></div>
-            <span className="text-sm">Preparing environment</span>
+            <span className="text-sm">Preparing Environment</span>
           </div>
           <button
             className="panel-button px-2 py-0.5 -mr-1 -my-1"
@@ -61,7 +61,7 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
     );
   }
 
-  const previews = expectedPreviews.filter((p) => p.ready);
+  const previews = expectedPreviews.filter((preview) => preview.ready);
   const defaultSize = 100 / previews.length;
   const minSize = 20;
 
@@ -81,9 +81,7 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
     );
 
     if (index !== previews.length - 1) {
-      children.push(
-        <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 8, coarse: 8 }} />,
-      );
+      children.push(<PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} />);
     }
   }
 

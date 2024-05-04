@@ -5,7 +5,7 @@ slug: foo
 focus: /src/index.html
 previews:
   - [8080, 'Main Page']
-  - [1, 'Test runner']
+  - [1, 'Test Runner']
   - [2, 'Bar']
 ---
 

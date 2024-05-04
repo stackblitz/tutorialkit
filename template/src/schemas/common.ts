@@ -33,7 +33,7 @@ export const previewSchema = z.union([
     port: z.number(),
     title: z.string(),
   }),
-])
+]);
 
 export type PreviewSchema = z.infer<typeof previewSchema>;
 
