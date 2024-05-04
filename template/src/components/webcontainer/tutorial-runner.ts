@@ -196,27 +196,24 @@ export class TutorialRunner {
 
       signal.throwIfAborted();
 
-      // check if the template changed
-      if (template && (this._currentTemplate == null || !areFilesEqual(template, this._currentTemplate))) {
-        if (this._currentTemplate) {
-          await updateFiles(webcontainer, this._currentTemplate, template);
-        } else {
-          await webcontainer.mount(toFileTree(template));
-        }
+      // always re-apply the template as a lesson could have touched some of its files
+      if (template) {
+        await webcontainer.mount(toFileTree(template));
 
-        this._currentTemplate = template;
         this._updateDirtyState(template);
       }
 
       signal.throwIfAborted();
 
-      if (this._currentFiles) {
-        await updateFiles(webcontainer, this._currentFiles, files);
+      if (this._currentFiles || this._currentTemplate) {
+        await updateFiles(webcontainer, { ...this._currentTemplate, ...this._currentFiles }, { ...template, ...files });
       } else {
         await webcontainer.mount(toFileTree(files));
       }
 
+      this._currentTemplate = { ...template };
       this._currentFiles = { ...files };
+
       this._updateDirtyState(files);
     });
 
