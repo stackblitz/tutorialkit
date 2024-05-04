@@ -68,8 +68,8 @@ export function EditorPanel({
   }, [lesson]);
 
   return (
-    <PanelGroup className={resizePanelStyles.PanelGroup} direction="horizontal">
-      <Panel collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
+    <PanelGroup direction="horizontal">
+      <Panel className="flex flex-col" collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
         <div className="panel-header border-r border-b border-panel-border">
           <div className="panel-title">
             <div className="i-ph-tree-structure-duotone shrink-0"></div>
@@ -77,7 +77,7 @@ export function EditorPanel({
           </div>
         </div>
         <FileTree
-          className="h-full py-2 border-r border-panel-border text-sm"
+          className="flex-grow py-2 border-r border-panel-border text-sm"
           selectedFile={selectedFile}
           hideRoot={lesson.data.hideRoot ?? true}
           files={lesson.files}

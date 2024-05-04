@@ -4,7 +4,7 @@ export const commandSchema = z.union([
   // a single string, the command to run
   z.string(),
 
-  // an array of two strings, the command followed by a title
+  // a tuple of two strings, the command followed by a title
   z.tuple([z.string(), z.string()]),
 
   z.strictObject({
@@ -22,8 +22,23 @@ export const commandsSchema = z.object({
 
 export type CommandsSchema = z.infer<typeof commandsSchema>;
 
+export const previewSchema = z.union([
+  // a single number, the port for the preview
+  z.number(),
+
+  // a tuple, the port followed by a title
+  z.tuple([z.number(), z.string()]),
+
+  z.strictObject({
+    port: z.number(),
+    title: z.string(),
+  }),
+])
+
+export type PreviewSchema = z.infer<typeof previewSchema>;
+
 export const webcontainerSchema = commandsSchema.extend({
-  previewPort: z.number().optional(),
+  previews: previewSchema.array().optional(),
   autoReload: z.boolean().optional(),
 });
 

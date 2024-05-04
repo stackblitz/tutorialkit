@@ -1,11 +1,12 @@
 import type { Files } from '@entities/tutorial';
-import type { CommandsSchema } from '@schemas';
+import type { CommandsSchema, PreviewSchema } from '@schemas';
 import { escapeCodes } from '@utils/terminal';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom } from 'nanostores';
 import { createContext } from 'react';
 import { tick } from '../../utils/event-loop';
 import { Command, Commands } from './command';
+import { PreviewInfo } from './preview-info';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
 import type { ITerminal } from './shell';
 import { areFilesEqual, diffFiles, toFileTree } from './utils/files';
@@ -72,8 +73,8 @@ export class TutorialRunner {
   // this strongly assumes that there's a single package json which might not be true
   private _packageJsonContent = '';
 
-  private _availablePreviews = new Map<number, string>();
-  private _previewPort: number | undefined = undefined;
+  private _availablePreviews = new Map<number, PreviewInfo>();
+  private _previewsLayout: PreviewInfo[] = [];
 
   /**
    * Steps that the runner is or will be executing.
@@ -81,10 +82,10 @@ export class TutorialRunner {
   steps = atom<Steps | undefined>(undefined);
 
   /**
-   * Atom representing the current preview url. If it's an empty string, no preview can
-   * be shown.
+   * Atom representing the current previews. If it's an empty array, or none of
+   * the preview included are ready then no preview can be shown.
    */
-  previewUrl = atom<string>('');
+  previews = atom<PreviewInfo[]>([]);
 
   constructor() {
     this._init();
@@ -94,13 +95,21 @@ export class TutorialRunner {
     const webcontainer = await webcontainerPromise;
 
     webcontainer.on('port', (port, type, url) => {
-      if (this._previewPort === undefined || this._previewPort === port) {
-        this.previewUrl.set(type === 'open' ? url : '');
+      let previewInfo = this._availablePreviews.get(port);
+
+      if (!previewInfo) {
+        previewInfo = new PreviewInfo(port, type === 'open');
+        this._availablePreviews.set(port, previewInfo);
       }
-      if (type === 'open') {
-        this._availablePreviews.set(port, url);
+
+      previewInfo.ready = type === 'open';
+      previewInfo.baseUrl = url;
+
+      if (this._previewsLayout.length === 0) {
+        this.previews.set([previewInfo]);
       } else {
-        this._availablePreviews.delete(port);
+        this._previewsLayout = [...this._previewsLayout];
+        this.previews.set(this._previewsLayout);
       }
     });
   }
@@ -109,23 +118,48 @@ export class TutorialRunner {
    * Set the expected port for the preview to show. If this is not set,
    * the port of the first server that is ready will be used.
    */
-  setPreviewPort(port: number | undefined) {
-    if (port === this._previewPort) {
+  setPreviews(previews: PreviewSchema[] = []) {
+    const previewInfos = previews.map((p) => {
+      const info = new PreviewInfo(p);
+
+      let previewInfo = this._availablePreviews.get(info.port);
+
+      if (!previewInfo) {
+        previewInfo = info;
+        this._availablePreviews.set(previewInfo.port, previewInfo);
+      }
+
+      return previewInfo;
+    });
+
+    let areDifferent = previewInfos.length != this._previewsLayout.length;
+
+    if (!areDifferent) {
+      for (let i = 0; i < previewInfos.length; i++) {
+        areDifferent = PreviewInfo.equals(previewInfos[i], this._previewsLayout[i]);
+
+        if (areDifferent) {
+          break;
+        }
+      }
+    }
+
+    if (!areDifferent) {
       return;
     }
 
-    this._previewPort = port;
+    this._previewsLayout = previewInfos;
 
     /**
      * If a port is provided and the preview is already ready we update the previewUrl.
      * If no port is provided we default to the first preview ever to ready if there are any.
      */
-    let previewUrl = port
-      ? this._availablePreviews.get(port)
-      : (this._availablePreviews.values().next().value as string | undefined);
+    if (previews.length === 0) {
+      const firstPreview = this._availablePreviews.values().next().value as PreviewInfo | undefined;
 
-    if (previewUrl) {
-      this.previewUrl.set(previewUrl);
+      this.previews.set(firstPreview ? [firstPreview] : []);
+    } else {
+      this.previews.set(this._previewsLayout);
     }
   }
 

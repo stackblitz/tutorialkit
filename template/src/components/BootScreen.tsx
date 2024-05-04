@@ -1,34 +1,14 @@
 import { useStore } from '@nanostores/react';
-import { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
+import { useContext } from 'react';
 import { TutorialRunnerContext, type Step } from './webcontainer/tutorial-runner';
 
-export type ImperativePreviewHandle = {
-  reload: () => void;
-};
-
-export const Preview = forwardRef<ImperativePreviewHandle>((_, ref) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+export function BootScreen() {
   const tutorialRunner = useContext(TutorialRunnerContext);
-  const previewUrl = useStore(tutorialRunner.previewUrl);
   const steps = useStore(tutorialRunner.steps);
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      reload: () => {
-        if (iframeRef.current) {
-          iframeRef.current.src = iframeRef.current.src;
-        }
-      },
-    }),
-    [],
-  );
 
   return (
     <div className="h-full w-full flex justify-center items-center">
-      {previewUrl ? (
-        <iframe ref={iframeRef} src={previewUrl} className="h-full w-full"></iframe>
-      ) : steps ? (
+      {steps ? (
         <ul className="space-y-1">
           {steps.map((step, index) => (
             <li key={index} className={`flex items-center ${toTextColor(step.status)}`}>
@@ -53,7 +33,7 @@ export const Preview = forwardRef<ImperativePreviewHandle>((_, ref) => {
       )}
     </div>
   );
-});
+}
 
 function toTextColor(status: Step['status']): string {
   switch (status) {

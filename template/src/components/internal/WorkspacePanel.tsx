@@ -1,4 +1,3 @@
-import type { ImperativePreviewHandle } from '@components/Preview';
 import type { Files, Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -10,7 +9,7 @@ import type {
 } from '../CodeMirrorEditor/CodeMirrorEditor';
 import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
 import { EditorPanel } from './EditorPanel';
-import { PreviewPanel } from './PreviewPanel';
+import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel';
 import { TerminalPanel } from './TerminalPanel';
 
 const DEFAULT_TERMINAL_SIZE = 25;
@@ -151,7 +150,7 @@ export function WorkspacePanel({ lesson }: Props) {
   useEffect(() => {
     setEditorState({});
 
-    tutorialRunner.setPreviewPort(lesson.data.previewPort);
+    tutorialRunner.setPreviews(lesson.data.previews);
 
     tutorialRunner.prepareFiles(lesson).then((cancelled) => {
       if (!cancelled && lesson.data.autoReload) {

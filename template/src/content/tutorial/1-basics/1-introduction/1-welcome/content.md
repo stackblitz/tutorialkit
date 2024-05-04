@@ -2,7 +2,7 @@
 type: lesson
 title: Welcome to TutorialKit
 focus: /src/index.js
-previewPort: 8080
+previews: [8080]
 mainCommand: ['node -e setTimeout(()=>{},10_000)', 'Running dev server']
 prepareCommands:
   - ['', 'This command will be skipped']

@@ -1,6 +1,7 @@
 ---
 type: tutorial
-previewPort: 8080
+previews:
+  - 8080
 autoReload: true
 mainCommand: ['npm start', 'Starting HTTP server']
 prepareCommands:

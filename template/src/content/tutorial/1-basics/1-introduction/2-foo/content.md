@@ -3,7 +3,10 @@ type: lesson
 title: Foo from part 1
 slug: foo
 focus: /src/index.html
-port: 1234
+previews:
+  - [8080, 'Main Page']
+  - [1, 'Test runner']
+  - [2, 'Bar']
 ---
 
 # Foo
