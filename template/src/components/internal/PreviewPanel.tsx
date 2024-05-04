@@ -2,7 +2,7 @@ import { BootScreen } from '@components/BootScreen';
 import type { PreviewInfo } from '@components/webcontainer/preview-info';
 import { useStore } from '@nanostores/react';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { Fragment, forwardRef, useContext, useImperativeHandle, useRef } from 'react';
+import { Fragment, createElement, forwardRef, useContext, useImperativeHandle, useRef } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelGroupHandle } from 'react-resizable-panels';
 import { TutorialRunnerContext, type Step } from '../webcontainer/tutorial-runner';
 
@@ -65,44 +65,64 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
   const defaultSize = 100 / previews.length;
   const minSize = 20;
 
-  return (
-    <PanelGroup id={'preview-panel'} direction="horizontal">
-      {previews.map((preview, index) => (
-        <Fragment key={preview.port}>
-          <Panel collapsible defaultSize={defaultSize} minSize={minSize}>
-            <div className={`panel-container ${index > 0 ? 'border-l border-panel-border' : ''}`}>
-              <div className="panel-header border-y border-panel-border justify-between">
-                <div className="panel-title">
-                  <div className="i-ph-globe-duotone"></div>
-                  <span className="text-sm truncate">{previewTitle(preview, previews.length)}</span>
-                </div>
-                {index === previews.length - 1 && (
-                  <button
-                    className="panel-button px-2 py-0.5 -mr-1 -my-1"
-                    title="Toggle Terminal"
-                    onClick={() => toggleTerminal?.()}
-                  >
-                    <div className="i-ph-terminal-window-duotone"></div>
-                    <span className="text-sm">Toggle Terminal</span>
-                  </button>
-                )}
-              </div>
-              <div className="h-full w-full flex justify-center items-center">
-                <iframe src={preview.url} className="h-full w-full" />
-              </div>
-            </div>
-          </Panel>
-          {index !== previews.length - 1 && (
-            <PanelResizeHandle
-              className={resizePanelStyles.PanelResizeHandle}
-              hitAreaMargins={{ fine: 8, coarse: 8 }}
-            />
-          )}
-        </Fragment>
-      ))}
-    </PanelGroup>
-  );
+  const children = [];
+
+  for (const [index, preview] of previews.entries()) {
+    children.push(
+      <Panel defaultSize={defaultSize} minSize={minSize}>
+        <Preview
+          preview={preview}
+          previewCount={previews.length}
+          first={index === 0}
+          last={index === previews.length - 1}
+          toggleTerminal={toggleTerminal}
+        />
+      </Panel>,
+    );
+
+    if (index !== previews.length - 1) {
+      children.push(
+        <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 8, coarse: 8 }} />,
+      );
+    }
+  }
+
+  return createElement(PanelGroup, { id: 'preview-panel', direction: 'horizontal' }, children);
 });
+
+interface PreviewProps {
+  preview: PreviewInfo;
+  previewCount: number;
+  first?: boolean;
+  last?: boolean;
+  toggleTerminal?: () => void;
+}
+
+function Preview({ preview, previewCount, first, last, toggleTerminal }: PreviewProps) {
+  return (
+    <div className={`panel-container ${!first ? 'border-l border-panel-border' : ''}`}>
+      <div className="panel-header border-y border-panel-border justify-between">
+        <div className="panel-title">
+          <div className="i-ph-globe-duotone"></div>
+          <span className="text-sm truncate">{previewTitle(preview, previewCount)}</span>
+        </div>
+        {last && (
+          <button
+            className="panel-button px-2 py-0.5 -mr-1 -my-1"
+            title="Toggle Terminal"
+            onClick={() => toggleTerminal?.()}
+          >
+            <div className="i-ph-terminal-window-duotone"></div>
+            <span className="text-sm">Toggle Terminal</span>
+          </button>
+        )}
+      </div>
+      <div className="h-full w-full flex justify-center items-center">
+        <iframe src={preview.url} className="h-full w-full" />
+      </div>
+    </div>
+  );
+}
 
 function previewTitle(preview: PreviewInfo, previewCount: number) {
   if (preview.title) {
