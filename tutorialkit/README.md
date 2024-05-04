@@ -5,11 +5,11 @@
 **With NPM**
 
 ```bash
-npx tutorialkit@latest create my-tutorial
+npx @blitz/tutorialkit@latest create my-tutorial
 ```
 
 **With PNPM**
 
 ```bash
-pnpm dlx tutorialkit@latest create my-tutorial
+pnpm dlx @blitz/tutorialkit@latest create my-tutorial
 ```
