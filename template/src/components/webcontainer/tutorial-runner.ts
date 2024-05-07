@@ -128,6 +128,8 @@ export class TutorialRunner {
         previewInfo = info;
 
         this._availablePreviews.set(previewInfo.port, previewInfo);
+      } else {
+        previewInfo.title = info.title;
       }
 
       return previewInfo;
