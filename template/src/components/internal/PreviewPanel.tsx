@@ -85,7 +85,7 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
     }
   }
 
-  return createElement(PanelGroup, { id: 'preview-panel', direction: 'horizontal' }, children);
+  return createElement(PanelGroup, { id: 'preview-panel', direction: 'horizontal' }, ...children);
 });
 
 interface PreviewProps {
