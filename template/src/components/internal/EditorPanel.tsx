@@ -1,7 +1,6 @@
-import { TutorialRunnerContext } from '@components/webcontainer/tutorial-runner';
 import type { Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import {
   CodeMirrorEditor,
@@ -36,7 +35,6 @@ export function EditorPanel({
 }: Props) {
   const fileTreePanelRef = useRef<ImperativePanelHandle>(null);
   const [selectedFile, setSelectedFile] = useState(lesson.data.focus);
-  const tutorialRunner = useContext(TutorialRunnerContext);
 
   const onFileClickWrapped = useCallback(
     (fullPath: string) => {
