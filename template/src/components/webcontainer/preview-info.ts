@@ -28,6 +28,6 @@ export class PreviewInfo {
   }
 
   static equals(a: PreviewInfo, b: PreviewInfo) {
-    return a.port === b.port;
+    return a.port === b.port && a.pathname === b.pathname && a.title === b.title;
   }
 }

@@ -139,7 +139,7 @@ export class TutorialRunner {
 
     if (!areDifferent) {
       for (let i = 0; i < previewInfos.length; i++) {
-        areDifferent = PreviewInfo.equals(previewInfos[i], this._previewsLayout[i]);
+        areDifferent = !PreviewInfo.equals(previewInfos[i], this._previewsLayout[i]);
 
         if (areDifferent) {
           break;

@@ -127,7 +127,7 @@ Here is an overview of the properties that can be used as part of the Front Matt
 | type            | ✅       | `part \| chapter \| lesson` | ❌        | The type of the metadata.                                                                                                                             |
 | title           | ✅       | `string`                    | ❌        | The title of the part, chapter, or lesson.                                                                                                            |
 | slug            |          | `string`                    | ❌        | Let’s you customize the URL pathname which is `/:partSlug/:chapterSlug/:lessonSlug`.                                                                  |
-| previews        |          | `number[]`                  | ✅        | Configure which ports should be used for the previews. If not specified, the lowest port will be used.                                                |
+| previews        |          | `Preview[]`                 | ✅        | Configure which ports should be used for the previews. If not specified, the lowest port will be used.                                                |
 | autoReload      |          | `boolean`                   | ✅        | Navigating to a lesson that specifies `autoReload` will always reload the preview. This is typically only needed if your server does not support HMR. |
 | prepareCommands |          | `Command[]`                 | ✅        | List of commands to execute sequentially. They are typically used to install dependencies or to run scripts.                                          |
 | mainCommand     |          | `Command`                   | ✅        | The main command to be executed. This command will run after the `prepareCommands`.                                                                   |
@@ -139,5 +139,11 @@ string | [command: string, title: string] | { command: string, title: string }
 ```
 
 The title is used as part of the boot screen (see [UI Structure](#ui-structure)).
+
+A `Preview` has the following shape:
+
+```ts
+string | [port: number, title: string] | { port: number, title: string }
+```
 
 In most cases, metadata is inherited. For example, if you specify a `mainCommand` on a chapter without specifying it on any of its lessons, each lesson will use the `mainCommand` from its respective chapter. This extends to chapter and parts as well.
