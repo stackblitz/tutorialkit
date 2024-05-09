@@ -138,7 +138,7 @@ A `Command` has the following shape:
 string | [command: string, title: string] | { command: string, title: string }
 ```
 
-The title is used as part of the boot screen (see [UI Structure](#ui-structure)).
+The `title` is used as part of the boot screen (see [UI Structure](#ui-structure)).
 
 A `Preview` has the following shape:
 

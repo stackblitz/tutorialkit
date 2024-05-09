@@ -154,7 +154,12 @@ export function WorkspacePanel({ lesson }: Props) {
 
     tutorialRunner.prepareFiles(lesson).then((cancelled) => {
       if (!cancelled && lesson.data.autoReload) {
-        previewRef.current?.reload();
+        /**
+         * @todo This causes some race with the preview where the iframe can show the "wrong" page.
+         * I think the reason is that when the ports are different then we render new frames which
+         * races against the reload which will internally reset the `src` attribute.
+         */
+        // previewRef.current?.reload();
       }
     });
 
