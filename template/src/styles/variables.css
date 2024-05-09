@@ -49,16 +49,6 @@
   --tk-background-info: theme('colors.info.950');
   --tk-background-tip: theme('colors.tip.950');
 
-  --tk-border-primary: theme('colors.gray.800');
-  --tk-border-secondary: theme('colors.gray.800');
-  --tk-border-brighter: theme('colors.gray.700');
-  --tk-border-accent: theme('colors.accent.700');
-  --tk-border-positive: theme('colors.positive.400');
-  --tk-border-warning: theme('colors.warning.400');
-  --tk-border-negative: theme('colors.negative.500');
-  --tk-border-info: theme('colors.info.400');
-  --tk-border-tip: theme('colors.tip.500');
-
   --tk-text-primary: theme('colors.gray.200');
   --tk-text-secondary: theme('colors.gray.400');
   --tk-text-disabled: theme('colors.gray.600');
@@ -71,6 +61,16 @@
   --tk-text-negative: theme('colors.negative.400');
   --tk-text-info: theme('colors.info.300');
   --tk-text-tip: theme('colors.tip.400');
+
+  --tk-border-primary: theme('colors.gray.800');
+  --tk-border-secondary: theme('colors.gray.800');
+  --tk-border-brighter: theme('colors.gray.700');
+  --tk-border-accent: theme('colors.accent.700');
+  --tk-border-positive: theme('colors.positive.400');
+  --tk-border-warning: theme('colors.warning.400');
+  --tk-border-negative: theme('colors.negative.500');
+  --tk-border-info: theme('colors.info.400');
+  --tk-border-tip: theme('colors.tip.500');
 }
 
 /*
