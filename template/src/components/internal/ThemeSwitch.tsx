@@ -11,12 +11,14 @@ export const ThemeSwitch = memo(() => {
   }, []);
 
   return (
-    <button
-      className="flex items-center text-2xl text-tk-elements-topBar-link-iconColor hover:text-tk-elements-topBar-link-iconColorHover bg-tk-elements-topBar-link-backgroundColor hover:bg-tk-elements-topBar-link-backgroundColorHover p-1 rounded-md"
-      title="Toggle Theme"
-      onClick={() => toggleTheme()}
-    >
-      {<div className={theme === 'dark' ? 'i-ph-sun-dim-duotone' : 'i-ph-moon-stars-duotone'}></div>}
-    </button>
+    domLoaded && (
+      <button
+        className="flex items-center text-2xl text-tk-elements-topBar-link-iconColor hover:text-tk-elements-topBar-link-iconColorHover bg-tk-elements-topBar-link-backgroundColor hover:bg-tk-elements-topBar-link-backgroundColorHover p-1 rounded-md"
+        title="Toggle Theme"
+        onClick={() => toggleTheme()}
+      >
+        {<div className={theme === 'dark' ? 'i-ph-sun-dim-duotone' : 'i-ph-moon-stars-duotone'}></div>}
+      </button>
+    )
   );
 });

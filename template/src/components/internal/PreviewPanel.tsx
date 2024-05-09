@@ -70,7 +70,7 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
 
   for (const [index, preview] of previews.entries()) {
     children.push(
-      <Panel key={`panel-${index}`} defaultSize={defaultSize} minSize={minSize}>
+      <Panel defaultSize={defaultSize} minSize={minSize}>
         <Preview
           preview={preview}
           previewCount={previews.length}
@@ -82,9 +82,7 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
     );
 
     if (index !== previews.length - 1) {
-      children.push(
-        <PanelResizeHandle key={`resize-handle-${index}`} className={resizePanelStyles.PanelResizeHandle} />,
-      );
+      children.push(<PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} />);
     }
   }
 
