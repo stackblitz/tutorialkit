@@ -35,11 +35,11 @@ const { lesson, navList, title } = Astro.props as Props;
       pos="40%"
       max="60%"
     >
-      <div class="h-full flex flex-col" slot="a">
+      <div class="h-full flex flex-col bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor" slot="a">
         <Nav client:load lesson={lesson} navList={navList} />
         <TutorialContent lesson={lesson} slot="a" />
       </div>
-      <div class="h-full border-l border-panel-border" slot="b">
+      <div class="h-full border-l border-tk-elements-app-borderColor" slot="b">
         <WorkspacePanel lesson={lesson} client:load transition:persist />
       </div>
     </ResizablePanel>

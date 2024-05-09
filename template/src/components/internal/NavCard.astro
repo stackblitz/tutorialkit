@@ -1,0 +1,23 @@
+---
+import type { LessonLink } from '@entities/tutorial';
+
+interface Props {
+  lesson: LessonLink;
+  type: 'next' | 'prev';
+}
+
+const { lesson, type } = Astro.props;
+---
+
+<a
+  class:list={[
+    'content-nav-card group flex flex-col bg-tk-elements-navCard-backgroundColor hover:bg-tk-elements-navCard-backgroundColorHover flex-1 p-4 border border-tk-elements-navCard-borderColor hover:border-tk-elements-navCard-borderColorHover text-tk-elements-navCard-textColor hover:text-tk-elements-navCard-textColorHover rounded-md cursor-pointer',
+    { 'text-right items-end': type === 'next' },
+  ]}
+  href={lesson.href}
+>
+  <span
+    class=`icon text-tk-elements-navCard-iconColor ${type === 'prev' ? 'i-ph-arrow-left' : 'i-ph-arrow-right' } pointer-events-none h-7 w-7 mb-2 group-hover:text-tk-elements-navCard-iconColorHover`
+  ></span>
+  <span class="line-clamp-2">{lesson.data.title}</span>
+</a>

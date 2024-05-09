@@ -2,6 +2,22 @@
   --un-rotate: 90deg;
 }
 
+.AccordionTrigger {
+  --at-apply: text-tk-elements-breadcrumb-dropdown-accordionTextColor;
+}
+
+.AccordionTrigger:hover {
+  --at-apply: text-tk-elements-breadcrumb-dropdown-accordionTextColorHover;
+}
+
+.AccordionTrigger .AccordionTriggerIcon {
+  --at-apply: transition-color duration-100 text-tk-elements-breadcrumb-dropdown-accordionIconColor;
+}
+
+.AccordionTrigger:hover .AccordionTriggerIcon {
+  --at-apply: text-tk-elements-breadcrumb-dropdown-accordionIconColorHover;
+}
+
 .AccordionContent {
   overflow: hidden;
 }
@@ -12,6 +28,56 @@
 
 .AccordionContent[data-state='closed'] {
   animation: slideUp 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.NavContainer:hover {
+  --at-apply: border-tk-elements-breadcrumb-toggleButton-borderColorHover;
+}
+
+.NavContainer[data-state='closed']:not(:hover) {
+  --at-apply: border-tk-elements-breadcrumb-toggleButton-borderColor;
+}
+
+.NavContainer[data-state='open']:not(:hover) {
+  --at-apply: border-tk-elements-breadcrumb-toggleButton-borderColorSelected;
+}
+
+.NavContainer .ToggleButton:hover {
+  --at-apply: bg-tk-elements-breadcrumb-toggleButton-backgroundColorHover
+    text-tk-elements-breadcrumb-toggleButton-textColorHover;
+}
+
+.NavContainer[data-state='closed'] .ToggleButton:not(:hover) {
+  --at-apply: bg-tk-elements-breadcrumb-toggleButton-backgroundColor text-tk-elements-breadcrumb-toggleButton-textColor;
+}
+
+.NavContainer[data-state='open'] .ToggleButton:not(:hover) {
+  --at-apply: bg-tk-elements-breadcrumb-toggleButton-backgroundColorSelected
+    text-tk-elements-breadcrumb-toggleButton-textColorSelected;
+}
+
+.NavContainer[data-state='closed'] .ToggleButton:not(:hover) .Divider {
+  --at-apply: text-tk-elements-breadcrumb-toggleButton-textDividerColor;
+}
+
+.NavContainer[data-state='open'] .ToggleButton:not(:hover) .Divider {
+  --at-apply: text-tk-elements-breadcrumb-toggleButton-textDividerColorSelected;
+}
+
+.NavContainer .ToggleButton:hover .Divider {
+  --at-apply: text-tk-elements-breadcrumb-toggleButton-textDividerColorHover;
+}
+
+.ToggleButton .ToggleButtonIcon {
+  --at-apply: text-tk-elements-breadcrumb-toggleButton-iconColor;
+}
+
+.ToggleButton:hover .ToggleButtonIcon {
+  --at-apply: text-tk-elements-breadcrumb-toggleButton-iconColorHover;
+}
+
+.NavContainer[data-state='open'] .ToggleButton:not(:hover) .ToggleButtonIcon {
+  --at-apply: text-tk-elements-breadcrumb-toggleButton-iconColorSelected;
 }
 
 @keyframes slideDown {

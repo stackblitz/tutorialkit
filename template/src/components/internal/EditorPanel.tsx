@@ -66,16 +66,16 @@ export function EditorPanel({
   }, [lesson]);
 
   return (
-    <PanelGroup direction="horizontal">
+    <PanelGroup className="bg-tk-elements-app-backgroundColor" direction="horizontal">
       <Panel className="flex flex-col" collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
-        <div className="panel-header border-r border-b border-panel-border">
+        <div className="panel-header border-r border-b border-tk-elements-app-borderColor">
           <div className="panel-title">
-            <div className="i-ph-tree-structure-duotone shrink-0"></div>
+            <div className="panel-icon i-ph-tree-structure-duotone shrink-0"></div>
             <span className="text-sm">Files</span>
           </div>
         </div>
         <FileTree
-          className="flex-grow py-2 border-r border-panel-border text-sm"
+          className="flex-grow py-2 border-r border-tk-elements-app-borderColor text-sm"
           selectedFile={selectedFile}
           hideRoot={lesson.data.hideRoot ?? true}
           files={lesson.files}
@@ -116,10 +116,10 @@ function FileTab({ editorDocument, helpAction, onHelpClick }: FileTabProps) {
   const icon = fileName ? getFileIcon(fileName) : '';
 
   return (
-    <div className="panel-header border-b border-panel-border flex justify-between">
+    <div className="panel-header border-b border-tk-elements-app-borderColor flex justify-between">
       <div className="panel-title">
-        <div className={`scale-125 ${icon}`}></div>
-        <span className="text-sm text-gray-600">{fileName}</span>
+        <div className={`panel-icon scale-125 ${icon}`}></div>
+        <span className="text-sm">{fileName}</span>
       </div>
       {!!helpAction && (
         <button onClick={onHelpClick} className="panel-button px-2 py-0.5 -mr-1 -my-1">

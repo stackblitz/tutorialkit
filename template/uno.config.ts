@@ -29,14 +29,19 @@ export default defineConfig({
   ],
   shortcuts: {
     'panel-container': 'grid grid-rows-[min-content_1fr] h-full',
-    'panel-header': 'flex items-center px-4 py-2 bg-panel-headerBackground min-h-[38px]',
-    'panel-title': 'flex items-center gap-1.5',
+    'panel-header': 'flex items-center px-4 py-2 bg-tk-elements-panel-header-backgroundColor min-h-[38px]',
+    'panel-title': 'flex items-center gap-1.5 text-tk-elements-panel-header-textColor',
+    'panel-icon': 'text-tk-elements-panel-header-iconColor',
     'panel-button':
-      'flex items-center gap-1.5 hover:bg-panel-buttonHover text-panel-buttonText hover:text-panel-buttonTextHover rounded-md text-sm transition-background duration-200',
+      'flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm bg-tk-elements-panel-headerButton-backgroundColor hover:bg-tk-elements-panel-headerButton-backgroundColorHover text-tk-elements-panel-headerButton-textColor hover:text-tk-elements-panel-headerButton-textColorHover',
   },
   transformers: [transformerDirectives()],
   presets: [
-    presetUno(),
+    presetUno({
+      dark: {
+        dark: '[data-theme="dark"]',
+      },
+    }),
     presetIcons({
       collections: {
         ...customIconCollection,

@@ -390,6 +390,8 @@ export class TutorialRunner {
   }
 
   private async _runCommands(webcontainer: WebContainer, commands: Commands, signal: AbortSignal) {
+    this._terminal?.reset();
+
     const abortListener = () => this._currentCommandProcess?.kill();
     signal.addEventListener('abort', abortListener);
 

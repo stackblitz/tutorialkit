@@ -1,8 +1,8 @@
 import { themeIsDark, themeStore } from '@stores/theme-store';
-import '@styles/xterm.css';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
+import '@xterm/xterm/css/xterm.css';
 import { useContext, useEffect, useRef } from 'react';
 import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
 import { darkTheme, lightTheme } from './theme';

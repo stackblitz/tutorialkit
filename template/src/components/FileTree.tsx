@@ -1,4 +1,5 @@
 import type { Files } from '@entities/tutorial';
+import classnames from 'classnames';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 
 const NODE_PADDING_LEFT = 12;
@@ -73,7 +74,7 @@ export function FileTree({ files, onFileClick, selectedFile, hideRoot, scope, hi
   }
 
   return (
-    <div className={className}>
+    <div className={classnames(className, 'bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
           case 'file':
@@ -109,9 +110,15 @@ interface FolderProps {
 function Folder({ folder: { depth, name }, collapsed, onClick }: FolderProps) {
   return (
     <NodeButton
-      className="hover:bg-gray-50"
+      className="group bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
       depth={depth}
-      icon={collapsed ? 'i-ph-folder-simple-duotone' : 'i-ph-folder-open-duotone'}
+      iconClasses={classnames(
+        'text-tk-elements-fileTree-folder-iconColor group-hover:text-tk-elements-fileTree-folder-iconColorHover',
+        {
+          'i-ph-folder-simple-duotone': collapsed,
+          'i-ph-folder-open-duotone': !collapsed,
+        },
+      )}
       onClick={onClick}
     >
       {name}
@@ -128,9 +135,17 @@ interface FileProps {
 function File({ file: { depth, name }, onClick, selected }: FileProps) {
   return (
     <NodeButton
-      className={selected ? 'bg-primary-700/10 text-primary-700' : 'hover:bg-gray-50'}
+      className={classnames('group', {
+        'bg-tk-elements-fileTree-file-backgroundColor hover:bg-tk-elements-fileTree-file-backgroundColorHover text-tk-elements-fileTree-file-textColor hover:text-tk-elements-fileTree-file-textColorHover':
+          !selected,
+        'bg-tk-elements-fileTree-file-backgroundColorSelected text-tk-elements-fileTree-file-textColorSelected':
+          selected,
+      })}
       depth={depth}
-      icon="i-ph-file-duotone"
+      iconClasses={classnames('i-ph-file-duotone', {
+        'text-tk-elements-fileTree-file-iconColor group-hover:text-tk-elements-fileTree-file-iconColorHover': !selected,
+        'text-tk-elements-fileTree-file-iconColorSelected': selected,
+      })}
       onClick={onClick}
     >
       {name}
@@ -140,20 +155,20 @@ function File({ file: { depth, name }, onClick, selected }: FileProps) {
 
 interface ButtonProps {
   depth: number;
-  icon: string;
+  iconClasses: string;
   children: ReactNode;
   className?: string;
   onClick?: () => void;
 }
 
-function NodeButton({ depth, icon, onClick, className, children }: ButtonProps) {
+function NodeButton({ depth, iconClasses, onClick, className, children }: ButtonProps) {
   return (
     <button
       className={`flex items-center gap-2 w-full pr-2 border-2 border-transparent text-faded ${className ?? ''}`}
       style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
       onClick={() => onClick?.()}
     >
-      <div className={`${icon} scale-120 shrink-0`}></div>
+      <div className={classnames('scale-120 shrink-0', iconClasses)}></div>
       <span>{children}</span>
     </button>
   );

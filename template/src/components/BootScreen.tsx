@@ -1,30 +1,40 @@
 import { useStore } from '@nanostores/react';
+import classnames from 'classnames';
 import { useContext } from 'react';
 import { TutorialRunnerContext, type Step } from './webcontainer/tutorial-runner';
 
-export function BootScreen() {
+interface Props {
+  className?: string;
+}
+
+export function BootScreen({ className }: Props) {
   const tutorialRunner = useContext(TutorialRunnerContext);
   const steps = useStore(tutorialRunner.steps);
 
   return (
-    <div className="h-full w-full flex justify-center items-center">
+    <div
+      className={classnames(
+        'h-full w-full flex justify-center items-center text-sm bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor',
+        className,
+      )}
+    >
       {steps ? (
         <ul className="space-y-1">
           {steps.map((step, index) => (
-            <li key={index} className={`flex items-center ${toTextColor(step.status)}`}>
+            <li key={index} className="flex items-center">
               {step.status === 'idle' ? (
-                <div className="inline-block mr-2 i-ph-circle-duotone scale-120" />
+                <div className="inline-block mr-2 i-ph-circle-duotone scale-120 text-tk-elements-status-disabled-iconColor" />
               ) : step.status === 'running' ? (
-                <div className="inline-block mr-2 i-svg-spinners-90-ring-with-bg scale-105" />
+                <div className="inline-block mr-2 i-svg-spinners-90-ring-with-bg scale-105 text-tk-elements-status-active-iconColor" />
               ) : step.status === 'completed' ? (
-                <div className="inline-block mr-2 i-ph-check-circle-duotone scale-120" />
+                <div className="inline-block mr-2 i-ph-check-circle-duotone scale-120 text-tk-elements-status-positive-iconColor" />
               ) : step.status === 'failed' ? (
-                <div className="inline-block mr-2 i-ph-x-circle-duotone scale-120" />
+                <div className="inline-block mr-2 i-ph-x-circle-duotone scale-120 text-tk-elements-status-negative-iconColor" />
               ) : (
                 // skipped step
-                <div className="inline-block mr-2 i-ph-minus-circle-duotone scale-120" />
+                <div className="inline-block mr-2 i-ph-minus-circle-duotone scale-120 text-tk-elements-status-skipped-iconColor" />
               )}
-              {step.title}
+              <span className={toTextColor(step.status)}>{step.title}</span>
             </li>
           ))}
         </ul>
@@ -38,19 +48,19 @@ export function BootScreen() {
 function toTextColor(status: Step['status']): string {
   switch (status) {
     case 'completed': {
-      return 'text-bootscreen-success';
+      return 'text-tk-elements-status-positive-textColor';
     }
     case 'failed': {
-      return 'text-bootscreen-failed';
+      return 'text-tk-elements-status-negative-textColor';
     }
     case 'idle': {
-      return 'text-gray-500/25';
+      return 'text-tk-elements-status-disabled-textColor';
     }
     case 'running': {
-      return '';
+      return 'text-tk-elements-status-active-textColor';
     }
     case 'skipped': {
-      return 'text-bootscreen-skipped';
+      return 'text-tk-elements-status-skipped-textColor';
     }
   }
 }

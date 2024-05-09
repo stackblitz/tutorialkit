@@ -18,45 +18,34 @@ type Children = Array<BlockContent | DefinitionContent>;
 interface Callout {
   title: string;
   icon: string;
-  borderColor: string;
-  backgroundColor: string;
-  titleColor: string;
 }
 
 const callouts: Record<string, Callout> = {
   tip: {
     title: 'Tip',
-    icon: 'i-ph-rocket-launch-bold',
-    borderColor: 'border-callout-tip-border',
-    backgroundColor: 'bg-callout-tip-bg',
-    titleColor: 'text-callout-tip-text',
+    icon: 'i-ph-rocket-launch',
   },
   info: {
     title: 'Info',
-    icon: 'i-ph-info-bold',
-    borderColor: 'border-callout-info-border',
-    backgroundColor: 'bg-callout-info-bg',
-    titleColor: 'text-callout-info-text',
+    icon: 'i-ph-info',
   },
   warn: {
     title: 'Warning',
-    icon: 'i-ph-warning-circle-bold',
-    borderColor: 'border-callout-warn-border',
-    backgroundColor: 'bg-callout-warn-bg',
-    titleColor: 'text-callout-warn-text',
+    icon: 'i-ph-warning-circle',
+  },
+  success: {
+    title: 'Success',
+    icon: 'i-ph-check-circle',
   },
   danger: {
     title: 'Danger',
     icon: 'i-ph-x-circle',
-    borderColor: 'border-callout-danger-border',
-    backgroundColor: 'bg-callout-danger-bg',
-    titleColor: 'text-callout-danger-text',
   },
 };
 
 type CalloutVariant = keyof typeof callouts;
 
-const variants = new Set<CalloutVariant>(['tip', 'info', 'warn', 'danger']);
+const variants = new Set<CalloutVariant>(['tip', 'info', 'warn', 'danger', 'success']);
 
 function isNodeDirective(node: Node): node is Directives {
   return node.type === 'textDirective' || node.type === 'leafDirective' || node.type === 'containerDirective';
@@ -116,11 +105,9 @@ export function remarkCallouts() {
           const hideIcon = attributes.hideIcon === 'true';
 
           const classes = [
-            `callout callout-${variant} my-4`,
-            'flex flex-col p-3',
+            `callout callout-${variant} my-4 flex flex-col p-3 bg-tk-elements-markdown-callouts-backgroundColor`,
             attributes.class ?? '',
-            callout.backgroundColor,
-            ...(noBorder ? [] : ['border-l-3', callout.borderColor]),
+            ...(noBorder ? [] : ['border-l-3', 'border-tk-elements-markdown-callouts-borderColor']),
           ];
 
           node.attributes = {
@@ -151,7 +138,7 @@ function generate(title: string, children: any[], callout: Callout, hideIcon: bo
             data: {
               hName: 'div',
               hProperties: {
-                className: ['w-full flex gap-2 items-center', callout.titleColor],
+                className: 'w-full flex gap-2 items-center text-tk-elements-markdown-callouts-titleTextColor',
                 ariaHidden: true,
               },
             },
@@ -161,12 +148,12 @@ function generate(title: string, children: any[], callout: Callout, hideIcon: bo
                 : ([
                     {
                       type: 'html',
-                      value: `<span class="text-6 inline-block ${callout.icon}"></span>`,
+                      value: `<span class="text-6 inline-block text-tk-elements-markdown-callouts-iconColor ${callout.icon}"></span>`,
                     },
                   ] satisfies Children)),
               {
                 type: 'html',
-                value: `<span class="text-4 font-bold inline-block"> ${title}</span>`,
+                value: `<span class="text-4 font-semibold inline-block"> ${title}</span>`,
               },
             ],
           },

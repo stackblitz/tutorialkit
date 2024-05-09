@@ -68,6 +68,10 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 Some **info** with some markdown `syntax` and a [`link`](https://google.com). Here's a normal [link]().
 :::
 
+:::tip{title="Foo"}
+Some **info** with some markdown `syntax` and a [`link`](https://google.com). Here's a normal [link]().
+:::
+
 :::tip{noBorder=true title="Foo" hideIcon=true}
 Some **info** with some markdown `syntax` and a [`link`](https://google.com). Here's a normal [link](https://google.com).
 :::
@@ -93,6 +97,10 @@ Some **content** with _Markdown_ `syntax` and a [`link`](https://google.com). He
 :::
 
 :::danger
+Some **content** with _Markdown_ `syntax` and a [`link`](https://google.com). Here's a normal [link](https://google.com).
+:::
+
+:::success
 Some **content** with _Markdown_ `syntax` and a [`link`](https://google.com). Here's a normal [link](https://google.com).
 :::
 

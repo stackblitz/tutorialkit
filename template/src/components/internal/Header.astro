@@ -1,15 +1,23 @@
 ---
 import { ThemeSwitch } from './ThemeSwitch';
+import Logo from '../../../public/logo.svg?raw';
 ---
 
-<nav class="bg-white border-b border-panel-border flex max-w-full items-center p-3 px-8" aria-label="">
+<nav
+  class="bg-tk-elements-topBar-backgroundColor border-b border-tk-elements-app-borderColor flex max-w-full items-center p-3 px-4"
+  aria-label=""
+>
   <div class="flex flex-1">
-    <a href="#" class="-m-1.5 p-1.5">
-      <span class="sr-only">Your Company</span>
-      <img class="h-8 w-auto" src="/logo.svg" alt="" />
+    <a
+      href="#"
+      class="-m-1.5 p-1.5 flex items-center text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
+    >
+      <span class="h-8 w-auto">
+        <Fragment set:html={Logo} />
+      </span>
     </a>
   </div>
-  <!-- <div>
-    <ThemeSwitch />
-  </div> -->
+  <div>
+    <ThemeSwitch client:only="react" />
+  </div>
 </nav>

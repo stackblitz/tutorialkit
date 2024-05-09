@@ -1,9 +1,98 @@
-html:not(.dark) {
-  --cm-bg: theme('colors.editor.light.background');
-  --cm-gutter-fg: theme('colors.editor.light.gutter.foreground');
-  --cm-active-line: theme('colors.editor.light.activeLine');
-  --cm-cursor-color: theme('colors.editor.light.cursor.width');
-  --cm-cursor-width: theme('colors.editor.light.cursor.background');
-  --cm-selection-bg-focus: theme('colors.editor.light.selectionFocus');
-  --cm-selection-bg-blur: theme('colors.editor.light.selectionBlur');
+:root {
+  --cm-backgroundColor: var(--tk-elements-editor-backgroundColor, var(--tk-elements-app-backgroundColor));
+  --cm-textColor: var(--tk-elements-editor-textColor, var(--tk-text-primary));
+
+  /* Gutter */
+  --cm-gutter-backgroundColor: var(--ts-elements-editor-gutter-backgroundColor, var(--cm-backgroundColor));
+  --cm-gutter-textColor: var(--tk-elements-editor-gutter-textColor, var(--tk-text-secondary));
+  --cm-gutter-activeLineTextColor: var(--tk-elements-editor-gutter-activeLineTextColor, var(--cm-gutter-textColor));
+
+  /* Fold Gutter */
+  --cm-foldGutter-textColor: var(--tk-elements-editor-foldGutter-textColor, var(--cm-gutter-textColor));
+  --cm-foldGutter-textColorHover: var(--tk-elements-editor-foldGutter-textColorHover, var(--cm-gutter-textColor));
+
+  /* Active Line */
+  --cm-activeLineBackgroundColor: var(--tk-elements-editor-activeLineBackgroundColor, rgb(224 231 235 / 30%));
+
+  /* Cursor */
+  --cm-cursor-width: 2px;
+  --cm-cursor-backgroundColor: var(--tk-elements-editor-cursor-textColor, var(--tk-text-primary));
+
+  /* Matching Brackets */
+  --cm-matching-bracket: var(--tk-elements-editor-matchingBracketBackgroundColor, rgb(50 140 130 / 0.3));
+
+  /* Selection */
+  --cm-selection-backgroundColorFocused: var(--tk-elements-editor-selection-backgroundColorFocused, #42b4ff);
+  --cm-selection-backgroundOpacityFocused: var(--tk-elements-editor-selection-backgroundOpacityFocused, 0.3);
+  --cm-selection-backgroundColorBlured: var(--tk-elements-editor-selection-backgroundColorBlured, #c9e9ff);
+  --cm-selection-backgroundOpacityBlured: var(--tk-elements-editor-selection-backgroundOpacityBlured, 0.3);
+
+  /* Panels */
+  --cm-panels-borderColor: var(--tk-elements-editor-panels-borderColor, var(--tk-elements-app-borderColor));
+
+  /* Search */
+  --cm-search-backgroundColor: var(--tk-elements-editor-search-backgroundColor, var(--cm-backgroundColor));
+  --cm-search-textColor: var(--tk-elements-editor-search-textColor, var(--tk-elements-app-textColor));
+  --cm-search-closeButton-backgroundColor: var(--tk-elements-editor-search-closeButton-backgroundColor, transparent);
+  --cm-search-closeButton-backgroundColorHover: var(
+    --tk-elements-editor-search-closeButton-backgroundColorHover,
+    var(--tk-background-secondary)
+  );
+  --cm-search-closeButton-textColor: var(--tk-elements-editor-search-closeButton-textColor, var(--tk-text-secondary));
+  --cm-search-closeButton-textColorHover: var(
+    --tk-elements-editor-search-closeButton-textColorHover,
+    var(--tk-text-primary)
+  );
+  --cm-search-button-backgroundColor: var(
+    --tk-elements-editor-search-button-backgroundColor,
+    var(--tk-background-secondary)
+  );
+  --cm-search-button-backgroundColorHover: var(
+    --tk-elements-editor-search-button-backgroundColorHover,
+    var(--tk-background-active)
+  );
+  --cm-search-button-textColor: var(--tk-elements-editor-search-button-textColor, var(--tk-text-secondary));
+  --cm-search-button-textColorHover: var(--tk-elements-editor-search-button-textColorHover, var(--tk-text-primary));
+  --cm-search-button-borderColor: var(--tk-elements-editor-search-button-borderColor, transparent);
+  --cm-search-button-borderColorHover: var(
+    --tk-elements-editor-search-button-borderColorHover,
+    var(--cm-search-button-borderColor)
+  );
+  --cm-search-button-borderColorFocused: var(
+    --tk-elements-editor-search-button-borderColorFocused,
+    var(--tk-border-accent)
+  );
+  --cm-search-input-backgroundColor: var(
+    --tk-elements-editor-search-input-backgroundColor,
+    var(--tk-background-primary)
+  );
+  --cm-search-input-borderColor: var(--tk-elements-editor-search-input-borderColor, var(--tk-elements-app-borderColor));
+  --cm-search-input-borderColorFocused: var(
+    --tk-elements-editor-search-input-borderColorFocused,
+    var(--tk-border-accent)
+  );
+
+  /* Tooltip */
+  --cm-tooltip-backgroundColor: var(
+    --tk-elements-editor-tooltip-backgroundColor,
+    var(--tk-elements-app-backgroundColor)
+  );
+  --cm-tooltip-backgroundColorSelected: var(
+    --tk-elements-editor-tooltip-backgroundColorSelected,
+    var(--tk-background-accent)
+  );
+  --cm-tooltip-borderColor: var(--tk-elements-editor-tooltip-borderColor, var(--tk-elements-app-borderColor));
+}
+
+html[data-theme='light'] {
+  --tk-elements-editor-gutter-textColor: #237893;
+  --tk-elements-editor-gutter-activeLineTextColor: var(--tk-text-primary);
+  --tk-elements-editor-foldGutter-textColorHover: var(--tk-text-primary);
+}
+
+html[data-theme='dark'] {
+  --tk-elements-editor-gutter-activeLineTextColor: var(--tk-text-primary);
+  --tk-elements-editor-selection-backgroundOpacityBlured: 0.1;
+  --tk-elements-editor-activeLineBackgroundColor: rgb(50 53 63 / 50%);
+  --tk-elements-editor-foldGutter-textColorHover: var(--tk-text-primary);
 }

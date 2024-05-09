@@ -1,3 +1,8 @@
+@import './variables.css';
+@import './markdown.css';
+@import './terminal.css';
+@import './panel.css';
+
 body {
   font-family: 'Inter', sans-serif;
   font-optical-sizing: auto;

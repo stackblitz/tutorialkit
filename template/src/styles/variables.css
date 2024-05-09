@@ -1,0 +1,222 @@
+/* Color Tokens Light */
+:root,
+:root[data-theme='light'] {
+  --tk-background-primary: theme('colors.gray.0');
+  --tk-background-secondary: theme('colors.gray.50');
+  --tk-background-active: theme('colors.gray.100');
+  --tk-background-brighter: theme('colors.gray.0');
+  --tk-background-accent: theme('colors.accent.600');
+  --tk-background-positive: theme('colors.positive.50');
+  --tk-background-warning: theme('colors.warning.100');
+  --tk-background-negative: theme('colors.negative.100');
+  --tk-background-info: theme('colors.info.100');
+  --tk-background-tip: theme('colors.tip.100');
+
+  --tk-border-primary: theme('colors.gray.200');
+  --tk-border-secondary: theme('colors.gray.200');
+  --tk-border-brighter: theme('colors.gray.300');
+  --tk-border-accent: theme('colors.accent.600');
+  --tk-border-positive: theme('colors.positive.600');
+  --tk-border-warning: theme('colors.warning.400');
+  --tk-border-negative: theme('colors.negative.500');
+  --tk-border-info: theme('colors.info.600');
+  --tk-border-tip: theme('colors.tip.600');
+
+  --tk-text-primary: theme('colors.gray.800');
+  --tk-text-secondary: theme('colors.gray.600');
+  --tk-text-disabled: theme('colors.gray.400');
+  --tk-text-body: theme('colors.gray.700');
+  --tk-text-heading: theme('colors.gray.950');
+  --tk-text-active: theme('colors.gray.1000');
+  --tk-text-accent: theme('colors.accent.600');
+  --tk-text-positive: theme('colors.positive.700');
+  --tk-text-warning: theme('colors.warning.600');
+  --tk-text-negative: theme('colors.negative.600');
+  --tk-text-info: theme('colors.info.800');
+  --tk-text-tip: theme('colors.tip.900');
+}
+
+/* Color Tokens Dark */
+:root[data-theme='dark'] {
+  --tk-background-primary: theme('colors.gray.950');
+  --tk-background-secondary: theme('colors.gray.900');
+  --tk-background-active: theme('colors.gray.800');
+  --tk-background-brighter: theme('colors.gray.800');
+  --tk-background-accent: theme('colors.accent.800');
+  --tk-background-positive: theme('colors.positive.950');
+  --tk-background-warning: theme('colors.warning.950');
+  --tk-background-negative: theme('colors.negative.950');
+  --tk-background-info: theme('colors.info.950');
+  --tk-background-tip: theme('colors.tip.950');
+
+  --tk-border-primary: theme('colors.gray.800');
+  --tk-border-secondary: theme('colors.gray.800');
+  --tk-border-brighter: theme('colors.gray.700');
+  --tk-border-accent: theme('colors.accent.700');
+  --tk-border-positive: theme('colors.positive.400');
+  --tk-border-warning: theme('colors.warning.400');
+  --tk-border-negative: theme('colors.negative.500');
+  --tk-border-info: theme('colors.info.400');
+  --tk-border-tip: theme('colors.tip.500');
+
+  --tk-text-primary: theme('colors.gray.200');
+  --tk-text-secondary: theme('colors.gray.400');
+  --tk-text-disabled: theme('colors.gray.600');
+  --tk-text-body: theme('colors.gray.300');
+  --tk-text-heading: theme('colors.gray.100');
+  --tk-text-active: theme('colors.gray.0');
+  --tk-text-accent: theme('colors.accent.500');
+  --tk-text-positive: theme('colors.positive.300');
+  --tk-text-warning: theme('colors.warning.300');
+  --tk-text-negative: theme('colors.negative.400');
+  --tk-text-info: theme('colors.info.300');
+  --tk-text-tip: theme('colors.tip.400');
+}
+
+/*
+ * Element Tokens
+ *
+ * Hierarchy: Element Token -> (Element Token | Color Tokens) -> Primitives
+ */
+:root {
+  /* App */
+  --tk-elements-app-backgroundColor: var(--tk-background-primary);
+  --tk-elements-app-borderColor: var(--tk-border-primary);
+  --tk-elements-app-textColor: var(--tk-text-primary);
+  --tk-elements-app-linkColor: var(--tk-text-accent);
+
+  /* Content */
+  --tk-elements-content-textColor: var(--tk-text-body);
+  --tk-elements-content-headingTextColor: var(--tk-text-primary);
+
+  /* Top Bar */
+  --tk-elements-topBar-backgroundColor: var(--tk-elements-app-backgroundColor);
+
+  /* Top Bar > Link */
+  --tk-elements-topBar-link-backgroundColor: var(--tk-elements-app-backgroundColor);
+  --tk-elements-topBar-link-backgroundColorHover: var(--tk-background-secondary);
+  --tk-elements-topBar-link-iconColor: var(--tk-text-secondary);
+  --tk-elements-topBar-link-iconColorHover: var(--tk-text-primary);
+
+  /* Top Bar > Logo */
+  --tk-elements-topBar-logo-color: var(--tk-text-active);
+  --tk-elements-topBar-logo-colorHover: var(--tk-text-active);
+
+  /* Previews */
+  --tk-elements-previews-borderColor: theme('colors.gray.200');
+
+  /* Panel */
+  --tk-elements-panel-backgroundColor: var(--tk-elements-app-backgroundColor);
+
+  /* Panel > Header */
+  --tk-elements-panel-header-backgroundColor: var(--tk-background-secondary);
+  --tk-elements-panel-header-textColor: var(--tk-text-heading);
+  --tk-elements-panel-header-iconColor: var(--tk-text-primary);
+
+  /* Panel > Header Button */
+  --tk-elements-panel-headerButton-backgroundColor: var(--tk-elements-panel-header-backgroundColor);
+  --tk-elements-panel-headerButton-backgroundColorHover: var(--tk-background-primary);
+  --tk-elements-panel-headerButton-textColor: var(--tk-text-secondary);
+  --tk-elements-panel-headerButton-textColorHover: var(--tk-text-primary);
+  --tk-elements-panel-headerButton-iconColor: var(--tk-text-secondary);
+  --tk-elements-panel-headerButton-iconColorHover: var(--tk-text-primary);
+
+  /* File Tree */
+  --tk-elements-fileTree-backgroundColor: var(--tk-elements-app-backgroundColor);
+  --tk-elements-fileTree-backgroundColorHover: var(--tk-background-secondary);
+  --tk-elements-fileTree-textColor: var(--tk-elements-app-textColor);
+  --tk-elements-fileTree-textColorHover: var(--tk-elements-fileTree-textColor);
+  --tk-elements-fileTree-iconColor: var(--tk-text-secondary);
+  --tk-elements-fileTree-iconColorHover: var(--tk-text-secondary);
+
+  /* File Tree > File */
+  --tk-elements-fileTree-file-backgroundColor: var(--tk-elements-fileTree-backgroundColor);
+  --tk-elements-fileTree-file-backgroundColorHover: var(--tk-elements-fileTree-backgroundColorHover);
+  --tk-elements-fileTree-file-backgroundColorSelected: var(--tk-background-active);
+  --tk-elements-fileTree-file-textColor: var(--tk-elements-fileTree-textColor);
+  --tk-elements-fileTree-file-textColorHover: var(--tk-elements-fileTree-textColorHover);
+  --tk-elements-fileTree-file-textColorSelected: var(--tk-text-active);
+  --tk-elements-fileTree-file-iconColor: var(--tk-elements-fileTree-iconColor);
+  --tk-elements-fileTree-file-iconColorHover: var(--tk-elements-fileTree-iconColorHover);
+  --tk-elements-fileTree-file-iconColorSelected: var(--tk-text-active);
+
+  /* File Tree > Folder */
+  --tk-elements-fileTree-folder-backgroundColor: var(--tk-elements-fileTree-backgroundColor);
+  --tk-elements-fileTree-folder-backgroundColorHover: var(--tk-elements-fileTree-backgroundColorHover);
+  --tk-elements-fileTree-folder-textColor: var(--tk-elements-fileTree-textColor);
+  --tk-elements-fileTree-folder-textColorHover: var(--tk-elements-fileTree-textColorHover);
+  --tk-elements-fileTree-folder-iconColor: var(--tk-elements-fileTree-iconColor);
+  --tk-elements-fileTree-folder-iconColorHover: var(--tk-elements-fileTree-iconColorHover);
+
+  /* Nav Card */
+  --tk-elements-navCard-backgroundColor: var(--tk-elements-app-backgroundColor);
+  --tk-elements-navCard-backgroundColorHover: var(--tk-elements-navCard-backgroundColor);
+  --tk-elements-navCard-borderColor: var(--tk-border-secondary);
+  --tk-elements-navCard-borderColorHover: var(--tk-border-accent);
+  --tk-elements-navCard-textColor: var(--tk-elements-app-textColor);
+  --tk-elements-navCard-textColorHover: var(--tk-text-active);
+  --tk-elements-navCard-iconColor: var(--tk-elements-app-textColor);
+  --tk-elements-navCard-iconColorHover: var(--tk-text-accent);
+
+  /* Breadcrumb > Nav Button */
+  --tk-elements-breadcrumb-navButton-iconColor: var(--tk-text-secondary);
+  --tk-elements-breadcrumb-navButton-iconColorHover: var(--tk-text-active);
+  --tk-elements-breadcrumb-navButton-iconColorDisabled: var(--tk-text-disabled);
+
+  /* Breadcrumb > Toggle Button */
+  --tk-elements-breadcrumb-toggleButton-backgroundColor: var(--tk-background-secondary);
+  --tk-elements-breadcrumb-toggleButton-backgroundColorHover: var(--tk-background-brighter);
+  --tk-elements-breadcrumb-toggleButton-backgroundColorSelected: var(
+    --tk-elements-breadcrumb-toggleButton-backgroundColor
+  );
+  --tk-elements-breadcrumb-toggleButton-borderColor: var(--tk-border-secondary);
+  --tk-elements-breadcrumb-toggleButton-borderColorHover: var(--tk-border-brighter);
+  --tk-elements-breadcrumb-toggleButton-borderColorSelected: var(--tk-elements-breadcrumb-toggleButton-borderColor);
+  --tk-elements-breadcrumb-toggleButton-textColor: var(--tk-elements-app-textColor);
+  --tk-elements-breadcrumb-toggleButton-textColorHover: var(--tk-elements-breadcrumb-toggleButton-textColor);
+  --tk-elements-breadcrumb-toggleButton-textColorSelected: var(--tk-elements-breadcrumb-toggleButton-textColor);
+  --tk-elements-breadcrumb-toggleButton-textDividerColor: var(--tk-text-disabled);
+  --tk-elements-breadcrumb-toggleButton-textDividerColorHover: var(
+    --tk-elements-breadcrumb-toggleButton-textDividerColor
+  );
+  --tk-elements-breadcrumb-toggleButton-textDividerColorSelected: var(
+    --tk-elements-breadcrumb-toggleButton-textDividerColor
+  );
+  --tk-elements-breadcrumb-toggleButton-iconColor: var(--tk-text-secondary);
+  --tk-elements-breadcrumb-toggleButton-iconColorHover: var(--tk-text-active);
+  --tk-elements-breadcrumb-toggleButton-iconColorSelected: var(--tk-text-active);
+
+  /* Breadcrumb > Dropdown */
+  --tk-elements-breadcrumb-dropdown-backgroundColor: var(--tk-background-primary);
+  --tk-elements-breadcrumb-dropdown-borderColor: var(--tk-border-secondary);
+  --tk-elements-breadcrumb-dropdown-textColor: var(--tk-elements-app-textColor);
+  --tk-elements-breadcrumb-dropdown-textColorHover: var(--tk-text-accent);
+  --tk-elements-breadcrumb-dropdown-accordionTextColor: var(--tk-elements-breadcrumb-dropdown-textColor);
+  --tk-elements-breadcrumb-dropdown-accordionTextColorHover: var(--tk-text-active);
+  --tk-elements-breadcrumb-dropdown-accordionIconColor: var(--tk-text-disabled);
+  --tk-elements-breadcrumb-dropdown-accordionIconColorHover: var(--tk-text-primary);
+  --tk-elements-breadcrumb-dropdown-lessonBackgroundColor: var(--tk-elements-breadcrumb-dropdown-backgroundColor);
+  --tk-elements-breadcrumb-dropdown-lessonBackgroundColorSelected: var(--tk-background-secondary);
+  --tk-elements-breadcrumb-dropdown-lessonTextColor: var(--tk-elements-breadcrumb-dropdown-textColor);
+  --tk-elements-breadcrumb-dropdown-lessonTextColorHover: var(--tk-elements-breadcrumb-dropdown-textColorHover);
+
+  /* Status > Positive */
+  --tk-elements-status-positive-textColor: var(--tk-text-positive);
+  --tk-elements-status-positive-iconColor: var(--tk-elements-status-positive-textColor);
+
+  /* Status > Negative */
+  --tk-elements-status-negative-textColor: var(--tk-text-negative);
+  --tk-elements-status-negative-iconColor: var(--tk-elements-status-negative-textColor);
+
+  /* Status > Skipped */
+  --tk-elements-status-skipped-textColor: var(--tk-text-secondary);
+  --tk-elements-status-skipped-iconColor: var(--tk-elements-status-neutral-textColor);
+
+  /* Status > Disabled */
+  --tk-elements-status-disabled-textColor: var(--tk-text-disabled);
+  --tk-elements-status-disabled-iconColor: var(--tk-elements-status-disabled-textColor);
+
+  /* Status > Active */
+  --tk-elements-status-active-textColor: var(--tk-text-primary);
+  --tk-elements-status-active-iconColor: var(--tk-elements-status-active-textColor);
+}

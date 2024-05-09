@@ -27,7 +27,7 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
   <div class=`container max-w-full ${type}` style=`--pos: ${pos}`>
     <!-- It's important to keep the inline script here because it restores the position and blocks rendering to avoid flickering -->
     <script is:inline define:vars={{ id }}>
-      const sessionStorageKey = `__resizable-panel-${id}__`;
+      const sessionStorageKey = `tk_resizable_panel_${id}`;
 
       const $container = document.querySelector(`resizable-panel[data-id="${id}"] > .container`);
       const pos = sessionStorage.getItem(sessionStorageKey);
@@ -82,7 +82,7 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
 
       resizeObserver.observe(this.#container);
 
-      this.#pos = sessionStorage.getItem(`__resizable-panel-${this.#id}__`) ?? this.#pos;
+      this.#pos = sessionStorage.getItem(`tk_resizable_panel_${this.#id}`) ?? this.#pos;
 
       this.#setPosition(this.#pos);
     }
@@ -121,7 +121,7 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
     #onMouseUp() {
       this.#dragging = false;
 
-      sessionStorage.setItem(`__resizable-panel-${this.#id}__`, this.#pos);
+      sessionStorage.setItem(`tk_resizable_panel_${this.#id}`, this.#pos);
 
       window.removeEventListener('mouseup', this.#onMouseUp);
       window.removeEventListener('mousemove', this.#onMouseMove);

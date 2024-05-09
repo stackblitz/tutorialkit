@@ -2,6 +2,7 @@ import { BootScreen } from '@components/BootScreen';
 import type { PreviewInfo } from '@components/webcontainer/preview-info';
 import { useStore } from '@nanostores/react';
 import resizePanelStyles from '@styles/resize-panel.module.css';
+import classnames from 'classnames';
 import { createElement, forwardRef, useContext, useImperativeHandle } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
@@ -42,9 +43,9 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
   if (!hasPreviews) {
     return (
       <div className="h-full w-full">
-        <div className="panel-header border-y border-panel-border justify-between">
+        <div className="panel-header border-y border-tk-elements-app-borderColor justify-between">
           <div className="panel-title">
-            <div className="i-ph-lightning-duotone"></div>
+            <div className="panel-icon i-ph-lightning-duotone"></div>
             <span className="text-sm">Preparing Environment</span>
           </div>
           <button
@@ -52,7 +53,7 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
             title="Toggle Terminal"
             onClick={() => toggleTerminal?.()}
           >
-            <div className="i-ph-terminal-window-duotone"></div>
+            <span className="panel-button-icon i-ph-terminal-window-duotone"></span>
             <span className="text-sm">Toggle Terminal</span>
           </button>
         </div>
@@ -69,7 +70,7 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
 
   for (const [index, preview] of previews.entries()) {
     children.push(
-      <Panel defaultSize={defaultSize} minSize={minSize}>
+      <Panel key={`panel-${index}`} defaultSize={defaultSize} minSize={minSize}>
         <Preview
           preview={preview}
           previewCount={previews.length}
@@ -81,7 +82,9 @@ export const PreviewPanel = forwardRef<ImperativePreviewHandle, Props>(({ toggle
     );
 
     if (index !== previews.length - 1) {
-      children.push(<PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} />);
+      children.push(
+        <PanelResizeHandle key={`resize-handle-${index}`} className={resizePanelStyles.PanelResizeHandle} />,
+      );
     }
   }
 
@@ -98,10 +101,14 @@ interface PreviewProps {
 
 function Preview({ preview, previewCount, first, last, toggleTerminal }: PreviewProps) {
   return (
-    <div className={`panel-container ${!first ? 'border-l border-panel-border' : ''}`}>
-      <div className="panel-header border-y border-panel-border justify-between">
+    <div className="panel-container">
+      <div
+        className={classnames('panel-header border-y border-tk-elements-app-borderColor justify-between', {
+          'border-l border-tk-elements-app-borderColor': !first,
+        })}
+      >
         <div className="panel-title">
-          <div className="i-ph-globe-duotone"></div>
+          <div className="panel-icon i-ph-globe-duotone"></div>
           <span className="text-sm truncate">{previewTitle(preview, previewCount)}</span>
         </div>
         {last && (
@@ -110,13 +117,22 @@ function Preview({ preview, previewCount, first, last, toggleTerminal }: Preview
             title="Toggle Terminal"
             onClick={() => toggleTerminal?.()}
           >
-            <div className="i-ph-terminal-window-duotone"></div>
+            <div className="panel-button-icon i-ph-terminal-window-duotone"></div>
             <span className="text-sm">Toggle Terminal</span>
           </button>
         )}
       </div>
-      <div className="h-full w-full flex justify-center items-center">
-        <iframe src={preview.url} className="h-full w-full" />
+      <div
+        className={classnames('h-full w-full flex justify-center items-center', {
+          'border-l border-tk-elements-previews-borderColor': !first,
+        })}
+      >
+        <iframe
+          title="Preview Window"
+          src={preview.url}
+          className="h-full w-full"
+          allow="magnetometer; accelerometer; gyroscope; geolocation; microphone; camera; payment; autoplay; serial; xr-spatial-tracking; cross-origin-isolated"
+        />
       </div>
     </div>
   );

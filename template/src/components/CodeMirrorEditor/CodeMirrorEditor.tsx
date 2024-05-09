@@ -20,7 +20,8 @@ import {
   type TransitionBeforePreparationEvent,
 } from 'astro:transitions/client';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
-import { theme } from './cm-theme';
+import { themeStore } from '../../stores/theme-store';
+import { reconfigureTheme, theme } from './cm-theme';
 import { indentKeyBinding } from './indent';
 import { getLanguage } from './languages';
 
@@ -106,6 +107,12 @@ export function CodeMirrorEditor({
       },
     });
 
+    const unsubscribeFromThemeStore = themeStore.subscribe(() => {
+      view.dispatch({
+        effects: [reconfigureTheme()],
+      });
+    });
+
     viewRef.current = view;
 
     // we grab the style tag that codemirror mounts
@@ -115,6 +122,7 @@ export function CodeMirrorEditor({
     document.addEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
 
     return () => {
+      unsubscribeFromThemeStore();
       document.removeEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
       viewRef.current?.destroy();
       viewRef.current = undefined;
@@ -195,7 +203,7 @@ function newEditorState(
         markerDOM: (open) => {
           const icon = document.createElement('div');
 
-          icon.className = `fold-icon ${open ? 'i-ph-caret-down' : 'i-ph-caret-right'}`;
+          icon.className = `fold-icon ${open ? 'i-ph-caret-down-bold' : 'i-ph-caret-right-bold'}`;
 
           return icon;
         },
@@ -235,7 +243,7 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, aut
     }
 
     view.dispatch({
-      effects: [languageExtension.reconfigure([languageSupport])],
+      effects: [languageExtension.reconfigure([languageSupport]), reconfigureTheme()],
     });
 
     requestAnimationFrame(() => {

@@ -1,16 +1,32 @@
 import { atom } from 'nanostores';
 
-type Theme = 'systemPreferred' | 'dark' | 'light';
+export type Theme = 'dark' | 'light';
+
+export const kTheme = 'tk_theme';
 
 export function themeIsDark() {
+  return themeStore.get() === 'dark';
+}
+
+export const themeStore = atom<Theme>(initStore());
+
+function initStore() {
+  if (!import.meta.env.SSR) {
+    const themeAttribute = document.querySelector('html')?.getAttribute('data-theme');
+
+    return (themeAttribute as Theme) ?? 'light';
+  }
+
+  return 'light';
+}
+
+export function toggleTheme() {
   const currentTheme = themeStore.get();
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-  return currentTheme === 'dark' || currentTheme === 'systemPreferred' ? prefersDarkTheme() : false;
+  themeStore.set(newTheme);
+
+  localStorage.setItem(kTheme, newTheme);
+
+  document.querySelector('html')?.setAttribute('data-theme', newTheme);
 }
-
-export function prefersDarkTheme() {
-  // we use `globalThis` because this also runs on the server side where `window` is undefined
-  return 'matchMedia' in globalThis && globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-export const themeStore = atom<Theme>('systemPreferred');

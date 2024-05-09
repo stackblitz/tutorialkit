@@ -1,5 +1,3 @@
-@import '@xterm/xterm/css/xterm.css';
-
 .xterm {
   --at-apply: h-full;
   --at-apply: p-3;

@@ -1,0 +1,7 @@
+.panel-button .panel-button-icon {
+  --at-apply: text-tk-elements-panel-headerButton-iconColor;
+}
+
+.panel-button:hover .panel-button-icon {
+  --at-apply: text-tk-elements-panel-headerButton-iconColorHover;
+}

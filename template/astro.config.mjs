@@ -33,6 +33,9 @@ export default defineConfig({
       },
     ],
   },
+  devToolbar: {
+    enabled: false,
+  },
   markdown: {
     remarkPlugins: [remarkDirective, remarkAsides()],
   },
@@ -41,6 +44,30 @@ export default defineConfig({
     expressiveCode({
       plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
       themes: ['dark-plus', 'light-plus'],
+      customizeTheme: (theme) => {
+        const isDark = theme.type === 'dark';
+
+        theme.styleOverrides = {
+          borderColor: 'var(--tk-border-secondary)',
+          borderWidth: '1px',
+          borderRadius: 'var(--code-border-radius, 0px)',
+          frames: {
+            terminalTitlebarBackground: `var(--tk-background-${isDark ? 'primary' : 'secondary'})`,
+            terminalTitlebarBorderBottomColor: `var(--tk-background-${isDark ? 'primary' : 'secondary'})`,
+            editorTabBorderRadius: 'var(--code-border-radius, 0px)',
+            editorTabBarBackground: `var(--tk-background-${isDark ? 'primary' : 'secondary'})`,
+          },
+        };
+      },
+      themeCssSelector: (theme) => {
+        let customThemeName = 'light';
+
+        if (theme.name === 'dark-plus') {
+          customThemeName = 'dark';
+        }
+
+        return `[data-theme='${customThemeName}']`;
+      },
       defaultProps: {
         showLineNumbers: false,
       },

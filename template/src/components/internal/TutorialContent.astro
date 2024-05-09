@@ -1,7 +1,6 @@
 ---
 import type { Lesson } from '@entities/tutorial';
-import '@styles/markdown.css';
-import ContentNavCard from './ContentNavCard.astro';
+import NavCard from './NavCard.astro';
 
 interface Props {
   lesson: Lesson;
@@ -12,15 +11,15 @@ const { Markdown, prev, next } = lesson;
 ---
 
 <div class="h-full overflow-auto scrollbar-transparent p-8">
-  <div class="markdown-content">
+  <div class="markdown-content text-tk-elements-content-textColor">
     <Markdown />
   </div>
   <div class="grid grid-cols-[1fr_1fr] gap-4 mt-8">
     <div class="flex">
-      {prev && <ContentNavCard lesson={prev} type="prev" />}
+      {prev && <NavCard lesson={prev} type="prev" />}
     </div>
     <div class="flex">
-      {next && <ContentNavCard lesson={next} type="next" />}
+      {next && <NavCard lesson={next} type="next" />}
     </div>
   </div>
 </div>
