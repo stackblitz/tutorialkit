@@ -22,7 +22,40 @@ const { title } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <ViewTransitions />
-    <slot name="head" />
+    <script>
+      import * as builtInSwap from 'node_modules/astro/dist/transitions/swap-functions';
+
+      document.addEventListener('astro:before-swap', (event) => {
+        event.swap = () => {
+          const { newDocument } = event;
+
+          builtInSwap.deselectScripts(newDocument);
+          builtInSwap.swapRootAttributes(newDocument);
+
+          /**
+           * Keep the dynamically injected style sheet from Codemirror on all transitions.
+           */
+          const codemirrorStyles = document.head.querySelector('style[data-astro-transition-persist="codemirror"]');
+
+          builtInSwap.swapHeadElements(newDocument);
+
+          if (codemirrorStyles) {
+            document.head.insertAdjacentElement('afterbegin', codemirrorStyles);
+          }
+
+          // only swap the main area of the page so we keep the webcontainer iframe intact
+          const newMain = newDocument.querySelector('main');
+          const oldMain = document.querySelector('main');
+
+          if (newMain && oldMain) {
+            builtInSwap.swapBodyElement(newMain, oldMain);
+          } else {
+            // fallback to built-in body swap semantics
+            builtInSwap.swapBodyElement(newDocument.body, document.body);
+          }
+        };
+      });
+    </script>
     <script>
       setTheme();
 

@@ -20,11 +20,6 @@ const { lesson, navList, title } = Astro.props as Props;
 ---
 
 <Layout title={title}>
-  <Fragment slot="head">
-    <script>
-      import '@utils/custom-swap';
-    </script>
-  </Fragment>
   <main class="max-w-full flex flex-col h-screen overflow-hidden" data-swap-root>
     <Header />
     <ResizablePanel
