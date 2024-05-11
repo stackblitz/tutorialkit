@@ -23,7 +23,7 @@ const { title } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <ViewTransitions />
     <slot name="head" />
-    <script is:inline>
+    <script>
       setTheme();
 
       document.addEventListener('astro:after-swap', () => {
@@ -37,7 +37,7 @@ const { title } = Astro.props;
           theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
 
-        document.querySelector('html').setAttribute('data-theme', theme);
+        document.querySelector('html')?.setAttribute('data-theme', theme);
       }
     </script>
   </head>
