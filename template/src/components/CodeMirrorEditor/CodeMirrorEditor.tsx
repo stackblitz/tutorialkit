@@ -13,14 +13,9 @@ import {
   lineNumbers,
   scrollPastEnd,
 } from '@codemirror/view';
+import { themeStore } from '@stores/theme-store';
 import { debounce } from '@utils/debounce';
-import {
-  TRANSITION_BEFORE_PREPARATION,
-  isTransitionBeforePreparationEvent,
-  type TransitionBeforePreparationEvent,
-} from 'astro:transitions/client';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
-import { themeStore } from '../../stores/theme-store';
 import { reconfigureTheme, theme } from './cm-theme';
 import { indentKeyBinding } from './indent';
 import { getLanguage } from './languages';
@@ -119,11 +114,8 @@ export function CodeMirrorEditor({
     const codemirrorStyleTag = document.head.children[0];
     codemirrorStyleTag.setAttribute('data-astro-transition-persist', 'codemirror');
 
-    document.addEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
-
     return () => {
       unsubscribeFromThemeStore();
-      document.removeEventListener(TRANSITION_BEFORE_PREPARATION, transitionBeforePreparation);
       viewRef.current?.destroy();
       viewRef.current = undefined;
     };
@@ -273,24 +265,4 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, aut
       view.scrollDOM.scrollTo(newLeft, newTop);
     });
   });
-}
-
-/**
- * Our options to for transitioning the style tag to the new DOM are limited so we have
- * to manually move the styles, otherwise they will just disappear because the editor
- * component is persisted and not re-mounted.
- */
-function transitionBeforePreparation(event: TransitionBeforePreparationEvent) {
-  if (isTransitionBeforePreparationEvent(event)) {
-    const originalLoader = event.loader;
-
-    event.loader = async () => {
-      await originalLoader();
-
-      const dummyStyleTag = document.createElement('style');
-      dummyStyleTag.setAttribute('data-astro-transition-persist', 'codemirror');
-
-      event.newDocument.head.insertAdjacentElement('afterbegin', dummyStyleTag);
-    };
-  }
 }
