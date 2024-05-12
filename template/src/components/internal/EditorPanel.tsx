@@ -78,7 +78,7 @@ export function EditorPanel({
           className="flex-grow py-2 border-r border-tk-elements-app-borderColor text-sm"
           selectedFile={selectedFile}
           hideRoot={lesson.data.hideRoot ?? true}
-          files={lesson.files}
+          files={lesson.files[1]}
           scope={lesson.data.scope}
           onFileClick={onFileClickWrapped}
         />

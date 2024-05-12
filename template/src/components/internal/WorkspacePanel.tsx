@@ -1,21 +1,29 @@
 import type { Files, Lesson } from '@entities/tutorial';
 import resizePanelStyles from '@styles/resize-panel.module.css';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import type {
   EditorDocument,
   OnChangeCallback as OnEditorChange,
   OnScrollCallback as OnEditorScroll,
 } from '../CodeMirrorEditor/CodeMirrorEditor';
-import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
+import { tutorialRunner } from '@app/webcontainer/tutorial-runner';
+import { lessonFilesFetcher } from '@app/lesson-files';
 import { EditorPanel } from './EditorPanel';
 import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel';
 import { TerminalPanel } from './TerminalPanel';
+import { newTask } from '@app/webcontainer/utils/tasks';
 
 const DEFAULT_TERMINAL_SIZE = 25;
 
 interface Props {
   lesson: Lesson;
+}
+
+interface LoadedFiles {
+  solution?: Files;
+  files?: Files;
+  template?: Files;
 }
 
 type EditorState = Record<string, EditorDocument>;
@@ -30,8 +38,7 @@ export function WorkspacePanel({ lesson }: Props) {
   const previewRef = useRef<ImperativePreviewHandle>(null);
   const terminalExpanded = useRef(false);
 
-  const tutorialRunner = useContext(TutorialRunnerContext);
-
+  const [loadedFiles, setLoadedFiles] = useState<LoadedFiles>({});
   const [helpAction, setHelpAction] = useState<'solve' | 'reset'>('reset');
   const [editorState, setEditorState] = useState<EditorState>({});
   const [selectedFile, setSelectedFile] = useState<string | undefined>();
@@ -99,17 +106,28 @@ export function WorkspacePanel({ lesson }: Props) {
       setSelectedFile(filePath);
 
       setEditorState((editorState) => {
+        const loadedFile = loadedFiles.files?.[filePath];
+        const loading = typeof loadedFile === 'undefined';
+        let value = '';
+
+        if (editorState[filePath]?.loading && !loading) {
+          value = loadedFile;
+        } else {
+          value = editorState[filePath]?.value ?? loadedFile ?? '';
+        }
+
         return {
           ...editorState,
           [filePath]: {
-            value: editorState[filePath]?.value ?? lesson.files[filePath] ?? '',
+            value,
+            loading,
             filePath: filePath,
             scroll: editorState[filePath]?.scroll,
           },
         };
       });
     },
-    [lesson],
+    [loadedFiles],
   );
 
   const onHelpClick = useCallback(() => {
@@ -133,17 +151,29 @@ export function WorkspacePanel({ lesson }: Props) {
     if (hasSolution(lesson)) {
       setHelpAction((action) => {
         if (action === 'reset') {
-          setFiles(lesson.files);
+          setLoadedFiles((loadedFiles) => {
+            setFiles(loadedFiles.files ?? {});
+
+            return loadedFiles;
+          });
 
           return 'solve';
         } else {
-          setFiles(lesson.solution);
+          setLoadedFiles((loadedFiles) => {
+            setFiles(loadedFiles.solution ?? {});
+
+            return loadedFiles;
+          });
 
           return 'reset';
         }
       });
     } else {
-      setFiles(lesson.files);
+      setLoadedFiles((loadedFiles) => {
+        setFiles(loadedFiles.files ?? {});
+
+        return loadedFiles;
+      });
     }
   }, [lesson]);
 
@@ -152,29 +182,56 @@ export function WorkspacePanel({ lesson }: Props) {
 
     tutorialRunner.setPreviews(lesson.data.previews);
 
-    tutorialRunner.prepareFiles(lesson).then((cancelled) => {
-      if (!cancelled && lesson.data.autoReload) {
-        /**
-         * @todo This causes some race with the preview where the iframe can show the "wrong" page.
-         * I think the reason is that when the ports are different then we render new frames which
-         * races against the reload which will internally reset the `src` attribute.
-         */
-        // previewRef.current?.reload();
-      }
-    });
+    const task = newTask(
+      async (signal) => {
+        const [template, solution, files] = await Promise.all([
+          lessonFilesFetcher.getLessonTemplate(lesson),
+          lessonFilesFetcher.getLessonSolution(lesson),
+          lessonFilesFetcher.getLessonFiles(lesson),
+        ]);
 
-    tutorialRunner.runCommands(lesson.data);
+        signal.throwIfAborted();
+
+        setLoadedFiles({
+          template,
+          solution,
+          files,
+        });
+
+        tutorialRunner.runCommands(lesson.data);
+
+        await tutorialRunner.prepareFiles({ template, files, signal });
+
+        signal.throwIfAborted();
+
+        if (lesson.data.autoReload) {
+          /**
+           * @todo This causes some race with the preview where the iframe can show the "wrong" page.
+           * I think the reason is that when the ports are different then we render new frames which
+           * races against the reload which will internally reset the `src` attribute.
+           */
+          // previewRef.current?.reload();
+        }
+      },
+      { ignoreCancel: true },
+    );
 
     if (hasSolution(lesson)) {
       setHelpAction('solve');
     } else {
       setHelpAction('reset');
     }
+
+    return () => task.cancel();
   }, [lesson]);
 
   useEffect(() => {
-    updateDocument(lesson.data.focus);
-  }, [lesson, updateDocument]);
+    if (typeof lesson.data.focus === 'undefined') {
+      setSelectedFile(undefined);
+    } else if (typeof loadedFiles.files?.[lesson.data.focus] !== 'undefined') {
+      updateDocument(lesson.data.focus);
+    }
+  }, [lesson, loadedFiles, updateDocument]);
 
   const toggleTerminal = useCallback(() => {
     const { current: terminal } = terminalPanelRef;

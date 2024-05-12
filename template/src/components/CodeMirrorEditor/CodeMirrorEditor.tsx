@@ -2,7 +2,7 @@ import { acceptCompletion, autocompletion, closeBrackets } from '@codemirror/aut
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { bracketMatching, foldGutter, indentOnInput, indentUnit } from '@codemirror/language';
 import { searchKeymap } from '@codemirror/search';
-import { Compartment, EditorSelection, EditorState } from '@codemirror/state';
+import { Compartment, EditorSelection, EditorState, type Extension } from '@codemirror/state';
 import {
   EditorView,
   drawSelection,
@@ -22,6 +22,7 @@ import { getLanguage } from './languages';
 
 export interface EditorDocument {
   value: string;
+  loading: boolean;
   filePath: string;
   scroll?: ScrollPosition;
 }
@@ -61,6 +62,7 @@ export function CodeMirrorEditor({
   onChange,
 }: Props) {
   const [language] = useState(new Compartment());
+  const [readOnly] = useState(new Compartment());
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewRef = useRef<EditorView>();
@@ -91,7 +93,11 @@ export function CodeMirrorEditor({
           newSelection !== previousSelection &&
           (newSelection === undefined || previousSelection === undefined || !newSelection.eq(previousSelection));
 
-        if (docRef.current && (transactions.some((transaction) => transaction.docChanged) || selectionChanged)) {
+        if (
+          docRef.current &&
+          !docRef.current.loading &&
+          (transactions.some((transaction) => transaction.docChanged) || selectionChanged)
+        ) {
           onUpdate({
             selection: view.state.selection,
             content: view.state.doc.toString(),
@@ -133,14 +139,17 @@ export function CodeMirrorEditor({
       let state = editorStates.get(doc.filePath);
 
       if (!state) {
-        state = newEditorState(doc.value, onScrollRef, debounceScroll, language);
+        state = newEditorState(doc.value, onScrollRef, debounceScroll, [
+          language.of([]),
+          readOnly.of([EditorState.readOnly.of(doc.loading)]),
+        ]);
         editorStates.set(doc.filePath, state);
       }
 
       view.setState(state);
     }
 
-    setEditorDocument(view, language, autoFocusOnDocumentChange, doc);
+    setEditorDocument(view, language, readOnly, autoFocusOnDocumentChange, doc);
   }, [doc]);
 
   return <div className="h-full overflow-hidden" ref={containerRef} />;
@@ -152,7 +161,7 @@ function newEditorState(
   content: string,
   onScrollRef: MutableRefObject<OnScrollCallback | undefined>,
   debounceScroll: number,
-  language: Compartment,
+  extensions: Extension[],
 ) {
   return EditorState.create({
     doc: content,
@@ -177,7 +186,6 @@ function newEditorState(
         indentKeyBinding,
       ]),
       indentUnit.of('\t'),
-      language.of([]),
       autocompletion({
         closeOnBlur: false,
       }),
@@ -200,11 +208,18 @@ function newEditorState(
           return icon;
         },
       }),
+      ...extensions,
     ],
   });
 }
 
-function setEditorDocument(view: EditorView, languageExtension: Compartment, autoFocus: boolean, doc?: EditorDocument) {
+function setEditorDocument(
+  view: EditorView,
+  language: Compartment,
+  readOnly: Compartment,
+  autoFocus: boolean,
+  doc?: EditorDocument,
+) {
   if (!doc) {
     view.dispatch({
       selection: { anchor: 0 },
@@ -229,13 +244,17 @@ function setEditorDocument(view: EditorView, languageExtension: Compartment, aut
     });
   }
 
+  view.dispatch({
+    effects: [readOnly.reconfigure([EditorState.readOnly.of(doc.loading)])],
+  });
+
   getLanguage(doc.filePath).then((languageSupport) => {
     if (!languageSupport) {
       return;
     }
 
     view.dispatch({
-      effects: [languageExtension.reconfigure([languageSupport]), reconfigureTheme()],
+      effects: [language.reconfigure([languageSupport]), reconfigureTheme()],
     });
 
     requestAnimationFrame(() => {

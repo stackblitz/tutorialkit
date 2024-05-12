@@ -3,14 +3,13 @@ import type { CommandsSchema, PreviewSchema } from '@schemas';
 import { escapeCodes } from '@utils/terminal';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom } from 'nanostores';
-import { createContext } from 'react';
 import { tick } from '../../utils/event-loop';
 import { Command, Commands } from './command';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
 import { PreviewInfo } from './preview-info';
 import type { ITerminal } from './shell';
 import { diffFiles, toFileTree } from './utils/files';
-import { newTask, type Task, type TaskCancelled } from './utils/promises';
+import { AbortError, newTask, type Task, type TaskCancelled } from './utils/tasks';
 
 interface LoadFilesOptions {
   /**
@@ -36,6 +35,11 @@ interface LoadFilesOptions {
    * @default true
    */
   abortPreviousLoad?: boolean;
+
+  /**
+   * A signal to abort this operation.
+   */
+  signal?: AbortSignal;
 }
 
 interface RunCommandsOptions extends CommandsSchema {
@@ -61,8 +65,8 @@ export interface Step {
  * There should be only a single instance of this class.
  */
 export class TutorialRunner {
-  private _currentLoadTask: Task<void> | undefined = undefined;
-  private _currentProcessTask: Task<void> | undefined = undefined;
+  private _currentLoadTask: Task<void | TaskCancelled> | undefined = undefined;
+  private _currentProcessTask: Task<void | TaskCancelled> | undefined = undefined;
   private _currentCommandProcess: WebContainerProcess | undefined = undefined;
   private _currentTemplate: Files | undefined = undefined;
   private _currentFiles: Files | undefined = undefined;
@@ -175,17 +179,20 @@ export class TutorialRunner {
   updateFile(filePath: string, content: string): void {
     const previousLoadPromise = this._currentLoadTask?.promise;
 
-    this._currentLoadTask = newTask(async (signal) => {
-      await previousLoadPromise;
+    this._currentLoadTask = newTask(
+      async (signal) => {
+        await previousLoadPromise;
 
-      const webcontainer = await webcontainerPromise;
+        const webcontainer = await webcontainerPromise;
 
-      signal.throwIfAborted();
+        signal.throwIfAborted();
 
-      await webcontainer.fs.writeFile(filePath, content);
+        await webcontainer.fs.writeFile(filePath, content);
 
-      this._updateCurrentFiles({ [filePath]: content });
-    });
+        this._updateCurrentFiles({ [filePath]: content });
+      },
+      { ignoreCancel: true },
+    );
   }
 
   /**
@@ -196,17 +203,20 @@ export class TutorialRunner {
   updateFiles(files: Files): void {
     const previousLoadPromise = this._currentLoadTask?.promise;
 
-    this._currentLoadTask = newTask(async (signal) => {
-      await previousLoadPromise;
+    this._currentLoadTask = newTask(
+      async (signal) => {
+        await previousLoadPromise;
 
-      const webcontainer = await webcontainerPromise;
+        const webcontainer = await webcontainerPromise;
 
-      signal.throwIfAborted();
+        signal.throwIfAborted();
 
-      await webcontainer.mount(toFileTree(files));
+        await webcontainer.mount(toFileTree(files));
 
-      this._updateCurrentFiles(files);
-    });
+        this._updateCurrentFiles(files);
+      },
+      { ignoreCancel: true },
+    );
   }
 
   /**
@@ -215,44 +225,51 @@ export class TutorialRunner {
    * This function always waits for any previous `prepareFiles` or `updateFile(s)` call to have completed
    * before sending the next one.
    *
-   * Previous load operations will be cancelled if `options.abortPreviousLoad` was set to true.
+   * Previous load operations will be cancelled if `options.abortPreviousLoad` was set to true (which is the default).
    *
    * @see {LoadFilesOptions}
    */
-  prepareFiles({ files, template, abortPreviousLoad = true }: LoadFilesOptions): Promise<void | TaskCancelled> {
+  prepareFiles({ files, template, signal, abortPreviousLoad = true }: LoadFilesOptions): Promise<void | TaskCancelled> {
     const previousLoadPromise = this._currentLoadTask?.promise;
 
     if (abortPreviousLoad) {
       this._currentLoadTask?.cancel();
     }
 
-    this._currentLoadTask = newTask(async (signal) => {
-      await previousLoadPromise;
+    this._currentLoadTask = newTask(
+      async (signal) => {
+        await previousLoadPromise;
 
-      const webcontainer = await webcontainerPromise;
+        const webcontainer = await webcontainerPromise;
 
-      signal.throwIfAborted();
+        signal.throwIfAborted();
 
-      // always re-apply the template as a lesson could have touched some of its files
-      if (template) {
-        await webcontainer.mount(toFileTree(template));
+        // always re-apply the template as a lesson could have touched some of its files
+        if (template) {
+          await webcontainer.mount(toFileTree(template));
 
-        this._updateDirtyState(template);
-      }
+          this._updateDirtyState(template);
+        }
 
-      signal.throwIfAborted();
+        signal.throwIfAborted();
 
-      if (this._currentFiles || this._currentTemplate) {
-        await updateFiles(webcontainer, { ...this._currentTemplate, ...this._currentFiles }, { ...template, ...files });
-      } else {
-        await webcontainer.mount(toFileTree(files));
-      }
+        if (this._currentFiles || this._currentTemplate) {
+          await updateFiles(
+            webcontainer,
+            { ...this._currentTemplate, ...this._currentFiles },
+            { ...template, ...files },
+          );
+        } else {
+          await webcontainer.mount(toFileTree(files));
+        }
 
-      this._currentTemplate = { ...template };
-      this._currentFiles = { ...files };
+        this._currentTemplate = { ...template };
+        this._currentFiles = { ...files };
 
-      this._updateDirtyState(files);
-    });
+        this._updateDirtyState(files);
+      },
+      { ignoreCancel: true, signal },
+    );
 
     return this._currentLoadTask.promise;
   }
@@ -353,15 +370,18 @@ export class TutorialRunner {
     const newCommands = new Commands(commands);
     this._currentRunCommands = newCommands;
 
-    this._currentProcessTask = newTask(async (signal) => {
-      await Promise.all([previousProcessPromise, loadPromise]);
+    this._currentProcessTask = newTask(
+      async (signal) => {
+        await Promise.all([previousProcessPromise, loadPromise]);
 
-      const webcontainer = await webcontainerPromise;
+        const webcontainer = await webcontainerPromise;
 
-      signal.throwIfAborted();
+        signal.throwIfAborted();
 
-      return this._runCommands(webcontainer, newCommands, signal);
-    });
+        return this._runCommands(webcontainer, newCommands, signal);
+      },
+      { ignoreCancel: true },
+    );
   }
 
   /**
@@ -378,19 +398,22 @@ export class TutorialRunner {
 
     this._currentProcessTask?.cancel();
 
-    this._currentProcessTask = newTask(async (signal) => {
-      await Promise.all([previousProcessPromise, loadPromise]);
+    this._currentProcessTask = newTask(
+      async (signal) => {
+        await Promise.all([previousProcessPromise, loadPromise]);
 
-      const webcontainer = await webcontainerPromise;
+        const webcontainer = await webcontainerPromise;
 
-      signal.throwIfAborted();
+        signal.throwIfAborted();
 
-      return this._runCommands(webcontainer, previousRunCommands, signal);
-    });
+        return this._runCommands(webcontainer, previousRunCommands, signal);
+      },
+      { ignoreCancel: true },
+    );
   }
 
   private async _runCommands(webcontainer: WebContainer, commands: Commands, signal: AbortSignal) {
-    this._terminal?.reset();
+    clearTerminal(this._terminal);
 
     const abortListener = () => this._currentCommandProcess?.kill();
     signal.addEventListener('abort', abortListener);
@@ -403,6 +426,17 @@ export class TutorialRunner {
       const updateStep = (index: number, step: Step) => {
         const currentSteps = this.steps.value!;
         this.steps.set([...currentSteps.slice(0, index), step, ...currentSteps.slice(index + 1)]);
+      };
+
+      const skipRemaining = (index: number) => {
+        const currentSteps = this.steps.value!;
+        this.steps.set([
+          ...currentSteps.slice(0, index),
+          ...currentSteps.slice(index).map((step) => ({
+            ...step,
+            status: 'skipped' as const,
+          })),
+        ]);
       };
 
       this.steps.set(
@@ -430,13 +464,18 @@ export class TutorialRunner {
         });
 
         // print newlines between commands to visually separate them from one another
-        if (index > 0 && this.steps.get()?.at(index - 1)?.status !== 'skipped') {
+        if (index > 0) {
           this._terminal?.write('\n');
         }
 
-        this._currentCommandProcess = await this._newProcess(webcontainer, command.shellCommand);
+        this._currentCommandProcess = await this._newProcess(webcontainer, command.shellCommand, signal);
 
-        signal.throwIfAborted();
+        try {
+          signal.throwIfAborted();
+        } catch (error) {
+          skipRemaining(index);
+          throw error;
+        }
 
         if (isMainCommand) {
           this._clearDirtyState();
@@ -450,20 +489,7 @@ export class TutorialRunner {
             status: 'failed',
           });
 
-          const currentSteps = this.steps.value!;
-
-          this.steps.set([
-            ...currentSteps.slice(0, index),
-            {
-              title: command.title,
-              status: 'failed',
-            },
-            ...currentSteps.slice(index + 1).map((step) => ({
-              ...step,
-              status: 'skipped' as const,
-            })),
-          ]);
-
+          skipRemaining(index + 1);
           break;
         } else {
           updateStep(index, {
@@ -472,7 +498,12 @@ export class TutorialRunner {
           });
         }
 
-        signal.throwIfAborted();
+        try {
+          signal.throwIfAborted();
+        } catch (error) {
+          skipRemaining(index + 1);
+          throw error;
+        }
       }
 
       if (!hasMainCommand) {
@@ -483,7 +514,7 @@ export class TutorialRunner {
     }
   }
 
-  private async _newProcess(webcontainer: WebContainer, shellCommand: string) {
+  private async _newProcess(webcontainer: WebContainer, shellCommand: string, signal: AbortSignal) {
     const [command, ...args] = shellCommand.split(' ');
 
     this._terminal?.write(`${escapeCodes.magenta('❯')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
@@ -496,6 +527,12 @@ export class TutorialRunner {
           }
         : undefined,
     });
+
+    const abortListener = () => process.kill();
+
+    signal.addEventListener('abort', abortListener, { once: true });
+
+    process.exit.then(() => signal.removeEventListener('abort', abortListener));
 
     process.output.pipeTo(new WritableStream({ write: (data) => this._terminal?.write(data) }));
 
@@ -556,11 +593,11 @@ export class TutorialRunner {
   }
 }
 
-export const TutorialRunnerContext = createContext(new TutorialRunner());
+export const tutorialRunner = new TutorialRunner();
 
-function clearTerminal(terminal: ITerminal) {
-  terminal.reset();
-  terminal.write(escapeCodes.clear);
+function clearTerminal(terminal?: ITerminal) {
+  terminal?.reset();
+  terminal?.write(escapeCodes.clear);
 }
 
 function commandsToList(commands: Commands | CommandsSchema) {

@@ -1,11 +1,11 @@
 import { BootScreen } from '@components/BootScreen';
-import type { PreviewInfo } from '@components/webcontainer/preview-info';
+import type { PreviewInfo } from '@app/webcontainer/preview-info';
 import { useStore } from '@nanostores/react';
 import resizePanelStyles from '@styles/resize-panel.module.css';
 import classnames from 'classnames';
-import { createElement, forwardRef, memo, useContext, useImperativeHandle } from 'react';
+import { createElement, forwardRef, memo, useImperativeHandle } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
+import { tutorialRunner } from '@app/webcontainer/tutorial-runner';
 
 interface Props {
   toggleTerminal?: () => void;
@@ -17,7 +17,6 @@ export type ImperativePreviewHandle = {
 
 export const PreviewPanel = memo(
   forwardRef<ImperativePreviewHandle, Props>(({ toggleTerminal }, ref) => {
-    const tutorialRunner = useContext(TutorialRunnerContext);
     const expectedPreviews = useStore(tutorialRunner.previews);
 
     const hasPreviews = expectedPreviews.some((preview) => preview.ready);

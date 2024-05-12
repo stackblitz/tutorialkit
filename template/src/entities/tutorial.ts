@@ -7,9 +7,11 @@ export type CollectionEntry = TutorialCollection[keyof TutorialCollection];
 
 export type Files = Record<string, string>;
 
+export type FilesRef = [folder: string, files: string[]];
+
 export interface LessonLink {
   href: string;
-  data: LessonSchema;
+  title: string;
 }
 
 export interface Part {
@@ -32,9 +34,8 @@ export interface Lesson {
   part: { id: string; title: string };
   chapter: { id: string; title: string };
   slug: string;
-  files: Files;
-  solution: Files;
-  template: Files;
+  files: FilesRef;
+  solution: FilesRef;
   next?: LessonLink;
   prev?: LessonLink;
   Markdown: AstroComponentFactory;

@@ -3,8 +3,8 @@ import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
-import { useContext, useEffect, useRef } from 'react';
-import { TutorialRunnerContext } from '../webcontainer/tutorial-runner';
+import { useEffect, useRef } from 'react';
+import { tutorialRunner } from '@app/webcontainer/tutorial-runner';
 import { darkTheme, lightTheme } from './theme';
 
 interface Props {
@@ -13,7 +13,6 @@ interface Props {
 
 export function Terminal({ readonly = true }: Props) {
   const terminalRef = useRef<HTMLDivElement>(null);
-  const tutorialRunner = useContext(TutorialRunnerContext);
 
   useEffect(() => {
     if (!terminalRef.current) {

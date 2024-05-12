@@ -19,5 +19,5 @@ const { lesson, type } = Astro.props;
   <span
     class=`icon text-tk-elements-navCard-iconColor ${type === 'prev' ? 'i-ph-arrow-left' : 'i-ph-arrow-right' } pointer-events-none h-7 w-7 mb-2 group-hover:text-tk-elements-navCard-iconColorHover`
   ></span>
-  <span class="line-clamp-2">{lesson.data.title}</span>
+  <span class="line-clamp-2">{lesson.title}</span>
 </a>

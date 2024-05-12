@@ -1,5 +1,5 @@
 import type { WebContainer } from '@webcontainer/api';
-import { withResolvers } from './utils/promises';
+import { withResolvers } from '@utils/promises';
 
 export interface ITerminal {
   reset: () => void;
@@ -30,7 +30,7 @@ export async function newShellProcess(webcontainer: WebContainer, signal: AbortS
 
         terminal.write(data);
       },
-    })
+    }),
   );
 
   const abortListener = () => process.kill();

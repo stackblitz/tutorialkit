@@ -1,14 +1,12 @@
 import { useStore } from '@nanostores/react';
 import classnames from 'classnames';
-import { useContext } from 'react';
-import { TutorialRunnerContext, type Step } from './webcontainer/tutorial-runner';
+import { tutorialRunner, type Step } from '@app/webcontainer/tutorial-runner';
 
 interface Props {
   className?: string;
 }
 
 export function BootScreen({ className }: Props) {
-  const tutorialRunner = useContext(TutorialRunnerContext);
   const steps = useStore(tutorialRunner.steps);
 
   return (

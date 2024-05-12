@@ -8,6 +8,7 @@ import remarkDirective from 'remark-directive';
 import UnoCSS from 'unocss/astro';
 import ViteRestart from 'vite-plugin-restart';
 import { remarkAsides } from './src/remark';
+import { webcontainerFiles } from './integrations/webcontainer-files';
 
 export default defineConfig({
   server: {
@@ -40,6 +41,7 @@ export default defineConfig({
     remarkPlugins: [remarkDirective, remarkAsides()],
   },
   integrations: [
+    webcontainerFiles,
     react(),
     expressiveCode({
       plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
