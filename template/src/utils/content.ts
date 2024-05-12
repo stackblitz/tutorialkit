@@ -5,19 +5,13 @@ import glob from 'fast-glob';
 import fs from 'node:fs';
 import path from 'node:path';
 
-let _tutorial: Tutorial | undefined;
-
 const CONTENT_DIR = path.join(import.meta.dirname, '../content/tutorial');
 const TEMPLATES_DIR = path.join(import.meta.dirname, '../templates');
 
 export async function getTutorial() {
-  if (_tutorial) {
-    return _tutorial;
-  }
-
   const collection = sortCollection(await getCollection('tutorial'));
 
-  _tutorial = {};
+  const _tutorial: Tutorial = {};
 
   let tutorialMetaData: TutorialSchema | undefined;
 
@@ -96,8 +90,8 @@ export async function getTutorial() {
   }
 
   lessons.sort((a, b) => {
-    const partsA = [a.part, a.chapter, a.id];
-    const partsB = [b.part, b.chapter, b.id];
+    const partsA = [a.part.id, a.chapter.id, a.id] as const;
+    const partsB = [b.part.id, b.chapter.id, b.id] as const;
 
     for (let i = 0; i < partsA.length; i++) {
       if (partsA[i] !== partsB[i]) {
