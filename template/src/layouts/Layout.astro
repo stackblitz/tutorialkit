@@ -44,8 +44,8 @@ const { title } = Astro.props;
           }
 
           // only swap the main area of the page so we keep the webcontainer iframe intact
-          const newMain = newDocument.querySelector('main');
-          const oldMain = document.querySelector('main');
+          const newMain = newDocument.querySelector('main[data-swap-root]');
+          const oldMain = document.querySelector('main[data-swap-root]');
 
           if (newMain && oldMain) {
             builtInSwap.swapBodyElement(newMain, oldMain);
