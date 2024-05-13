@@ -181,14 +181,20 @@ export function WorkspacePanel({ lesson }: Props) {
     setEditorState({});
 
     tutorialRunner.setPreviews(lesson.data.previews);
-    tutorialRunner.setExpectedListOfCommands(lesson.data);
 
     const task = newTask(
       async (signal) => {
+        const templatePromise = lessonFilesFetcher.getLessonTemplate(lesson);
+        const filesPromise = lessonFilesFetcher.getLessonFiles(lesson);
+
+        const preparePromise = tutorialRunner.prepareFiles({ template: templatePromise, files: filesPromise, signal });
+
+        tutorialRunner.runCommands(lesson.data);
+
         const [template, solution, files] = await Promise.all([
-          lessonFilesFetcher.getLessonTemplate(lesson),
+          templatePromise,
           lessonFilesFetcher.getLessonSolution(lesson),
-          lessonFilesFetcher.getLessonFiles(lesson),
+          filesPromise,
         ]);
 
         signal.throwIfAborted();
@@ -198,10 +204,6 @@ export function WorkspacePanel({ lesson }: Props) {
           solution,
           files,
         });
-
-        const preparePromise = tutorialRunner.prepareFiles({ template, files, signal });
-
-        tutorialRunner.runCommands(lesson.data);
 
         await preparePromise;
 

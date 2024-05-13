@@ -9,19 +9,19 @@ import { isWebContainerSupported, webcontainerContext, webcontainer as webcontai
 import { PreviewInfo } from './preview-info';
 import type { ITerminal } from './shell';
 import { diffFiles, toFileTree } from './utils/files';
-import { AbortError, newTask, type Task, type TaskCancelled } from './utils/tasks';
+import { newTask, type Task, type TaskCancelled } from './utils/tasks';
 import { StepsController } from './steps';
 
 interface LoadFilesOptions {
   /**
    * The list of files to load.
    */
-  files: Files;
+  files: Files | Promise<Files>;
 
   /**
    * The template to load.
    */
-  template?: Files;
+  template?: Files | Promise<Files>;
 
   /**
    * If true, all files will be removed (except for `node_modules`).
@@ -248,6 +248,10 @@ export class TutorialRunner {
 
         signal.throwIfAborted();
 
+        [template, files] = await Promise.all([template, files]);
+
+        signal.throwIfAborted();
+
         // always re-apply the template as a lesson could have touched some of its files
         if (template) {
           await webcontainer.mount(toFileTree(template));
@@ -344,10 +348,6 @@ export class TutorialRunner {
     }
   }
 
-  setExpectedListOfCommands(commands: CommandsSchema): void {
-    this._stepController.setFromCommands([...new Commands(commands)]);
-  }
-
   /**
    * Runs a list of commands.
    *
@@ -362,25 +362,60 @@ export class TutorialRunner {
    * @see {LoadFilesOptions}
    */
   runCommands({ abortPreviousRun = true, ...commands }: RunCommandsOptions): void {
-    const anyChange = this._changeDetection(commands);
-
-    if (!anyChange) {
-      return;
-    }
-
-    const previousProcessPromise = this._currentProcessTask?.promise;
+    const previousTask = this._currentProcessTask;
     const loadPromise = this._currentLoadTask?.promise;
 
-    if (abortPreviousRun) {
-      this._currentProcessTask?.cancel();
-    }
-
     const newCommands = new Commands(commands);
-    this._currentRunCommands = newCommands;
+    let anyChange = this._changeDetection(commands);
+
+    // if we already know that there's a change we can update the steps now
+    if (anyChange) {
+      this._stepController.setFromCommands([...newCommands]);
+    }
 
     this._currentProcessTask = newTask(
       async (signal) => {
-        await Promise.all([previousProcessPromise, loadPromise]);
+        /**
+         * Make sure we wait for everything to be loaded on the fs before
+         * checking for changes. We do this because we want to know if the
+         * `package.json` changed.
+         */
+        await loadPromise;
+
+        if (signal.aborted && abortPreviousRun) {
+          previousTask?.cancel();
+        }
+
+        signal.throwIfAborted();
+
+        anyChange ||= this._changeDetection(commands);
+
+        if (!anyChange) {
+          /**
+           * If there are no changes and we have a previous task, then
+           * we must link this new task to that previous one, otherwise
+           * the link is broken and that task will never ends.
+           *
+           * We create that link here by awaiting it. Note that this `if`
+           * here should always evaluate to true.
+           */
+          if (previousTask) {
+            const abortListener = () => previousTask.cancel();
+            signal.addEventListener('abort', abortListener, { once: true });
+
+            return previousTask.promise;
+          }
+
+          return;
+        }
+
+        if (abortPreviousRun) {
+          previousTask?.cancel();
+        }
+
+        this._currentRunCommands = newCommands;
+
+        await previousTask?.promise;
 
         const webcontainer = await webcontainerPromise;
 
