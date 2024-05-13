@@ -1,5 +1,4 @@
-import './setup';
-import { auth, WebContainer } from '@webcontainer/api';
+import { WebContainer } from '@webcontainer/api';
 
 interface WebContainerContext {
   loaded: boolean;
@@ -10,9 +9,8 @@ export let webcontainer: Promise<WebContainer> = new Promise(() => {});
 if (!import.meta.env.SSR) {
   webcontainer = WebContainer.boot({ workdirName: 'tutorial' });
 
-  webcontainer.then((webcontainer) => {
+  webcontainer.then(() => {
     webcontainerContext.loaded = true;
-    (window as any).webcontainer = webcontainer;
   });
 }
 

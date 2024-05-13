@@ -59,8 +59,8 @@ export async function getTutorial() {
       const filesDir = path.join(lessonDir, '_files');
       const solutionDir = path.join(lessonDir, '_solution');
 
-      const files = await getFilesRef(filesDir); //await createFileMap(filesDir);
-      const solution = await getFilesRef(solutionDir); //await createFileMap(solutionDir);
+      const files = await getFilesRef(filesDir);
+      const solution = await getFilesRef(solutionDir);
 
       const lesson: Lesson = {
         data,
@@ -213,6 +213,7 @@ function getSlug(entry: CollectionEntry) {
 
 async function getFilesRef(pathToFolder: string): Promise<FilesRef> {
   const root = path.join(CONTENT_DIR, pathToFolder);
+
   const filePaths = (
     await glob(`${root}/**/*`, {
       onlyFiles: true,

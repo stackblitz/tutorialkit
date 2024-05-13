@@ -1,7 +1,7 @@
 ---
 type: part
 title: Advanced
-template: anotherone
+template: vite-app
 previews:
   - [5173, 'Vite App']
 ---

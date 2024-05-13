@@ -10,7 +10,7 @@ export interface Task<T> {
 export class AbortError extends Error {}
 
 interface NewTaskOptions {
-  // if set to true then the promise resolve with the kTaskCancelled Symbol
+  // if set to true then the promise resolves with the `kTaskCancelled` symbol
   ignoreCancel?: boolean;
 
   // an abort signal that this task will listen to and will abort if that signal trigger

@@ -31,7 +31,7 @@ export const webcontainerFiles: AstroIntegration = {
       ]);
 
       watcher.on('all', async (eventName, filePath) => {
-        // new directories don't affect the file tree.
+        // new directories don't affect the file tree
         if (eventName === 'addDir') {
           return;
         }
@@ -49,6 +49,7 @@ export const webcontainerFiles: AstroIntegration = {
         res.writeHead(200, {
           'Content-Type': 'application/json',
         });
+
         res.end(result);
       });
     },
@@ -97,7 +98,7 @@ class FileMapCache {
   ) {}
 
   generateFileMapForPath(filePath: string) {
-    const fileMapFolderPath = resolveFilesFolderPath(filePath);
+    const fileMapFolderPath = resolveFilesFolderPath(filePath, this._logger);
 
     if (!fileMapFolderPath) {
       this._logger.warn(`File ${filePath} is not part of the tutorial or templates folders.`);
@@ -109,7 +110,7 @@ class FileMapCache {
     // clear the existing cache value (mark it as stale)
     this._cache.set(fileRef, undefined);
 
-    // add this file to the queue of
+    // add this file as required to be processed
     this._requestsQueue.add(fileMapFolderPath);
 
     if (this._timeoutId) {
@@ -137,7 +138,7 @@ class FileMapCache {
     }
 
     if (typeof cacheValue === 'undefined') {
-      this._logger.error(`The cache never resolved for ${fileMapPath}`);
+      this._logger.error(`The cache never resolved for ${fileMapPath}.`);
       return false;
     }
 
@@ -206,11 +207,12 @@ async function createFileMap(dir: string) {
   return JSON.stringify(files);
 }
 
-function resolveFilesFolderPath(filePath: string): string | undefined {
+function resolveFilesFolderPath(filePath: string, logger: AstroIntegrationLogger): string | undefined {
   if (filePath.startsWith(TEMPLATES_DIR)) {
     const index = filePath.indexOf(path.sep, TEMPLATES_DIR.length + 1);
 
     if (index === -1) {
+      logger.error(`Bug: ${filePath} is not in a directory under ${TEMPLATES_DIR}`);
       return undefined;
     }
 
@@ -223,6 +225,7 @@ function resolveFilesFolderPath(filePath: string): string | undefined {
     while (filesFolder && !filesFolder.endsWith(FILES_FOLDER_NAME) && !filesFolder.endsWith(SOLUTION_FOLDER_NAME)) {
       // the folder wasn't found, this should never happen
       if (filesFolder === CONTENT_DIR) {
+        logger.error(`Bug: ${filePath} was not under ${FILES_FOLDER_NAME} or ${SOLUTION_FOLDER_NAME}`);
         return undefined;
       }
 

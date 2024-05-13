@@ -107,7 +107,8 @@ export function WorkspacePanel({ lesson }: Props) {
 
       setEditorState((editorState) => {
         const loadedFile = loadedFiles.files?.[filePath];
-        const loading = typeof loadedFile === 'undefined';
+        const loading = loadedFile === undefined;
+
         let value = '';
 
         if (editorState[filePath]?.loading && !loading) {
@@ -231,9 +232,9 @@ export function WorkspacePanel({ lesson }: Props) {
   }, [lesson]);
 
   useEffect(() => {
-    if (typeof lesson.data.focus === 'undefined') {
+    if (lesson.data.focus === undefined) {
       setSelectedFile(undefined);
-    } else if (typeof loadedFiles.files?.[lesson.data.focus] !== 'undefined') {
+    } else if (loadedFiles.files?.[lesson.data.focus] !== undefined) {
       updateDocument(lesson.data.focus);
     }
   }, [lesson, loadedFiles, updateDocument]);

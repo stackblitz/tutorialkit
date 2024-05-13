@@ -85,8 +85,8 @@ export class LessonFilesFetcher {
         return body;
       } catch (error) {
         if (retry <= 0) {
-          // console.error(`Failed to fetch ${pathname} after 3 attempts.`);
-          // console.error(error);
+          console.error(`Failed to fetch ${pathname} after 3 attempts.`);
+          console.error(error);
 
           return {};
         }

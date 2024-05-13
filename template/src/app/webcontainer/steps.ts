@@ -28,12 +28,22 @@ export class StepsController {
   }
 
   updateStep(index: number, step: Step) {
-    const currentSteps = this.steps.value!;
+    const currentSteps = this.steps.value;
+
+    if (!currentSteps) {
+      return;
+    }
+
     this.steps.set([...currentSteps.slice(0, index), step, ...currentSteps.slice(index + 1)]);
   }
 
   skipRemaining(index: number) {
-    const currentSteps = this.steps.value!;
+    const currentSteps = this.steps.value;
+
+    if (!currentSteps) {
+      return;
+    }
+
     this.steps.set([
       ...currentSteps.slice(0, index),
       ...currentSteps.slice(index).map((step) => ({

@@ -143,6 +143,7 @@ export function CodeMirrorEditor({
           language.of([]),
           readOnly.of([EditorState.readOnly.of(doc.loading)]),
         ]);
+
         editorStates.set(doc.filePath, state);
       }
 
