@@ -10,6 +10,7 @@ import { PreviewInfo } from './preview-info';
 import type { ITerminal } from './shell';
 import { diffFiles, toFileTree } from './utils/files';
 import { AbortError, newTask, type Task, type TaskCancelled } from './utils/tasks';
+import { StepsController } from './steps';
 
 interface LoadFilesOptions {
   /**
@@ -79,11 +80,14 @@ export class TutorialRunner {
 
   private _availablePreviews = new Map<number, PreviewInfo>();
   private _previewsLayout: PreviewInfo[] = [];
+  private _stepController = new StepsController();
 
   /**
    * Steps that the runner is or will be executing.
    */
-  steps = atom<Steps | undefined>(undefined);
+  get steps() {
+    return this._stepController.steps;
+  }
 
   /**
    * Atom representing the current previews. If it's an empty array or none of
@@ -340,6 +344,10 @@ export class TutorialRunner {
     }
   }
 
+  setExpectedListOfCommands(commands: CommandsSchema): void {
+    this._stepController.setFromCommands([...new Commands(commands)]);
+  }
+
   /**
    * Runs a list of commands.
    *
@@ -416,41 +424,20 @@ export class TutorialRunner {
     clearTerminal(this._terminal);
 
     const abortListener = () => this._currentCommandProcess?.kill();
-    signal.addEventListener('abort', abortListener);
+    signal.addEventListener('abort', abortListener, { once: true });
 
     const hasMainCommand = !!commands.mainCommand;
 
     try {
       const commandList = [...commands];
 
-      const updateStep = (index: number, step: Step) => {
-        const currentSteps = this.steps.value!;
-        this.steps.set([...currentSteps.slice(0, index), step, ...currentSteps.slice(index + 1)]);
-      };
-
-      const skipRemaining = (index: number) => {
-        const currentSteps = this.steps.value!;
-        this.steps.set([
-          ...currentSteps.slice(0, index),
-          ...currentSteps.slice(index).map((step) => ({
-            ...step,
-            status: 'skipped' as const,
-          })),
-        ]);
-      };
-
-      this.steps.set(
-        commandList.map((command) => ({
-          title: command.title,
-          status: 'idle',
-        })),
-      );
+      this._stepController.setFromCommands(commandList);
 
       for (const [index, command] of commandList.entries()) {
         const isMainCommand = index === commandList.length - 1 && !!commands.mainCommand;
 
         if (!command.isRunnable()) {
-          updateStep(index, {
+          this._stepController.updateStep(index, {
             title: command.title,
             status: 'skipped',
           });
@@ -458,7 +445,7 @@ export class TutorialRunner {
           continue;
         }
 
-        updateStep(index, {
+        this._stepController.updateStep(index, {
           title: command.title,
           status: 'running',
         });
@@ -468,12 +455,12 @@ export class TutorialRunner {
           this._terminal?.write('\n');
         }
 
-        this._currentCommandProcess = await this._newProcess(webcontainer, command.shellCommand, signal);
+        this._currentCommandProcess = await this._newProcess(webcontainer, command.shellCommand);
 
         try {
           signal.throwIfAborted();
         } catch (error) {
-          skipRemaining(index);
+          this._stepController.skipRemaining(index);
           throw error;
         }
 
@@ -484,15 +471,15 @@ export class TutorialRunner {
         const exitCode = await this._currentCommandProcess.exit;
 
         if (exitCode !== 0) {
-          updateStep(index, {
+          this._stepController.updateStep(index, {
             title: command.title,
             status: 'failed',
           });
 
-          skipRemaining(index + 1);
+          this._stepController.skipRemaining(index + 1);
           break;
         } else {
-          updateStep(index, {
+          this._stepController.updateStep(index, {
             title: command.title,
             status: 'completed',
           });
@@ -501,7 +488,7 @@ export class TutorialRunner {
         try {
           signal.throwIfAborted();
         } catch (error) {
-          skipRemaining(index + 1);
+          this._stepController.skipRemaining(index + 1);
           throw error;
         }
       }
@@ -514,7 +501,7 @@ export class TutorialRunner {
     }
   }
 
-  private async _newProcess(webcontainer: WebContainer, shellCommand: string, signal: AbortSignal) {
+  private async _newProcess(webcontainer: WebContainer, shellCommand: string) {
     const [command, ...args] = shellCommand.split(' ');
 
     this._terminal?.write(`${escapeCodes.magenta('❯')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
@@ -527,12 +514,6 @@ export class TutorialRunner {
           }
         : undefined,
     });
-
-    const abortListener = () => process.kill();
-
-    signal.addEventListener('abort', abortListener, { once: true });
-
-    process.exit.then(() => signal.removeEventListener('abort', abortListener));
 
     process.output.pipeTo(new WritableStream({ write: (data) => this._terminal?.write(data) }));
 

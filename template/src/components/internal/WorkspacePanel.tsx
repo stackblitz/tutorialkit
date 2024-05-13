@@ -181,6 +181,7 @@ export function WorkspacePanel({ lesson }: Props) {
     setEditorState({});
 
     tutorialRunner.setPreviews(lesson.data.previews);
+    tutorialRunner.setExpectedListOfCommands(lesson.data);
 
     const task = newTask(
       async (signal) => {
@@ -198,9 +199,11 @@ export function WorkspacePanel({ lesson }: Props) {
           files,
         });
 
+        const preparePromise = tutorialRunner.prepareFiles({ template, files, signal });
+
         tutorialRunner.runCommands(lesson.data);
 
-        await tutorialRunner.prepareFiles({ template, files, signal });
+        await preparePromise;
 
         signal.throwIfAborted();
 
