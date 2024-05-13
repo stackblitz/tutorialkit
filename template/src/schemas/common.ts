@@ -40,6 +40,7 @@ export type PreviewSchema = z.infer<typeof previewSchema>;
 export const webcontainerSchema = commandsSchema.extend({
   previews: previewSchema.array().optional(),
   autoReload: z.boolean().optional(),
+  template: z.string().optional(),
 });
 
 export const baseSchema = webcontainerSchema.extend({

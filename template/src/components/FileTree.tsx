@@ -1,4 +1,4 @@
-import type { Files } from '@entities/tutorial';
+import type { FilesRef } from '@entities/tutorial';
 import classnames from 'classnames';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 
@@ -6,7 +6,7 @@ const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 
 interface Props {
-  files: Files;
+  files: string[];
   selectedFile?: string;
   onFileClick: (filePath: string) => void;
   hideRoot: boolean;
@@ -192,7 +192,7 @@ interface FolderNode extends BaseNode {
 }
 
 function buildFileList(
-  files: Files,
+  files: string[],
   hideRoot: boolean,
   scope: string | undefined,
   hiddenFiles: Array<string | RegExp>,
@@ -205,7 +205,7 @@ function buildFileList(
     fileList.push({ kind: 'folder', name: '/', depth: 0, id: 0 });
   }
 
-  for (const filePath of Object.keys(files).sort()) {
+  for (const filePath of files) {
     if (scope && !filePath.startsWith(scope)) {
       continue;
     }

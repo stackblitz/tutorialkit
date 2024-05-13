@@ -1,12 +1,10 @@
-import type { CollectionEntry, Files, Lesson, Tutorial } from '@entities/tutorial';
+import type { CollectionEntry, FilesRef, Lesson, Tutorial } from '@entities/tutorial';
 import type { TutorialSchema } from '@schemas';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
-import fs from 'node:fs';
 import path from 'node:path';
 
 const CONTENT_DIR = path.join(import.meta.dirname, '../content/tutorial');
-const TEMPLATES_DIR = path.join(import.meta.dirname, '../templates');
 
 export async function getTutorial() {
   const collection = sortCollection(await getCollection('tutorial'));
@@ -25,6 +23,9 @@ export async function getTutorial() {
 
     if (type === 'tutorial') {
       tutorialMetaData = data;
+
+      // default template if not specified
+      tutorialMetaData.template ??= 'default';
     } else if (type === 'part') {
       _tutorial[partId] = {
         id: partId,
@@ -54,16 +55,12 @@ export async function getTutorial() {
 
       const { Content } = await entry.render();
 
-      const lessonDir = path.join(CONTENT_DIR, path.dirname(entry.id));
+      const lessonDir = path.dirname(entry.id);
       const filesDir = path.join(lessonDir, '_files');
       const solutionDir = path.join(lessonDir, '_solution');
 
-      // we currently only support a single template
-      const templateDir = path.join(TEMPLATES_DIR, 'default');
-
-      const files = await createFileMap(filesDir);
-      const templateFiles = await createFileMap(templateDir);
-      const solution = await createFileMap(solutionDir);
+      const files = await getFilesRef(filesDir);
+      const solution = await getFilesRef(solutionDir);
 
       const lesson: Lesson = {
         data,
@@ -80,7 +77,6 @@ export async function getTutorial() {
         slug: getSlug(entry),
         files,
         solution,
-        template: templateFiles,
       };
 
       lessons.push(lesson);
@@ -113,7 +109,7 @@ export async function getTutorial() {
     lesson.data = {
       ...pick(
         [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
-        ['mainCommand', 'prepareCommands', 'previews', 'autoReload'],
+        ['mainCommand', 'prepareCommands', 'previews', 'autoReload', 'template'],
       ),
       ...lesson.data,
     };
@@ -123,7 +119,7 @@ export async function getTutorial() {
       const chapterSlug = _tutorial[prevLesson.part.id].chapters[prevLesson.chapter.id].slug;
 
       lesson.prev = {
-        data: prevLesson.data,
+        title: prevLesson.data.title,
         href: `/${partSlug}/${chapterSlug}/${prevLesson.slug}`,
       };
     }
@@ -133,7 +129,7 @@ export async function getTutorial() {
       const chapterSlug = _tutorial[nextLesson.part.id].chapters[nextLesson.chapter.id].slug;
 
       lesson.next = {
-        data: nextLesson.data,
+        title: nextLesson.data.title,
         href: `/${partSlug}/${chapterSlug}/${nextLesson.slug}`,
       };
     }
@@ -215,16 +211,16 @@ function getSlug(entry: CollectionEntry) {
   return slug;
 }
 
-async function createFileMap(dir: string) {
-  const filePaths = await glob(`${dir}/**/*`, {
-    onlyFiles: true,
-  });
+async function getFilesRef(pathToFolder: string): Promise<FilesRef> {
+  const root = path.join(CONTENT_DIR, pathToFolder);
 
-  const files: Files = {};
+  const filePaths = (
+    await glob(`${root}/**/*`, {
+      onlyFiles: true,
+    })
+  ).map((filePath) => `/${path.relative(root, filePath)}`);
 
-  for (const filePath of filePaths) {
-    files[`/${path.relative(dir, filePath)}`] = fs.readFileSync(filePath, 'utf8');
-  }
+  filePaths.sort();
 
-  return files;
+  return [pathToFolder, filePaths];
 }
