@@ -1,20 +1,40 @@
-import { WebContainer } from '@webcontainer/api';
+import { authStatusStore } from '@stores/auth-store';
+import { useAuth } from './setup';
+import { auth, WebContainer } from '@webcontainer/api';
 
 interface WebContainerContext {
+  useAuth: boolean;
+  loggedIn: () => Promise<void>;
   loaded: boolean;
 }
 
 export let webcontainer: Promise<WebContainer> = new Promise(() => {});
 
 if (!import.meta.env.SSR) {
-  webcontainer = WebContainer.boot({ workdirName: 'tutorial' });
+  webcontainer = Promise.resolve(useAuth ? auth.loggedIn() : null).then(() =>
+    WebContainer.boot({ workdirName: 'tutorial' }),
+  );
 
   webcontainer.then(() => {
     webcontainerContext.loaded = true;
   });
 }
 
+export async function login() {
+  auth.startAuthFlow({ popup: true });
+
+  await auth.loggedIn();
+
+  authStatusStore.set({ status: 'authorized' });
+}
+
+export function logout() {
+  auth.logout({ ignoreRevokeError: true });
+}
+
 export const webcontainerContext: WebContainerContext = {
+  useAuth,
+  loggedIn: () => auth.loggedIn(),
   loaded: false,
 };
 

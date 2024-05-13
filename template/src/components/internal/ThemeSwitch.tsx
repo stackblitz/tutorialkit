@@ -17,7 +17,7 @@ export const ThemeSwitch = memo(() => {
         title="Toggle Theme"
         onClick={() => toggleTheme()}
       >
-        {<div className={theme === 'dark' ? 'i-ph-sun-dim-duotone' : 'i-ph-moon-stars-duotone'}></div>}
+        <div className={theme === 'dark' ? 'i-ph-sun-dim-duotone' : 'i-ph-moon-stars-duotone'} />
       </button>
     )
   );

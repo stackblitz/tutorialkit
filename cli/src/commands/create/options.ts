@@ -5,6 +5,7 @@ export interface CreateOptions {
   _: Array<string | number>;
   install?: boolean;
   git?: boolean;
+  enterprise?: string;
   dir?: string;
   dryRun?: boolean;
   defaults?: boolean;

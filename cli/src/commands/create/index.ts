@@ -10,6 +10,7 @@ import { assertNotCanceled } from '../../utils/tasks';
 import { installDependencies, type PackageManager } from './dependencies';
 import { initGitRepo } from './git';
 import { DEFAULT_VALUES, type CreateOptions } from './options';
+import { setupEnterpriseConfig } from './enterprise';
 import { copyTemplate } from './template';
 
 export async function createTutorial(flags: yargs.Arguments) {
@@ -26,6 +27,10 @@ export async function createTutorial(flags: yargs.Arguments) {
           [
             '--package-manager <name>, -p <name>',
             `The package used to install dependencies (default ${chalk.yellow(DEFAULT_VALUES.packageManager)})`,
+          ],
+          [
+            '--enterprise <origin>, -e <origin>',
+            `The origin of your StackBlitz Enterprise instance (if not provided authentication is not turned on and your project will use ${chalk.yellow('https://stackblitz.com')})`,
           ],
           [
             '--force',
@@ -124,6 +129,7 @@ async function _createTutorial(flags: CreateOptions) {
 
   const { selectedPackageManager, dependenciesInstalled } = await installDependencies(resolvedDest, flags);
 
+  await setupEnterpriseConfig(resolvedDest, flags);
   updateProjectName(resolvedDest, tutorialName, flags);
   updateReadme(resolvedDest, selectedPackageManager, flags);
 
@@ -229,5 +235,9 @@ function applyAliases(flags: CreateOptions & Record<string, any>) {
 
   if (flags.p) {
     flags.packageManager = flags.p;
+  }
+
+  if (flags.e) {
+    flags.enterprise = flags.e;
   }
 }
