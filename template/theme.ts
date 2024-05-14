@@ -1,6 +1,6 @@
 import type { ConfigBase } from 'unocss';
 
-const BASE_COLORS = {
+const PRIMITIVES = {
   accent: {
     50: '#EFF9FF',
     100: '#E5F6FF',
@@ -98,7 +98,7 @@ const BASE_COLORS = {
 
 export const theme: ConfigBase['theme'] = {
   colors: {
-    ...BASE_COLORS,
+    ...PRIMITIVES,
     tk: {
       background: {
         primary: 'var(--tk-background-primary)',
