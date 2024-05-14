@@ -3,19 +3,19 @@
 }
 
 .AccordionTrigger {
-  --at-apply: text-tk-elements-breadcrumb-dropdown-accordionTextColor;
+  --at-apply: text-tk-elements-breadcrumbs-dropdown-accordionTextColor;
 }
 
 .AccordionTrigger:hover {
-  --at-apply: text-tk-elements-breadcrumb-dropdown-accordionTextColorHover;
+  --at-apply: text-tk-elements-breadcrumbs-dropdown-accordionTextColorHover;
 }
 
 .AccordionTrigger .AccordionTriggerIcon {
-  --at-apply: transition-color duration-100 text-tk-elements-breadcrumb-dropdown-accordionIconColor;
+  --at-apply: transition-color duration-100 text-tk-elements-breadcrumbs-dropdown-accordionIconColor;
 }
 
 .AccordionTrigger:hover .AccordionTriggerIcon {
-  --at-apply: text-tk-elements-breadcrumb-dropdown-accordionIconColorHover;
+  --at-apply: text-tk-elements-breadcrumbs-dropdown-accordionIconColorHover;
 }
 
 .AccordionContent {
@@ -31,53 +31,54 @@
 }
 
 .NavContainer:hover {
-  --at-apply: border-tk-elements-breadcrumb-toggleButton-borderColorHover;
+  --at-apply: border-tk-elements-breadcrumbs-toggleButton-borderColorHover;
 }
 
 .NavContainer[data-state='closed']:not(:hover) {
-  --at-apply: border-tk-elements-breadcrumb-toggleButton-borderColor;
+  --at-apply: border-tk-elements-breadcrumbs-toggleButton-borderColor;
 }
 
 .NavContainer[data-state='open']:not(:hover) {
-  --at-apply: border-tk-elements-breadcrumb-toggleButton-borderColorSelected;
+  --at-apply: border-tk-elements-breadcrumbs-toggleButton-borderColorSelected;
 }
 
 .NavContainer .ToggleButton:hover {
-  --at-apply: bg-tk-elements-breadcrumb-toggleButton-backgroundColorHover
-    text-tk-elements-breadcrumb-toggleButton-textColorHover;
+  --at-apply: bg-tk-elements-breadcrumbs-toggleButton-backgroundColorHover
+    text-tk-elements-breadcrumbs-toggleButton-textColorHover;
 }
 
 .NavContainer[data-state='closed'] .ToggleButton:not(:hover) {
-  --at-apply: bg-tk-elements-breadcrumb-toggleButton-backgroundColor text-tk-elements-breadcrumb-toggleButton-textColor;
+  --at-apply: bg-tk-elements-breadcrumbs-toggleButton-backgroundColor
+    text-tk-elements-breadcrumbs-toggleButton-textColor;
 }
 
 .NavContainer[data-state='open'] .ToggleButton:not(:hover) {
-  --at-apply: bg-tk-elements-breadcrumb-toggleButton-backgroundColorSelected
-    text-tk-elements-breadcrumb-toggleButton-textColorSelected;
+  --at-apply: bg-tk-elements-breadcrumbs-toggleButton-backgroundColorSelected
+    text-tk-elements-breadcrumbs-toggleButton-textColorSelected;
 }
 
 .NavContainer[data-state='closed'] .ToggleButton:not(:hover) .Divider {
-  --at-apply: text-tk-elements-breadcrumb-toggleButton-textDividerColor;
+  --at-apply: text-tk-elements-breadcrumbs-toggleButton-textDividerColor;
 }
 
 .NavContainer[data-state='open'] .ToggleButton:not(:hover) .Divider {
-  --at-apply: text-tk-elements-breadcrumb-toggleButton-textDividerColorSelected;
+  --at-apply: text-tk-elements-breadcrumbs-toggleButton-textDividerColorSelected;
 }
 
 .NavContainer .ToggleButton:hover .Divider {
-  --at-apply: text-tk-elements-breadcrumb-toggleButton-textDividerColorHover;
+  --at-apply: text-tk-elements-breadcrumbs-toggleButton-textDividerColorHover;
 }
 
 .ToggleButton .ToggleButtonIcon {
-  --at-apply: text-tk-elements-breadcrumb-toggleButton-iconColor;
+  --at-apply: text-tk-elements-breadcrumbs-toggleButton-iconColor;
 }
 
 .ToggleButton:hover .ToggleButtonIcon {
-  --at-apply: text-tk-elements-breadcrumb-toggleButton-iconColorHover;
+  --at-apply: text-tk-elements-breadcrumbs-toggleButton-iconColorHover;
 }
 
 .NavContainer[data-state='open'] .ToggleButton:not(:hover) .ToggleButtonIcon {
-  --at-apply: text-tk-elements-breadcrumb-toggleButton-iconColorSelected;
+  --at-apply: text-tk-elements-breadcrumbs-toggleButton-iconColorSelected;
 }
 
 @keyframes slideDown {

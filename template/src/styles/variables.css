@@ -159,46 +159,46 @@
   --tk-elements-navCard-iconColorHover: var(--tk-text-accent);
 
   /* Breadcrumb > Nav Button */
-  --tk-elements-breadcrumb-navButton-iconColor: var(--tk-text-secondary);
-  --tk-elements-breadcrumb-navButton-iconColorHover: var(--tk-text-active);
-  --tk-elements-breadcrumb-navButton-iconColorDisabled: var(--tk-text-disabled);
+  --tk-elements-breadcrumbs-navButton-iconColor: var(--tk-text-secondary);
+  --tk-elements-breadcrumbs-navButton-iconColorHover: var(--tk-text-active);
+  --tk-elements-breadcrumbs-navButton-iconColorDisabled: var(--tk-text-disabled);
 
   /* Breadcrumb > Toggle Button */
-  --tk-elements-breadcrumb-toggleButton-backgroundColor: var(--tk-background-secondary);
-  --tk-elements-breadcrumb-toggleButton-backgroundColorHover: var(--tk-background-brighter);
-  --tk-elements-breadcrumb-toggleButton-backgroundColorSelected: var(
-    --tk-elements-breadcrumb-toggleButton-backgroundColor
+  --tk-elements-breadcrumbs-toggleButton-backgroundColor: var(--tk-background-secondary);
+  --tk-elements-breadcrumbs-toggleButton-backgroundColorHover: var(--tk-background-brighter);
+  --tk-elements-breadcrumbs-toggleButton-backgroundColorSelected: var(
+    --tk-elements-breadcrumbs-toggleButton-backgroundColor
   );
-  --tk-elements-breadcrumb-toggleButton-borderColor: var(--tk-border-secondary);
-  --tk-elements-breadcrumb-toggleButton-borderColorHover: var(--tk-border-brighter);
-  --tk-elements-breadcrumb-toggleButton-borderColorSelected: var(--tk-elements-breadcrumb-toggleButton-borderColor);
-  --tk-elements-breadcrumb-toggleButton-textColor: var(--tk-elements-app-textColor);
-  --tk-elements-breadcrumb-toggleButton-textColorHover: var(--tk-elements-breadcrumb-toggleButton-textColor);
-  --tk-elements-breadcrumb-toggleButton-textColorSelected: var(--tk-elements-breadcrumb-toggleButton-textColor);
-  --tk-elements-breadcrumb-toggleButton-textDividerColor: var(--tk-text-disabled);
-  --tk-elements-breadcrumb-toggleButton-textDividerColorHover: var(
-    --tk-elements-breadcrumb-toggleButton-textDividerColor
+  --tk-elements-breadcrumbs-toggleButton-borderColor: var(--tk-border-secondary);
+  --tk-elements-breadcrumbs-toggleButton-borderColorHover: var(--tk-border-brighter);
+  --tk-elements-breadcrumbs-toggleButton-borderColorSelected: var(--tk-elements-breadcrumbs-toggleButton-borderColor);
+  --tk-elements-breadcrumbs-toggleButton-textColor: var(--tk-elements-app-textColor);
+  --tk-elements-breadcrumbs-toggleButton-textColorHover: var(--tk-elements-breadcrumbs-toggleButton-textColor);
+  --tk-elements-breadcrumbs-toggleButton-textColorSelected: var(--tk-elements-breadcrumbs-toggleButton-textColor);
+  --tk-elements-breadcrumbs-toggleButton-textDividerColor: var(--tk-text-disabled);
+  --tk-elements-breadcrumbs-toggleButton-textDividerColorHover: var(
+    --tk-elements-breadcrumbs-toggleButton-textDividerColor
   );
-  --tk-elements-breadcrumb-toggleButton-textDividerColorSelected: var(
-    --tk-elements-breadcrumb-toggleButton-textDividerColor
+  --tk-elements-breadcrumbs-toggleButton-textDividerColorSelected: var(
+    --tk-elements-breadcrumbs-toggleButton-textDividerColor
   );
-  --tk-elements-breadcrumb-toggleButton-iconColor: var(--tk-text-secondary);
-  --tk-elements-breadcrumb-toggleButton-iconColorHover: var(--tk-text-active);
-  --tk-elements-breadcrumb-toggleButton-iconColorSelected: var(--tk-text-active);
+  --tk-elements-breadcrumbs-toggleButton-iconColor: var(--tk-text-secondary);
+  --tk-elements-breadcrumbs-toggleButton-iconColorHover: var(--tk-text-active);
+  --tk-elements-breadcrumbs-toggleButton-iconColorSelected: var(--tk-text-active);
 
   /* Breadcrumb > Dropdown */
-  --tk-elements-breadcrumb-dropdown-backgroundColor: var(--tk-background-primary);
-  --tk-elements-breadcrumb-dropdown-borderColor: var(--tk-border-secondary);
-  --tk-elements-breadcrumb-dropdown-textColor: var(--tk-elements-app-textColor);
-  --tk-elements-breadcrumb-dropdown-textColorHover: var(--tk-text-accent);
-  --tk-elements-breadcrumb-dropdown-accordionTextColor: var(--tk-elements-breadcrumb-dropdown-textColor);
-  --tk-elements-breadcrumb-dropdown-accordionTextColorHover: var(--tk-text-active);
-  --tk-elements-breadcrumb-dropdown-accordionIconColor: var(--tk-text-disabled);
-  --tk-elements-breadcrumb-dropdown-accordionIconColorHover: var(--tk-text-primary);
-  --tk-elements-breadcrumb-dropdown-lessonBackgroundColor: var(--tk-elements-breadcrumb-dropdown-backgroundColor);
-  --tk-elements-breadcrumb-dropdown-lessonBackgroundColorSelected: var(--tk-background-secondary);
-  --tk-elements-breadcrumb-dropdown-lessonTextColor: var(--tk-elements-breadcrumb-dropdown-textColor);
-  --tk-elements-breadcrumb-dropdown-lessonTextColorHover: var(--tk-elements-breadcrumb-dropdown-textColorHover);
+  --tk-elements-breadcrumbs-dropdown-backgroundColor: var(--tk-background-primary);
+  --tk-elements-breadcrumbs-dropdown-borderColor: var(--tk-border-secondary);
+  --tk-elements-breadcrumbs-dropdown-textColor: var(--tk-elements-app-textColor);
+  --tk-elements-breadcrumbs-dropdown-textColorHover: var(--tk-text-accent);
+  --tk-elements-breadcrumbs-dropdown-accordionTextColor: var(--tk-elements-breadcrumbs-dropdown-textColor);
+  --tk-elements-breadcrumbs-dropdown-accordionTextColorHover: var(--tk-text-active);
+  --tk-elements-breadcrumbs-dropdown-accordionIconColor: var(--tk-text-disabled);
+  --tk-elements-breadcrumbs-dropdown-accordionIconColorHover: var(--tk-text-primary);
+  --tk-elements-breadcrumbs-dropdown-lessonBackgroundColor: var(--tk-elements-breadcrumbs-dropdown-backgroundColor);
+  --tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected: var(--tk-background-secondary);
+  --tk-elements-breadcrumbs-dropdown-lessonTextColor: var(--tk-elements-breadcrumbs-dropdown-textColor);
+  --tk-elements-breadcrumbs-dropdown-lessonTextColorHover: var(--tk-elements-breadcrumbs-dropdown-textColorHover);
 
   /* Status > Positive */
   --tk-elements-status-positive-textColor: var(--tk-text-positive);
