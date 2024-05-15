@@ -1,6 +1,6 @@
 /**
- * This code must be executed before webcontainer boot and be executed as soon as possible
- * so that when the authentication flow is complete in a popup, the popup is closed quickly.
+ * This code must be executed before WebContainer boots and be executed as soon as possible.
+ * This ensures that when the authentication flow is complete in a popup, the popup is closed quickly.
  */
 import { auth } from '@webcontainer/api';
 import { authStatusStore } from '@stores/auth-store';
