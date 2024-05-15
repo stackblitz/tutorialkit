@@ -33,7 +33,7 @@ export const tutorialkit: AstroIntegration = {
           },
         });
       } catch (error) {
-        logger.error(`Invalid tutorialkit configuration!`);
+        logger.error(`Invalid TutorialKit configuration!`);
         console.error(error);
       }
     },

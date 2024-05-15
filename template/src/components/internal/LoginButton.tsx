@@ -24,6 +24,7 @@ export function LoginButton() {
       timeoutId.current = setTimeout(() => {
         setDisabled(false);
       }, 1000);
+
       login();
     } else {
       logout();
@@ -36,6 +37,7 @@ export function LoginButton() {
       if (disabled && authStatus.status === 'auth-failed') {
         return false;
       }
+
       return disabled;
     });
   }, [authStatus.status]);

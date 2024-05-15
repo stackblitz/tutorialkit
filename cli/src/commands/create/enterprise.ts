@@ -12,7 +12,7 @@ export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) 
 
   if (!flags.defaults && flags.enterprise === undefined) {
     const answer = await prompts.confirm({
-      message: 'Will you be using StackBlitz Enterprise?',
+      message: 'Do you want to configure StackBlitz Enterprise?',
       initialValue: false,
     });
 

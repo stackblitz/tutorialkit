@@ -311,7 +311,7 @@ export class TutorialRunner {
       Promise.resolve()
         .then(async () => {
           if (webcontainerContext.useAuth) {
-            terminal.write('Waiting for authentication to be complete...');
+            terminal.write('Waiting for authentication to complete...');
 
             await webcontainerContext.loggedIn();
           }
