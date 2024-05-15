@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { authStatusStore } from '@stores/auth-store';
+import { authStore } from '@stores/auth-store';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { logout, login } from '@app/webcontainer';
@@ -7,7 +7,7 @@ import { logout, login } from '@app/webcontainer';
 export function LoginButton() {
   // using any because @types/node are included in that context although they shouldn't
   const timeoutId = useRef<any>(0);
-  const authStatus = useStore(authStatusStore);
+  const authStatus = useStore(authStore);
   const [disabled, setDisabled] = useState(false);
 
   const showLogin = authStatus.status !== 'authorized';
@@ -18,7 +18,7 @@ export function LoginButton() {
       clearTimeout(timeoutId.current);
 
       /*
-       * Clear timeout in case the login failed because the popup got stuck in an error or
+       * Re-enable the button in case the login failed because the popup got stuck in an error or
        * was closed before the authorization step was completed.
        */
       timeoutId.current = setTimeout(() => {

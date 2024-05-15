@@ -1,4 +1,4 @@
-import { authStatusStore } from '@stores/auth-store';
+import { authStore } from '@stores/auth-store';
 import { useAuth } from './setup';
 import { auth, WebContainer } from '@webcontainer/api';
 
@@ -25,7 +25,7 @@ export async function login() {
 
   await auth.loggedIn();
 
-  authStatusStore.set({ status: 'authorized' });
+  authStore.set({ status: 'authorized' });
 }
 
 export function logout() {

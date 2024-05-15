@@ -7,6 +7,5 @@ interface WebContainerConfig {
   scope: string;
 }
 
-// we use a separate variable for the check to help esbuild eliminate branches
 declare const __ENTERPRISE__: boolean;
 declare const __WC_CONFIG__: WebContainerConfig | undefined;
