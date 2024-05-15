@@ -44,16 +44,15 @@ export function LoginButton() {
 
   return (
     <button
-      className={classNames(
-        'flex font-500 disabled:opacity-50 border-1 items-center text-sm ml-2 px-4 py-1 rounded-md',
-        {
-          'bg-accent-600 border-accent-700 text-white': showLogin,
-          'bg-gray-50 text-gray-900 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700': !showLogin,
-          'hover:bg-accent-500 hover:border-accent-600 active:bg-accent-400': !disabled && showLogin,
-          'hover:bg-gray-100 active:bg-gray-200 hover:text-gray-800 hover:dark:bg-gray-700 hover:dark:text-gray-50 hover:dark:border-gray-600 active:dark:bg-gray-600':
-            !disabled && !showLogin,
-        },
-      )}
+      className={classNames('flex font-500 disabled:opacity-50 items-center text-sm ml-2 px-4 py-1 rounded-md', {
+        'bg-tk-elements-topBar-primaryButton-backgroundColor bg-tk-elements-topBar-primaryButton-textColor': showLogin,
+        'bg-tk-elements-topBar-secondaryButton-backgroundColor bg-tk-elements-topBar-secondaryButton-textColor':
+          !showLogin,
+        'hover:bg-tk-elements-topBar-primaryButton-backgroundColorHover hover:bg-tk-elements-topBar-primaryButton-textColorHover active:bg-tk-elements-topBar-primaryButton-backgroundColorActive':
+          !disabled && showLogin,
+        'hover:bg-tk-elements-topBar-secondaryButton-backgroundColorHover active:bg-tk-elements-topBar-secondaryButton-backgroundColorActive hover:bg-tk-elements-topBar-secondaryButton-textColorHover':
+          !disabled && !showLogin,
+      })}
       disabled={disabled}
       onClick={onClick}
     >

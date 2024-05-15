@@ -102,6 +102,22 @@
   --tk-elements-topBar-logo-color: var(--tk-text-active);
   --tk-elements-topBar-logo-colorHover: var(--tk-text-active);
 
+  /* Top Bar > Button primary */
+  --tk-elements-topBar-primaryButton-backgroundColor: theme('colors.accent.600');
+  --tk-elements-topBar-primaryButton-backgroundColorHover: theme('colors.accent.500');
+  --tk-elements-topBar-primaryButton-backgroundColorDisabled: theme('colors.accent.600');
+  --tk-elements-topBar-primaryButton-backgroundColorActive: theme('colors.accent.400');
+  --tk-elements-topBar-primaryButton-textColor: theme('colors.gray.0');
+  --tk-elements-topBar-primaryButton-textColorHover: theme('colors.gray.0');
+
+  /* Top Bar > Button secondary */
+  --tk-elements-topBar-secondaryButton-backgroundColor: var(--tk-background-secondary);
+  --tk-elements-topBar-secondaryButton-backgroundColorHover: var(--tk-background-secondary);
+  --tk-elements-topBar-secondaryButton-backgroundColorDisabled: var(--tk-background-secondary);
+  --tk-elements-topBar-secondaryButton-backgroundColorActive: var(--tk-background-secondary);
+  --tk-elements-topBar-secondaryButton-textColor: var(--tk-background-secondary);
+  --tk-elements-topBar-secondaryButton-textColorHover: var(--tk-background-secondary);
+
   /* Previews */
   --tk-elements-previews-borderColor: theme('colors.gray.200');
 

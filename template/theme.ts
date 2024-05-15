@@ -160,6 +160,22 @@ export const theme: ConfigBase['theme'] = {
             color: 'var(--tk-elements-topBar-logo-color)',
             colorHover: 'var(--tk-elements-topBar-logo-colorHover)',
           },
+          primaryButton: {
+            backgroundColor: 'var(--tk-elements-topBar-primaryButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-topBar-primaryButton-backgroundColorHover)',
+            backgroundColorDisabled: 'var(--tk-elements-topBar-primaryButton-backgroundColorDisabled)',
+            backgroundColorActive: 'var(--tk-elements-topBar-primaryButton-backgroundColorActive)',
+            textColor: 'var(--tk-elements-topBar-primaryButton-textColor)',
+            textColorHover: 'var(--tk-elements-topBar-primaryButton-textColorHover)',
+          },
+          secondaryButton: {
+            backgroundColor: 'var(--tk-elements-topBar-secondayButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-topBar-secondayButton-backgroundColorHover)',
+            backgroundColorDisabled: 'var(--tk-elements-topBar-secondayButton-backgroundColorDisabled)',
+            backgroundColorActive: 'var(--tk-elements-topBar-secondayButton-backgroundColorActive)',
+            textColor: 'var(--tk-elements-topBar-secondayButton-textColor)',
+            textColorHover: 'var(--tk-elements-topBar-secondayButton-textColorHover)',
+          },
         },
         panel: {
           backgroundColor: 'var(--tk-elements-panel-backgroundColor)',
