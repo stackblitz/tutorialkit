@@ -8,9 +8,10 @@ export function LoginButton() {
   // using any because @types/node are included in that context although they shouldn't
   const timeoutId = useRef<any>(0);
   const authStatus = useStore(authStore);
-  const [disabled, setDisabled] = useState(false);
 
-  const showLogin = authStatus.status !== 'authorized';
+  // using an indirect state so that there's no hydratation errors
+  const [showLogin, setShowLogin] = useState(true);
+  const [disabled, setDisabled] = useState(false);
 
   function onClick() {
     if (showLogin) {
@@ -32,6 +33,8 @@ export function LoginButton() {
   }
 
   useEffect(() => {
+    setShowLogin(authStatus.status !== 'authorized');
+
     // if authentication failed we invite the user to try again
     setDisabled((disabled) => {
       if (disabled && authStatus.status === 'auth-failed') {
