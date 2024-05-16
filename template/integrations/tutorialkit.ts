@@ -7,9 +7,7 @@ export const tutorialkit: AstroIntegration = {
     'astro:config:setup'({ config, updateConfig, addWatchFile, logger }) {
       const configPath = new URL('tutorialkit.config.json', config.root);
 
-      addWatchFile(configPath);
-
-      if (!fs.existsSync(configPath)) {
+      const setDefaultConfig = () =>
         updateConfig({
           vite: {
             define: {
@@ -18,6 +16,11 @@ export const tutorialkit: AstroIntegration = {
             },
           },
         });
+
+      addWatchFile(configPath);
+
+      if (!fs.existsSync(configPath)) {
+        setDefaultConfig();
 
         return;
       }
@@ -36,6 +39,8 @@ export const tutorialkit: AstroIntegration = {
       } catch (error) {
         logger.error(`Invalid TutorialKit configuration!`);
         console.error(error);
+
+        setDefaultConfig();
       }
     },
   },
