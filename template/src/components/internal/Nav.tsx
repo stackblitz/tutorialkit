@@ -29,9 +29,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
       <a
         className={classnames(
           'flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
-          !prev
-            ? 'text-tk-elements-breadcrumbs-navButton-iconColorDisabled'
-            : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
+          !prev ? 'opacity-32 pointer-events-none' : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
         )}
         aria-disabled={!prev}
         href={prev?.href}
@@ -86,9 +84,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
       <a
         className={classnames(
           'flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
-          !next
-            ? 'text-tk-elements-breadcrumbs-navButton-iconColorDisabled'
-            : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
+          !next ? 'opacity-32 pointer-events-none' : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
         )}
         aria-disabled={!next}
         href={next?.href}

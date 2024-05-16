@@ -308,9 +308,18 @@ export class TutorialRunner {
     }
 
     if (!webcontainerContext.loaded) {
-      terminal.write('Booting WebContainer...');
+      Promise.resolve()
+        .then(async () => {
+          if (webcontainerContext.useAuth) {
+            terminal.write('Waiting for authentication to complete...');
 
-      webcontainerPromise
+            await webcontainerContext.loggedIn();
+          }
+
+          terminal.write('Booting WebContainer...');
+
+          return webcontainerPromise;
+        })
         .then(async () => {
           await tick();
 

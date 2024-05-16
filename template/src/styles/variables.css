@@ -6,6 +6,8 @@
   --tk-background-active: theme('colors.gray.100');
   --tk-background-brighter: theme('colors.gray.0');
   --tk-background-accent: theme('colors.accent.600');
+  --tk-background-accent-secondary: theme('colors.accent.600');
+  --tk-background-accent-active: theme('colors.accent.500');
   --tk-background-positive: theme('colors.positive.50');
   --tk-background-warning: theme('colors.warning.100');
   --tk-background-negative: theme('colors.negative.100');
@@ -23,7 +25,9 @@
   --tk-border-tip: theme('colors.tip.600');
 
   --tk-text-primary: theme('colors.gray.800');
+  --tk-text-primary-inverted: theme('colors.gray.0');
   --tk-text-secondary: theme('colors.gray.600');
+  --tk-text-secondary-inverted: theme('colors.gray.200');
   --tk-text-disabled: theme('colors.gray.400');
   --tk-text-body: theme('colors.gray.700');
   --tk-text-heading: theme('colors.gray.950');
@@ -43,6 +47,8 @@
   --tk-background-active: theme('colors.gray.800');
   --tk-background-brighter: theme('colors.gray.800');
   --tk-background-accent: theme('colors.accent.800');
+  --tk-background-accent-secondary: theme('colors.accent.400');
+  --tk-background-accent-active: theme('colors.accent.300');
   --tk-background-positive: theme('colors.positive.950');
   --tk-background-warning: theme('colors.warning.950');
   --tk-background-negative: theme('colors.negative.950');
@@ -50,7 +56,9 @@
   --tk-background-tip: theme('colors.tip.950');
 
   --tk-text-primary: theme('colors.gray.200');
+  --tk-text-primary-inverted: theme('colors.gray.950');
   --tk-text-secondary: theme('colors.gray.400');
+  --tk-text-secondary-inverted: theme('colors.gray.700');
   --tk-text-disabled: theme('colors.gray.600');
   --tk-text-body: theme('colors.gray.300');
   --tk-text-heading: theme('colors.gray.100');
@@ -92,15 +100,32 @@
   /* Top Bar */
   --tk-elements-topBar-backgroundColor: var(--tk-elements-app-backgroundColor);
 
-  /* Top Bar > Link */
-  --tk-elements-topBar-link-backgroundColor: var(--tk-elements-app-backgroundColor);
-  --tk-elements-topBar-link-backgroundColorHover: var(--tk-background-secondary);
-  --tk-elements-topBar-link-iconColor: var(--tk-text-secondary);
-  --tk-elements-topBar-link-iconColorHover: var(--tk-text-primary);
+  /* Top Bar > Icon Button */
+  --tk-elements-topBar-iconButton-backgroundColor: var(--tk-elements-app-backgroundColor);
+  --tk-elements-topBar-iconButton-backgroundColorHover: var(--tk-background-secondary);
+  --tk-elements-topBar-iconButton-iconColor: var(--tk-text-secondary);
+  --tk-elements-topBar-iconButton-iconColorHover: var(--tk-text-primary);
 
   /* Top Bar > Logo */
   --tk-elements-topBar-logo-color: var(--tk-text-active);
   --tk-elements-topBar-logo-colorHover: var(--tk-text-active);
+
+  /* Top Bar > Primary Button */
+  --tk-elements-topBar-primaryButton-backgroundColor: var(--tk-background-accent-secondary);
+  --tk-elements-topBar-primaryButton-backgroundColorHover: var(--tk-background-accent-active);
+  --tk-elements-topBar-primaryButton-textColor: var(--tk-text-primary-inverted);
+  --tk-elements-topBar-primaryButton-textColorHover: var(--tk-text-primary-inverted);
+  --tk-elements-topBar-primaryButton-iconColor: var(--tk-text-primary-inverted);
+  --tk-elements-topBar-primaryButton-iconColorHover: var(--tk-text-primary-inverted);
+
+  /* Top Bar > Secondary Button */
+  --tk-elements-topBar-secondaryButton-backgroundColor: var(--tk-elements-topBar-backgroundColor);
+  --tk-elements-topBar-secondaryButton-backgroundColorHover: var(--tk-background-secondary);
+  --tk-elements-topBar-secondaryButton-textColor: var(--tk-text-secondary);
+  --tk-elements-topBar-secondaryButton-textColorHover: var(--tk-text-primary);
+  --tk-elements-topBar-secondaryButton-iconColor: var(--tk-text-secondary);
+  --tk-elements-topBar-secondaryButton-iconColorHover: var(--tk-text-primary);
+
 
   /* Previews */
   --tk-elements-previews-borderColor: theme('colors.gray.200');
@@ -161,7 +186,6 @@
   /* Breadcrumb > Nav Button */
   --tk-elements-breadcrumbs-navButton-iconColor: var(--tk-text-secondary);
   --tk-elements-breadcrumbs-navButton-iconColorHover: var(--tk-text-active);
-  --tk-elements-breadcrumbs-navButton-iconColorDisabled: var(--tk-text-disabled);
 
   /* Breadcrumb > Toggle Button */
   --tk-elements-breadcrumbs-toggleButton-backgroundColor: var(--tk-background-secondary);

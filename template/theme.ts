@@ -150,15 +150,31 @@ export const theme: ConfigBase['theme'] = {
         },
         topBar: {
           backgroundColor: 'var(--tk-elements-topBar-backgroundColor)',
-          link: {
-            backgroundColor: 'var(--tk-elements-topBar-link-backgroundColor)',
-            backgroundColorHover: 'var(--tk-elements-topBar-link-backgroundColorHover)',
-            iconColor: 'var(--tk-elements-topBar-link-iconColor)',
-            iconColorHover: 'var(--tk-elements-topBar-link-iconColorHover)',
+          iconButton: {
+            backgroundColor: 'var(--tk-elements-topBar-iconButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-topBar-iconButton-backgroundColorHover)',
+            iconColor: 'var(--tk-elements-topBar-iconButton-iconColor)',
+            iconColorHover: 'var(--tk-elements-topBar-iconButton-iconColorHover)',
           },
           logo: {
             color: 'var(--tk-elements-topBar-logo-color)',
             colorHover: 'var(--tk-elements-topBar-logo-colorHover)',
+          },
+          primaryButton: {
+            backgroundColor: 'var(--tk-elements-topBar-primaryButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-topBar-primaryButton-backgroundColorHover)',
+            textColor: 'var(--tk-elements-topBar-primaryButton-textColor)',
+            textColorHover: 'var(--tk-elements-topBar-primaryButton-textColorHover)',
+            iconColor: 'var(--tk-elements-topBar-primaryButton-iconColor)',
+            iconColorHover: 'var(--tk-elements-topBar-primaryButton-iconColorHover)',
+          },
+          secondaryButton: {
+            backgroundColor: 'var(--tk-elements-topBar-secondaryButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-topBar-secondaryButton-backgroundColorHover)',
+            textColor: 'var(--tk-elements-topBar-secondaryButton-textColor)',
+            textColorHover: 'var(--tk-elements-topBar-secondaryButton-textColorHover)',
+            iconColor: 'var(--tk-elements-topBar-secondaryButton-iconColor)',
+            iconColorHover: 'var(--tk-elements-topBar-secondaryButton-iconColorHover)',
           },
         },
         panel: {
@@ -221,7 +237,6 @@ export const theme: ConfigBase['theme'] = {
           navButton: {
             iconColor: 'var(--tk-elements-breadcrumbs-navButton-iconColor)',
             iconColorHover: 'var(--tk-elements-breadcrumbs-navButton-iconColorHover)',
-            iconColorDisabled: 'var(--tk-elements-breadcrumbs-navButton-iconColorDisabled)',
           },
           toggleButton: {
             backgroundColor: 'var(--tk-elements-breadcrumbs-toggleButton-backgroundColor)',

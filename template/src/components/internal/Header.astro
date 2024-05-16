@@ -1,6 +1,8 @@
 ---
 import { ThemeSwitch } from './ThemeSwitch';
+import { LoginButton } from './LoginButton';
 import Logo from '../../../public/logo.svg?raw';
+import { useAuth } from '@app/webcontainer/setup';
 ---
 
 <nav
@@ -18,5 +20,8 @@ import Logo from '../../../public/logo.svg?raw';
   </div>
   <div>
     <ThemeSwitch client:load transition:persist />
+  </div>
+  <div>
+    {useAuth && <LoginButton client:load transition:persist />}
   </div>
 </nav>

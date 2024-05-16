@@ -106,8 +106,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
       '@webcontainer/api':
-        specifier: ^1.1.9
-        version: 1.1.9
+        specifier: beta
+        version: 1.2.0-beta.3
       '@xterm/addon-fit':
         specifier: ^0.10.0
         version: 0.10.0(@xterm/xterm@5.5.0)
@@ -3128,8 +3128,8 @@ packages:
     resolution: {integrity: sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==}
     dev: true
 
-  /@webcontainer/api@1.1.9:
-    resolution: {integrity: sha512-Sp6PV0K9D/3f8fSbCubqhfmBFH8XbngZCBOCF+aExyGqnz2etmw+KYvbQ/JxYvYX5KPaSxM+asFQwoP2RHl5cg==}
+  /@webcontainer/api@1.2.0-beta.3:
+    resolution: {integrity: sha512-9MDal6jnj2W8lRhWsloC9Y6HnlVVFUlCwmVlzFSUxY+q4EBJznYXmvwS4XLFyV46ynX702zttWDFTn6dq0zlEg==}
     dev: false
 
   /@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0):

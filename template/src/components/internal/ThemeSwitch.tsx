@@ -13,11 +13,11 @@ export const ThemeSwitch = memo(() => {
   return (
     domLoaded && (
       <button
-        className="flex items-center text-2xl text-tk-elements-topBar-link-iconColor hover:text-tk-elements-topBar-link-iconColorHover bg-tk-elements-topBar-link-backgroundColor hover:bg-tk-elements-topBar-link-backgroundColorHover p-1 rounded-md"
+        className="flex items-center text-2xl text-tk-elements-topBar-iconButton-iconColor hover:text-tk-elements-topBar-iconButton-iconColorHover bg-tk-elements-topBar-iconButton-backgroundColor hover:bg-tk-elements-topBar-iconButton-backgroundColorHover p-1 rounded-md"
         title="Toggle Theme"
         onClick={() => toggleTheme()}
       >
-        {<div className={theme === 'dark' ? 'i-ph-sun-dim-duotone' : 'i-ph-moon-stars-duotone'}></div>}
+        <div className={theme === 'dark' ? 'i-ph-sun-dim-duotone' : 'i-ph-moon-stars-duotone'} />
       </button>
     )
   );
