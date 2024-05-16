@@ -150,11 +150,11 @@ export const theme: ConfigBase['theme'] = {
         },
         topBar: {
           backgroundColor: 'var(--tk-elements-topBar-backgroundColor)',
-          link: {
-            backgroundColor: 'var(--tk-elements-topBar-link-backgroundColor)',
-            backgroundColorHover: 'var(--tk-elements-topBar-link-backgroundColorHover)',
-            iconColor: 'var(--tk-elements-topBar-link-iconColor)',
-            iconColorHover: 'var(--tk-elements-topBar-link-iconColorHover)',
+          iconButton: {
+            backgroundColor: 'var(--tk-elements-topBar-iconButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-topBar-iconButton-backgroundColorHover)',
+            iconColor: 'var(--tk-elements-topBar-iconButton-iconColor)',
+            iconColorHover: 'var(--tk-elements-topBar-iconButton-iconColorHover)',
           },
           logo: {
             color: 'var(--tk-elements-topBar-logo-color)',
@@ -167,6 +167,8 @@ export const theme: ConfigBase['theme'] = {
             backgroundColorActive: 'var(--tk-elements-topBar-primaryButton-backgroundColorActive)',
             textColor: 'var(--tk-elements-topBar-primaryButton-textColor)',
             textColorHover: 'var(--tk-elements-topBar-primaryButton-textColorHover)',
+            iconColor: 'var(--tk-elements-topBar-primaryButton-iconColor)',
+            iconColorHover: 'var(--tk-elements-topBar-primaryButton-iconColorHover)',
           },
           secondaryButton: {
             backgroundColor: 'var(--tk-elements-topBar-secondayButton-backgroundColor)',
