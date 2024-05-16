@@ -113,8 +113,6 @@
   /* Top Bar > Primary Button */
   --tk-elements-topBar-primaryButton-backgroundColor: var(--tk-background-accent-secondary);
   --tk-elements-topBar-primaryButton-backgroundColorHover: var(--tk-background-accent-active);
-  --tk-elements-topBar-primaryButton-backgroundColorDisabled: var(????);
-  --tk-elements-topBar-primaryButton-backgroundColorActive: var(????);
   --tk-elements-topBar-primaryButton-textColor: var(--tk-text-primary-inverted);
   --tk-elements-topBar-primaryButton-textColorHover: var(--tk-text-primary-inverted);
   --tk-elements-topBar-primaryButton-iconColor: var(--tk-text-primary-inverted);
@@ -123,8 +121,6 @@
   /* Top Bar > Secondary Button */
   --tk-elements-topBar-secondaryButton-backgroundColor: var(--tk-elements-topBar-backgroundColor);
   --tk-elements-topBar-secondaryButton-backgroundColorHover: var(--tk-background-secondary);
-  --tk-elements-topBar-secondaryButton-backgroundColorDisabled: var(????);
-  --tk-elements-topBar-secondaryButton-backgroundColorActive: var(????);
   --tk-elements-topBar-secondaryButton-textColor: var(--tk-text-secondary);
   --tk-elements-topBar-secondaryButton-textColorHover: var(--tk-text-primary);
   --tk-elements-topBar-secondaryButton-iconColor: var(--tk-text-secondary);
@@ -190,7 +186,6 @@
   /* Breadcrumb > Nav Button */
   --tk-elements-breadcrumbs-navButton-iconColor: var(--tk-text-secondary);
   --tk-elements-breadcrumbs-navButton-iconColorHover: var(--tk-text-active);
-  --tk-elements-breadcrumbs-navButton-iconColorDisabled: var(--tk-text-disabled);
 
   /* Breadcrumb > Toggle Button */
   --tk-elements-breadcrumbs-toggleButton-backgroundColor: var(--tk-background-secondary);

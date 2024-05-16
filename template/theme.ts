@@ -163,8 +163,6 @@ export const theme: ConfigBase['theme'] = {
           primaryButton: {
             backgroundColor: 'var(--tk-elements-topBar-primaryButton-backgroundColor)',
             backgroundColorHover: 'var(--tk-elements-topBar-primaryButton-backgroundColorHover)',
-            backgroundColorDisabled: 'var(--tk-elements-topBar-primaryButton-backgroundColorDisabled)',
-            backgroundColorActive: 'var(--tk-elements-topBar-primaryButton-backgroundColorActive)',
             textColor: 'var(--tk-elements-topBar-primaryButton-textColor)',
             textColorHover: 'var(--tk-elements-topBar-primaryButton-textColorHover)',
             iconColor: 'var(--tk-elements-topBar-primaryButton-iconColor)',
@@ -173,8 +171,6 @@ export const theme: ConfigBase['theme'] = {
           secondaryButton: {
             backgroundColor: 'var(--tk-elements-topBar-secondayButton-backgroundColor)',
             backgroundColorHover: 'var(--tk-elements-topBar-secondayButton-backgroundColorHover)',
-            backgroundColorDisabled: 'var(--tk-elements-topBar-secondayButton-backgroundColorDisabled)',
-            backgroundColorActive: 'var(--tk-elements-topBar-secondayButton-backgroundColorActive)',
             textColor: 'var(--tk-elements-topBar-secondayButton-textColor)',
             textColorHover: 'var(--tk-elements-topBar-secondayButton-textColorHover)',
           },
@@ -239,7 +235,6 @@ export const theme: ConfigBase['theme'] = {
           navButton: {
             iconColor: 'var(--tk-elements-breadcrumbs-navButton-iconColor)',
             iconColorHover: 'var(--tk-elements-breadcrumbs-navButton-iconColorHover)',
-            iconColorDisabled: 'var(--tk-elements-breadcrumbs-navButton-iconColorDisabled)',
           },
           toggleButton: {
             backgroundColor: 'var(--tk-elements-breadcrumbs-toggleButton-backgroundColor)',
