@@ -48,12 +48,13 @@ export function LoginButton() {
   return (
     <button
       className={classNames('flex font-500 disabled:opacity-32 items-center text-sm ml-2 px-4 py-1 rounded-md', {
-        'bg-tk-elements-topBar-primaryButton-backgroundColor bg-tk-elements-topBar-primaryButton-textColor': showLogin,
-        'bg-tk-elements-topBar-secondaryButton-backgroundColor bg-tk-elements-topBar-secondaryButton-textColor':
+        'bg-tk-elements-topBar-primaryButton-backgroundColor text-tk-elements-topBar-primaryButton-textColor':
+          showLogin,
+        'bg-tk-elements-topBar-secondaryButton-backgroundColor text-tk-elements-topBar-secondaryButton-textColor':
           !showLogin,
-        'hover:bg-tk-elements-topBar-primaryButton-backgroundColorHover hover:bg-tk-elements-topBar-primaryButton-textColorHover':
+        'hover:bg-tk-elements-topBar-primaryButton-backgroundColorHover hover:text-tk-elements-topBar-primaryButton-textColorHover':
           !disabled && showLogin,
-        'hover:bg-tk-elements-topBar-secondaryButton-backgroundColorHover hover:bg-tk-elements-topBar-secondaryButton-textColorHover':
+        'hover:bg-tk-elements-topBar-secondaryButton-backgroundColorHover hover:text-tk-elements-topBar-secondaryButton-textColorHover':
           !disabled && !showLogin,
       })}
       disabled={disabled}

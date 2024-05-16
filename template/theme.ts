@@ -169,10 +169,12 @@ export const theme: ConfigBase['theme'] = {
             iconColorHover: 'var(--tk-elements-topBar-primaryButton-iconColorHover)',
           },
           secondaryButton: {
-            backgroundColor: 'var(--tk-elements-topBar-secondayButton-backgroundColor)',
-            backgroundColorHover: 'var(--tk-elements-topBar-secondayButton-backgroundColorHover)',
-            textColor: 'var(--tk-elements-topBar-secondayButton-textColor)',
-            textColorHover: 'var(--tk-elements-topBar-secondayButton-textColorHover)',
+            backgroundColor: 'var(--tk-elements-topBar-secondaryButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-topBar-secondaryButton-backgroundColorHover)',
+            textColor: 'var(--tk-elements-topBar-secondaryButton-textColor)',
+            textColorHover: 'var(--tk-elements-topBar-secondaryButton-textColorHover)',
+            iconColor: 'var(--tk-elements-topBar-secondaryButton-iconColor)',
+            iconColorHover: 'var(--tk-elements-topBar-secondaryButton-iconColorHover)',
           },
         },
         panel: {
