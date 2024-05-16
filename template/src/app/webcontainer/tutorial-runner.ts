@@ -558,7 +558,7 @@ export class TutorialRunner {
   private _updateDirtyState(files: Files) {
     for (const filePath in files) {
       if (filePath.endsWith('/package.json') && files[filePath] != this._packageJsonContent) {
-        this._packageJsonContent = files[filePath];
+        this._packageJsonContent = files[filePath] as string;
         this._packageJsonDirty = true;
 
         return;
