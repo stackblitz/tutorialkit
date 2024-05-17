@@ -36,13 +36,8 @@ await fsExtra.copy(templatePath, templateDest, {
 
 success('Template copied');
 
-// copy example content
-fs.cpSync(path.join(overwritesFolder, 'tutorial'), path.join(templateDest, 'src/content/tutorial'), {
-  recursive: true,
-});
-
-// copy example templates
-fs.cpSync(path.join(overwritesFolder, 'templates'), path.join(templateDest, 'src/templates'), {
+// copy overwrites
+fs.cpSync(path.join(overwritesFolder), path.join(templateDest), {
   recursive: true,
 });
 
