@@ -120,7 +120,7 @@ function convertToFiles(json: Record<string, string | { base64: string }>): File
     let transformedValue;
 
     if (typeof value === 'object') {
-      transformedValue = Uint8Array.from(atob(value.base64), (c) => c.charCodeAt(0));
+      transformedValue = Uint8Array.from(atob(value.base64), (char) => char.charCodeAt(0));
     } else {
       transformedValue = value;
     }
