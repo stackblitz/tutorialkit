@@ -1,4 +1,4 @@
-import type { Tutorial } from '@entities/tutorial';
+import type { Tutorial } from '@tutorialkit/types';
 
 export interface NavItem {
   id: string;

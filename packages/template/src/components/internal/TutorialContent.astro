@@ -1,9 +1,10 @@
 ---
-import type { Lesson } from '@entities/tutorial';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import type { Lesson } from '@tutorialkit/types';
 import NavCard from './NavCard.astro';
 
 interface Props {
-  lesson: Lesson;
+  lesson: Lesson & { Markdown: AstroComponentFactory };
 }
 
 const { lesson } = Astro.props;

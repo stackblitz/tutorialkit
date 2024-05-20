@@ -1,4 +1,4 @@
-import type { Files } from '@entities/tutorial';
+import type { Files } from '@tutorialkit/types';
 import type { DirectoryNode, FileNode, FileSystemTree } from '@webcontainer/api';
 
 type FileSystemTreeNode = DirectoryNode | FileNode | undefined;

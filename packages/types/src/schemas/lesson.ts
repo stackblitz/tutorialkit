@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'zod';
 import { baseSchema } from './common';
 
 export const lessonSchema = baseSchema.extend({

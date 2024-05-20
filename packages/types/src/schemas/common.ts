@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'zod';
 
 export const commandSchema = z.union([
   // a single string, the command to run

@@ -1,9 +1,4 @@
-import type { ChapterSchema, LessonSchema, PartSchema } from '@schemas';
-import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
-import { type ContentEntryMap } from 'astro:content';
-
-export type TutorialCollection = ContentEntryMap['tutorial'];
-export type CollectionEntry = TutorialCollection[keyof TutorialCollection];
+import type { ChapterSchema, LessonSchema, PartSchema } from '../schemas';
 
 export type Files = Record<string, string>;
 
@@ -38,7 +33,9 @@ export interface Lesson {
   solution: FilesRef;
   next?: LessonLink;
   prev?: LessonLink;
-  Markdown: AstroComponentFactory;
+
+  // property available when content is generated for an astro project
+  Markdown: unknown;
 }
 
 export type Tutorial = Record<string, Part>;

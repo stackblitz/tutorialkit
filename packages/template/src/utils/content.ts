@@ -1,8 +1,12 @@
-import type { CollectionEntry, FilesRef, Lesson, Tutorial } from '@entities/tutorial';
-import type { TutorialSchema } from '@schemas';
+import type { TutorialSchema, FilesRef, Lesson, Tutorial } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
+
+import { type ContentEntryMap } from 'astro:content';
+
+type TutorialCollection = ContentEntryMap['tutorial'];
+type CollectionEntry = TutorialCollection[keyof TutorialCollection];
 
 const CONTENT_DIR = path.join(import.meta.dirname, '../content/tutorial');
 
@@ -25,7 +29,7 @@ export async function getTutorial() {
       tutorialMetaData = data;
 
       // default template if not specified
-      tutorialMetaData.template ??= 'default';
+      tutorialMetaData!.template ??= 'default';
     } else if (type === 'part') {
       _tutorial[partId] = {
         id: partId,

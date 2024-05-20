@@ -1,4 +1,3 @@
-import type { FilesRef } from '@entities/tutorial';
 import classnames from 'classnames';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 

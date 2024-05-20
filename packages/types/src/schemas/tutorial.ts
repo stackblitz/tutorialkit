@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'zod';
 import { webcontainerSchema } from './common';
 
 export const tutorialSchema = webcontainerSchema.extend({
