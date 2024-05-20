@@ -19,6 +19,7 @@
   right: 0;
   top: -5px;
   bottom: -5px;
+  z-index: 999;
 }
 
 .PanelResizeHandle[data-resize-handle-state='hover']:after,

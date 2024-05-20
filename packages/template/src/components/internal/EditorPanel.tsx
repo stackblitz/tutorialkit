@@ -166,6 +166,12 @@ function getFileIcon(fileName: string) {
     case 'json': {
       return 'i-languages-json?mask';
     }
+    case 'gif':
+    case 'jpg':
+    case 'jpeg':
+    case 'png': {
+      return 'i-ph-image';
+    }
     default: {
       return null;
     }

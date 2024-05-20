@@ -210,7 +210,7 @@ async function createFileMap(dir: string) {
 
       files[`/${path.relative(dir, filePath)}`] = stringContent;
     } catch {
-      files[`/${path.relative(dir, filePath)}`] = buffer.toString('base64');
+      files[`/${path.relative(dir, filePath)}`] = { base64: buffer.toString('base64') };
     }
   }
 

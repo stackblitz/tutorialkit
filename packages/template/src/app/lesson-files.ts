@@ -27,7 +27,7 @@ export class LessonFilesFetcher {
         throw new Error(`Failed to fetch: status ${response.status}`);
       }
 
-      const body: Files = await response.json();
+      const body = convertToFiles(await response.json());
 
       this._map.set(templatePathname, body);
 
@@ -78,7 +78,7 @@ export class LessonFilesFetcher {
           throw new Error(`Failed to fetch ${pathname}: ${response.status} ${response.statusText}`);
         }
 
-        const body: Files = await response.json();
+        const body = convertToFiles(await response.json());
 
         this._map.set(pathname, body);
 
@@ -106,3 +106,27 @@ export class LessonFilesFetcher {
 }
 
 export const lessonFilesFetcher = new LessonFilesFetcher();
+
+function convertToFiles(json: Record<string, string | { base64: string }>): Files {
+  const result: Files = {};
+
+  if (typeof json !== 'object') {
+    return result;
+  }
+
+  for (const property in json) {
+    const value = json[property];
+
+    let transformedValue;
+
+    if (typeof value === 'object') {
+      transformedValue = Uint8Array.from(atob(value.base64), (char) => char.charCodeAt(0));
+    } else {
+      transformedValue = value;
+    }
+
+    result[property] = transformedValue;
+  }
+
+  return result;
+}

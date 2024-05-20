@@ -5,7 +5,7 @@ import { type ContentEntryMap } from 'astro:content';
 export type TutorialCollection = ContentEntryMap['tutorial'];
 export type CollectionEntry = TutorialCollection[keyof TutorialCollection];
 
-export type Files = Record<string, string>;
+export type Files = Record<string, string | Uint8Array>;
 
 export type FilesRef = [folder: string, files: string[]];
 
