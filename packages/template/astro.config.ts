@@ -4,46 +4,30 @@ import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-s
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import expressiveCode from 'astro-expressive-code';
 import { defineConfig } from 'astro/config';
-import remarkDirective from 'remark-directive';
 import UnoCSS from 'unocss/astro';
-import ViteRestart from 'vite-plugin-restart';
-import { remarkAsides } from './src/remark';
-import { webcontainerFiles } from './integrations/webcontainer-files';
-import { tutorialkit } from './integrations/tutorialkit';
+// import ViteRestart from 'vite-plugin-restart';
+import tutorialKit from '@tutorialkit/astro';
 
 export default defineConfig({
-  server: {
-    headers: {
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-      'Cross-Origin-Opener-Policy': 'same-origin',
-    },
-  },
   vite: {
-    optimizeDeps: {
-      entries: ['!**/src/(content|templates)/**'],
-    },
     plugins: [
-      ViteRestart({ restart: './src/remark/**' }),
-      {
-        name: 'reloadWebContainer',
-        handleHotUpdate(ctx) {
-          if (ctx.file.endsWith('/webcontainer/index.ts')) {
-            ctx.server.hot.send({ type: 'full-reload' });
-            return [];
-          }
-        },
-      },
+      // ViteRestart({ restart: './src/remark/**' }),
+      // {
+      //   name: 'reloadWebContainer',
+      //   handleHotUpdate(ctx) {
+      //     if (ctx.file.endsWith('/webcontainer/index.ts')) {
+      //       ctx.server.hot.send({ type: 'full-reload' });
+      //       return [];
+      //     }
+      //   },
+      // },
     ],
   },
   devToolbar: {
     enabled: false,
   },
-  markdown: {
-    remarkPlugins: [remarkDirective, remarkAsides()],
-  },
   integrations: [
-    tutorialkit,
-    webcontainerFiles,
+    tutorialKit(),
     react(),
     expressiveCode({
       plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
