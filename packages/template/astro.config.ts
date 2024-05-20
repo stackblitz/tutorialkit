@@ -5,29 +5,14 @@ import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import expressiveCode from 'astro-expressive-code';
 import { defineConfig } from 'astro/config';
 import UnoCSS from 'unocss/astro';
-// import ViteRestart from 'vite-plugin-restart';
-import tutorialKit from '@tutorialkit/astro';
+import tutorialkit from '@tutorialkit/astro';
 
 export default defineConfig({
-  vite: {
-    plugins: [
-      // ViteRestart({ restart: './src/remark/**' }),
-      // {
-      //   name: 'reloadWebContainer',
-      //   handleHotUpdate(ctx) {
-      //     if (ctx.file.endsWith('/webcontainer/index.ts')) {
-      //       ctx.server.hot.send({ type: 'full-reload' });
-      //       return [];
-      //     }
-      //   },
-      // },
-    ],
-  },
   devToolbar: {
     enabled: false,
   },
   integrations: [
-    tutorialKit(),
+    tutorialkit(),
     react(),
     expressiveCode({
       plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
