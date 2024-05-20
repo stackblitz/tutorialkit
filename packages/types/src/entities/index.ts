@@ -23,7 +23,7 @@ export interface Chapter {
   lessons: Record<string, Lesson>;
 }
 
-export interface Lesson {
+export interface Lesson<T = unknown> {
   id: string;
   data: LessonSchema;
   part: { id: string; title: string };
@@ -35,7 +35,7 @@ export interface Lesson {
   prev?: LessonLink;
 
   // property available when content is generated for an astro project
-  Markdown: unknown;
+  Markdown: T;
 }
 
 export type Tutorial = Record<string, Part>;

@@ -1,9 +1,7 @@
 import type { TutorialSchema, FilesRef, Lesson, Tutorial } from '@tutorialkit/types';
-import { getCollection } from 'astro:content';
+import { getCollection, type ContentEntryMap } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
-
-import { type ContentEntryMap } from 'astro:content';
 
 type TutorialCollection = ContentEntryMap['tutorial'];
 type CollectionEntry = TutorialCollection[keyof TutorialCollection];

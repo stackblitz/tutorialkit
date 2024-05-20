@@ -4,7 +4,7 @@ import type { Lesson } from '@tutorialkit/types';
 import NavCard from './NavCard.astro';
 
 interface Props {
-  lesson: Lesson & { Markdown: AstroComponentFactory };
+  lesson: Lesson<AstroComponentFactory>;
 }
 
 const { lesson } = Astro.props;
