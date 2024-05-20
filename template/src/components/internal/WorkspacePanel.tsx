@@ -109,7 +109,7 @@ export function WorkspacePanel({ lesson }: Props) {
         const loadedFile = loadedFiles.files?.[filePath];
         const loading = loadedFile === undefined;
 
-        let value = '';
+        let value: string | Uint8Array = '';
 
         if (editorState[filePath]?.loading && !loading) {
           value = loadedFile;

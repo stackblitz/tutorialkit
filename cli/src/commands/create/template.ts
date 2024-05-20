@@ -27,7 +27,8 @@ export async function copyTemplate(dest: string, flags: CreateOptions) {
 
   for (const fileName of toCopy) {
     const sourceFilePath = path.join(templatePath, fileName);
-    const destFilePath = path.join(dest, fileName);
+    const destFileName = fileName === '.npmignore' ? '.gitignore' : fileName;
+    const destFilePath = path.join(dest, destFileName);
 
     const stats = await fsPromises.stat(sourceFilePath);
 

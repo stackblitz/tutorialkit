@@ -19,13 +19,18 @@ import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { reconfigureTheme, theme } from './cm-theme';
 import { indentKeyBinding } from './indent';
 import { getLanguage } from './languages';
+import { BinaryContent } from './BinaryContent';
 
 export interface EditorDocument {
-  value: string;
+  value: string | Uint8Array;
   loading: boolean;
   filePath: string;
   scroll?: ScrollPosition;
 }
+
+type TextEditorDocument = EditorDocument & {
+  value: string;
+};
 
 export interface ScrollPosition {
   top: number;
@@ -70,6 +75,8 @@ export function CodeMirrorEditor({
   const editorStatesRef = useRef<EditorStates>();
   const onScrollRef = useRef(onScroll);
   const onChangeRef = useRef(onChange);
+
+  const isBinaryFile = doc?.value instanceof Uint8Array;
 
   onScrollRef.current = onScroll;
   onChangeRef.current = onChange;
@@ -135,25 +142,37 @@ export function CodeMirrorEditor({
     const editorStates = editorStatesRef.current!;
     const view = viewRef.current!;
 
-    if (doc) {
-      let state = editorStates.get(doc.filePath);
-
-      if (!state) {
-        state = newEditorState(doc.value, onScrollRef, debounceScroll, [
-          language.of([]),
-          readOnly.of([EditorState.readOnly.of(doc.loading)]),
-        ]);
-
-        editorStates.set(doc.filePath, state);
-      }
-
-      view.setState(state);
+    if (!doc) {
+      setNoDocument(view);
+      return;
     }
 
-    setEditorDocument(view, language, readOnly, autoFocusOnDocumentChange, doc);
+    if (doc.value instanceof Uint8Array) {
+      return;
+    }
+
+    let state = editorStates.get(doc.filePath);
+
+    if (!state) {
+      state = newEditorState(doc.value, onScrollRef, debounceScroll, [
+        language.of([]),
+        readOnly.of([EditorState.readOnly.of(doc.loading)]),
+      ]);
+
+      editorStates.set(doc.filePath, state);
+    }
+
+    view.setState(state);
+
+    setEditorDocument(view, language, readOnly, autoFocusOnDocumentChange, doc as TextEditorDocument);
   }, [doc]);
 
-  return <div className="h-full overflow-hidden" ref={containerRef} />;
+  return (
+    <div className="h-full relative">
+      {isBinaryFile && <BinaryContent />}
+      <div className="h-full overflow-hidden" ref={containerRef} />
+    </div>
+  );
 }
 
 CodeMirrorEditor.displayName = 'CodeMirrorEditor';
@@ -214,27 +233,27 @@ function newEditorState(
   });
 }
 
+function setNoDocument(view: EditorView) {
+  view.dispatch({
+    selection: { anchor: 0 },
+    changes: {
+      from: 0,
+      to: view.state.doc.length,
+      insert: '',
+    },
+  });
+
+  view.scrollDOM.scrollTo(0, 0);
+}
+
 function setEditorDocument(
   view: EditorView,
   language: Compartment,
   readOnly: Compartment,
   autoFocus: boolean,
-  doc?: EditorDocument,
+  doc: TextEditorDocument,
 ) {
-  if (!doc) {
-    view.dispatch({
-      selection: { anchor: 0 },
-      changes: {
-        from: 0,
-        to: view.state.doc.length,
-        insert: '',
-      },
-    });
-
-    view.scrollDOM.scrollTo(0, 0);
-
-    return;
-  } else if (doc.value !== view.state.doc.toString()) {
+  if (doc.value !== view.state.doc.toString()) {
     view.dispatch({
       selection: { anchor: 0 },
       changes: {

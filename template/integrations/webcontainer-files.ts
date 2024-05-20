@@ -9,7 +9,7 @@ import type { IncomingMessage } from 'http';
 import { withResolvers } from '../src/utils/promises';
 
 type ViteDevServer = Parameters<Required<AstroIntegration['hooks']>['astro:server:setup']>['0']['server'];
-type Files = Record<string, string>;
+type Files = Record<string, string | { base64: string }>;
 
 const FILES_FOLDER_NAME = '_files';
 const SOLUTION_FOLDER_NAME = '_solution';
@@ -200,7 +200,7 @@ async function createFileMap(dir: string) {
 
       files[`/${path.relative(dir, filePath)}`] = stringContent;
     } catch {
-      files[`/${path.relative(dir, filePath)}`] = buffer.toString('base64');
+      files[`/${path.relative(dir, filePath)}`] = { base64: buffer.toString('base64') };
     }
   }
 
