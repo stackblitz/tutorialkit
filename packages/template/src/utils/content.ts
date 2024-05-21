@@ -27,7 +27,7 @@ export async function getTutorial() {
       tutorialMetaData = data;
 
       // default template if not specified
-      tutorialMetaData!.template ??= 'default';
+      tutorialMetaData.template ??= 'default';
     } else if (type === 'part') {
       _tutorial[partId] = {
         id: partId,
