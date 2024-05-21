@@ -1,15 +1,18 @@
 import type { AstroIntegrationLogger } from 'astro';
 import type { AstroConfigSetupOptions } from './types';
+import { z, ZodError, type ZodFormattedError } from 'zod';
 import fs from 'node:fs';
 
-interface TutorialKitConfig {
-  isolation?: 'require-corp' | 'creddentialless';
-  enterprise?: {
-    editorOrigin: string;
-    clientId: string;
-    scope: string;
-  };
-}
+const configSchema = z.object({
+  isolation: z.union([z.literal('require-corp'), z.literal('credentialless')]).optional(),
+  enterprise: z.object({
+    editorOrigin: z.string(),
+    clientId: z.string(),
+    scope: z.string(),
+  }).optional(),
+}).strict();
+
+type TutorialKitConfig = z.infer<typeof configSchema>;
 
 function readTutorialKitConfig(configPath: URL, logger: AstroIntegrationLogger): TutorialKitConfig {
   if (!fs.existsSync(configPath)) {
@@ -17,8 +20,32 @@ function readTutorialKitConfig(configPath: URL, logger: AstroIntegrationLogger):
   }
 
   try {
-    return JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+
+    return configSchema.parse(config);
   } catch (error) {
+    if (error instanceof ZodError) {
+      logger.error(`Invalid TutorialKit configuration:`)
+
+      function printError(formattedError: ZodFormattedError<any>, path = '', depth = 0) {
+        const prefix = path.length > 0 ? `'${path}': ` : '';
+
+        for (const issue of formattedError._errors) {
+          logger.error(`${'  '.repeat(depth)}- ${prefix}${issue}`);
+        }
+
+        for (const property in formattedError) {
+          if (property !== '_errors') {
+            const subpath = path.length === 0 ? property : `${path}.${property}`;
+            printError(formattedError[property as keyof typeof formattedError] as any, subpath, depth + 1);
+          }
+        }
+      }
+
+      printError(error.format())
+      return {};
+    }
+
     logger.error(`Invalid TutorialKit configuration!`);
     console.error(error);
 

@@ -55,6 +55,7 @@ export class WebContainerFiles {
 
   async buildAssets(projectRoot: string, { dir, logger }: AstroBuildDoneOptions) {
     const { contentDir, templatesDir } = this._folders(projectRoot);
+
     const folders = await glob(
       [`${contentDir}/**/${FILES_FOLDER_NAME}`, `${contentDir}/**/${SOLUTION_FOLDER_NAME}`, `${templatesDir}/*`],
       { onlyDirectories: true },
@@ -164,9 +165,9 @@ class FileMapCache {
     let shouldReloadPage = false;
 
     while (this._requestsQueue.size > 0) {
-      const requests = [...this._requestsQueue].map(
-        (folderPath) => [getFilesRef(folderPath, this._dirs), folderPath] as const,
-      );
+      const requests = [...this._requestsQueue].map((folderPath) => {
+        return [getFilesRef(folderPath, this._dirs), folderPath] as const;
+      });
       this._requestsQueue.clear();
 
       shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));
@@ -210,7 +211,7 @@ async function createFileMap(dir: string) {
 
       files[`/${path.relative(dir, filePath)}`] = stringContent;
     } catch {
-      files[`/${path.relative(dir, filePath)}`] = buffer.toString('base64');
+      files[`/${path.relative(dir, filePath)}`] = { base64: buffer.toString('base64') };
     }
   }
 
