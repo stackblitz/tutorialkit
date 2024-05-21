@@ -5,7 +5,7 @@ import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import expressiveCode from 'astro-expressive-code';
 import { defineConfig } from 'astro/config';
 import UnoCSS from 'unocss/astro';
-import tutorialkit from '@tutorialkitjs/astro';
+import tutorialkit from '@tutorialkit/astro';
 
 export default defineConfig({
   devToolbar: {

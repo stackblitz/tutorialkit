@@ -1,5 +1,5 @@
 {
-  "name": "@tutorialkitjs/astro",
+  "name": "@tutorialkit/astro",
   "version": "0.0.1-alpha.14",
   "description": "TutorialKit integration for Astro (https://astro.build)",
   "type": "module",
