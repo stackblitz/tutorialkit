@@ -13,6 +13,8 @@ import { DEFAULT_VALUES, type CreateOptions } from './options';
 import { setupEnterpriseConfig } from './enterprise';
 import { copyTemplate } from './template';
 
+const TUTORIALKIT_VERSION = pkg.version;
+
 export async function createTutorial(flags: yargs.Arguments) {
   if (flags._[1] === 'help' || flags.help || flags.h) {
     printHelp({
@@ -130,7 +132,7 @@ async function _createTutorial(flags: CreateOptions) {
   const { selectedPackageManager, dependenciesInstalled } = await installDependencies(resolvedDest, flags);
 
   await setupEnterpriseConfig(resolvedDest, flags);
-  updateProjectName(resolvedDest, tutorialName, flags);
+  updatePackageJson(resolvedDest, tutorialName, flags);
   updateReadme(resolvedDest, selectedPackageManager, flags);
 
   await initGitRepo(resolvedDest, flags);
@@ -194,7 +196,7 @@ function printNextSteps(dest: string, packageManager: PackageManager, dependenci
   }
 }
 
-function updateProjectName(dest: string, projectName: string, flags: CreateOptions) {
+function updatePackageJson(dest: string, projectName: string, flags: CreateOptions) {
   if (flags.dryRun) {
     return;
   }
@@ -205,7 +207,20 @@ function updateProjectName(dest: string, projectName: string, flags: CreateOptio
 
   pkgJson.name = projectName;
 
+  updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION);
+  updateWorkspaceVersions(pkgJson.devDependencies, TUTORIALKIT_VERSION);
+
   fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, undefined, 2));
+}
+
+function updateWorkspaceVersions(dependencies: Record<string, string>, version: string) {
+  for (const dependency in dependencies) {
+    const depVersion = dependencies[dependency];
+
+    if (depVersion === 'workspace:*') {
+      dependencies[dependency] = version;
+    }
+  }
 }
 
 function updateReadme(dest: string, packageManager: PackageManager, flags: CreateOptions) {

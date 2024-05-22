@@ -1,8 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "template:dev": "pnpm run --filter=tutorialkit-starter dev",
-    "template:build": "pnpm run --filter=tutorialkit-starter build",
+    "build": "pnpm run '--filter=@tutorialkit/*' build",
+    "template:dev": "pnpm run build && pnpm run --filter=tutorialkit-starter dev",
+    "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
     "prepare": "is-ci || husky install"
   },
   "license": "MIT",

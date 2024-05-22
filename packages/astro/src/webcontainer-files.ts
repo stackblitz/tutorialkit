@@ -1,82 +1,90 @@
-import type { AstroIntegration, AstroIntegrationLogger } from 'astro';
+import type { AstroIntegrationLogger } from 'astro';
+import type { IncomingMessage } from 'http';
+import type { AstroServerSetupOptions, ViteDevServer, AstroBuildDoneOptions, Files } from './types';
 import { FSWatcher, watch } from 'chokidar';
-import { dim } from 'kleur/colors';
 import glob from 'fast-glob';
+import { dim } from 'kleur/colors';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { IncomingMessage } from 'http';
-import { withResolvers } from '../src/utils/promises';
-
-type ViteDevServer = Parameters<Required<AstroIntegration['hooks']>['astro:server:setup']>['0']['server'];
-type Files = Record<string, string | { base64: string }>;
+import { withResolvers } from './utils';
 
 const FILES_FOLDER_NAME = '_files';
 const SOLUTION_FOLDER_NAME = '_solution';
-const CONTENT_DIR = path.join(import.meta.dirname, '../src/content/tutorial');
-const TEMPLATES_DIR = path.join(import.meta.dirname, '../src/templates');
 
-let watcher: FSWatcher;
+export class WebContainerFiles {
+  private _watcher: FSWatcher | undefined;
 
-export const webcontainerFiles: AstroIntegration = {
-  name: 'webcontainer-files',
-  hooks: {
-    async 'astro:server:setup'({ server, logger }) {
-      const cache = new FileMapCache(logger, server);
+  serverSetup(projectRoot: string, { server, logger }: AstroServerSetupOptions) {
+    const { contentDir, templatesDir } = this._folders(projectRoot);
+    const cache = new FileMapCache(logger, server, { contentDir, templatesDir });
 
-      watcher = watch([
-        `${CONTENT_DIR}/**/${FILES_FOLDER_NAME}/**/*`,
-        `${CONTENT_DIR}/**/${SOLUTION_FOLDER_NAME}/**/*`,
-        TEMPLATES_DIR,
-      ]);
+    this._watcher = watch([
+      `${contentDir}/**/${FILES_FOLDER_NAME}/**/*`,
+      `${contentDir}/**/${SOLUTION_FOLDER_NAME}/**/*`,
+      templatesDir,
+    ]);
 
-      watcher.on('all', async (eventName, filePath) => {
-        // new directories don't affect the file tree
-        if (eventName === 'addDir') {
-          return;
-        }
+    this._watcher.on('all', async (eventName, filePath) => {
+      // new directories don't affect the file tree
+      if (eventName === 'addDir') {
+        return;
+      }
 
-        cache.generateFileMapForPath(filePath);
+      cache.generateFileMapForPath(filePath);
+    });
+
+    server.middlewares.use(async (req, res, next) => {
+      const result = await cache.canHandle(req);
+
+      if (!result) {
+        return next();
+      }
+
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
       });
 
-      server.middlewares.use(async (req, res, next) => {
-        const result = await cache.canHandle(req);
+      res.end(result);
+    });
+  }
 
-        if (!result) {
-          return next();
-        }
+  serverDone() {
+    return this._watcher?.close();
+  }
 
-        res.writeHead(200, {
-          'Content-Type': 'application/json',
-        });
+  async buildAssets(projectRoot: string, { dir, logger }: AstroBuildDoneOptions) {
+    const { contentDir, templatesDir } = this._folders(projectRoot);
 
-        res.end(result);
-      });
-    },
-    async 'astro:server:done'() {
-      await watcher.close();
-    },
-    async 'astro:build:done'({ dir, logger }) {
-      const folders = await glob(
-        [`${CONTENT_DIR}/**/${FILES_FOLDER_NAME}`, `${CONTENT_DIR}/**/${SOLUTION_FOLDER_NAME}`, `${TEMPLATES_DIR}/*`],
-        {
-          onlyDirectories: true,
-        },
-      );
+    const folders = await glob(
+      [`${contentDir}/**/${FILES_FOLDER_NAME}`, `${contentDir}/**/${SOLUTION_FOLDER_NAME}`, `${templatesDir}/*`],
+      { onlyDirectories: true },
+    );
 
-      await Promise.all(
-        folders.map(async (folder) => {
-          const fileRef = getFilesRef(folder);
-          const dest = fileURLToPath(new URL(fileRef, dir));
+    await Promise.all(
+      folders.map(async (folder) => {
+        const fileRef = getFilesRef(folder, { contentDir, templatesDir });
+        const dest = fileURLToPath(new URL(fileRef, dir));
 
-          await fs.promises.writeFile(dest, await createFileMap(folder));
+        await fs.promises.writeFile(dest, await createFileMap(folder));
 
-          logger.info(`${dim(fileRef)}`);
-        }),
-      );
-    },
-  },
-};
+        logger.info(`${dim(fileRef)}`);
+      }),
+    );
+  }
+
+  private _folders(projectRoot: string): ContentDirs {
+    const contentDir = path.join(projectRoot, './src/content/tutorial');
+    const templatesDir = path.join(projectRoot, './src/templates');
+
+    return { contentDir, templatesDir };
+  }
+}
+
+interface ContentDirs {
+  templatesDir: string;
+  contentDir: string;
+}
 
 class FileMapCache {
   // cache of filename to file content
@@ -95,17 +103,18 @@ class FileMapCache {
   constructor(
     private _logger: AstroIntegrationLogger,
     private _server: ViteDevServer,
+    private _dirs: ContentDirs,
   ) {}
 
   generateFileMapForPath(filePath: string) {
-    const fileMapFolderPath = resolveFilesFolderPath(filePath, this._logger);
+    const fileMapFolderPath = resolveFilesFolderPath(filePath, this._logger, this._dirs);
 
     if (!fileMapFolderPath) {
       this._logger.warn(`File ${filePath} is not part of the tutorial or templates folders.`);
       return;
     }
 
-    const fileRef = getFilesRef(fileMapFolderPath);
+    const fileRef = getFilesRef(fileMapFolderPath, this._dirs);
 
     // clear the existing cache value (mark it as stale)
     this._cache.set(fileRef, undefined);
@@ -156,7 +165,10 @@ class FileMapCache {
     let shouldReloadPage = false;
 
     while (this._requestsQueue.size > 0) {
-      const requests = [...this._requestsQueue].map((folderPath) => [getFilesRef(folderPath), folderPath] as const);
+      const requests = [...this._requestsQueue].map((folderPath) => {
+        return [getFilesRef(folderPath, this._dirs), folderPath] as const;
+      });
+
       this._requestsQueue.clear();
 
       shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));
@@ -207,24 +219,28 @@ async function createFileMap(dir: string) {
   return JSON.stringify(files);
 }
 
-function resolveFilesFolderPath(filePath: string, logger: AstroIntegrationLogger): string | undefined {
-  if (filePath.startsWith(TEMPLATES_DIR)) {
-    const index = filePath.indexOf(path.sep, TEMPLATES_DIR.length + 1);
+function resolveFilesFolderPath(
+  filePath: string,
+  logger: AstroIntegrationLogger,
+  { contentDir, templatesDir }: ContentDirs,
+): string | undefined {
+  if (filePath.startsWith(templatesDir)) {
+    const index = filePath.indexOf(path.sep, templatesDir.length + 1);
 
     if (index === -1) {
-      logger.error(`Bug: ${filePath} is not in a directory under ${TEMPLATES_DIR}`);
+      logger.error(`Bug: ${filePath} is not in a directory under ${templatesDir}`);
       return undefined;
     }
 
     return filePath.slice(0, index);
   }
 
-  if (filePath.startsWith(CONTENT_DIR)) {
+  if (filePath.startsWith(contentDir)) {
     let filesFolder = filePath;
 
     while (filesFolder && !filesFolder.endsWith(FILES_FOLDER_NAME) && !filesFolder.endsWith(SOLUTION_FOLDER_NAME)) {
       // the folder wasn't found, this should never happen
-      if (filesFolder === CONTENT_DIR) {
+      if (filesFolder === contentDir) {
         logger.error(`Bug: ${filePath} was not under ${FILES_FOLDER_NAME} or ${SOLUTION_FOLDER_NAME}`);
         return undefined;
       }
@@ -238,11 +254,11 @@ function resolveFilesFolderPath(filePath: string, logger: AstroIntegrationLogger
   return undefined;
 }
 
-function getFilesRef(pathToFolder: string) {
-  if (pathToFolder.startsWith(CONTENT_DIR)) {
-    pathToFolder = pathToFolder.slice(CONTENT_DIR.length + 1);
-  } else if (pathToFolder.startsWith(TEMPLATES_DIR)) {
-    pathToFolder = 'template' + pathToFolder.slice(TEMPLATES_DIR.length);
+function getFilesRef(pathToFolder: string, { contentDir, templatesDir }: ContentDirs) {
+  if (pathToFolder.startsWith(contentDir)) {
+    pathToFolder = pathToFolder.slice(contentDir.length + 1);
+  } else if (pathToFolder.startsWith(templatesDir)) {
+    pathToFolder = 'template' + pathToFolder.slice(templatesDir.length);
   }
 
   return encodeURIComponent(pathToFolder.replaceAll('/', '-').replaceAll('_', '')) + '.json';
