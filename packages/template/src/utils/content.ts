@@ -1,10 +1,13 @@
 import type { CollectionEntry, FilesRef, Lesson, Tutorial } from '@entities/tutorial';
 import type { TutorialSchema } from '@schemas';
 import { getCollection } from 'astro:content';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import glob from 'fast-glob';
 import path from 'node:path';
 
-const CONTENT_DIR = path.join(import.meta.dirname, '../content/tutorial');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const CONTENT_DIR = path.join(__dirname, '../content/tutorial');
 
 export async function getTutorial() {
   const collection = sortCollection(await getCollection('tutorial'));
