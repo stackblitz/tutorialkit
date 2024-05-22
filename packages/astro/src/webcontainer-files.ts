@@ -168,6 +168,7 @@ class FileMapCache {
       const requests = [...this._requestsQueue].map((folderPath) => {
         return [getFilesRef(folderPath, this._dirs), folderPath] as const;
       });
+
       this._requestsQueue.clear();
 
       shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));

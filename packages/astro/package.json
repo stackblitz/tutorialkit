@@ -20,7 +20,6 @@
     "kleur": "4.1.5",
     "mdast-util-directive": "^3.0.0",
     "mdast-util-to-markdown": "^2.1.0",
-    "remark": "^15.0.1",
     "remark-directive": "^3.0.0",
     "unified": "^11.0.4",
     "unist-util-visit": "^5.0.0",
