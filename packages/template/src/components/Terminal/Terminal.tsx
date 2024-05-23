@@ -4,7 +4,7 @@ import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import { useEffect, useRef } from 'react';
-import { tutorialRunner } from '@app/webcontainer/tutorial-runner';
+import { tutorialRunner } from '../webcontainer';
 import { darkTheme, lightTheme } from './theme';
 
 interface Props {

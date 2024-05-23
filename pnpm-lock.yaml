@@ -104,6 +104,22 @@ importers:
         specifier: ^11.2.0
         version: 11.2.0
 
+  packages/runtime:
+    dependencies:
+      '@tutorialkit/types':
+        specifier: workspace:*
+        version: link:../types
+      '@webcontainer/api':
+        specifier: beta
+        version: 1.2.0-beta.3
+      nanostores:
+        specifier: ^0.10.3
+        version: 0.10.3
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
   packages/template:
     dependencies:
       '@codemirror/autocomplete':
@@ -209,6 +225,9 @@ importers:
       '@tutorialkit/astro':
         specifier: workspace:*
         version: link:../astro
+      '@tutorialkit/runtime':
+        specifier: workspace:*
+        version: link:../runtime
       '@tutorialkit/types':
         specifier: workspace:*
         version: link:../types
@@ -6592,6 +6611,7 @@ packages:
       unified: 11.0.4
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /remark-rehype@11.1.0:
     resolution: {integrity: sha512-z3tJrAs2kIs1AqIIy6pzHmAHlF1hWQ+OdY4/hv+Wxe35EhyLKcajL33iUEn3ScxtFox9nUvRufR/Zre8Q08H/g==}
@@ -6628,6 +6648,7 @@ packages:
       '@types/mdast': 4.0.3
       mdast-util-to-markdown: 2.1.0
       unified: 11.0.4
+    dev: true
 
   /request-light@0.7.0:
     resolution: {integrity: sha512-lMbBMrDoxgsyO+yB3sDcrDuX85yYt7sS8BfQd11jtbW/z5ZWgLZRcEGLsLoYw7I0WSUGQBs8CC8ScIxkTX1+6Q==}

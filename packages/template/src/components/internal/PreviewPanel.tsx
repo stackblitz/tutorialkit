@@ -1,11 +1,11 @@
 import { BootScreen } from '@components/BootScreen';
-import type { PreviewInfo } from '@app/webcontainer/preview-info';
+import type { PreviewInfo } from '@tutorialkit/runtime';
 import { useStore } from '@nanostores/react';
 import resizePanelStyles from '@styles/resize-panel.module.css';
 import classnames from 'classnames';
 import { createElement, forwardRef, memo, useImperativeHandle } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { tutorialRunner } from '@app/webcontainer/tutorial-runner';
+import { tutorialRunner } from '@components/webcontainer';
 
 interface Props {
   toggleTerminal?: () => void;

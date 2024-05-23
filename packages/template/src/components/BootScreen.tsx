@@ -1,6 +1,7 @@
 import { useStore } from '@nanostores/react';
+import type { Step } from '@tutorialkit/runtime';
 import classnames from 'classnames';
-import { tutorialRunner, type Step } from '@app/webcontainer/tutorial-runner';
+import { tutorialRunner } from './webcontainer';
 
 interface Props {
   className?: string;
