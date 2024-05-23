@@ -19,3 +19,4 @@ dist-ssr
 *.sw?
 .pnpm-store
 /tutorialkit/template
+tsconfig.tsbuildinfo

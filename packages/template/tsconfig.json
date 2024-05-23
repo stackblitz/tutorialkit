@@ -8,5 +8,6 @@
       "@*": ["src/*"]
     }
   },
-  "exclude": ["dist"]
+  "exclude": ["dist"],
+  "references": [{ "path": "../runtime" }, { "path": "../types" }]
 }
