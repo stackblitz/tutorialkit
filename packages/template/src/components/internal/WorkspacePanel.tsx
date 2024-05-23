@@ -1,4 +1,4 @@
-import type { Files, Lesson } from '@entities/tutorial';
+import type { Files, Lesson } from '@tutorialkit/types';
 import resizePanelStyles from '@styles/resize-panel.module.css';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';

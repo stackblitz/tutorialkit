@@ -1,4 +1,4 @@
-import type { Lesson } from '@entities/tutorial';
+import type { Lesson } from '@tutorialkit/types';
 import * as Accordion from '@radix-ui/react-accordion';
 import navStyles from '@styles/nav.module.css';
 import type { NavItem, NavList } from '@utils/nav';

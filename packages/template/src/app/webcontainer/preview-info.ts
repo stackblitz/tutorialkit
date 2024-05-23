@@ -1,4 +1,4 @@
-import type { PreviewSchema } from '@schemas';
+import type { PreviewSchema } from '@tutorialkit/types';
 
 export class PreviewInfo {
   port: number;

@@ -1,5 +1,4 @@
-import type { Files } from '@entities/tutorial';
-import type { CommandsSchema, PreviewSchema } from '@schemas';
+import type { Files, CommandsSchema, PreviewSchema } from '@tutorialkit/types';
 import { escapeCodes } from '@utils/terminal';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom } from 'nanostores';

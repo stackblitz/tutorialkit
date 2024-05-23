@@ -1,4 +1,4 @@
-import type { Files, FilesRef, Lesson } from '@entities/tutorial';
+import type { Files, FilesRef, Lesson } from '@tutorialkit/types';
 import { newTask, type Task } from './webcontainer/utils/tasks';
 import { wait } from '@utils/promises';
 

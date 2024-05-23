@@ -1,4 +1,6 @@
+import type { Lesson } from '@tutorialkit/types';
 import type { GetStaticPaths, GetStaticPathsItem } from 'astro';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import { getTutorial } from './content';
 import { generateNavigationList } from './nav';
 
@@ -23,7 +25,7 @@ export async function generateStaticRoutes() {
           props: {
             navList: generateNavigationList(tutorial),
             title: `${part.slug} / ${chapter.data.title} / ${lesson.data.title}`,
-            lesson,
+            lesson: lesson as Lesson<AstroComponentFactory>,
           },
         } satisfies GetStaticPathsItem);
       }
