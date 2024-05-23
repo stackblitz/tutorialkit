@@ -1,13 +1,13 @@
 # @tutorialkit/runtime
 
-A wrapper around the **[WebContainer API][webcontainer-api]** that focus on providing you with the right abstractions to let you focus on building your highly interactive tutorial.
+A wrapper around the **[WebContainer API][webcontainer-api]** focused on providing the right abstractions to let you focus on building highly interactive tutorials.
 
-This runtime exposes:
+The runtime exposes the following:
 
-- `lessonFilesFetcher`: A singleton that lets you fetch a lesson's files content
-- `TutorialRunner`: the API to manage your tutorial content in webcontainer.
+- `lessonFilesFetcher`: A singleton that lets you fetch the contents of the fetch lesson files
+- `TutorialRunner`: The API to manage your tutorial content in WebContainer
 
-Only a single instance of `TutorialRunner` should be created in your application and its lifetime is bound by the lifetime of the webcontainer instance.
+Only a single instance of `TutorialRunner` should be created in your application and its lifetime is bound by the lifetime of the WebContainer instance.
 
 ## License
 
