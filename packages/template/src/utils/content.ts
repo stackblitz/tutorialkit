@@ -1,5 +1,5 @@
 import type { TutorialSchema, FilesRef, Lesson, Tutorial } from '@tutorialkit/types';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import glob from 'fast-glob';
@@ -157,7 +157,7 @@ function pick<T extends Record<any, any>>(objects: (T | undefined)[], properties
   return newObject;
 }
 
-function sortCollection(collection: CollectionEntry[]) {
+function sortCollection(collection: CollectionEntry<'tutorial'>[]) {
   return collection.sort((a, b) => {
     const splitA = a.id.split('/');
     const splitB = b.id.split('/');
@@ -196,7 +196,7 @@ function parseId(id: string) {
   return [partId, chapterId, lessonId];
 }
 
-function getSlug(entry: CollectionEntry) {
+function getSlug(entry: CollectionEntry<'tutorial'>) {
   let slug: string = entry.slug;
 
   if (entry.slug.includes('/')) {
