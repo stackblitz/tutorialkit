@@ -146,14 +146,16 @@ export function WorkspacePanel({ lesson }: Props) {
   useEffect(() => {
     setEditorState(
       Object.fromEntries(
-        lesson.files[1].map((filePath) => [
-          filePath,
-          {
-            value: '',
-            loading: true,
+        lesson.files[1].map((filePath) => {
+          return [
             filePath,
-          },
-        ]),
+            {
+              value: '',
+              loading: true,
+              filePath,
+            },
+          ];
+        }),
       ),
     );
 
@@ -182,10 +184,10 @@ export function WorkspacePanel({ lesson }: Props) {
           files,
         });
 
-        setEditorState(
-          (previousState) =>
-            Object.fromEntries(
-              Object.entries(files).map(([filePath, value]) => [
+        setEditorState((previousState) => {
+          return Object.fromEntries(
+            Object.entries(files).map(([filePath, value]) => {
+              return [
                 filePath,
                 {
                   value,
@@ -193,9 +195,10 @@ export function WorkspacePanel({ lesson }: Props) {
                   filePath,
                   scroll: previousState[filePath]?.scroll,
                 },
-              ]),
-            ) satisfies EditorState,
-        );
+              ];
+            }),
+          ) satisfies EditorState;
+        });
 
         if (lesson.data.focus === undefined) {
           setSelectedFile(undefined);
