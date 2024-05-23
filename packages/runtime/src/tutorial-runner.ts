@@ -1,15 +1,16 @@
-import type { Files, CommandsSchema, PreviewSchema } from '@tutorialkit/types';
-import { escapeCodes } from '@utils/terminal';
+import type { CommandsSchema, Files, PreviewSchema } from '@tutorialkit/types';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
+import { auth } from '@webcontainer/api';
 import { atom } from 'nanostores';
-import { tick } from '../../../template/src/utils/event-loop';
-import { Command, Commands } from './command';
-import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
-import { PreviewInfo } from './preview-info';
-import type { ITerminal } from './shell';
-import { diffFiles, toFileTree } from './utils/files';
-import { newTask, type Task, type TaskCancelled } from '../tasks';
-import { StepsController } from './steps';
+import { newTask, type Task, type TaskCancelled } from './tasks';
+import { escapeCodes } from './terminal';
+import { tick } from './utils/promises';
+import { isWebContainerSupported } from './utils/support';
+import { Command, Commands } from './webcontainer/command';
+import { PreviewInfo } from './webcontainer/preview-info';
+import type { ITerminal } from './webcontainer/shell';
+import { StepsController } from './webcontainer/steps';
+import { diffFiles, toFileTree } from './webcontainer/utils/files';
 
 interface LoadFilesOptions {
   /**
@@ -51,13 +52,6 @@ interface RunCommandsOptions extends CommandsSchema {
   abortPreviousRun?: boolean;
 }
 
-type Steps = Step[];
-
-export interface Step {
-  title: string;
-  status: 'completed' | 'running' | 'failed' | 'skipped' | 'idle';
-}
-
 /**
  * The idea behind this class is that it manages the state of WebContainer and exposes
  * an interface that makes sense to every component of TutorialKit.
@@ -65,6 +59,7 @@ export interface Step {
  * There should be only a single instance of this class.
  */
 export class TutorialRunner {
+  private _webcontainerLoaded: boolean = false;
   private _currentLoadTask: Task<void | TaskCancelled> | undefined = undefined;
   private _currentProcessTask: Task<void | TaskCancelled> | undefined = undefined;
   private _currentCommandProcess: WebContainerProcess | undefined = undefined;
@@ -94,12 +89,17 @@ export class TutorialRunner {
    */
   previews = atom<PreviewInfo[]>([]);
 
-  constructor() {
+  constructor(
+    private _webcontainer: Promise<WebContainer>,
+    private _useAuth: boolean = false,
+  ) {
     this._init();
   }
 
   private async _init() {
-    const webcontainer = await webcontainerPromise;
+    const webcontainer = await this._webcontainer;
+
+    this._webcontainerLoaded = true;
 
     webcontainer.on('port', (port, type, url) => {
       let previewInfo = this._availablePreviews.get(port);
@@ -186,7 +186,7 @@ export class TutorialRunner {
       async (signal) => {
         await previousLoadPromise;
 
-        const webcontainer = await webcontainerPromise;
+        const webcontainer = await this._webcontainer;
 
         signal.throwIfAborted();
 
@@ -210,7 +210,7 @@ export class TutorialRunner {
       async (signal) => {
         await previousLoadPromise;
 
-        const webcontainer = await webcontainerPromise;
+        const webcontainer = await this._webcontainer;
 
         signal.throwIfAborted();
 
@@ -243,7 +243,7 @@ export class TutorialRunner {
       async (signal) => {
         await previousLoadPromise;
 
-        const webcontainer = await webcontainerPromise;
+        const webcontainer = await this._webcontainer;
 
         signal.throwIfAborted();
 
@@ -306,18 +306,18 @@ export class TutorialRunner {
       return;
     }
 
-    if (!webcontainerContext.loaded) {
+    if (!this._webcontainerLoaded) {
       Promise.resolve()
         .then(async () => {
-          if (webcontainerContext.useAuth) {
+          if (this._useAuth) {
             terminal.write('Waiting for authentication to complete...');
 
-            await webcontainerContext.loggedIn();
+            await auth.loggedIn();
           }
 
           terminal.write('Booting WebContainer...');
 
-          return webcontainerPromise;
+          return this._webcontainer;
         })
         .then(async () => {
           await tick();
@@ -425,7 +425,7 @@ export class TutorialRunner {
 
         await previousTask?.promise;
 
-        const webcontainer = await webcontainerPromise;
+        const webcontainer = await this._webcontainer;
 
         signal.throwIfAborted();
 
@@ -453,7 +453,7 @@ export class TutorialRunner {
       async (signal) => {
         await Promise.all([previousProcessPromise, loadPromise]);
 
-        const webcontainer = await webcontainerPromise;
+        const webcontainer = await this._webcontainer;
 
         signal.throwIfAborted();
 
@@ -616,8 +616,6 @@ export class TutorialRunner {
     return false;
   }
 }
-
-export const tutorialRunner = new TutorialRunner();
 
 function clearTerminal(terminal?: ITerminal) {
   terminal?.reset();

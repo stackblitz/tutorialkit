@@ -1,6 +1,6 @@
 import type { Files, FilesRef, Lesson } from '@tutorialkit/types';
 import { newTask, type Task } from './tasks';
-import { wait } from '@utils/promises';
+import { wait } from './utils/promises';
 
 export class LessonFilesFetcher {
   private _map = new Map<string, Files>();

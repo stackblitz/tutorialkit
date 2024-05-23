@@ -7,12 +7,12 @@ import type {
   OnChangeCallback as OnEditorChange,
   OnScrollCallback as OnEditorScroll,
 } from '../CodeMirrorEditor/CodeMirrorEditor';
-import { tutorialRunner } from '@app/webcontainer/tutorial-runner';
-import { lessonFilesFetcher } from '@app/lesson-files';
+import { tutorialRunner } from '@components/webcontainer';
+import { lessonFilesFetcher } from '@tutorialkit/runtime';
 import { EditorPanel } from './EditorPanel';
 import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel';
 import { TerminalPanel } from './TerminalPanel';
-import { newTask } from '@app/webcontainer/utils/tasks';
+import { newTask } from '@tutorialkit/runtime/tasks';
 
 const DEFAULT_TERMINAL_SIZE = 25;
 
