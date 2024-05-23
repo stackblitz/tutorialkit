@@ -2,13 +2,13 @@ import type { Files, CommandsSchema, PreviewSchema } from '@tutorialkit/types';
 import { escapeCodes } from '@utils/terminal';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom } from 'nanostores';
-import { tick } from '../../utils/event-loop';
+import { tick } from '../../../template/src/utils/event-loop';
 import { Command, Commands } from './command';
 import { isWebContainerSupported, webcontainerContext, webcontainer as webcontainerPromise } from './index';
 import { PreviewInfo } from './preview-info';
 import type { ITerminal } from './shell';
 import { diffFiles, toFileTree } from './utils/files';
-import { newTask, type Task, type TaskCancelled } from './utils/tasks';
+import { newTask, type Task, type TaskCancelled } from '../tasks';
 import { StepsController } from './steps';
 
 interface LoadFilesOptions {

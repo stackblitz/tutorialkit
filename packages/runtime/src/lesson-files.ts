@@ -1,5 +1,5 @@
 import type { Files, FilesRef, Lesson } from '@tutorialkit/types';
-import { newTask, type Task } from './webcontainer/utils/tasks';
+import { newTask, type Task } from './tasks';
 import { wait } from '@utils/promises';
 
 export class LessonFilesFetcher {
