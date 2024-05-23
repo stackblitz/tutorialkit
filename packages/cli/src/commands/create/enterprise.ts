@@ -12,7 +12,7 @@ export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) 
 
   if (!flags.defaults && flags.enterprise === undefined) {
     const answer = await prompts.confirm({
-      message: 'Do you want to configure StackBlitz Enterprise?',
+      message: `TutorialKit uses StackBlitz WebContainers, do you want to configure the Enterprise version?`,
       initialValue: false,
     });
 
