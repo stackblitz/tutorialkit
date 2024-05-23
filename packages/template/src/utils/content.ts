@@ -1,12 +1,12 @@
 import type { TutorialSchema, FilesRef, Lesson, Tutorial } from '@tutorialkit/types';
-import { getCollection, type ContentEntryMap } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import glob from 'fast-glob';
 import path from 'node:path';
 
-type TutorialCollection = ContentEntryMap['tutorial'];
-type CollectionEntry = TutorialCollection[keyof TutorialCollection];
-
-const CONTENT_DIR = path.join(import.meta.dirname, '../content/tutorial');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const CONTENT_DIR = path.join(__dirname, '../content/tutorial');
 
 export async function getTutorial() {
   const collection = sortCollection(await getCollection('tutorial'));
