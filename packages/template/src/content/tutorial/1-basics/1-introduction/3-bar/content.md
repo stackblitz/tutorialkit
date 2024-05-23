@@ -2,7 +2,7 @@
 type: lesson
 title: Bar
 slug: bar
-focus: /src/index.js
+focus: /src/index.html
 previews: [1]
 ---
 
