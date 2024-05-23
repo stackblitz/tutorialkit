@@ -96,41 +96,6 @@ export function WorkspacePanel({ lesson }: Props) {
     [editorDocument, editorState],
   );
 
-  const updateDocument = useCallback(
-    (filePath?: string) => {
-      if (!filePath) {
-        setSelectedFile(undefined);
-        return;
-      }
-
-      setSelectedFile(filePath);
-
-      setEditorState((editorState) => {
-        const loadedFile = loadedFiles.files?.[filePath];
-        const loading = loadedFile === undefined;
-
-        let value: string | Uint8Array = '';
-
-        if (editorState[filePath]?.loading && !loading) {
-          value = loadedFile;
-        } else {
-          value = editorState[filePath]?.value ?? loadedFile ?? '';
-        }
-
-        return {
-          ...editorState,
-          [filePath]: {
-            value,
-            loading,
-            filePath: filePath,
-            scroll: editorState[filePath]?.scroll,
-          },
-        };
-      });
-    },
-    [loadedFiles],
-  );
-
   const onHelpClick = useCallback(() => {
     const setFiles = (files: Files) => {
       setEditorState((editorState) => {
@@ -179,7 +144,18 @@ export function WorkspacePanel({ lesson }: Props) {
   }, [lesson]);
 
   useEffect(() => {
-    setEditorState({});
+    setEditorState(
+      Object.fromEntries(
+        lesson.files[1].map((filePath) => [
+          filePath,
+          {
+            value: '',
+            loading: true,
+            filePath,
+          },
+        ]),
+      ),
+    );
 
     tutorialRunner.setPreviews(lesson.data.previews);
 
@@ -206,6 +182,27 @@ export function WorkspacePanel({ lesson }: Props) {
           files,
         });
 
+        setEditorState(
+          (previousState) =>
+            Object.fromEntries(
+              Object.entries(files).map(([filePath, value]) => [
+                filePath,
+                {
+                  value,
+                  loading: false,
+                  filePath,
+                  scroll: previousState[filePath]?.scroll,
+                },
+              ]),
+            ) satisfies EditorState,
+        );
+
+        if (lesson.data.focus === undefined) {
+          setSelectedFile(undefined);
+        } else if (files[lesson.data.focus] !== undefined) {
+          setSelectedFile(lesson.data.focus);
+        }
+
         await preparePromise;
 
         signal.throwIfAborted();
@@ -230,14 +227,6 @@ export function WorkspacePanel({ lesson }: Props) {
 
     return () => task.cancel();
   }, [lesson]);
-
-  useEffect(() => {
-    if (lesson.data.focus === undefined) {
-      setSelectedFile(undefined);
-    } else if (loadedFiles.files?.[lesson.data.focus] !== undefined) {
-      updateDocument(lesson.data.focus);
-    }
-  }, [lesson, loadedFiles, updateDocument]);
 
   const toggleTerminal = useCallback(() => {
     const { current: terminal } = terminalPanelRef;
@@ -267,7 +256,7 @@ export function WorkspacePanel({ lesson }: Props) {
           lesson={lesson}
           helpAction={helpAction}
           onHelpClick={onHelpClick}
-          onFileClick={updateDocument}
+          onFileClick={setSelectedFile}
           onEditorScroll={onEditorScroll}
           onEditorChange={onEditorChange}
         />
