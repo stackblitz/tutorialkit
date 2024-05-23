@@ -4,7 +4,8 @@
     "build": "pnpm run '--filter=@tutorialkit/*' build",
     "template:dev": "pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
-    "prepare": "is-ci || husky install"
+    "prepare": "is-ci || husky install",
+    "clean": "./scripts/clean.sh"
   },
   "license": "MIT",
   "devDependencies": {

@@ -41,6 +41,14 @@ fs.cpSync(path.join(overwritesFolder), path.join(templateDest), {
   recursive: true,
 });
 
+// remove project references from tsconfig.json
+const tsconfigPath = path.join(templateDest, 'tsconfig.json');
+const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, { encoding: 'utf-8' }));
+
+delete tsconfig.references;
+
+fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, undefined, 2));
+
 async function runBuild() {
   const exitCode = await new Promise((resolve) => {
     const child = spawn('node', [path.join(__dirname, './build.js')], {

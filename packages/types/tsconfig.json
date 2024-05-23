@@ -1,15 +1,9 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "verbatimModuleSyntax": true,
-    "moduleResolution": "Bundler",
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "declaration": true,
-    "strict": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "rootDir": "src",
+    "composite": true
   },
   "include": ["src"]
 }
