@@ -4,7 +4,7 @@ A wrapper around the **[WebContainer API][webcontainer-api]** focused on providi
 
 The runtime exposes the following:
 
-- `lessonFilesFetcher`: A singleton that lets you fetch the contents of the fetch lesson files
+- `lessonFilesFetcher`: A singleton that lets you fetch the contents of the lesson files
 - `TutorialRunner`: The API to manage your tutorial content in WebContainer
 
 Only a single instance of `TutorialRunner` should be created in your application and its lifetime is bound by the lifetime of the WebContainer instance.
