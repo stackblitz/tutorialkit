@@ -2,10 +2,10 @@ import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
+import tutorialkit from '@tutorialkit/astro';
 import expressiveCode from 'astro-expressive-code';
 import { defineConfig } from 'astro/config';
 import UnoCSS from 'unocss/astro';
-import tutorialkit from '@tutorialkit/astro';
 
 export default defineConfig({
   devToolbar: {
