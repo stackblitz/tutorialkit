@@ -1,3 +1,5 @@
+import type { BaseSchema, ChapterSchema, LessonSchema, PartSchema, TutorialSchema } from '@tutorialkit/types';
+import frontMatter from 'front-matter';
 import * as kleur from 'kleur/colors';
 import type { Root } from 'mdast';
 import fs from 'node:fs';
@@ -12,9 +14,13 @@ interface RemarkImportFilePluginOptions {
 export function remarkImportFilePlugin(options: RemarkImportFilePluginOptions) {
   return (): Transformer<Root> => {
     return (tree, file) => {
+      // we only want to process content files (both md and mdx) and ignore any other markdown files
+      if (!file.basename || !/^content\.mdx?$/.test(file.basename)) {
+        return;
+      }
+
       const cwd = path.dirname(file.path);
-      const { frontmatter } = file.data.astro as Record<string, any>;
-      const templateName = frontmatter.template ?? 'default';
+      const templateName = getTemplateName(file.path);
       const templatesPath = path.join(options.templatesPath, templateName);
 
       visit(tree, (node) => {
@@ -22,13 +28,13 @@ export function remarkImportFilePlugin(options: RemarkImportFilePluginOptions) {
           return undefined;
         }
 
-        if (node.lang && /^(file|solution):/.test(node.lang)) {
+        if (node.lang && /^(files?|solution):/.test(node.lang)) {
           // we allow both a leading slash and without for file names to make it more graceful
-          const relativeFilePath = node.lang.replace(/^(file|solution):\//, '');
+          const relativeFilePath = node.lang.replace(/^(files?|solution):\//, '');
 
           let content: string | undefined;
 
-          if (node.lang.startsWith('file:')) {
+          if (/^files?\:/.test(node.lang)) {
             // we first try to read the file from the lesson files
             content = tryRead(path.join(cwd, '_files', relativeFilePath), false);
 
@@ -60,6 +66,30 @@ function tryRead(filePath: string, warn = true) {
       printWarning(`Could not read '${filePath}'. Are you sure this file exists?`);
     }
   }
+}
+
+function getTemplateName(file: string) {
+  const content = fs.readFileSync(file, 'utf8');
+
+  const meta = frontMatter<BaseSchema & Pick<TutorialSchema | PartSchema | ChapterSchema | LessonSchema, 'type'>>(
+    content,
+  );
+
+  if (meta.attributes.template) {
+    return meta.attributes.template;
+  }
+
+  /**
+   * If we reach this point, it means we haven't encountered a template name yet
+   * and we cannot go any further up the tutorial hierarchy. In this case, we return
+   * a default value.
+   */
+  if (meta.attributes.type === 'tutorial') {
+    return 'default';
+  }
+
+  // otherwise we traverse up the tutorial hierarchy
+  return getTemplateName(path.join(path.dirname(path.dirname(file)), 'meta.md'));
 }
 
 function printWarning(message: string) {
