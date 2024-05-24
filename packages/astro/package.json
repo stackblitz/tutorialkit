@@ -14,25 +14,37 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b"
+    "build": "node ./scripts/build.js"
   },
   "dependencies": {
+    "@nanostores/react": "0.7.2",
+    "@tutorialkit/components-react": "workspace:*",
+    "@tutorialkit/runtime": "workspace:*",
+    "@tutorialkit/types": "workspace:*",
+    "@types/react": "^18.2.75",
+    "@webcontainer/api": "beta",
     "chokidar": "3.6.0",
+    "classnames": "^2.5.1",
     "fast-glob": "^3.3.2",
     "front-matter": "^4.0.2",
     "hastscript": "^9.0.0",
     "kleur": "4.1.5",
     "mdast-util-directive": "^3.0.0",
     "mdast-util-to-markdown": "^2.1.0",
+    "nanostores": "^0.10.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "remark-directive": "^3.0.0",
     "unified": "^11.0.4",
     "unist-util-visit": "^5.0.0",
     "zod": "3.23.8"
   },
+  "peerDependencies": {
+    "astro": "^4.8.6"
+  },
   "devDependencies": {
     "@tutorialkit/types": "workspace:*",
     "@types/mdast": "^4.0.3",
-    "astro": "^4.8.6",
     "typescript": "^5.4.5"
   }
 }

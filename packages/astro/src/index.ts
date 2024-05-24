@@ -4,19 +4,42 @@ import { updateConfigFromTutorialKitConfig } from './config';
 import { updateMarkdownConfig } from './remark';
 import { WebContainerFiles } from './webcontainer-files';
 
-interface Options {}
+interface Options {
+  /**
+   * Whether or not default routes are injected.
+   *
+   * Set this to false to customize the pages.
+   *
+   * @default true
+   */
+  defaultRoutes?: boolean;
+}
 
-export default function createPlugin(options?: Options): AstroIntegration {
+export default function createPlugin({ defaultRoutes = true }: Options = {}): AstroIntegration {
   const webcontainerFiles = new WebContainerFiles();
 
   let _config: AstroConfig;
 
   return {
-    name: 'tutorialkit',
+    name: '@tutorialkit/astro',
     hooks: {
-      'astro:config:setup'(astroConfigSetupOptions) {
-        updateConfigFromTutorialKitConfig(astroConfigSetupOptions);
-        updateMarkdownConfig(astroConfigSetupOptions);
+      'astro:config:setup'(options) {
+        const { injectRoute } = options;
+
+        updateConfigFromTutorialKitConfig(options);
+        updateMarkdownConfig(options);
+
+        injectRoute({
+          pattern: '/',
+          entrypoint: '@tutorialkit/astro/default/pages/index.astro',
+          prerender: true,
+        });
+
+        injectRoute({
+          pattern: '[...slug]',
+          entrypoint: '@tutorialkit/astro/default/pages/[...slug].astro',
+          prerender: true,
+        });
       },
       'astro:config:done'({ config }) {
         _config = config;
@@ -33,7 +56,7 @@ export default function createPlugin(options?: Options): AstroIntegration {
         const projectRoot = fileURLToPath(_config.root);
 
         await webcontainerFiles.buildAssets(projectRoot, astroBuildDoneOptions);
-      }
+      },
     },
   };
 }

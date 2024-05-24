@@ -1,0 +1,80 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="TutorialKit" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <ViewTransitions />
+    <script>
+      import * as builtInSwap from 'astro/dist/transitions/swap-functions';
+
+      document.addEventListener('astro:before-swap', (event) => {
+        event.swap = () => {
+          const { newDocument } = event;
+
+          builtInSwap.deselectScripts(newDocument);
+          builtInSwap.swapRootAttributes(newDocument);
+
+          /**
+           * Keep the dynamically injected style sheet from Codemirror on all transitions.
+           */
+          const codemirrorStyles = document.head.querySelector('style[data-astro-transition-persist="codemirror"]');
+
+          builtInSwap.swapHeadElements(newDocument);
+
+          if (codemirrorStyles) {
+            document.head.insertAdjacentElement('afterbegin', codemirrorStyles);
+          }
+
+          // only swap the main area of the page so we keep the webcontainer iframe intact
+          const newMain = newDocument.querySelector('main[data-swap-root]');
+          const oldMain = document.querySelector('main[data-swap-root]');
+
+          if (newMain && oldMain) {
+            builtInSwap.swapBodyElement(newMain, oldMain);
+          } else {
+            // fallback to built-in body swap semantics
+            builtInSwap.swapBodyElement(newDocument.body, document.body);
+          }
+        };
+      });
+    </script>
+    <script>
+      setTheme();
+
+      document.addEventListener('astro:after-swap', () => {
+        setTheme();
+      });
+
+      function setTheme() {
+        let theme = localStorage.getItem('tk_theme');
+
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        document.querySelector('html')?.setAttribute('data-theme', theme);
+      }
+    </script>
+  </head>
+  <body class="h-full text-black">
+    <slot />
+  </body>
+</html>
