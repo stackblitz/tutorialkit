@@ -37,17 +37,19 @@ export default function createPlugin({ defaultRoutes = true }: Options = {}): As
           },
         });
 
-        injectRoute({
-          pattern: '/',
-          entrypoint: '@tutorialkit/astro/default/pages/index.astro',
-          prerender: true,
-        });
+        if (defaultRoutes) {
+          injectRoute({
+            pattern: '/',
+            entrypoint: '@tutorialkit/astro/default/pages/index.astro',
+            prerender: true,
+          });
 
-        injectRoute({
-          pattern: '[...slug]',
-          entrypoint: '@tutorialkit/astro/default/pages/[...slug].astro',
-          prerender: true,
-        });
+          injectRoute({
+            pattern: '[...slug]',
+            entrypoint: '@tutorialkit/astro/default/pages/[...slug].astro',
+            prerender: true,
+          });
+        }
       },
       'astro:config:done'({ config }) {
         _config = config;
