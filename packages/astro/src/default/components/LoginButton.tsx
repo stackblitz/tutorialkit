@@ -1,6 +1,6 @@
 import { useStore } from '@nanostores/react';
 import { authStore } from '../stores/auth-store';
-import classNames from 'classnames';
+import { classNames } from '@tutorialkit/components-react';
 import { useEffect, useRef, useState } from 'react';
 import { logout, login } from './webcontainer';
 

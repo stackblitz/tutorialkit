@@ -1,8 +1,8 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
-import { updateConfigFromTutorialKitConfig } from './config';
-import { updateMarkdownConfig } from './remark';
-import { WebContainerFiles } from './webcontainer-files';
+import { updateConfigFromTutorialKitConfig } from './config.js';
+import { updateMarkdownConfig } from './remark/index.js';
+import { WebContainerFiles } from './webcontainer-files.js';
 
 interface Options {
   /**

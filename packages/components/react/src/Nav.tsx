@@ -1,7 +1,7 @@
 import type { Lesson, NavItem, NavList } from '@tutorialkit/types';
 import * as Accordion from '@radix-ui/react-accordion';
 import navStyles from './styles/nav.module.css';
-import classnames from 'classnames';
+import { classNames } from './utils/classnames.js';
 import { AnimatePresence, cubicBezier, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -26,7 +26,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
   return (
     <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1 text-sm">
       <a
-        className={classnames(
+        className={classNames(
           'flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
           !prev ? 'opacity-32 pointer-events-none' : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
         )}
@@ -38,14 +38,14 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
       <div className="relative">
         <div
           data-state={`${showDropdown ? 'open' : 'closed'}`}
-          className={classnames(
+          className={classNames(
             navStyles.NavContainer,
             'absolute z-1 left-0 transition-[background,box-shadow] duration-0 right-0 rounded-[8px] border overflow-hidden',
           )}
           ref={menuRef}
         >
           <button
-            className={classnames(
+            className={classNames(
               navStyles.ToggleButton,
               'flex-1 flex items-center text-left py-3 px-3 w-full overflow-hidden',
             )}
@@ -59,7 +59,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
               <strong className="font-semibold">{currentLesson.data.title}</strong>
             </div>
             <div
-              className={classnames(navStyles.ToggleButtonIcon, 'ml-auto w-[30px]', {
+              className={classNames(navStyles.ToggleButtonIcon, 'ml-auto w-[30px]', {
                 'i-ph-caret-up-bold': showDropdown,
                 'i-ph-caret-down-bold': !showDropdown,
               })}
@@ -81,7 +81,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
         </div>
       </div>
       <a
-        className={classnames(
+        className={classNames(
           'flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
           !next ? 'opacity-32 pointer-events-none' : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
         )}
@@ -105,7 +105,7 @@ function renderParts(navList: NavList, currentLesson: Lesson) {
             <li key={partIndex}>
               <Accordion.Item value={`part-${part.id}`}>
                 <Accordion.Trigger
-                  className={classnames(
+                  className={classNames(
                     navStyles.AccordionTrigger,
                     'flex items-center gap-1 w-full hover:text-primary-700',
                     {
@@ -146,7 +146,7 @@ function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: bool
             <li key={chapterIndex} className="">
               <Accordion.Item value={`chapter-${chapter.id}`}>
                 <Accordion.Trigger
-                  className={classnames(
+                  className={classNames(
                     navStyles.AccordionTrigger,
                     'flex items-center gap-1 w-full hover:text-primary-700',
                     {
@@ -182,7 +182,7 @@ function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: bo
         return (
           <li key={lessonIndex} className="mr-3">
             <a
-              className={classnames(
+              className={classNames(
                 'w-full inline-block border border-transparent pr-3 hover:text-tk-elements-breadcrumbs-dropdown-textColorHover px-3 py-1 rounded-1',
                 {
                   'bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColor': !isActiveLesson,

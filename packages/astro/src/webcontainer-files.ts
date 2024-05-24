@@ -7,7 +7,7 @@ import { dim } from 'kleur/colors';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { withResolvers } from './utils';
+import { withResolvers } from './utils.js';
 
 const FILES_FOLDER_NAME = '_files';
 const SOLUTION_FOLDER_NAME = '_solution';

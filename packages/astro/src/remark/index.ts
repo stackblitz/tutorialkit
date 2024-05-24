@@ -1,8 +1,8 @@
 import path from 'node:path';
 import remarkDirective from 'remark-directive';
 import type { AstroConfigSetupOptions } from '../types';
-import { remarkCalloutsPlugin } from './callouts';
-import { remarkImportFilePlugin } from './import-file';
+import { remarkCalloutsPlugin } from './callouts.js';
+import { remarkImportFilePlugin } from './import-file.js';
 
 export function updateMarkdownConfig({ updateConfig }: AstroConfigSetupOptions) {
   updateConfig({

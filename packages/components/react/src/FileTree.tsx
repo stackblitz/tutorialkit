@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import { classNames } from './utils/classnames.js';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 
 const NODE_PADDING_LEFT = 12;
@@ -73,7 +73,7 @@ export function FileTree({ files, onFileClick, selectedFile, hideRoot, scope, hi
   }
 
   return (
-    <div className={classnames(className, 'bg-tk-elements-fileTree-backgroundColor')}>
+    <div className={classNames(className, 'bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
           case 'file':
@@ -111,7 +111,7 @@ function Folder({ folder: { depth, name }, collapsed, onClick }: FolderProps) {
     <NodeButton
       className="group bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
       depth={depth}
-      iconClasses={classnames(
+      iconClasses={classNames(
         'text-tk-elements-fileTree-folder-iconColor group-hover:text-tk-elements-fileTree-folder-iconColorHover',
         {
           'i-ph-folder-simple-duotone': collapsed,
@@ -134,14 +134,14 @@ interface FileProps {
 function File({ file: { depth, name }, onClick, selected }: FileProps) {
   return (
     <NodeButton
-      className={classnames('group', {
+      className={classNames('group', {
         'bg-tk-elements-fileTree-file-backgroundColor hover:bg-tk-elements-fileTree-file-backgroundColorHover text-tk-elements-fileTree-file-textColor hover:text-tk-elements-fileTree-file-textColorHover':
           !selected,
         'bg-tk-elements-fileTree-file-backgroundColorSelected text-tk-elements-fileTree-file-textColorSelected':
           selected,
       })}
       depth={depth}
-      iconClasses={classnames('i-ph-file-duotone', {
+      iconClasses={classNames('i-ph-file-duotone', {
         'text-tk-elements-fileTree-file-iconColor group-hover:text-tk-elements-fileTree-file-iconColorHover': !selected,
         'text-tk-elements-fileTree-file-iconColorSelected': selected,
       })}
@@ -167,7 +167,7 @@ function NodeButton({ depth, iconClasses, onClick, className, children }: Button
       style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
       onClick={() => onClick?.()}
     >
-      <div className={classnames('scale-120 shrink-0', iconClasses)}></div>
+      <div className={classNames('scale-120 shrink-0', iconClasses)}></div>
       <span>{children}</span>
     </button>
   );

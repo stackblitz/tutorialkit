@@ -2,7 +2,7 @@ import { BootScreen } from '../BootScreen.js';
 import type { PreviewInfo, TutorialRunner } from '@tutorialkit/runtime';
 import { useStore } from '@nanostores/react';
 import resizePanelStyles from '../styles/resize-panel.module.css';
-import classnames from 'classnames';
+import { classNames } from '../utils/classnames.js';
 import { createElement, forwardRef, memo, useImperativeHandle } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 
@@ -102,7 +102,7 @@ function Preview({ preview, previewCount, first, last, toggleTerminal }: Preview
   return (
     <div className="panel-container">
       <div
-        className={classnames('panel-header border-y border-tk-elements-app-borderColor justify-between', {
+        className={classNames('panel-header border-y border-tk-elements-app-borderColor justify-between', {
           'border-l border-tk-elements-app-borderColor': !first,
         })}
       >
@@ -122,7 +122,7 @@ function Preview({ preview, previewCount, first, last, toggleTerminal }: Preview
         )}
       </div>
       <div
-        className={classnames('h-full w-full flex justify-center items-center', {
+        className={classNames('h-full w-full flex justify-center items-center', {
           'border-l border-tk-elements-previews-borderColor': !first,
         })}
       >
