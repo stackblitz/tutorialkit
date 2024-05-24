@@ -1,12 +1,9 @@
 import type { TutorialSchema, FilesRef, Lesson, Tutorial } from '@tutorialkit/types';
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import glob from 'fast-glob';
 import path from 'node:path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const CONTENT_DIR = path.join(__dirname, '../content/tutorial');
+const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
 
 export async function getTutorial(): Promise<Tutorial> {
   const collection = sortCollection(await getCollection('tutorial'));

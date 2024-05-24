@@ -24,7 +24,7 @@ export default defineConfig({
   theme,
   content: {
     // this didn't work
-    // filesystem: [resolve('../components/react/dist/**/*.js')],
+    // filesystem: ['node_modules/@tutorialkit/astro/node_modules/@tutorialkit/components-react/dist/**/*.js'],
     //
     // but this hack did:
     inline: globSync('node_modules/@tutorialkit/astro/node_modules/@tutorialkit/components-react/dist/**/*.js').map(
@@ -46,6 +46,7 @@ export default defineConfig({
     'panel-button':
       'flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm bg-tk-elements-panel-headerButton-backgroundColor hover:bg-tk-elements-panel-headerButton-backgroundColorHover text-tk-elements-panel-headerButton-textColor hover:text-tk-elements-panel-headerButton-textColorHover',
   },
+  details: true,
   transformers: [transformerDirectives()],
   presets: [
     presetUno({
