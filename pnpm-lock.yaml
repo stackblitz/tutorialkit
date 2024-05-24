@@ -298,6 +298,9 @@ importers:
       astro-expressive-code:
         specifier: ^0.35.3
         version: 0.35.3(astro@4.8.6)
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
       prettier-plugin-astro:
         specifier: ^0.13.0
         version: 0.13.0

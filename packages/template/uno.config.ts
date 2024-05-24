@@ -22,6 +22,17 @@ const customIconCollection = iconPaths.reduce(
 
 export default defineConfig({
   theme,
+  content: {
+    // this didn't work
+    // filesystem: [resolve('../components/react/dist/**/*.js')],
+    //
+    // but this hack did:
+    inline: globSync('node_modules/@tutorialkit/astro/node_modules/@tutorialkit/components-react/dist/**/*.js').map(
+      (filePath) => {
+        return () => fs.readFile(filePath, { encoding: 'utf8' });
+      },
+    ),
+  },
   rules: [
     ['scrollbar-transparent', { 'scrollbar-color': '#0000004d transparent' }],
     ['nav-box-shadow', { 'box-shadow': '0 2px 4px -1px rgba(0, 0, 0, 0.1)' }],
