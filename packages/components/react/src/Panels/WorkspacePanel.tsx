@@ -7,12 +7,12 @@ import type {
   EditorDocument,
   OnChangeCallback as OnEditorChange,
   OnScrollCallback as OnEditorScroll,
-} from '../CodeMirrorEditor';
+} from '../CodeMirrorEditor/index.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
 import type { Theme } from '../types';
-import { EditorPanel } from './EditorPanel';
-import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel';
-import { TerminalPanel } from './TerminalPanel';
+import { EditorPanel } from './EditorPanel.js';
+import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
+import { TerminalPanel } from './TerminalPanel.js';
 
 const DEFAULT_TERMINAL_SIZE = 25;
 

@@ -23,7 +23,7 @@ const { title } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <ViewTransitions />
     <script>
-      import * as builtInSwap from 'astro/dist/transitions/swap-functions';
+      import * as builtInSwap from 'node_modules/astro/dist/transitions/swap-functions';
 
       document.addEventListener('astro:before-swap', (event) => {
         event.swap = () => {

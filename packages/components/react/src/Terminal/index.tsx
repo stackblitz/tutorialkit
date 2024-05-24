@@ -4,7 +4,7 @@ import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import { useEffect, useRef } from 'react';
-import { darkTheme, lightTheme } from './theme';
+import { darkTheme, lightTheme } from './theme.js';
 
 export interface Props {
   readonly?: boolean;

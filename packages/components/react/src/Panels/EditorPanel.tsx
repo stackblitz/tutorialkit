@@ -1,14 +1,14 @@
 import type { Lesson } from '@tutorialkit/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import resizePanelStyles from './styles/resize-panel.module.css';
+import resizePanelStyles from '../styles/resize-panel.module.css';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import {
   CodeMirrorEditor,
   type EditorDocument,
   type OnChangeCallback as OnEditorChange,
   type OnScrollCallback as OnEditorScroll,
-} from '../CodeMirrorEditor';
-import { FileTree } from '../FileTree';
+} from '../CodeMirrorEditor/index.js';
+import { FileTree } from '../FileTree.js';
 import type { Theme } from '../types';
 
 const DEFAULT_FILE_TREE_SIZE = 25;

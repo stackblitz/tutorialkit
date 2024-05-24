@@ -10,6 +10,10 @@
     "preview": "astro preview",
     "start": "astro dev"
   },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
     "@astrojs/check": "^0.6.0",
     "@astrojs/mdx": "^3.0.0",
@@ -24,6 +28,7 @@
     "@unocss/transformer-directives": "^0.59.4",
     "astro": "^4.8.6",
     "astro-expressive-code": "^0.35.3",
+    "fast-glob": "^3.3.2",
     "prettier-plugin-astro": "^0.13.0",
     "typescript": "^5.4.5",
     "unocss": "^0.59.4"

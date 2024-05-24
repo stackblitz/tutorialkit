@@ -15,11 +15,11 @@ import {
 } from '@codemirror/view';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Theme } from '../types';
-import { debounce } from '../utils/debounce';
-import { BinaryContent } from './BinaryContent';
-import { getTheme, reconfigureTheme } from './cm-theme';
-import { indentKeyBinding } from './indent';
-import { getLanguage } from './languages';
+import { debounce } from '../utils/debounce.js';
+import { BinaryContent } from './BinaryContent.js';
+import { getTheme, reconfigureTheme } from './cm-theme.js';
+import { indentKeyBinding } from './indent.js';
+import { getLanguage } from './languages.js';
 
 export interface EditorDocument {
   value: string | Uint8Array;

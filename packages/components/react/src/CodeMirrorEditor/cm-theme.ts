@@ -3,7 +3,7 @@ import { Compartment, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import type { Theme } from '../types';
 import '../styles/cm.css';
-import { vscodeDarkTheme } from './themes/vscode-dark';
+import { vscodeDarkTheme } from './themes/vscode-dark.js';
 
 export const darkTheme = EditorView.theme({}, { dark: true });
 export const themeSelection = new Compartment();

@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import type { Props } from '../Terminal';
 
-const Terminal = lazy(() => import('../Terminal'));
+const Terminal = lazy(() => import('../Terminal/index.js'));
 
 export function TerminalPanel(props: Props) {
   const [domLoaded, setDomLoaded] = useState(false);

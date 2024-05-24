@@ -24,10 +24,18 @@ export default function createPlugin({ defaultRoutes = true }: Options = {}): As
     name: '@tutorialkit/astro',
     hooks: {
       'astro:config:setup'(options) {
-        const { injectRoute } = options;
+        const { injectRoute, updateConfig } = options;
 
         updateConfigFromTutorialKitConfig(options);
         updateMarkdownConfig(options);
+
+        updateConfig({
+          vite: {
+            ssr: {
+              noExternal: ['@tutorialkit/astro', '@tutorialkit/components-react'],
+            },
+          },
+        });
 
         injectRoute({
           pattern: '/',

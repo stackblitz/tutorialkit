@@ -1,7 +1,7 @@
-import { BootScreen } from '../BootScreen';
+import { BootScreen } from '../BootScreen.js';
 import type { PreviewInfo, TutorialRunner } from '@tutorialkit/runtime';
 import { useStore } from '@nanostores/react';
-import resizePanelStyles from './styles/resize-panel.module.css';
+import resizePanelStyles from '../styles/resize-panel.module.css';
 import classnames from 'classnames';
 import { createElement, forwardRef, memo, useImperativeHandle } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
