@@ -54,7 +54,6 @@ export default defineConfig({
     UnoCSS({
       configDeps: ['./theme.ts'],
       injectReset: true,
-      details: true,
     }),
   ],
 });
