@@ -32,6 +32,9 @@ importers:
       fast-glob:
         specifier: ^3.3.2
         version: 3.3.2
+      front-matter:
+        specifier: ^4.0.2
+        version: 4.0.2
       hastscript:
         specifier: ^9.0.0
         version: 9.0.0
@@ -57,6 +60,9 @@ importers:
         specifier: 3.23.8
         version: 3.23.8
     devDependencies:
+      '@tutorialkit/types':
+        specifier: workspace:0.0.1-alpha.14
+        version: link:../types
       '@types/mdast':
         specifier: ^4.0.3
         version: 4.0.3
@@ -3148,7 +3154,6 @@ packages:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
     dependencies:
       sprintf-js: 1.0.3
-    dev: true
 
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -4164,7 +4169,6 @@ packages:
     resolution: {integrity: sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==}
     engines: {node: '>=4'}
     hasBin: true
-    dev: true
 
   /estree-util-attach-comments@3.0.0:
     resolution: {integrity: sha512-cKUwm/HUcTDsYh/9FgnuFqpfquUbwIqwKM26BVCGDPVgvaCl/nDCCjUfiLlx6lsEZ3Z4RFxNbOQ60pkaEwFxGw==}
@@ -4361,6 +4365,12 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       tslib: 2.6.2
+    dev: false
+
+  /front-matter@4.0.2:
+    resolution: {integrity: sha512-I8ZuJ/qG92NWX8i5x1Y8qyj3vizhXS31OxjKDu3LKP+7/qBgfIKValiZIEwoVoJKUHlhWtYrktkxV1XsX+pPlg==}
+    dependencies:
+      js-yaml: 3.14.1
     dev: false
 
   /fs-extra@11.2.0:
@@ -5146,7 +5156,6 @@ packages:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
-    dev: true
 
   /js-yaml@4.1.0:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
@@ -7060,7 +7069,6 @@ packages:
 
   /sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
-    dev: true
 
   /stdin-discarder@0.2.2:
     resolution: {integrity: sha512-UhDfHmA92YAlNnCfhmq0VeNL5bDbiZGg7sZ2IvPsXubGkiNa9EC+tUTsjBRsYUAz87btI6/1wf4XoVvQ3uRnmQ==}

@@ -19,6 +19,7 @@
   "dependencies": {
     "chokidar": "3.6.0",
     "fast-glob": "^3.3.2",
+    "front-matter": "^4.0.2",
     "hastscript": "^9.0.0",
     "kleur": "4.1.5",
     "mdast-util-directive": "^3.0.0",
@@ -29,6 +30,7 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@tutorialkit/types": "workspace:*",
     "@types/mdast": "^4.0.3",
     "astro": "^4.8.6",
     "typescript": "^5.4.5"

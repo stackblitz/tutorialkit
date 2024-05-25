@@ -75,7 +75,7 @@ function transformUnhandledDirective(node: TextDirective | LeafDirective, index:
   }
 }
 
-export function remarkCallouts() {
+export function remarkCalloutsPlugin() {
   return (): Transformer<Root> => {
     return (tree) => {
       visit(tree, (node, index, parent) => {
