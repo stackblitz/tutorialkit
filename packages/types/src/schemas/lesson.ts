@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { baseSchema } from './common';
+import { baseSchema } from './common.js';
 
 export const lessonSchema = baseSchema.extend({
   type: z.literal('lesson'),
