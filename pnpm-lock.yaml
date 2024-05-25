@@ -90,9 +90,6 @@ importers:
         specifier: 3.23.8
         version: 3.23.8
     devDependencies:
-      '@tutorialkit/types':
-        specifier: workspace:0.0.1-alpha.14
-        version: link:../types
       '@types/mdast':
         specifier: ^4.0.3
         version: 4.0.3

@@ -1,11 +1,16 @@
 ---
 import { ThemeSwitch } from './ThemeSwitch';
 import { LoginButton } from './LoginButton';
-// import Logo from '../../../public/logo.svg?raw';
-
-// TODO: read logo from project file
-
 import { useAuth } from './setup';
+import fs from 'node:fs';
+
+let logo;
+
+try {
+  logo = fs.readFileSync('./public/logo.svg', { encoding: 'utf8' });
+} catch {
+  console.warn('No logo.svg found in public/');
+}
 ---
 
 <nav
@@ -17,7 +22,7 @@ import { useAuth } from './setup';
       class="flex items-center text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
     >
       <span class="h-5 w-auto">
-        <!-- <Fragment set:html={Logo} /> -->
+        {logo && <Fragment set:html={logo} />}
       </span>
     </a>
   </div>
