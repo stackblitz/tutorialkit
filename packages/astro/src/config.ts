@@ -39,6 +39,7 @@ export function updateConfigFromTutorialKitConfig({
     vite: {
       optimizeDeps: {
         entries: ['!**/src/(content|templates)/**'],
+        include: ['@tutorialkit/components-react'],
       },
       define: {
         __ENTERPRISE__: `${!!tkConfig.enterprise}`,

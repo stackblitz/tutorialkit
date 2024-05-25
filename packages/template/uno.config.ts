@@ -24,14 +24,12 @@ export default defineConfig({
   theme,
   content: {
     // this didn't work
-    // filesystem: ['node_modules/@tutorialkit/astro/node_modules/@tutorialkit/components-react/dist/**/*.js'],
+    // filesystem: ['node_modules/**/@tutorialkit/components-react/dist/**/*.js'],
     //
     // but this hack did:
-    inline: globSync('node_modules/@tutorialkit/astro/node_modules/@tutorialkit/components-react/dist/**/*.js').map(
-      (filePath) => {
-        return () => fs.readFile(filePath, { encoding: 'utf8' });
-      },
-    ),
+    inline: globSync('node_modules/**/@tutorialkit/components-react/dist/**/*.js').map((filePath) => {
+      return () => fs.readFile(filePath, { encoding: 'utf8' });
+    }),
   },
   rules: [
     ['scrollbar-transparent', { 'scrollbar-color': '#0000004d transparent' }],
