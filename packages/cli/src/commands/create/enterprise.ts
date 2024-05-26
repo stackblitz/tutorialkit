@@ -1,13 +1,12 @@
 import * as prompts from '@clack/prompts';
-import fs from 'node:fs';
+import fs, { cp } from 'node:fs';
 import path from 'node:path';
-import { assertNotCanceled } from '../../utils/tasks';
-import type { CreateOptions } from './options';
-import type { TutorialKitConfig } from './types';
+import { assertNotCanceled } from '../../utils/tasks.js';
+import type { CreateOptions } from './options.js';
+import { parseAstroConfig, replaceArgs } from './astro-config.js';
+import { generate } from './babel.js';
 
 export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) {
-  const configPath = path.resolve(dest, 'tutorialkit.config.json');
-
   let editorOrigin = flags.enterprise;
 
   if (!flags.defaults && flags.enterprise === undefined) {
@@ -19,9 +18,6 @@ export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) 
     assertNotCanceled(answer);
 
     if (!answer) {
-      if (!flags.dryRun) {
-        fs.rmSync(configPath);
-      }
       return;
     }
 
@@ -44,16 +40,29 @@ export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) 
     editorOrigin = new URL(editorOrigin).origin;
   }
 
+  const configPath = path.resolve(dest, 'astro.config.ts');
+
   if (!flags.dryRun && editorOrigin) {
-    const configJson: TutorialKitConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    const astroConfig = await parseAstroConfig(configPath);
 
-    configJson.enterprise = {
-      clientId: 'wc_api',
-      editorOrigin,
-      scope: 'turbo',
-    };
+    replaceArgs(
+      {
+        enterprise: {
+          clientId: 'wc_api',
+          editorOrigin,
+          scope: 'turbo',
+        },
+      },
+      astroConfig,
+    );
 
-    fs.writeFileSync(configPath, JSON.stringify(configJson, undefined, 2));
+    // add a new line
+    const defaultExport = 'export default defineConfig';
+    let output = generate(astroConfig);
+
+    output = output.replace(defaultExport, `\n${defaultExport}`);
+
+    fs.writeFileSync(configPath, output);
   }
 }
 

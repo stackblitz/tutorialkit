@@ -1,10 +1,10 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
-import { updateConfigFromTutorialKitConfig } from './config.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { WebContainerFiles } from './webcontainer-files.js';
+import { extraIntegrations } from './integrations.js';
 
-interface Options {
+export interface Options {
   /**
    * Whether or not default routes are injected.
    *
@@ -13,9 +13,37 @@ interface Options {
    * @default true
    */
   defaultRoutes?: boolean;
+
+  /**
+   * The isolation policy for the dev server.
+   *
+   * @default 'credentialless'
+   */
+  isolation?: 'require-corp' | 'credentialless';
+
+  /**
+   * Configuration options when using the Enterprise
+   * version of the WebContainer API.
+   */
+  enterprise?: {
+    /**
+     * The StackBlitz editor origin.
+     */
+    editorOrigin: string;
+
+    /**
+     * The client id.
+     */
+    clientId: string;
+
+    /**
+     * The OAuth scope.
+     */
+    scope: string;
+  };
 }
 
-export default function createPlugin({ defaultRoutes = true }: Options = {}): AstroIntegration {
+export default function createPlugin({ defaultRoutes = true, isolation, enterprise }: Options = {}): AstroIntegration {
   const webcontainerFiles = new WebContainerFiles();
 
   let _config: AstroConfig;
@@ -24,9 +52,27 @@ export default function createPlugin({ defaultRoutes = true }: Options = {}): As
     name: '@tutorialkit/astro',
     hooks: {
       'astro:config:setup'(options) {
-        const { injectRoute, updateConfig } = options;
+        const { injectRoute, updateConfig, config } = options;
 
-        updateConfigFromTutorialKitConfig(options);
+        updateConfig({
+          server: {
+            headers: {
+              'Cross-Origin-Embedder-Policy': isolation ?? 'require-corp',
+              'Cross-Origin-Opener-Policy': 'same-origin',
+            },
+          },
+          vite: {
+            optimizeDeps: {
+              entries: ['!**/src/(content|templates)/**'],
+              include: ['@tutorialkit/components-react'],
+            },
+            define: {
+              __ENTERPRISE__: `${!!enterprise}`,
+              __WC_CONFIG__: enterprise ? JSON.stringify(enterprise) : 'undefined',
+            },
+          },
+        });
+
         updateMarkdownConfig(options);
 
         updateConfig({
@@ -50,6 +96,10 @@ export default function createPlugin({ defaultRoutes = true }: Options = {}): As
             prerender: true,
           });
         }
+
+        // inject the additional integrations right after ours
+        const selfIndex = config.integrations.findIndex((integration) => integration.name === '@tutorialkit/astro');
+        config.integrations.splice(selfIndex + 1, 0, ...extraIntegrations());
       },
       'astro:config:done'({ config }) {
         _config = config;

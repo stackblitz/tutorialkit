@@ -3,8 +3,8 @@ import ignore from 'ignore';
 import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';
-import { warnLabel } from '../../utils/messages';
-import { templatePath, type CreateOptions } from './options';
+import { warnLabel } from '../../utils/messages.js';
+import { templatePath, type CreateOptions } from './options.js';
 
 export async function copyTemplate(dest: string, flags: CreateOptions) {
   if (flags.dryRun) {
@@ -12,7 +12,7 @@ export async function copyTemplate(dest: string, flags: CreateOptions) {
     return;
   }
 
-  const gitignore = ignore().add(readIgnoreFile());
+  const gitignore = ignore.default().add(readIgnoreFile());
 
   const toCopy: string[] = [];
   const folders = await fsPromises.readdir(templatePath);
