@@ -1,5 +1,7 @@
 import type { ChapterSchema, LessonSchema, PartSchema } from '../schemas';
 
+export type * from './nav';
+
 export type Files = Record<string, string | Uint8Array>;
 
 export type FilesRef = [folder: string, files: string[]];
@@ -39,12 +41,3 @@ export interface Lesson<T = unknown> {
 }
 
 export type Tutorial = Record<string, Part>;
-
-export interface NavItem {
-  id: string;
-  title: string;
-  href?: string;
-  sections?: NavItem[];
-}
-
-export type NavList = NavItem[];
