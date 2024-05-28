@@ -1,14 +1,10 @@
 {
   "files.exclude": {
     ".astro": true,
-    ".gitignore": true,
     "astro.config.ts": true,
     "theme.ts": true,
     "uno.config.ts": true,
     "tsconfig.json": true,
-    "package.json": true,
-    "package-lock.json": true,
-    "node_modules": true,
     "icons": true,
     "public": true,
     "src/env.d.ts": true,
