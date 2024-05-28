@@ -1,5 +1,13 @@
-import type { TutorialSchema, FilesRef, Lesson, Tutorial } from '@tutorialkit/types';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import type {
+  TutorialSchema,
+  PartSchema,
+  ChapterSchema,
+  LessonSchema,
+  FilesRef,
+  Lesson,
+  Tutorial,
+} from '@tutorialkit/types';
+import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
 
@@ -24,7 +32,7 @@ export async function getTutorial(): Promise<Tutorial> {
       tutorialMetaData = data;
 
       // default template if not specified
-      tutorialMetaData!.template ??= 'default';
+      tutorialMetaData.template ??= 'default';
     } else if (type === 'part') {
       _tutorial[partId] = {
         id: partId,
@@ -154,7 +162,7 @@ function pick<T extends Record<any, any>>(objects: (T | undefined)[], properties
   return newObject;
 }
 
-function sortCollection(collection: CollectionEntry<'tutorial'>[]) {
+function sortCollection(collection: CollectionEntryTutorial[]) {
   return collection.sort((a, b) => {
     const splitA = a.id.split('/');
     const splitB = b.id.split('/');
@@ -193,7 +201,7 @@ function parseId(id: string) {
   return [partId, chapterId, lessonId];
 }
 
-function getSlug(entry: CollectionEntry<'tutorial'>) {
+function getSlug(entry: CollectionEntryTutorial) {
   let slug: string = entry.slug;
 
   if (entry.slug.includes('/')) {
@@ -222,4 +230,17 @@ async function getFilesRef(pathToFolder: string): Promise<FilesRef> {
   filePaths.sort();
 
   return [pathToFolder, filePaths];
+}
+
+interface CollectionEntryTutorial {
+  id: string;
+  slug: string;
+  body: string;
+  collection: 'tutorial';
+  data: TutorialSchema | PartSchema | ChapterSchema | LessonSchema;
+  render(): Promise<{
+    Content: import('astro').MarkdownInstance<{}>['Content'];
+    headings: import('astro').MarkdownHeading[];
+    remarkPluginFrontmatter: Record<string, any>;
+  }>;
 }
