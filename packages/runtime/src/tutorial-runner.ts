@@ -2,15 +2,15 @@ import type { CommandsSchema, Files, PreviewSchema } from '@tutorialkit/types';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { auth } from '@webcontainer/api';
 import { atom } from 'nanostores';
-import { newTask, type Task, type TaskCancelled } from './tasks';
-import { escapeCodes } from './terminal';
-import { tick } from './utils/promises';
-import { isWebContainerSupported } from './utils/support';
-import { Command, Commands } from './webcontainer/command';
-import { PreviewInfo } from './webcontainer/preview-info';
+import { newTask, type Task, type TaskCancelled } from './tasks.js';
+import { escapeCodes } from './terminal.js';
+import { tick } from './utils/promises.js';
+import { isWebContainerSupported } from './utils/support.js';
+import { Command, Commands } from './webcontainer/command.js';
+import { PreviewInfo } from './webcontainer/preview-info.js';
 import type { ITerminal } from './webcontainer/shell';
-import { StepsController } from './webcontainer/steps';
-import { diffFiles, toFileTree } from './webcontainer/utils/files';
+import { StepsController } from './webcontainer/steps.js';
+import { diffFiles, toFileTree } from './webcontainer/utils/files.js';
 
 interface LoadFilesOptions {
   /**

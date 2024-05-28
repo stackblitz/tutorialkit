@@ -1,7 +1,6 @@
-import type { Lesson } from '@tutorialkit/types';
+import type { Lesson, NavItem, NavList } from '@tutorialkit/types';
 import * as Accordion from '@radix-ui/react-accordion';
 import navStyles from '@styles/nav.module.css';
-import type { NavItem, NavList } from '@utils/nav';
 import classnames from 'classnames';
 import { AnimatePresence, cubicBezier, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';

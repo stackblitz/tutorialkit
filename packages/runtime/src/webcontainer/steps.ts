@@ -1,5 +1,5 @@
 import { atom } from 'nanostores';
-import type { Command } from './command';
+import type { Command } from './command.js';
 
 export type Steps = Step[];
 

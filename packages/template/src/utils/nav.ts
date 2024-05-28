@@ -1,13 +1,4 @@
-import type { Tutorial } from '@tutorialkit/types';
-
-export interface NavItem {
-  id: string;
-  title: string;
-  href?: string;
-  sections?: NavItem[];
-}
-
-export type NavList = NavItem[];
+import type { Tutorial, NavList } from '@tutorialkit/types';
 
 export function generateNavigationList(tutorial: Tutorial): NavList {
   return objectToSortedArray(tutorial).map((part) => {

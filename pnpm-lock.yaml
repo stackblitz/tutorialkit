@@ -61,7 +61,7 @@ importers:
         version: 3.23.8
     devDependencies:
       '@tutorialkit/types':
-        specifier: workspace:0.0.1-alpha.14
+        specifier: workspace:*
         version: link:../types
       '@types/mdast':
         specifier: ^4.0.3
