@@ -1,6 +1,6 @@
 import path from 'node:path';
 import remarkDirective from 'remark-directive';
-import type { AstroConfigSetupOptions } from '../types';
+import type { AstroConfigSetupOptions } from '../types.js';
 import { remarkCalloutsPlugin } from './callouts.js';
 import { remarkImportFilePlugin } from './import-file.js';
 

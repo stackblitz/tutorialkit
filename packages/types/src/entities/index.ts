@@ -41,12 +41,3 @@ export interface Lesson<T = unknown> {
 }
 
 export type Tutorial = Record<string, Part>;
-
-export interface NavItem {
-  id: string;
-  title: string;
-  href?: string;
-  sections?: NavItem[];
-}
-
-export type NavList = NavItem[];

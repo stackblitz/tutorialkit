@@ -1,6 +1,6 @@
 import type { AstroIntegrationLogger } from 'astro';
 import type { IncomingMessage } from 'http';
-import type { AstroServerSetupOptions, ViteDevServer, AstroBuildDoneOptions, Files } from './types';
+import type { AstroServerSetupOptions, ViteDevServer, AstroBuildDoneOptions, Files } from './types.js';
 import { FSWatcher, watch } from 'chokidar';
 import glob from 'fast-glob';
 import { dim } from 'kleur/colors';
