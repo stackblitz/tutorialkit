@@ -1,7 +1,7 @@
 import transformerDirectives from '@unocss/transformer-directives';
 import { globSync } from 'fast-glob';
 import fs from 'node:fs/promises';
-import { basename, dirname } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { defineConfig, presetIcons, presetUno } from 'unocss';
 import { theme } from './theme';
 
@@ -27,7 +27,7 @@ export default defineConfig({
     // filesystem: ['node_modules/**/@tutorialkit/components-react/dist/**/*.js'],
     //
     // but this hack did:
-    inline: globSync('node_modules/**/@tutorialkit/components-react/dist/**/*.js').map((filePath) => {
+    inline: globSync(join(require.resolve('@tutorialkit/components-react'), '../**/*.js')).map((filePath) => {
       return () => fs.readFile(filePath, { encoding: 'utf8' });
     }),
   },
