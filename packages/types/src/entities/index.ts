@@ -1,6 +1,6 @@
-import type { ChapterSchema, LessonSchema, PartSchema } from '../schemas';
+import type { ChapterSchema, LessonSchema, PartSchema } from '../schemas/index.js';
 
-export type * from './nav';
+export type * from './nav.js';
 
 export type Files = Record<string, string | Uint8Array>;
 
