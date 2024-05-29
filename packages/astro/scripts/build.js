@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+import { existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { cp, rm } from 'node:fs/promises';
 
@@ -5,10 +7,11 @@ import { cp, rm } from 'node:fs/promises';
 await rm('dist', { recursive: true, force: true });
 
 // build everything with typescript
-spawnSync('tsc', ['-b'], { stdio: 'inherit' });
+spawnSync('tsc', ['--project', './tsconfig.build.json'], { stdio: 'inherit' });
 
-// delete transpiled files by typescript that we don't want
-await rm('dist/default', { recursive: true });
+if (existsSync('./dist/default')) {
+  assert.fail('TypeScript transpiled the default folder, it means that the tsconfig has an issue');
+}
 
 // copy default folder unmodified
 await cp('./src/default', './dist/default', { recursive: true });
