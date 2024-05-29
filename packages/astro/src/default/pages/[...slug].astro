@@ -1,14 +1,14 @@
 ---
-import { NavWrapper as Nav } from '../components/NavWrapper';
-import { WorkspacePanelWrapper as WorkspacePanel } from '../components/WorkspacePanelWrapper';
+import type { InferGetStaticPropsType } from 'astro';
 import Header from '../components/Header.astro';
+import { NavWrapper as Nav } from '../components/NavWrapper';
 import ResizablePanel from '../components/ResizablePanel.astro';
 import TutorialContent from '../components/TutorialContent.astro';
+import { WorkspacePanelWrapper as WorkspacePanel } from '../components/WorkspacePanelWrapper';
 import Layout from '../layouts/Layout.astro';
 import '../styles/base.css';
 import { RESIZABLE_PANELS } from '../utils/constants';
 import { generateStaticRoutes } from '../utils/routes';
-import type { InferGetStaticPropsType } from 'astro';
 
 export async function getStaticPaths() {
   return generateStaticRoutes();

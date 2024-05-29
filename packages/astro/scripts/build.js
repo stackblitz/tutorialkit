@@ -1,5 +1,5 @@
-import { rm, cp } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
+import { cp, rm } from 'node:fs/promises';
 
 // clean dist
 await rm('dist', { recursive: true, force: true });

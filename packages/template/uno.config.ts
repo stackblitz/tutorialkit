@@ -23,10 +23,6 @@ const customIconCollection = iconPaths.reduce(
 export default defineConfig({
   theme,
   content: {
-    // this didn't work
-    // filesystem: ['node_modules/**/@tutorialkit/components-react/dist/**/*.js'],
-    //
-    // but this hack did:
     inline: globSync(join(require.resolve('@tutorialkit/components-react'), '../**/*.js')).map((filePath) => {
       return () => fs.readFile(filePath, { encoding: 'utf8' });
     }),

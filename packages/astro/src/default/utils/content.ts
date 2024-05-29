@@ -1,11 +1,11 @@
 import type {
-  TutorialSchema,
-  PartSchema,
   ChapterSchema,
-  LessonSchema,
   FilesRef,
   Lesson,
+  LessonSchema,
+  PartSchema,
   Tutorial,
+  TutorialSchema,
 } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';

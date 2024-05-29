@@ -6,5 +6,5 @@ export * from './Panels/EditorPanel.js';
 export * from './Panels/PreviewPanel.js';
 export * from './Panels/TerminalPanel.js';
 export * from './Panels/WorkspacePanel.js';
-export * from './utils/classnames.js';
 export type * from './types';
+export * from './utils/classnames.js';
