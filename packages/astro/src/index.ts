@@ -23,7 +23,7 @@ export interface Options {
    *
    * @see https://webcontainers.io/guides/configuring-headers
    *
-   * @default 'credentialless'
+   * @default 'require-corp'
    */
   isolation?: 'require-corp' | 'credentialless';
 
