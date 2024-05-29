@@ -1,13 +1,13 @@
 import type { AstroIntegrationLogger } from 'astro';
 import type { IncomingMessage } from 'http';
-import type { AstroServerSetupOptions, ViteDevServer, AstroBuildDoneOptions, Files } from './types';
+import type { AstroServerSetupOptions, ViteDevServer, AstroBuildDoneOptions, Files } from './types.js';
 import { FSWatcher, watch } from 'chokidar';
 import glob from 'fast-glob';
 import { dim } from 'kleur/colors';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { withResolvers } from './utils';
+import { withResolvers } from './utils.js';
 
 const FILES_FOLDER_NAME = '_files';
 const SOLUTION_FOLDER_NAME = '_solution';

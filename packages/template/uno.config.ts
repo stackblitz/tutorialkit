@@ -1,7 +1,7 @@
 import transformerDirectives from '@unocss/transformer-directives';
 import { globSync } from 'fast-glob';
 import fs from 'node:fs/promises';
-import { basename, dirname } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { defineConfig, presetIcons, presetUno } from 'unocss';
 import { theme } from './theme';
 
@@ -22,6 +22,15 @@ const customIconCollection = iconPaths.reduce(
 
 export default defineConfig({
   theme,
+  content: {
+    // this didn't work
+    // filesystem: ['node_modules/**/@tutorialkit/components-react/dist/**/*.js'],
+    //
+    // but this hack did:
+    inline: globSync(join(require.resolve('@tutorialkit/components-react'), '../**/*.js')).map((filePath) => {
+      return () => fs.readFile(filePath, { encoding: 'utf8' });
+    }),
+  },
   rules: [
     ['scrollbar-transparent', { 'scrollbar-color': '#0000004d transparent' }],
     ['nav-box-shadow', { 'box-shadow': '0 2px 4px -1px rgba(0, 0, 0, 0.1)' }],

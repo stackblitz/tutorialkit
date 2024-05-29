@@ -1,0 +1,35 @@
+---
+import { ThemeSwitch } from './ThemeSwitch';
+import { LoginButton } from './LoginButton';
+import { useAuth } from './setup';
+import fs from 'node:fs';
+
+let logo;
+
+try {
+  logo = fs.readFileSync('./public/logo.svg', { encoding: 'utf8' });
+} catch {
+  console.warn('No logo.svg found in public/');
+}
+---
+
+<nav
+  class="bg-tk-elements-topBar-backgroundColor border-b border-tk-elements-app-borderColor flex max-w-full items-center p-3 px-4 min-h-[56px]"
+>
+  <div class="flex flex-1">
+    <a
+      href="#"
+      class="flex items-center text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
+    >
+      <span class="h-5 w-auto">
+        {logo && <Fragment set:html={logo} />}
+      </span>
+    </a>
+  </div>
+  <div>
+    <ThemeSwitch client:load transition:persist />
+  </div>
+  <div>
+    {useAuth && <LoginButton client:load transition:persist />}
+  </div>
+</nav>

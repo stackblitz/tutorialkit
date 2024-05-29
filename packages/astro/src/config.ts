@@ -1,5 +1,5 @@
 import type { AstroIntegrationLogger } from 'astro';
-import type { AstroConfigSetupOptions } from './types';
+import type { AstroConfigSetupOptions } from './types.js';
 import { z, ZodError, type ZodFormattedError } from 'zod';
 import fs from 'node:fs';
 
@@ -39,6 +39,7 @@ export function updateConfigFromTutorialKitConfig({
     vite: {
       optimizeDeps: {
         entries: ['!**/src/(content|templates)/**'],
+        include: ['@tutorialkit/components-react'],
       },
       define: {
         __ENTERPRISE__: `${!!tkConfig.enterprise}`,
