@@ -2,11 +2,9 @@
   "files.exclude": {
     ".astro": true,
     "astro.config.ts": true,
-    "theme.ts": true,
     "uno.config.ts": true,
     "tsconfig.json": true,
     "icons": true,
-    "public": true,
     "src/env.d.ts": true,
     "**/.git": true,
     "**/.svn": true,
