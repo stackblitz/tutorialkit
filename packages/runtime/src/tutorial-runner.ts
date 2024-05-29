@@ -66,7 +66,7 @@ export class TutorialRunner {
   private _currentTemplate: Files | undefined = undefined;
   private _currentFiles: Files | undefined = undefined;
   private _currentRunCommands: Commands | undefined = undefined;
-  private _terminal: ITerminal | undefined = undefined;
+  private _output: ITerminal | undefined = undefined;
   private _packageJsonDirty = false;
 
   // this strongly assumes that there's a single package json which might not be true
@@ -287,8 +287,8 @@ export class TutorialRunner {
    *
    * @param terminal Terminal to hook up to WebContainer.
    */
-  hookTerminal(terminal: ITerminal) {
-    this._terminal = terminal;
+  hookOutputPanel(terminal: ITerminal) {
+    this._output = terminal;
 
     if (!isWebContainerSupported()) {
       terminal.write(
@@ -348,8 +348,8 @@ export class TutorialRunner {
     }
   }
 
-  onTerminalResize() {
-    const { cols, rows } = this._terminal ?? {};
+  onOutputResize() {
+    const { cols, rows } = this._output ?? {};
 
     if (cols && rows) {
       this._currentCommandProcess?.resize({ cols, rows });
@@ -464,7 +464,7 @@ export class TutorialRunner {
   }
 
   private async _runCommands(webcontainer: WebContainer, commands: Commands, signal: AbortSignal) {
-    clearTerminal(this._terminal);
+    clearTerminal(this._output);
 
     const abortListener = () => this._currentCommandProcess?.kill();
     signal.addEventListener('abort', abortListener, { once: true });
@@ -495,7 +495,7 @@ export class TutorialRunner {
 
         // print newlines between commands to visually separate them from one another
         if (index > 0) {
-          this._terminal?.write('\n');
+          this._output?.write('\n');
         }
 
         this._currentCommandProcess = await this._newProcess(webcontainer, command.shellCommand);
@@ -547,18 +547,18 @@ export class TutorialRunner {
   private async _newProcess(webcontainer: WebContainer, shellCommand: string) {
     const [command, ...args] = shellCommand.split(' ');
 
-    this._terminal?.write(`${escapeCodes.magenta('❯')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
+    this._output?.write(`${escapeCodes.magenta('❯')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
 
     const process = await webcontainer.spawn(command, args, {
-      terminal: this._terminal
+      terminal: this._output
         ? {
-            cols: this._terminal.cols,
-            rows: this._terminal.rows,
+            cols: this._output.cols,
+            rows: this._output.rows,
           }
         : undefined,
     });
 
-    process.output.pipeTo(new WritableStream({ write: (data) => this._terminal?.write(data) }));
+    process.output.pipeTo(new WritableStream({ write: (data) => this._output?.write(data) }));
 
     return process;
   }
