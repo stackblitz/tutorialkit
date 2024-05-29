@@ -118,7 +118,7 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
 
       // if `tutorialkit` is called as `tutorialkit()`
       if (integrationArgs.length === 0) {
-        const objectArgs = fromPOJO(newTutorialKitArgs) as t.ObjectExpression;
+        const objectArgs = fromValue(newTutorialKitArgs) as t.ObjectExpression;
 
         if (objectArgs.properties.length > 0) {
           integrationArgs.push(objectArgs);
@@ -162,23 +162,23 @@ function updateObject(properties: any, object: t.ObjectExpression | undefined): 
     }) as t.ObjectProperty | undefined;
 
     if (!propertyInObject) {
-      object.properties.push(t.objectProperty(t.identifier(property), fromPOJO(properties[property])));
+      object.properties.push(t.objectProperty(t.identifier(property), fromValue(properties[property])));
     } else {
       if (typeof properties[property] === 'object' && t.isObjectExpression(propertyInObject.value)) {
         updateObject(properties[property], propertyInObject.value);
       } else {
-        propertyInObject.value = fromPOJO(properties[property]);
+        propertyInObject.value = fromValue(properties[property]);
       }
     }
   }
 }
 
 /**
- * Convert a plain old JavaScript Object into a babel expression.
+ * Convert a plain old JavaScript Object and primitives value into a babel expression.
  *
  * @param value value to convert
  */
-function fromPOJO(value: any): t.Expression {
+function fromValue(value: any): t.Expression {
   if (value == null) {
     return t.nullLiteral();
   }
@@ -192,8 +192,10 @@ function fromPOJO(value: any): t.Expression {
   }
 
   if (Array.isArray(value)) {
-    return t.arrayExpression(value.map(fromPOJO));
+    return t.arrayExpression(value.map(fromValue));
   }
 
-  return t.objectExpression(Object.keys(value).map((key) => t.objectProperty(t.identifier(key), fromPOJO(value[key]))));
+  return t.objectExpression(
+    Object.keys(value).map((key) => t.objectProperty(t.identifier(key), fromValue(value[key]))),
+  );
 }
