@@ -1,7 +1,7 @@
-import { cp } from 'fs/promises';
 import { spawnSync } from 'child_process';
-import { join } from 'path';
 import fastGlob from 'fast-glob';
+import { cp } from 'fs/promises';
+import { join } from 'path';
 
 // build everything with typescript
 spawnSync('tsc', ['-b'], { stdio: 'inherit' });

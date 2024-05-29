@@ -1,6 +1,6 @@
 import { useStore } from '@nanostores/react';
-import { themeStore, toggleTheme } from '../stores/theme-store';
 import { memo, useEffect, useState } from 'react';
+import { themeStore, toggleTheme } from '../stores/theme-store';
 
 export const ThemeSwitch = memo(() => {
   const theme = useStore(themeStore);

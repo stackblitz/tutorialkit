@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
-import { t, parse, visit } from './babel.js';
 import type { Options } from '../../../../astro/src/index.js';
+import { parse, t, visit } from './babel.js';
 
 export async function parseAstroConfig(astroConfigPath: string): Promise<t.File> {
   const source = await fs.readFile(astroConfigPath, { encoding: 'utf-8' });
@@ -18,7 +18,7 @@ export async function parseAstroConfig(astroConfigPath: string): Promise<t.File>
 }
 
 /**
- * This function modify the arguments provided to the tutorialkit integration in the astro
+ * This function modifies the arguments provided to the tutorialkit integration in the astro
  * configuration.
  *
  * For instance if `tutorialkit` is currently invoked as:
@@ -34,8 +34,8 @@ export async function parseAstroConfig(astroConfigPath: string): Promise<t.File>
  * tutorialkit({ isolation: 'require-corp', enterprise: {} })
  * ```
  *
- * @param newTutorialKitArgs arguments to be provided to the tutorialkit integration
- * @param ast the astro config parsed by babel
+ * @param newTutorialKitArgs Arguments to be provided to the tutorialkit integration.
+ * @param ast The astro config parsed by babel.
  */
 export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
   const integrationImport = '@tutorialkit/astro';
@@ -43,7 +43,7 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
   let integrationId: t.Identifier | undefined;
 
   /**
-   * In this first pass we search for the tutorialkit name by looking at the default import
+   * In the first pass we search for the tutorialkit name by looking for a default import
    * to `@tutorialkit/astro`.
    */
   visit(ast, {
@@ -65,8 +65,8 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
   }
 
   /**
-   * In this second pass, we search for the default export which is a call to `defineConfig`
-   * and we look for our `integrationId` that we just got inside the `integrations` field.
+   * In the second pass, we search for a default export which is a call to `defineConfig`
+   * and we look for our `integrationId` that we just got from the `integrations` field.
    */
   visit(ast, {
     ExportDefaultDeclaration(path) {
@@ -143,11 +143,11 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
  *  - If a property is present in `properties` but not in `object` it's added
  *  - If a property is not present in `properties` but in `object` we do nothing
  *  - If a property is present in `properties` and in `object` we:
- *      * Recursively update both if both are object
- *      * Set the value present in properties otherwise
+ *      - Recursively update both if both are object
+ *      - Set the value present in properties otherwise
  *
- * @param properties the properties to read keys and values from
- * @param object the object expression to update
+ * @param properties The properties to read keys and values from.
+ * @param object The object expression to update.
  */
 function updateObject(properties: any, object: t.ObjectExpression | undefined): t.ObjectExpression {
   if (typeof properties !== 'object') {
@@ -174,7 +174,7 @@ function updateObject(properties: any, object: t.ObjectExpression | undefined): 
 }
 
 /**
- * Convert a plain old JavaScript Object and primitives value into a babel expression.
+ * Convert a plain old JavaScript object and primitive value into a babel expression.
  *
  * @param value value to convert
  */

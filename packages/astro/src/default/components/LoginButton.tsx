@@ -1,8 +1,8 @@
 import { useStore } from '@nanostores/react';
-import { authStore } from '../stores/auth-store';
 import { classNames } from '@tutorialkit/components-react';
 import { useEffect, useRef, useState } from 'react';
-import { logout, login } from './webcontainer';
+import { authStore } from '../stores/auth-store';
+import { login, logout } from './webcontainer';
 
 export function LoginButton() {
   // using any because @types/node are included in that context although they shouldn't

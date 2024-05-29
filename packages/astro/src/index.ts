@@ -1,8 +1,8 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
+import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { WebContainerFiles } from './webcontainer-files.js';
-import { extraIntegrations } from './integrations.js';
 
 export interface Options {
   /**

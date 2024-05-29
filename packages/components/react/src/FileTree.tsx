@@ -1,5 +1,5 @@
-import { classNames } from './utils/classnames.js';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { classNames } from './utils/classnames.js';
 
 const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
