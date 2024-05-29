@@ -17,11 +17,35 @@ export async function parseAstroConfig(astroConfigPath: string): Promise<t.File>
   return result;
 }
 
+/**
+ * This function modify the arguments provided to the tutorialkit integration in the astro
+ * configuration.
+ *
+ * For instance if `tutorialkit` is currently invoked as:
+ *
+ * ```ts
+ * tutorialkit({ isolation: 'require-corp' })
+ * ```
+ *
+ * and this function is called with `{ enterprise: {} }` as the new tutorialkit object, then
+ * the modified config will contain:
+ *
+ * ```ts
+ * tutorialkit({ isolation: 'require-corp', enterprise: {} })
+ * ```
+ *
+ * @param newTutorialKitArgs arguments to be provided to the tutorialkit integration
+ * @param ast the astro config parsed by babel
+ */
 export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
   const integrationImport = '@tutorialkit/astro';
 
   let integrationId: t.Identifier | undefined;
 
+  /**
+   * In this first pass we search for the tutorialkit name by looking at the default import
+   * to `@tutorialkit/astro`.
+   */
   visit(ast, {
     ImportDeclaration(path) {
       if (path.node.source.value === integrationImport) {
@@ -40,6 +64,10 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
     throw new Error(`Could not find import to '${integrationImport}'`);
   }
 
+  /**
+   * In this second pass, we search for the default export which is a call to `defineConfig`
+   * and we look for our `integrationId` that we just got inside the `integrations` field.
+   */
   visit(ast, {
     ExportDefaultDeclaration(path) {
       if (!t.isCallExpression(path.node.declaration)) {
@@ -80,6 +108,7 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
         return t.isCallExpression(expr) && t.isIdentifier(expr.callee) && expr.callee.name === integrationId.name;
       }) as t.CallExpression | undefined;
 
+      // if the integration wasn't found we add it
       if (!integrationCall) {
         integrationCall = t.callExpression(integrationId, []);
         integrationsProp.value.elements.push(integrationCall);
@@ -87,6 +116,7 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
 
       const integrationArgs = integrationCall.arguments;
 
+      // if `tutorialkit` is called as `tutorialkit()`
       if (integrationArgs.length === 0) {
         const objectArgs = fromPOJO(newTutorialKitArgs) as t.ObjectExpression;
 
@@ -101,11 +131,24 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
         throw new Error('Only updating an existing object literal as the config is supported');
       }
 
+      // if `tutorialkit` is called with an object literal we update its existing properties
       updateObject(newTutorialKitArgs, integrationArgs[0]);
     },
   });
 }
 
+/**
+ * Update an object expression to match `properties`, such that:
+ *
+ *  - If a property is present in `properties` but not in `object` it's added
+ *  - If a property is not present in `properties` but in `object` we do nothing
+ *  - If a property is present in `properties` and in `object` we:
+ *      * Recursively update both if both are object
+ *      * Set the value present in properties otherwise
+ *
+ * @param properties the properties to read keys and values from
+ * @param object the object expression to update
+ */
 function updateObject(properties: any, object: t.ObjectExpression | undefined): t.ObjectExpression {
   if (typeof properties !== 'object') {
     return t.objectExpression([]);
@@ -130,6 +173,11 @@ function updateObject(properties: any, object: t.ObjectExpression | undefined): 
   }
 }
 
+/**
+ * Convert a plain old JavaScript Object into a babel expression.
+ *
+ * @param value value to convert
+ */
 function fromPOJO(value: any): t.Expression {
   if (value == null) {
     return t.nullLiteral();
