@@ -1,5 +1,5 @@
 import * as prompts from '@clack/prompts';
-import fs, { cp } from 'node:fs';
+import fs from 'node:fs';
 import path from 'node:path';
 import { assertNotCanceled } from '../../utils/tasks.js';
 import type { CreateOptions } from './options.js';
@@ -56,10 +56,10 @@ export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) 
       astroConfig,
     );
 
-    // add a new line
     const defaultExport = 'export default defineConfig';
     let output = generate(astroConfig);
 
+    // add a new line
     output = output.replace(defaultExport, `\n${defaultExport}`);
 
     fs.writeFileSync(configPath, output);

@@ -53,13 +53,22 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
       }
 
       let integrationsProp = configObject.properties.find((prop) => {
-        if (prop.type !== 'ObjectProperty') return false;
+        if (prop.type !== 'ObjectProperty') {
+          return false;
+        }
+
         if (prop.key.type === 'Identifier') {
-          if (prop.key.name === 'integrations') return true;
+          if (prop.key.name === 'integrations') {
+            return true;
+          }
         }
+
         if (prop.key.type === 'StringLiteral') {
-          if (prop.key.value === 'integrations') return true;
+          if (prop.key.value === 'integrations') {
+            return true;
+          }
         }
+
         return false;
       }) as t.ObjectProperty | undefined;
 
@@ -67,9 +76,9 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
         throw new Error('Unable to parse integrations in Astro config');
       }
 
-      let integrationCall = integrationsProp.value.elements.find(
-        (expr) => t.isCallExpression(expr) && t.isIdentifier(expr.callee) && expr.callee.name === integrationId.name,
-      ) as t.CallExpression | undefined;
+      let integrationCall = integrationsProp.value.elements.find((expr) => {
+        return t.isCallExpression(expr) && t.isIdentifier(expr.callee) && expr.callee.name === integrationId.name;
+      }) as t.CallExpression | undefined;
 
       if (!integrationCall) {
         integrationCall = t.callExpression(integrationId, []);
@@ -105,9 +114,9 @@ function updateObject(properties: any, object: t.ObjectExpression | undefined): 
   object ??= t.objectExpression([]);
 
   for (const property of properties) {
-    const propertyInObject = object.properties.find(
-      (prop) => prop.type === 'ObjectProperty' && prop.key === property,
-    ) as t.ObjectProperty | undefined;
+    const propertyInObject = object.properties.find((prop) => {
+      return prop.type === 'ObjectProperty' && prop.key === property;
+    }) as t.ObjectProperty | undefined;
 
     if (!propertyInObject) {
       object.properties.push(t.objectProperty(t.identifier(property), fromPOJO(properties[property])));

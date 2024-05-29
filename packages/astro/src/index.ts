@@ -15,7 +15,13 @@ export interface Options {
   defaultRoutes?: boolean;
 
   /**
-   * The isolation policy for the dev server.
+   * The value of the Cross-Origin-Embedder-Policy header for the dev server.
+   * This is required for webcontainer to works.
+   *
+   * Using credentialless lets you embed images from third party more easily.
+   * However only Firefox and Chrome supports credentialless.
+   *
+   * @see https://webcontainers.io/guides/configuring-headers
    *
    * @default 'credentialless'
    */
@@ -23,7 +29,7 @@ export interface Options {
 
   /**
    * Configuration options when using the Enterprise
-   * version of the WebContainer API.
+   * version of WebContainer API.
    */
   enterprise?: {
     /**
