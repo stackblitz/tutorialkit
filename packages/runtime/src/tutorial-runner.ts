@@ -476,6 +476,9 @@ export class TutorialRunner {
 
       this._stepController.setFromCommands(commandList);
 
+      // keep track of the current runnable command we are on
+      let runnableCommands = 0;
+
       for (const [index, command] of commandList.entries()) {
         const isMainCommand = index === commandList.length - 1 && !!commands.mainCommand;
 
@@ -494,9 +497,11 @@ export class TutorialRunner {
         });
 
         // print newlines between commands to visually separate them from one another
-        if (index > 0) {
+        if (runnableCommands > 0) {
           this._output?.write('\n');
         }
+
+        runnableCommands++;
 
         this._currentCommandProcess = await this._newProcess(webcontainer, command.shellCommand);
 
