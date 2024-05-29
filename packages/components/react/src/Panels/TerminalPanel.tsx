@@ -1,9 +1,14 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
-import type { Props } from '../Terminal';
+import type { TutorialRunner } from '@tutorialkit/runtime';
 
 const Terminal = lazy(() => import('../Terminal/index.js'));
 
-export function TerminalPanel(props: Props) {
+interface TerminalPanelProps {
+  theme: 'dark' | 'light';
+  tutorialRunner: TutorialRunner
+}
+
+export function TerminalPanel({ theme, tutorialRunner }: TerminalPanelProps) {
   const [domLoaded, setDomLoaded] = useState(false);
 
   useEffect(() => {
@@ -14,14 +19,18 @@ export function TerminalPanel(props: Props) {
     <div className="panel-container bg-tk-elements-app-backgroundColor">
       <div className="panel-header border-y border-tk-elements-app-borderColor">
         <div className="panel-title">
-          <div className="panel-icon i-ph-terminal-window-duotone"></div>
-          <span className="text-sm">Terminal</span>
+          <div className="panel-icon i-ph-newspaper-duotone"></div>
+          <span className="text-sm">Output</span>
         </div>
       </div>
       <div className="h-full overflow-hidden">
         {domLoaded && (
           <Suspense>
-            <Terminal {...props} />
+            <Terminal
+              theme={theme}
+              readonly={true}
+              onTerminalReady={(terminal) => tutorialRunner.hookOutputPanel(terminal)}
+              onTerminalResize={() => tutorialRunner.onOutputResize()}/>
           </Suspense>
         )}
       </div>

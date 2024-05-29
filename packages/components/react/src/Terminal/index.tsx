@@ -1,4 +1,3 @@
-import type { TutorialRunner } from '@tutorialkit/runtime';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
@@ -7,12 +6,13 @@ import { useEffect, useRef } from 'react';
 import { darkTheme, lightTheme } from './theme.js';
 
 export interface Props {
-  readonly?: boolean;
-  tutorialRunner: TutorialRunner;
   theme: 'dark' | 'light';
+  readonly?: boolean;
+  onTerminalReady?: (terminal: XTerm) => void;
+  onTerminalResize?: () => void;
 }
 
-export function Terminal({ tutorialRunner, theme, readonly = true }: Props) {
+export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalResize }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm>();
 
@@ -30,11 +30,16 @@ export function Terminal({ tutorialRunner, theme, readonly = true }: Props) {
     const terminal = new XTerm({
       cursorBlink: true,
       convertEol: true,
-      disableStdin: false,
+      disableStdin: readonly,
       theme: theme === 'dark' ? darkTheme : lightTheme,
       fontSize: 13,
       fontFamily: 'Menlo, courier-new, courier, monospace',
     });
+
+    if (readonly) {
+      // write DECTCEM to the terminal to hide the cursor if we are in readonly mode
+      terminal.write('\x1b[?25l');
+    }
 
     terminalRef.current = terminal;
 
@@ -44,14 +49,14 @@ export function Terminal({ tutorialRunner, theme, readonly = true }: Props) {
 
     fitAddon.fit();
 
-    tutorialRunner.hookTerminal(terminal);
-
     const resizeObserver = new ResizeObserver(() => {
       fitAddon.fit();
-      tutorialRunner.onTerminalResize();
+      onTerminalResize?.();
     });
 
     resizeObserver.observe(element);
+
+    onTerminalReady?.(terminal);
 
     return () => {
       resizeObserver.disconnect();
