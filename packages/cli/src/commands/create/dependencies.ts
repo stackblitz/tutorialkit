@@ -1,10 +1,10 @@
 import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
 import { lookpath } from 'lookpath';
-import { warnLabel } from '../../utils/messages';
-import { runShellCommand } from '../../utils/shell';
-import { assertNotCanceled, runTask } from '../../utils/tasks';
-import { DEFAULT_VALUES, type CreateOptions } from './options';
+import { warnLabel } from '../../utils/messages.js';
+import { runShellCommand } from '../../utils/shell.js';
+import { assertNotCanceled, runTask } from '../../utils/tasks.js';
+import { DEFAULT_VALUES, type CreateOptions } from './options.js';
 
 export type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 

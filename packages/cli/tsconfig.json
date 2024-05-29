@@ -4,7 +4,7 @@
     "outDir": "./dist",
     "declaration": false,
     "declarationMap": false,
-    "module": "ESNext",
+    "module": "nodenext",
     "target": "ESNext",
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -13,7 +13,7 @@
     "esModuleInterop": true,
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "node16",
     "lib": ["ESNext"],
     "sourceMap": false
   },

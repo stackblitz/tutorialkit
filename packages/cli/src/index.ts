@@ -2,9 +2,9 @@
 
 import chalk from 'chalk';
 import yargs from 'yargs-parser';
-import { createTutorial } from './commands/create';
-import { pkg } from './pkg';
-import { errorLabel, primaryLabel, printHelp } from './utils/messages';
+import { createTutorial } from './commands/create/index.js';
+import { pkg } from './pkg.js';
+import { errorLabel, primaryLabel, printHelp } from './utils/messages.js';
 
 type CLICommand = 'version' | 'help' | 'create';
 

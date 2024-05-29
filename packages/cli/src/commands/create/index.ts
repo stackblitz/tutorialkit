@@ -3,15 +3,15 @@ import chalk from 'chalk';
 import fs from 'node:fs';
 import path from 'node:path';
 import yargs from 'yargs-parser';
-import { pkg } from '../../pkg';
-import { errorLabel, primaryLabel, printHelp } from '../../utils/messages';
-import { generateProjectName } from '../../utils/project';
-import { assertNotCanceled } from '../../utils/tasks';
-import { installDependencies, type PackageManager } from './dependencies';
-import { initGitRepo } from './git';
-import { DEFAULT_VALUES, type CreateOptions } from './options';
-import { setupEnterpriseConfig } from './enterprise';
-import { copyTemplate } from './template';
+import { pkg } from '../../pkg.js';
+import { errorLabel, primaryLabel, printHelp } from '../../utils/messages.js';
+import { generateProjectName } from '../../utils/project.js';
+import { assertNotCanceled } from '../../utils/tasks.js';
+import { installDependencies, type PackageManager } from './dependencies.js';
+import { initGitRepo } from './git.js';
+import { DEFAULT_VALUES, type CreateOptions } from './options.js';
+import { setupEnterpriseConfig } from './enterprise.js';
+import { copyTemplate } from './template.js';
 
 const TUTORIALKIT_VERSION = pkg.version;
 

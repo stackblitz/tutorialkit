@@ -2,11 +2,11 @@ import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
 import fs from 'node:fs';
 import path from 'node:path';
-import { pkg } from '../../pkg';
-import { warnLabel } from '../../utils/messages';
-import { runShellCommand } from '../../utils/shell';
-import { assertNotCanceled, runTask } from '../../utils/tasks';
-import { DEFAULT_VALUES, type CreateOptions } from './options';
+import { pkg } from '../../pkg.js';
+import { warnLabel } from '../../utils/messages.js';
+import { runShellCommand } from '../../utils/shell.js';
+import { assertNotCanceled, runTask } from '../../utils/tasks.js';
+import { DEFAULT_VALUES, type CreateOptions } from './options.js';
 
 export async function initGitRepo(cwd: string, flags: CreateOptions) {
   let shouldInitGitRepo = flags.git ?? DEFAULT_VALUES.git;

@@ -19,12 +19,17 @@
     "build": "node ./scripts/build.js"
   },
   "dependencies": {
+    "@astrojs/mdx": "^3.0.0",
+    "@astrojs/react": "^3.3.4",
+    "@expressive-code/plugin-collapsible-sections": "^0.35.3",
+    "@expressive-code/plugin-line-numbers": "^0.35.3",
     "@nanostores/react": "0.7.2",
     "@tutorialkit/components-react": "workspace:*",
     "@tutorialkit/runtime": "workspace:*",
     "@tutorialkit/types": "workspace:*",
     "@types/react": "^18.2.75",
     "@webcontainer/api": "beta",
+    "astro-expressive-code": "^0.35.3",
     "chokidar": "3.6.0",
     "fast-glob": "^3.3.2",
     "front-matter": "^4.0.2",
@@ -38,6 +43,7 @@
     "remark-directive": "^3.0.0",
     "unified": "^11.0.4",
     "unist-util-visit": "^5.0.0",
+    "unocss": "^0.59.4",
     "zod": "3.23.8"
   },
   "peerDependencies": {
