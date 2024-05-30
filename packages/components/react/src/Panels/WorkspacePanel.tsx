@@ -268,12 +268,12 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
         />
       </Panel>
       <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 5, coarse: 5 }} />
-      <Panel defaultSize={25} minSize={10}>
+      <Panel defaultSize={50} minSize={10}>
         <PreviewPanel tutorialRunner={tutorialRunner} ref={previewRef} toggleTerminal={toggleTerminal} />
       </Panel>
       <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 5, coarse: 5 }} />
       <Panel
-        defaultSize={25}
+        defaultSize={0}
         minSize={10}
         collapsible
         ref={terminalPanelRef}
