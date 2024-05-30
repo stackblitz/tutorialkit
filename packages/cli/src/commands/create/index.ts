@@ -129,11 +129,13 @@ async function _createTutorial(flags: CreateOptions) {
 
   await copyTemplate(resolvedDest, flags);
 
+  updatePackageJson(resolvedDest, tutorialName, flags);
+
   const { selectedPackageManager, dependenciesInstalled } = await installDependencies(resolvedDest, flags);
 
-  await setupEnterpriseConfig(resolvedDest, flags);
-  updatePackageJson(resolvedDest, tutorialName, flags);
   updateReadme(resolvedDest, selectedPackageManager, flags);
+
+  await setupEnterpriseConfig(resolvedDest, flags);
 
   await initGitRepo(resolvedDest, flags);
 

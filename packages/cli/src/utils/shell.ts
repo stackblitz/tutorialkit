@@ -29,7 +29,21 @@ export async function runShellCommand(
       timeout: opts.timeout,
     });
 
-    const done = new Promise((resolve) => child.on('close', resolve));
+    const done = new Promise((resolve, reject) => {
+      child.on('close', (code) => {
+        if (code !== 0) {
+          reject(code);
+
+          return;
+        }
+
+        resolve(code);
+      });
+
+      child.on('error', (code) => {
+        reject(code);
+      })
+    });
 
     child.stdout?.setEncoding('utf8');
     child.stderr?.setEncoding('utf8');
@@ -43,8 +57,8 @@ export async function runShellCommand(
     });
 
     await done;
-  } catch {
-    throw { stdout, stderr, exitCode: 1 };
+  } catch (exitCode) {
+    throw { stdout, stderr, exitCode };
   }
 
   return { stdout, stderr, exitCode: child.exitCode };
