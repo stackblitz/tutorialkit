@@ -1,8 +1,8 @@
 /**
- * A plugin that automatically add user land CSS if they have any, particularly
+ * A plugin that automatically adds user land CSS if they have any, particularly
  * useful to override the CSS variables of the theme.
  *
- * It expose a virtual module `@tutorialkit/css` which is imported manually in
+ * It exposes a virtual module `@tutorialkit/css` which is imported manually in
  * the correct location to make sure the CSS customization are added after the
  * default values.
  */
@@ -46,6 +46,7 @@ export function watchUserlandCSS(server: ViteDevServer, logger: AstroIntegration
   const projectRoot = server.config.root;
 
   const watchedNames = new Map<string, boolean>(CUSTOM_PATHS.map((path) => [path, false] as const));
+
   const watcher = watch(projectRoot, {
     ignoreInitial: true,
     cwd: projectRoot,
@@ -93,6 +94,7 @@ function checkConflicts(watchedNames: Map<string, boolean>, logger: AstroIntegra
   if (conflictCount > 1) {
     let errorMessage = '';
     let index = 0;
+
     const lastIndex = conflictCount - 1;
 
     for (const [configName, isPresent] of watchedNames.entries()) {
