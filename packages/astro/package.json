@@ -52,6 +52,8 @@
   "devDependencies": {
     "@tutorialkit/types": "workspace:*",
     "@types/mdast": "^4.0.3",
+    "esbuild": "^0.20.2",
+    "esbuild-node-externals": "^1.13.0",
     "typescript": "^5.4.5"
   }
 }

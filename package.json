@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit build",
-    "template:dev": "pnpm run build && pnpm run --filter=tutorialkit-starter dev",
+    "template:dev": "TUTORIALKIT_DEV=true pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
     "prepare": "is-ci || husky install",
     "clean": "./scripts/clean.sh"

@@ -70,7 +70,7 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
           vite: {
             optimizeDeps: {
               entries: ['!**/src/(content|templates)/**'],
-              include: ['@tutorialkit/components-react'],
+              include: process.env.TUTORIALKIT_DEV ? [] : ['@tutorialkit/components-react'],
             },
             define: {
               __ENTERPRISE__: `${!!enterprise}`,
