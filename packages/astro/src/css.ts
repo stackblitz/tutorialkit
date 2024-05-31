@@ -12,7 +12,7 @@ import path from 'path';
 import type { ViteDevServer, VitePlugin } from './types';
 import type { AstroIntegrationLogger } from 'astro';
 
-const CUSTOM_PATHS = ['theme.css', 'theme/style.css', 'theme/styles.css', 'theme/variables.css'];
+const CUSTOM_PATHS = ['theme.css', 'theme/index.css'];
 
 const virtualModuleId = '@tutorialkit/custom.css';
 const resolvedVirtualModuleId = `/${virtualModuleId}`;
