@@ -13,7 +13,7 @@ interface Props {
 
 const previewsContainer = globalThis.document ? document.getElementById('previews-container')! : ({} as HTMLElement);
 
-type IframeRef = { ref: HTMLIFrameElement | undefined; container: HTMLElement | undefined };
+type IFrameRef = { ref: HTMLIFrameElement | undefined; container: HTMLElement | undefined };
 
 export type ImperativePreviewHandle = {
   reload: () => void;
@@ -22,7 +22,7 @@ export type ImperativePreviewHandle = {
 export const PreviewPanel = memo(
   forwardRef<ImperativePreviewHandle, Props>(({ toggleTerminal, tutorialRunner }, ref) => {
     const expectedPreviews = useStore(tutorialRunner.previews);
-    const iframeRefs = useRef<IframeRef[]>([]);
+    const iframeRefs = useRef<IFrameRef[]>([]);
 
     const onResize = useCallback(() => {
       const padding = 1;
@@ -125,7 +125,7 @@ export const PreviewPanel = memo(
 );
 
 interface PreviewProps {
-  iframe: IframeRef;
+  iframe: IFrameRef;
   onResize: () => void;
   preview: PreviewInfo;
   previewCount: number;
@@ -205,7 +205,9 @@ function previewTitle(preview: PreviewInfo, previewCount: number) {
 function preparePreviewsContainer(previewCount: number) {
   while (previewsContainer.childElementCount < previewCount) {
     const iframe = document.createElement('iframe');
+
     iframe.className = 'absolute -z-10';
+
     iframe.allow =
       document.featurePolicy?.allowedFeatures() ??
       'magnetometer; accelerometer; gyroscope; geolocation; microphone; camera; payment; autoplay; serial; xr-spatial-tracking; cross-origin-isolated';
@@ -224,7 +226,7 @@ function preparePreviewsContainer(previewCount: number) {
   }
 }
 
-function newIframeRef(): IframeRef {
+function newIframeRef(): IFrameRef {
   return { ref: undefined, container: undefined };
 }
 
