@@ -15,7 +15,7 @@ import type { AstroIntegrationLogger } from 'astro';
 const CUSTOM_PATHS = ['theme.css', 'theme/style.css', 'theme/styles.css', 'theme/variables.css'];
 
 const virtualModuleId = '@tutorialkit/custom.css';
-const resolvedVirtualModuleId = `/` + virtualModuleId;
+const resolvedVirtualModuleId = `/${virtualModuleId}`;
 
 let projectRoot = process.cwd();
 
