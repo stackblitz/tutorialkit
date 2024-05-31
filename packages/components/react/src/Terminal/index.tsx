@@ -7,12 +7,13 @@ import { darkTheme, lightTheme } from './theme.js';
 
 export interface Props {
   theme: 'dark' | 'light';
+  className?: string;
   readonly?: boolean;
   onTerminalReady?: (terminal: XTerm) => void;
-  onTerminalResize?: () => void;
+  onTerminalResize?: (cols: number, rows: number) => void;
 }
 
-export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalResize }: Props) {
+export function Terminal({ theme, className, readonly = true, onTerminalReady, onTerminalResize }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm>();
 
@@ -51,7 +52,7 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
 
     const resizeObserver = new ResizeObserver(() => {
       fitAddon.fit();
-      onTerminalResize?.();
+      onTerminalResize?.(terminal.cols, terminal.rows);
     });
 
     resizeObserver.observe(element);
@@ -74,7 +75,7 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
     terminal.options.theme = theme === 'dark' ? darkTheme : lightTheme;
   }, [theme]);
 
-  return <div className="h-full" ref={divRef} />;
+  return <div className={`h-full ${className}`} ref={divRef} />;
 }
 
 export default Terminal;

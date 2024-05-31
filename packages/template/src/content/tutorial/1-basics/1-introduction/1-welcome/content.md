@@ -9,6 +9,8 @@ prepareCommands:
   - ['node --version', 'Print Node.js version']
   - ['node -e setTimeout(()=>{},5000)', 'Installing dependencies']
   - ['node -e setTimeout(()=>{process.exit(1)},5000)', 'This is going to fail']
+terminal:
+  panels: ['terminal', 'output']
 ---
 
 # Kitchen Sink [Heading 1]

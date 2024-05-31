@@ -35,6 +35,7 @@ export default defineConfig({
   shortcuts: {
     'panel-container': 'grid grid-rows-[min-content_1fr] h-full',
     'panel-header': 'flex items-center px-4 py-2 bg-tk-elements-panel-header-backgroundColor min-h-[38px]',
+    'panel-tabs-header': 'flex bg-tk-elements-panel-header-backgroundColor h-[38px]',
     'panel-title': 'flex items-center gap-1.5 text-tk-elements-panel-header-textColor',
     'panel-icon': 'text-tk-elements-panel-header-iconColor',
     'panel-button':

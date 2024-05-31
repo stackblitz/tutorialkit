@@ -4,7 +4,7 @@ export const darkTheme: ITheme = {
   cursor: '#eff0eb',
   cursorAccent: '#00000000',
   foreground: '#eff0eb',
-  background: '#16181d',
+  background: '#232429',
   red: '#ff5c57',
   green: '#5af78e',
   yellow: '#f3f99d',

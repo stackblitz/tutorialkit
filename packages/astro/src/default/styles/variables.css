@@ -146,6 +146,20 @@
   --tk-elements-panel-headerButton-iconColor: var(--tk-text-secondary);
   --tk-elements-panel-headerButton-iconColorHover: var(--tk-text-primary);
 
+  /* Panel > Header Tab */
+  --tk-elements-panel-headerTab-backgroundColor: var(--tk-elements-panel-header-backgroundColor);
+  --tk-elements-panel-headerTab-backgroundColorHover: var(--tk-background-active);
+  --tk-elements-panel-headerTab-backgroundColorActive: var(--tk-background-primary);
+  --tk-elements-panel-headerTab-borderColor: var(--tk-elements-panel-header-backgroundColor);
+  --tk-elements-panel-headerTab-borderColorHover: var(--tk-background-active);
+  --tk-elements-panel-headerTab-borderColorActive: var(--tk-elements-app-borderColor);
+  --tk-elements-panel-headerTab-textColor: var(--tk-elements-panel-header-textColor);
+  --tk-elements-panel-headerTab-textColorHover: var(--tk-elements-panel-header-textColor);
+  --tk-elements-panel-headerTab-textColorActive: var(--tk-text-active);
+  --tk-elements-panel-headerTab-iconColor: var(--tk-elements-panel-header-iconColor);
+  --tk-elements-panel-headerTab-iconColorHover: var(--tk-elements-panel-header-iconColor);
+  --tk-elements-panel-headerTab-iconColorActive: var(--tk-text-active);
+
   /* File Tree */
   --tk-elements-fileTree-backgroundColor: var(--tk-elements-app-backgroundColor);
   --tk-elements-fileTree-backgroundColorHover: var(--tk-background-secondary);

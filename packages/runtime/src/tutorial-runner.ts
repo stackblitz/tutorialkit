@@ -1,4 +1,4 @@
-import type { CommandsSchema, Files, PreviewSchema } from '@tutorialkit/types';
+import type { CommandsSchema, Files, PreviewSchema, TerminalSchema } from '@tutorialkit/types';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { auth } from '@webcontainer/api';
 import { atom } from 'nanostores';
@@ -8,9 +8,11 @@ import { tick } from './utils/promises.js';
 import { isWebContainerSupported } from './utils/support.js';
 import { Command, Commands } from './webcontainer/command.js';
 import { PreviewInfo } from './webcontainer/preview-info.js';
-import type { ITerminal } from './webcontainer/shell';
+import { newShellProcess, type ITerminal } from './webcontainer/shell.js';
 import { StepsController } from './webcontainer/steps.js';
 import { diffFiles, toFileTree } from './webcontainer/utils/files.js';
+import { TerminalConfig } from './webcontainer/terminal-config.js';
+import { Output } from './output.js';
 
 interface LoadFilesOptions {
   /**
@@ -52,6 +54,15 @@ interface RunCommandsOptions extends CommandsSchema {
   abortPreviousRun?: boolean;
 }
 
+
+class Terminal {
+  constructor(private readonly process: WebContainerProcess) {}
+
+  resize(cols: number, rows: number) {
+    this.process.resize({ cols, rows });
+  }
+}
+
 /**
  * The idea behind this class is that it manages the state of WebContainer and exposes
  * an interface that makes sense to every component of TutorialKit.
@@ -66,7 +77,8 @@ export class TutorialRunner {
   private _currentTemplate: Files | undefined = undefined;
   private _currentFiles: Files | undefined = undefined;
   private _currentRunCommands: Commands | undefined = undefined;
-  private _output: ITerminal | undefined = undefined;
+  private _output = new Output();
+  private _terminals: Terminal[] = [];
   private _packageJsonDirty = false;
 
   // this strongly assumes that there's a single package json which might not be true
@@ -88,6 +100,8 @@ export class TutorialRunner {
    * the previews are ready, then no preview can be shown.
    */
   previews = atom<PreviewInfo[]>([]);
+
+  terminalConfig = atom<TerminalConfig>(new TerminalConfig());
 
   constructor(
     private _webcontainer: Promise<WebContainer>,
@@ -171,6 +185,10 @@ export class TutorialRunner {
     } else {
       this.previews.set(this._previewsLayout);
     }
+  }
+
+  setTerminalConfiguration(config?: TerminalSchema) {
+    this.terminalConfig.set(new TerminalConfig(config));
   }
 
   /**
@@ -282,77 +300,57 @@ export class TutorialRunner {
   }
 
   /**
-   * Connect a terminal to WebContainer in order to get output of processes executed by the
+   * Connects the output panel to the runner in order to get output of processes executed by the
    * `TutorialRunner`.
    *
-   * @param terminal Terminal to hook up to WebContainer.
+   * @param terminal The output terminal to hook up to the processes.
    */
-  hookOutputPanel(terminal: ITerminal) {
-    this._output = terminal;
+  attachOutputPanel(terminal: ITerminal) {
+    this._output.register(terminal);
 
-    if (!isWebContainerSupported()) {
-      terminal.write(
-        [
-          escapeCodes.red('Incompatible Web Browser'),
-          '',
-          `WebContainers currently work in Chromium-based browsers, Firefox, and Safari 16.4. We're hoping to add support for more browsers as they implement the necessary Web Platform features.`,
-          '',
-          'Read more about browser support:',
-          'https://webcontainers.io/guides/browser-support',
-          '',
-        ].join('\n'),
-      );
+    try {
+      validateWebContainerSupported(terminal);
 
-      return;
-    }
-
-    if (!this._webcontainerLoaded) {
-      Promise.resolve()
-        .then(async () => {
-          if (this._useAuth) {
-            terminal.write('Waiting for authentication to complete...');
-
-            await auth.loggedIn();
-          }
-
-          terminal.write('Booting WebContainer...');
-
-          return this._webcontainer;
-        })
-        .then(async () => {
-          await tick();
-
-          clearTerminal(terminal);
-        })
-        .catch(async () => {
-          /**
-           * We wait until the next tick to render the error cause it can happen
-           * that the terminal is not cleared.
-           */
-          await tick();
-
-          clearTerminal(terminal);
-
-          terminal.write(
-            [
-              escapeCodes.red(`Looks like your browser's configuration is blocking WebContainers.`),
-              '',
-              `Let's troubleshoot this!`,
-              '',
-              'Read more at:',
-              'https://webcontainers.io/guides/browser-config',
-              '',
-            ].join('\n'),
-          );
-        });
+      if (!this._webcontainerLoaded) {
+        this._bootWebContainer(terminal);
+      }
+    } catch {
+      // do nothing if it fails, it means WebContainer is not supported
     }
   }
 
-  onOutputResize() {
-    const { cols, rows } = this._output ?? {};
+  /**
+   * Connects the terminal panel to a fresh JSH process which acts as a real terminal that can be interacted with.
+   *
+   * @param terminal The terminal to hook up to the JSH process.
+   */
+  attachTerminal(terminal: ITerminal) {
+    try {
+      validateWebContainerSupported(terminal);
 
+      this._bootWebContainer(terminal).then(async (webcontainerInstance) => {
+        const controller = new AbortController();
+
+        const process = await newShellProcess(webcontainerInstance, controller.signal, terminal);
+
+        this._terminals.push(new Terminal(process));
+      });
+    } catch {
+      // do nothing if it fails, it means WebContainer is not supported
+    }
+  }
+
+  onTerminalResize(cols: number, rows: number) {
     if (cols && rows) {
+      this._output.resize(cols, rows);
+
+      // resize the current command process which is visible in the output panel
       this._currentCommandProcess?.resize({ cols, rows });
+
+      // iterate over all terminals and call resize
+      for (const terminal of this._terminals) {
+        terminal.resize(cols, rows);
+      }
     }
   }
 
@@ -620,11 +618,51 @@ export class TutorialRunner {
 
     return false;
   }
+
+  private async _bootWebContainer(terminal: ITerminal) {
+    if (this._useAuth) {
+      terminal.write('Waiting for authentication to complete...');
+
+      await auth.loggedIn();
+
+      clearTerminal(terminal);
+    }
+
+    if (!this._webcontainerLoaded) {
+      terminal.write('Booting WebContainer...');
+    }
+
+    try {
+      const webcontainerInstance = await this._webcontainer;
+
+      clearTerminal(terminal);
+
+      return webcontainerInstance;
+    } catch (error) {
+      clearTerminal(terminal);
+
+      await tick();
+
+      terminal.write(
+        [
+          escapeCodes.red(`Looks like your browser's configuration is blocking WebContainers.`),
+          '',
+          `Let's troubleshoot this!`,
+          '',
+          'Read more at:',
+          'https://webcontainers.io/guides/browser-config',
+          '',
+        ].join('\n'),
+      );
+
+      throw error;
+    }
+  }
 }
 
-function clearTerminal(terminal?: ITerminal) {
-  terminal?.reset();
-  terminal?.write(escapeCodes.clear);
+function clearTerminal(output: { reset: () => void, write: (data: string) => void; }) {
+  output.reset();
+  output.write(escapeCodes.clear);
 }
 
 function commandsToList(commands: Commands | CommandsSchema) {
@@ -643,4 +681,22 @@ async function updateFiles(webcontainer: WebContainer, previousFiles: Files, new
   }
 
   await webcontainer.mount(toFileTree(addedOrModified));
+}
+
+function validateWebContainerSupported(terminal: ITerminal) {
+  if (!isWebContainerSupported()) {
+    terminal.write(
+      [
+        escapeCodes.red('Incompatible Web Browser'),
+        '',
+        `WebContainers currently work in Chromium-based browsers, Firefox, and Safari 16.4. We're hoping to add support for more browsers as they implement the necessary Web Platform features.`,
+        '',
+        'Read more about browser support:',
+        'https://webcontainers.io/guides/browser-support',
+        '',
+      ].join('\n'),
+    );
+
+    throw new Error('Incompatible Web Browser');
+  }
 }
