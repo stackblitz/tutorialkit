@@ -209,7 +209,7 @@ function preparePreviewsContainer(previewCount: number) {
     iframe.className = 'absolute -z-10';
 
     iframe.allow =
-      document.featurePolicy?.allowedFeatures() ??
+      document.featurePolicy?.allowedFeatures().join('; ') ??
       'magnetometer; accelerometer; gyroscope; geolocation; microphone; camera; payment; autoplay; serial; xr-spatial-tracking; cross-origin-isolated';
 
     previewsContainer.appendChild(iframe);
@@ -244,7 +244,7 @@ declare global {
   interface Document {
     featurePolicy:
       | {
-          allowedFeatures(): string;
+          allowedFeatures(): string[];
         }
       | undefined;
   }
