@@ -3,7 +3,7 @@ import type { PreviewInfo, TutorialRunner } from '@tutorialkit/runtime';
 import { useStore } from '@nanostores/react';
 import resizePanelStyles from '../styles/resize-panel.module.css';
 import { classNames } from '../utils/classnames.js';
-import { createElement, forwardRef, memo, useEffect, useImperativeHandle, useRef } from 'react';
+import { createElement, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 const previewsContainer = globalThis.document ? document.getElementById('previews-container')! : ({} as HTMLElement);
 
-type IframeRef = { ref: HTMLIFrameElement | undefined };
+type IframeRef = { ref: HTMLIFrameElement | undefined; container: HTMLElement | undefined };
 
 export type ImperativePreviewHandle = {
   reload: () => void;
@@ -23,6 +23,22 @@ export const PreviewPanel = memo(
   forwardRef<ImperativePreviewHandle, Props>(({ toggleTerminal, tutorialRunner }, ref) => {
     const expectedPreviews = useStore(tutorialRunner.previews);
     const iframeRefs = useRef<IframeRef[]>([]);
+
+    const onResize = useCallback(() => {
+      const padding = 1;
+
+      for (const { ref, container } of iframeRefs.current) {
+        if (!ref || !container) {
+          continue;
+        }
+
+        const { left, top, width, height } = container.getBoundingClientRect();
+        ref.style.left = `${Math.floor(left) - padding}px`;
+        ref.style.top = `${Math.floor(top) - padding}px`;
+        ref.style.height = `${Math.floor(height) + padding}px`;
+        ref.style.width = `${Math.floor(width) + padding}px`;
+      }
+    }, []);
 
     const activePreviewsCount = expectedPreviews.reduce((count, preview) => (preview.ready ? count + 1 : count), 0);
     const hasPreviews = activePreviewsCount > 0;
@@ -46,7 +62,7 @@ export const PreviewPanel = memo(
       [],
     );
 
-    adjustSize(iframeRefs.current, activePreviewsCount, newIframeRef);
+    adjustLength(iframeRefs.current, activePreviewsCount, newIframeRef);
     preparePreviewsContainer(activePreviewsCount);
 
     // update preview refs
@@ -89,6 +105,7 @@ export const PreviewPanel = memo(
         <Panel defaultSize={defaultSize} minSize={minSize}>
           <Preview
             iframe={iframeRefs.current[index]}
+            onResize={onResize}
             preview={preview}
             previewCount={previews.length}
             first={index === 0}
@@ -109,6 +126,7 @@ export const PreviewPanel = memo(
 
 interface PreviewProps {
   iframe: IframeRef;
+  onResize: () => void;
   preview: PreviewInfo;
   previewCount: number;
   first?: boolean;
@@ -116,7 +134,7 @@ interface PreviewProps {
   toggleTerminal?: () => void;
 }
 
-function Preview({ preview, iframe, previewCount, first, last, toggleTerminal }: PreviewProps) {
+function Preview({ preview, iframe, onResize, previewCount, first, last, toggleTerminal }: PreviewProps) {
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -124,25 +142,15 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal }:
       return;
     }
 
+    iframe.container = previewContainerRef.current!;
+
     if (preview.url) {
       iframe.ref.src = preview.url;
     }
   }, [preview.url, iframe.ref]);
 
   useEffect(() => {
-    const padding = 1;
-    const resizeObserver = new ResizeObserver(() => {
-      if (!iframe.ref) {
-        return;
-      }
-
-      const { left, top, width, height } = previewContainerRef.current?.getBoundingClientRect()!;
-      iframe.ref.style.left = `${Math.floor(left) - padding}px`;
-      iframe.ref.style.top = `${Math.floor(top) - padding}px`;
-      iframe.ref.style.height = `${Math.floor(height) + padding}px`;
-      iframe.ref.style.width = `${Math.floor(width) + padding}px`;
-    });
-
+    const resizeObserver = new ResizeObserver(onResize);
     resizeObserver.observe(previewContainerRef.current!);
 
     return () => {
@@ -217,10 +225,10 @@ function preparePreviewsContainer(previewCount: number) {
 }
 
 function newIframeRef(): IframeRef {
-  return { ref: undefined };
+  return { ref: undefined, container: undefined };
 }
 
-function adjustSize<T>(array: T[], expectedSize: number, newElement: () => T) {
+function adjustLength<T>(array: T[], expectedSize: number, newElement: () => T) {
   while (array.length < expectedSize) {
     array.push(newElement());
   }
