@@ -1,8 +1,12 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
+import Inspect from 'vite-plugin-inspect';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { WebContainerFiles } from './webcontainer-files.js';
+import { userlandCSS, watchUserlandCSS } from './css.js';
+
+export { theme } from './theme.js';
 
 export interface Options {
   /**
@@ -76,18 +80,14 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
               __ENTERPRISE__: `${!!enterprise}`,
               __WC_CONFIG__: enterprise ? JSON.stringify(enterprise) : 'undefined',
             },
+            ssr: {
+              noExternal: ['@tutorialkit/astro', '@tutorialkit/components-react'],
+            },
+            plugins: [userlandCSS, process.env.TUTORIALKIT_DEV ? Inspect() : null],
           },
         });
 
         updateMarkdownConfig(options);
-
-        updateConfig({
-          vite: {
-            ssr: {
-              noExternal: ['@tutorialkit/astro', '@tutorialkit/components-react'],
-            },
-          },
-        });
 
         if (defaultRoutes) {
           injectRoute({
@@ -110,10 +110,13 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
       'astro:config:done'({ config }) {
         _config = config;
       },
-      'astro:server:setup'(astroServerSetupOptions) {
+      'astro:server:setup'(options) {
+        const { server, logger } = options;
         const projectRoot = fileURLToPath(_config.root);
 
-        webcontainerFiles.serverSetup(projectRoot, astroServerSetupOptions);
+        webcontainerFiles.serverSetup(projectRoot, options);
+
+        watchUserlandCSS(server, logger);
       },
       async 'astro:server:done'() {
         await webcontainerFiles.serverDone();

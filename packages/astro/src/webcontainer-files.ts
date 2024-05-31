@@ -25,7 +25,7 @@ export class WebContainerFiles {
       templatesDir,
     ]);
 
-    this._watcher.on('all', async (eventName, filePath) => {
+    this._watcher.on('all', (eventName, filePath) => {
       // new directories don't affect the file tree
       if (eventName === 'addDir') {
         return;

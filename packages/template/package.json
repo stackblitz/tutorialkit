@@ -22,6 +22,7 @@
     "@iconify-json/svg-spinners": "^1.1.2",
     "@tutorialkit/astro": "workspace:*",
     "@tutorialkit/types": "workspace:*",
+    "@types/node": "^20.12.7",
     "@unocss/reset": "^0.59.4",
     "@unocss/transformer-directives": "^0.59.4",
     "astro": "^4.8.6",

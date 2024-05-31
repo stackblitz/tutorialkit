@@ -1,9 +1,9 @@
+import { theme } from '@tutorialkit/astro';
 import transformerDirectives from '@unocss/transformer-directives';
 import { globSync } from 'fast-glob';
 import fs from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { defineConfig, presetIcons, presetUno } from 'unocss';
-import { theme } from './theme';
 
 const iconPaths = globSync('./icons/languages/*.svg');
 
