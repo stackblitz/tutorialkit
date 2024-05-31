@@ -199,6 +199,7 @@ function preparePreviewsContainer(previewCount: number) {
     const iframe = document.createElement('iframe');
     iframe.className = 'absolute -z-10';
     iframe.allow =
+      document.featurePolicy?.allowedFeatures() ??
       'magnetometer; accelerometer; gyroscope; geolocation; microphone; camera; payment; autoplay; serial; xr-spatial-tracking; cross-origin-isolated';
 
     previewsContainer.appendChild(iframe);
@@ -226,5 +227,15 @@ function adjustSize<T>(array: T[], expectedSize: number, newElement: () => T) {
 
   while (array.length > expectedSize) {
     array.pop();
+  }
+}
+
+declare global {
+  interface Document {
+    featurePolicy:
+      | {
+          allowedFeatures(): string;
+        }
+      | undefined;
   }
 }
