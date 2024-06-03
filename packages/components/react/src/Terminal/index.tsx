@@ -3,7 +3,7 @@ import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import { useEffect, useRef } from 'react';
-import { darkTheme, lightTheme } from './theme.js';
+import { getTerminalTheme } from './theme.js';
 
 export interface Props {
   theme: 'dark' | 'light';
@@ -31,7 +31,7 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
       cursorBlink: true,
       convertEol: true,
       disableStdin: readonly,
-      theme: theme === 'dark' ? darkTheme : lightTheme,
+      theme: getTerminalTheme(),
       fontSize: 13,
       fontFamily: 'Menlo, courier-new, courier, monospace',
     });
@@ -71,7 +71,7 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
 
     const terminal = terminalRef.current;
 
-    terminal.options.theme = theme === 'dark' ? darkTheme : lightTheme;
+    terminal.options.theme = getTerminalTheme();
   }, [theme]);
 
   return <div className="h-full" ref={divRef} />;
