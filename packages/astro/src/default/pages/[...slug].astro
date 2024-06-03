@@ -21,6 +21,7 @@ const { lesson, navList, title } = Astro.props as Props;
 ---
 
 <Layout title={title}>
+  <div id="previews-container"></div>
   <main class="max-w-full flex flex-col h-screen overflow-hidden" data-swap-root>
     <Header />
     <ResizablePanel

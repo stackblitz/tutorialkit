@@ -269,15 +269,6 @@ export class TutorialRunner {
 
         signal.throwIfAborted();
 
-        // always re-apply the template as a lesson could have touched some of its files
-        if (template) {
-          await webcontainer.mount(toFileTree(template));
-
-          this._updateDirtyState(template);
-        }
-
-        signal.throwIfAborted();
-
         if (this._currentFiles || this._currentTemplate) {
           await updateFiles(
             webcontainer,
@@ -285,7 +276,7 @@ export class TutorialRunner {
             { ...template, ...files },
           );
         } else {
-          await webcontainer.mount(toFileTree(files));
+          await webcontainer.mount(toFileTree({ ...template, ...files }));
         }
 
         this._currentTemplate = { ...template };

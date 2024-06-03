@@ -13,7 +13,7 @@ export function BootScreen({ className, tutorialRunner }: Props) {
   return (
     <div
       className={classNames(
-        'h-full w-full flex justify-center items-center text-sm bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor',
+        'flex-grow w-full flex justify-center items-center text-sm bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor',
         className,
       )}
     >
