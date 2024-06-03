@@ -18,6 +18,7 @@ export type NormalizedTerminalConfig = {
  */
 export function normalizeTerminalConfig(config?: TerminalConfig): NormalizedTerminalConfig {
   let activePanel = 0;
+
   let panels: Array<[PanelType, string]> = [
     ['output', 'Output']
   ];

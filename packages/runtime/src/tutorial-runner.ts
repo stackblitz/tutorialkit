@@ -309,11 +309,7 @@ export class TutorialRunner {
     this._output.register(terminal);
 
     try {
-      validateWebContainerSupported(terminal);
-
-      if (!this._webcontainerLoaded) {
-        this._bootWebContainer(terminal);
-      }
+      this._bootWebContainer(terminal);
     } catch {
       // do nothing if it fails, it means WebContainer is not supported
     }
@@ -326,8 +322,6 @@ export class TutorialRunner {
    */
   attachTerminal(terminal: ITerminal) {
     try {
-      validateWebContainerSupported(terminal);
-
       this._bootWebContainer(terminal).then(async (webcontainerInstance) => {
         const controller = new AbortController();
 
@@ -620,7 +614,9 @@ export class TutorialRunner {
   }
 
   private async _bootWebContainer(terminal: ITerminal) {
-    if (this._useAuth) {
+    validateWebContainerSupported(terminal);
+
+    if (this._useAuth && !this._webcontainerLoaded) {
       terminal.write('Waiting for authentication to complete...');
 
       await auth.loggedIn();

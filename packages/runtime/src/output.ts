@@ -1,4 +1,4 @@
-import type { ITerminal } from "./webcontainer/shell";
+import type { ITerminal } from './webcontainer/shell.js';
 
 /**
  * The output of the tutorial could be written to multiple output panels. This class contains a list of all the panels
