@@ -53,7 +53,8 @@ export function TerminalPanel({ theme, tutorialRunner }: TerminalPanelProps) {
                       aria-selected={selected}
                       onClick={() => setTabIndex(index) }
                     >
-                      <span className={classNames(`text-tk-elements-panel-headerTab-iconColor group-hover:text-tk-elements-panel-headerTab-iconColorHover ${ICON_MAP.get(type) ?? ''}`, {
+                      <span className={classNames(`text-tk-elements-panel-headerTab-iconColor ${ICON_MAP.get(type) ?? ''}`, {
+                        'group-hover:text-tk-elements-panel-headerTab-iconColorHover': !selected,
                         'text-tk-elements-panel-headerTab-iconColorActive': selected
                       })}></span>
                       {name}
