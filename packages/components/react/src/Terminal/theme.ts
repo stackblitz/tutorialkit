@@ -7,7 +7,6 @@ const THEME_CACHE = new Map<'light' | 'dark', ITheme>();
 
 export function getTerminalTheme(theme: 'light' | 'dark'): ITheme {
   if (THEME_CACHE.has(theme)) {
-    console.log('grab from cache!');
     return THEME_CACHE.get(theme)!;
   }
 
