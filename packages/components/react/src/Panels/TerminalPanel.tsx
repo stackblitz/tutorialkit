@@ -44,7 +44,7 @@ export function TerminalPanel({ theme, tutorialRunner }: TerminalPanelProps) {
                   <li key={index}>
                     <button
                       className={classNames('group h-full px-4 flex items-center gap-1.5 whitespace-nowrap text-sm position-relative border-r border-tk-elements-panel-headerTab-borderColor', {
-                        'bg-tk-elements-panel-headerTab-backgroundColor hover:bg-tk-elements-panel-headerTab-backgroundColorHover text-tk-elements-panel-headerTab-textColor hover:text-tk-elements-panel-headerTab-textColorHover': !selected,
+                        'bg-tk-elements-panel-headerTab-backgroundColor text-tk-elements-panel-headerTab-textColor hover:bg-tk-elements-panel-headerTab-backgroundColorHover hover:text-tk-elements-panel-headerTab-textColorHover hover:border-tk-elements-panel-headerTab-borderColorHover': !selected,
                         'bg-tk-elements-panel-headerTab-backgroundColorActive text-tk-elements-panel-headerTab-textColorActive border-tk-elements-panel-headerTab-borderColorActive': selected,
                         'shadow-[0px_1px_0px_0px] shadow-tk-elements-panel-headerTab-backgroundColorActive': selected,
                         'border-l': index > 0
