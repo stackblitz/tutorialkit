@@ -31,7 +31,7 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
       cursorBlink: true,
       convertEol: true,
       disableStdin: readonly,
-      theme: getTerminalTheme(),
+      theme: getTerminalTheme(theme),
       fontSize: 13,
       fontFamily: 'Menlo, courier-new, courier, monospace',
     });
@@ -71,7 +71,7 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
 
     const terminal = terminalRef.current;
 
-    terminal.options.theme = getTerminalTheme();
+    terminal.options.theme = getTerminalTheme(theme);
   }, [theme]);
 
   return <div className="h-full" ref={divRef} />;
