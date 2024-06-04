@@ -108,6 +108,15 @@ export const webcontainerSchema = commandsSchema.extend({
   autoReload: z.boolean().optional(),
   template: z.string().optional(),
   terminal: terminalSchema.optional(),
+  editor: z.union([
+    // can either be completely removed by setting it to `false`
+    z.boolean().optional(),
+
+    // or you can only remove the file tree
+    z.strictObject({
+      fileTree: z.boolean().optional()
+    }),
+  ]),
 });
 
 export const baseSchema = webcontainerSchema.extend({
