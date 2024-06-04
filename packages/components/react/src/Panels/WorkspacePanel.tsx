@@ -14,6 +14,7 @@ import type { Theme } from '../types';
 import { EditorPanel } from './EditorPanel.js';
 import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';
+import { classNames } from '../utils/classnames.js';
 
 const DEFAULT_TERMINAL_SIZE = 25;
 
@@ -35,10 +36,13 @@ type EditorState = Record<string, EditorDocument>;
  * This component is the orchestrator between various interactive components.
  */
 export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
-  const { fileTree } = lesson.data;
+  const { editor } = lesson.data;
+
+  const fileTree = editor === undefined || editor === true || (editor !== false && editor?.fileTree !== false);
 
   const terminalConfig = useStore(tutorialRunner.terminalConfig);
 
+  const editorPanelRef = useRef<ImperativePanelHandle>(null);
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
   const previewRef = useRef<ImperativePreviewHandle>(null);
   const terminalExpanded = useRef(false);
@@ -234,6 +238,17 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
       setHelpAction('reset');
     }
 
+    // collapse the editor if it should be hidden entirely
+    if (lesson.data.editor !== false) {
+      if (editorPanelRef.current?.isCollapsed()) {
+        editorPanelRef.current?.expand();
+      }
+    } else {
+      if (!editorPanelRef.current?.isCollapsed()) {
+        editorPanelRef.current?.collapse();
+      }
+    }
+
     return () => task.cancel();
   }, [lesson]);
 
@@ -265,7 +280,12 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
 
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
-      <Panel defaultSize={50} minSize={10}>
+      <Panel
+        defaultSize={50}
+        minSize={10}
+        collapsible
+        ref={editorPanelRef}
+      >
         <EditorPanel
           theme={theme}
           showFileTree={fileTree}
@@ -278,7 +298,13 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
           onEditorChange={onEditorChange}
         />
       </Panel>
-      <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 5, coarse: 5 }} />
+      <PanelResizeHandle
+        className={classNames(resizePanelStyles.PanelResizeHandle, {
+          'border-t border-tk-elements-app-borderColor': editor !== false
+        })}
+        hitAreaMargins={{ fine: 5, coarse: 5 }}
+        disabled={editor === false}
+      />
       <Panel defaultSize={50} minSize={10}>
         <PreviewPanel
           tutorialRunner={tutorialRunner}
