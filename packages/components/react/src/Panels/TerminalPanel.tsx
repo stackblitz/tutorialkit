@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { type TutorialRunner } from '@tutorialkit/runtime';
+import type { TutorialRunner } from '@tutorialkit/runtime';
 import type { TerminalPanelType } from '@tutorialkit/types';
 import { classNames } from '../utils/classnames.js';
 
