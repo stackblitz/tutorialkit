@@ -16,6 +16,7 @@ import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';
 import { classNames } from '../utils/classnames.js';
 
+const DEFAULT_EDITOR_SIZE = 50;
 const DEFAULT_TERMINAL_SIZE = 25;
 
 interface Props {
@@ -241,6 +242,7 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
     // collapse the editor if it should be hidden entirely
     if (lesson.data.editor !== false) {
       if (editorPanelRef.current?.isCollapsed()) {
+        editorPanelRef.current?.resize(DEFAULT_EDITOR_SIZE);
         editorPanelRef.current?.expand();
       }
     } else {
@@ -281,8 +283,8 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
       <Panel
-        defaultSize={50}
-        minSize={10}
+        defaultSize={editor === false ? 0 : DEFAULT_EDITOR_SIZE}
+        minSize={editor === false ? 0 : 10}
         collapsible
         ref={editorPanelRef}
       >
