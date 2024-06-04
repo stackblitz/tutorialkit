@@ -1,3 +1,12 @@
+export interface ITerminal {
+  readonly cols?: number;
+  readonly rows?: number;
+
+  reset: () => void;
+  write: (data: string) => void;
+  onData: (cb: (data: string) => void) => void;
+}
+
 const reset = '\x1b[0m';
 
 export const escapeCodes = {

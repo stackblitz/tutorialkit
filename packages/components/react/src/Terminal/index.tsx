@@ -1,18 +1,19 @@
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
-import { Terminal as XTerm } from '@xterm/xterm';
+import { Terminal as XTerm, type ITheme } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import { useEffect, useRef } from 'react';
 import { getTerminalTheme } from './theme.js';
 
 export interface Props {
   theme: 'dark' | 'light';
+  className?: string;
   readonly?: boolean;
   onTerminalReady?: (terminal: XTerm) => void;
-  onTerminalResize?: () => void;
+  onTerminalResize?: (cols: number, rows: number) => void;
 }
 
-export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalResize }: Props) {
+export function Terminal({ theme, className, readonly = true, onTerminalReady, onTerminalResize }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm>();
 
@@ -31,15 +32,10 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
       cursorBlink: true,
       convertEol: true,
       disableStdin: readonly,
-      theme: getTerminalTheme(),
+      theme: getTerminalTheme(readonly ? { cursor: '#00000000'} : {}),
       fontSize: 13,
       fontFamily: 'Menlo, courier-new, courier, monospace',
     });
-
-    if (readonly) {
-      // write DECTCEM to the terminal to hide the cursor if we are in readonly mode
-      terminal.write('\x1b[?25l');
-    }
 
     terminalRef.current = terminal;
 
@@ -51,7 +47,7 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
 
     const resizeObserver = new ResizeObserver(() => {
       fitAddon.fit();
-      onTerminalResize?.();
+      onTerminalResize?.(terminal.cols, terminal.rows);
     });
 
     resizeObserver.observe(element);
@@ -71,10 +67,12 @@ export function Terminal({ theme, readonly = true, onTerminalReady, onTerminalRe
 
     const terminal = terminalRef.current;
 
-    terminal.options.theme = getTerminalTheme();
-  }, [theme]);
+    // we render a transparent cursor in case the terminal is readonly
+    terminal.options.theme = getTerminalTheme(readonly ? { cursor: '#00000000'} : {});
+    terminal.options.disableStdin = readonly;
+  }, [theme, readonly]);
 
-  return <div className="h-full" ref={divRef} />;
+  return <div className={`h-full ${className}`} ref={divRef} />;
 }
 
 export default Terminal;

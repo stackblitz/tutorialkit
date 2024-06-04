@@ -3,7 +3,7 @@ import type { ITheme } from '@xterm/xterm';
 const style = getComputedStyle(document.documentElement);
 const cssVar = (token: string) => style.getPropertyValue(token) || undefined;
 
-export function getTerminalTheme(): ITheme {
+export function getTerminalTheme(overrides?: ITheme): ITheme {
   return {
     cursor: cssVar('--tk-elements-terminal-cursorColor'),
     cursorAccent: cssVar('--tk-elements-terminal-cursorColorAccent'),
@@ -30,5 +30,7 @@ export function getTerminalTheme(): ITheme {
     brightMagenta: cssVar('--tk-elements-terminal-color-brightMagenta'),
     brightCyan: cssVar('--tk-elements-terminal-color-brightCyan'),
     brightWhite: cssVar('--tk-elements-terminal-color-brightWhite'),
+
+    ...overrides
   };
 }

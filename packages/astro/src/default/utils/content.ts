@@ -116,7 +116,7 @@ export async function getTutorial(): Promise<Tutorial> {
     lesson.data = {
       ...pick(
         [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
-        ['mainCommand', 'prepareCommands', 'previews', 'autoReload', 'template'],
+        ['mainCommand', 'prepareCommands', 'previews', 'autoReload', 'template', 'terminal'],
       ),
       ...lesson.data,
     };

@@ -4,6 +4,7 @@
   --tk-background-primary: theme('colors.gray.0');
   --tk-background-secondary: theme('colors.gray.50');
   --tk-background-active: theme('colors.gray.100');
+  --tk-background-active-secondary: theme('colors.gray.0');
   --tk-background-brighter: theme('colors.gray.0');
   --tk-background-accent: theme('colors.accent.600');
   --tk-background-accent-secondary: theme('colors.accent.600');
@@ -40,7 +41,6 @@
   --tk-border-tip: theme('colors.tip.600');
 
   /* Terminal Colors */
-  --tk-terminal-background: theme('colors.gray.0');
   --tk-terminal-foreground: #333333;
   --tk-terminal-selection: #00000040;
 
@@ -67,6 +67,7 @@
   --tk-background-primary: theme('colors.gray.950');
   --tk-background-secondary: theme('colors.gray.900');
   --tk-background-active: theme('colors.gray.800');
+  --tk-background-active-secondary: theme('colors.gray.1000');
   --tk-background-brighter: theme('colors.gray.800');
   --tk-background-accent: theme('colors.accent.800');
   --tk-background-accent-secondary: theme('colors.accent.400');
@@ -103,7 +104,6 @@
   --tk-border-tip: theme('colors.tip.500');
 
   /* Terminal Colors */
-  --tk-terminal-background: theme('colors.gray.1000');
   --tk-terminal-foreground: #eff0eb;
   --tk-terminal-selection-background: #97979b33;
 
@@ -190,6 +190,20 @@
   --tk-elements-panel-headerButton-iconColor: var(--tk-text-secondary);
   --tk-elements-panel-headerButton-iconColorHover: var(--tk-text-primary);
 
+  /* Panel > Header Tab */
+  --tk-elements-panel-headerTab-backgroundColor: var(--tk-elements-panel-header-backgroundColor);
+  --tk-elements-panel-headerTab-backgroundColorHover: var(--tk-background-active);
+  --tk-elements-panel-headerTab-backgroundColorActive: var(--tk-background-active-secondary);
+  --tk-elements-panel-headerTab-borderColor: var(--tk-elements-panel-header-backgroundColor);
+  --tk-elements-panel-headerTab-borderColorHover: var(--tk-background-active);
+  --tk-elements-panel-headerTab-borderColorActive: var(--tk-elements-app-borderColor);
+  --tk-elements-panel-headerTab-textColor: var(--tk-elements-panel-header-textColor);
+  --tk-elements-panel-headerTab-textColorHover: var(--tk-elements-panel-header-textColor);
+  --tk-elements-panel-headerTab-textColorActive: var(--tk-text-active);
+  --tk-elements-panel-headerTab-iconColor: var(--tk-elements-panel-header-iconColor);
+  --tk-elements-panel-headerTab-iconColorHover: var(--tk-elements-panel-header-iconColor);
+  --tk-elements-panel-headerTab-iconColorActive: var(--tk-text-active);
+
   /* File Tree */
   --tk-elements-fileTree-backgroundColor: var(--tk-elements-app-backgroundColor);
   --tk-elements-fileTree-backgroundColorHover: var(--tk-background-secondary);
@@ -269,7 +283,7 @@
   --tk-elements-breadcrumbs-dropdown-lessonTextColorHover: var(--tk-elements-breadcrumbs-dropdon-textColorHover);
 
   /* Terminal */
-  --tk-elements-terminal-backgroundColor: var(--tk-terminal-background);
+  --tk-elements-terminal-backgroundColor: var(--tk-background-active-secondary);
   --tk-elements-terminal-textColor: var(--tk-terminal-foreground);
   --tk-elements-terminal-cursorColor: var(--tk-terminal-foreground);
   --tk-elements-terminal-selection-backgroundColor: var(--tk-terminal-selection-background);

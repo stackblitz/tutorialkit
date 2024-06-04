@@ -2,6 +2,7 @@ import { TutorialRunner, lessonFilesFetcher } from '@tutorialkit/runtime';
 import { newTask } from '@tutorialkit/runtime/tasks';
 import type { Files, Lesson } from '@tutorialkit/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useStore } from '@nanostores/react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import type {
   EditorDocument,
@@ -35,6 +36,8 @@ type EditorState = Record<string, EditorDocument>;
  */
 export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
   const { fileTree } = lesson.data;
+
+  const terminalConfig = useStore(tutorialRunner.terminalConfig);
 
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
   const previewRef = useRef<ImperativePreviewHandle>(null);
@@ -162,6 +165,7 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
     );
 
     tutorialRunner.setPreviews(lesson.data.previews);
+    tutorialRunner.setTerminalConfiguration(lesson.data.terminal);
 
     const task = newTask(
       async (signal) => {
@@ -233,14 +237,21 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
     return () => task.cancel();
   }, [lesson]);
 
-  const toggleTerminal = useCallback(() => {
+  useEffect(() => {
+    if (terminalConfig.panels.length === 0) {
+      // force hide the terminal if we don't have any panels to show
+      toggleTerminal(true);
+    }
+  }, [terminalConfig]);
+
+  const toggleTerminal = useCallback((hide?: boolean) => {
     const { current: terminal } = terminalPanelRef;
 
     if (!terminal) {
       return;
     }
 
-    if (terminal.isCollapsed()) {
+    if (terminal.isCollapsed() && hide !== true) {
       if (!terminalExpanded.current) {
         terminalExpanded.current = true;
         terminal.resize(DEFAULT_TERMINAL_SIZE);
@@ -269,9 +280,17 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
       </Panel>
       <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 5, coarse: 5 }} />
       <Panel defaultSize={50} minSize={10}>
-        <PreviewPanel tutorialRunner={tutorialRunner} ref={previewRef} toggleTerminal={toggleTerminal} />
+        <PreviewPanel
+          tutorialRunner={tutorialRunner}
+          ref={previewRef}
+          showToggleTerminal={terminalConfig.panels.length > 0}
+          toggleTerminal={toggleTerminal} />
       </Panel>
-      <PanelResizeHandle className={resizePanelStyles.PanelResizeHandle} hitAreaMargins={{ fine: 5, coarse: 5 }} />
+      <PanelResizeHandle
+        className={resizePanelStyles.PanelResizeHandle}
+        hitAreaMargins={{ fine: 5, coarse: 5 }}
+        disabled={terminalConfig.panels.length === 0}
+      />
       <Panel
         defaultSize={0}
         minSize={10}
