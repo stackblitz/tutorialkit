@@ -67,7 +67,7 @@ export class TutorialRunner {
   private _currentTemplate: Files | undefined = undefined;
   private _currentFiles: Files | undefined = undefined;
   private _currentRunCommands: Commands | undefined = undefined;
-  private _output?: ITerminal;
+  private _output: ITerminal | undefined = undefined;
   private _packageJsonDirty = false;
 
   // this strongly assumes that there's a single package json which might not be true
@@ -329,17 +329,14 @@ export class TutorialRunner {
    * @param terminal The terminal to hook up to the JSH process.
    */
   async attachTerminal(id: string, terminal: ITerminal) {
-    try {
-      const panel = this.terminalConfig.get().panels.find((panel) => panel.id === id)
+    const panel = this.terminalConfig.get().panels.find((panel) => panel.id === id)
 
-      if (!panel) {
-        return;
-      }
-
-      panel.attachTerminal(terminal);
-    } catch {
-      // do nothing if it fails, it means WebContainer is not supported
+    if (!panel) {
+      // if we don't have a panel with the provided id, just exit.
+      return;
     }
+
+    panel.attachTerminal(terminal);
   }
 
   onTerminalResize(cols: number, rows: number) {
@@ -667,9 +664,9 @@ export class TutorialRunner {
   }
 }
 
-function clearTerminal(output: ITerminal | undefined) {
-  output?.reset();
-  output?.write(escapeCodes.clear);
+function clearTerminal(terminal?: ITerminal) {
+  terminal?.reset();
+  terminal?.write(escapeCodes.clear);
 }
 
 function commandsToList(commands: Commands | CommandsSchema) {
