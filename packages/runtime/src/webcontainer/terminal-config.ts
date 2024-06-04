@@ -1,8 +1,6 @@
-import type { TerminalSchema } from '@tutorialkit/types';
+import type { TerminalPanelType, TerminalSchema } from '@tutorialkit/types';
 import type { WebContainerProcess } from '@webcontainer/api';
 import type { ITerminal } from '../terminal.js';
-
-export type TerminalPanelType = 'output' | 'terminal';
 
 type NormalizedTerminalConfig = {
   panels: TerminalPanel[];
@@ -61,7 +59,8 @@ export class TerminalPanel implements ITerminal {
 
   constructor(
     readonly type: TerminalPanelType,
-    name?: string
+    name?: string,
+    id?: string
   ) {
     // automatically infer a name if no name is provided
     if (!name) {
@@ -78,7 +77,7 @@ export class TerminalPanel implements ITerminal {
     }
 
     this.name = name;
-    this.id = type === 'output' ? 'output' : `${type}-${globalId++}`;
+    this.id = id ?? (type === 'output' ? 'output' : `${type}-${globalId++}`);
   }
 
   get terminal() {
@@ -201,9 +200,19 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
       panels.push(new TerminalPanel('terminal'));
     } else if (Array.isArray(config.panels)) {
       for (const panel of config.panels) {
-        const [type, name] = Array.isArray(panel) ? panel : [panel];
+        const [type, config = {}] = Array.isArray(panel) ? panel : [panel];
 
-        panels.push(new TerminalPanel(type, name));
+        let name: string | undefined;
+        let id: string | undefined;
+
+        if (typeof config === 'string') {
+          name = config;
+        } else {
+          name = config.name;
+          id = config.id;
+        }
+
+        panels.push(new TerminalPanel(type, name, id));
       }
     }
   }

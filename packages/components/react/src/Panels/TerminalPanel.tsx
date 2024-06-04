@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { type TutorialRunner, type TerminalPanelType } from '@tutorialkit/runtime';
+import { type TutorialRunner } from '@tutorialkit/runtime';
+import type { TerminalPanelType } from '@tutorialkit/types';
 import { classNames } from '../utils/classnames.js';
 
 const Terminal = lazy(() => import('../Terminal/index.js'));

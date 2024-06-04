@@ -37,6 +37,11 @@ export const previewSchema = z.union([
 
 export type PreviewSchema = z.infer<typeof previewSchema>;
 
+const panelType = z.union([
+  z.literal('output'),
+  z.literal('terminal')
+]);
+
 export const terminalSchema = z.union([
   // will just show a terminal
   z.boolean(),
@@ -55,17 +60,20 @@ export const terminalSchema = z.union([
        */
       z.array(
         z.union([
-          z.union([
-            z.literal('output'),
-            z.literal('terminal')
-          ]),
+          panelType,
           z.tuple([
+            panelType,
             z.union([
-              z.literal('output'),
-              z.literal('terminal')
+              // either the name of the panel
+              z.string(),
+
+              // or an object with a name and/or id
+              z.strictObject({
+                name: z.string().optional(),
+                id: z.string().optional(),
+              }),
             ]),
-            z.string()
-          ])
+          ]),
         ])
       ).refine(
         (arg) => {
@@ -92,6 +100,7 @@ export const terminalSchema = z.union([
   })
 ]);
 
+export type TerminalPanelType = z.infer<typeof panelType>;
 export type TerminalSchema = z.infer<typeof terminalSchema>;
 
 export const webcontainerSchema = commandsSchema.extend({
