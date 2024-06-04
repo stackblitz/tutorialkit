@@ -299,13 +299,16 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
         />
       </Panel>
       <PanelResizeHandle
-        className={classNames(resizePanelStyles.PanelResizeHandle, {
-          'border-t border-tk-elements-app-borderColor': editor !== false
-        })}
+        className={resizePanelStyles.PanelResizeHandle}
         hitAreaMargins={{ fine: 5, coarse: 5 }}
         disabled={editor === false}
       />
-      <Panel defaultSize={50} minSize={10}>
+      <Panel
+        defaultSize={50}
+        minSize={10}
+        className={classNames({
+          'border-t border-tk-elements-app-borderColor': editor !== false
+        })}>
         <PreviewPanel
           tutorialRunner={tutorialRunner}
           ref={previewRef}
