@@ -1,47 +1,36 @@
 import type { ITheme } from '@xterm/xterm';
 
-export const darkTheme: ITheme = {
-  cursor: '#eff0eb',
-  cursorAccent: '#00000000',
-  foreground: '#eff0eb',
-  background: '#232429',
-  red: '#ff5c57',
-  green: '#5af78e',
-  yellow: '#f3f99d',
-  blue: '#57c7ff',
-  magenta: '#ff6ac1',
-  cyan: '#9aedfe',
-  white: '#f1f1f0',
-  brightBlack: '#686868',
-  brightRed: '#ff5c57',
-  brightGreen: '#5af78e',
-  brightYellow: '#f3f99d',
-  brightBlue: '#57c7ff',
-  brightMagenta: '#ff6ac1',
-  brightCyan: '#9aedfe',
-  brightWhite: '#f1f1f0',
-  selectionBackground: '#97979b33',
-};
+const style = getComputedStyle(document.documentElement);
+const cssVar = (token: string) => style.getPropertyValue(token) || undefined;
 
-export const lightTheme = {
-  cursor: '#333333',
-  cursorAccent: '#00000000',
-  foreground: '#333333',
-  background: '#ffffff',
-  red: '#cd3131',
-  green: '#00bc00',
-  yellow: '#949800',
-  blue: '#0451a5',
-  magenta: '#bc05bc',
-  cyan: '#0598bc',
-  white: '#555555',
-  brightBlack: '#686868',
-  brightRed: '#cd3131',
-  brightGreen: '#00bc00',
-  brightYellow: '#949800',
-  brightBlue: '#0451a5',
-  brightMagenta: '#bc05bc',
-  brightCyan: '#0598bc',
-  brightWhite: '#a5a5a5',
-  selectionBackground: '#00000040',
-};
+export function getTerminalTheme(overrides?: ITheme): ITheme {
+  return {
+    cursor: cssVar('--tk-elements-terminal-cursorColor'),
+    cursorAccent: cssVar('--tk-elements-terminal-cursorColorAccent'),
+    foreground: cssVar('--tk-elements-terminal-textColor'),
+    background: cssVar('--tk-elements-terminal-backgroundColor'),
+    selectionBackground: cssVar('--tk-elements-terminal-selection-backgroundColor'),
+    selectionForeground: cssVar('--tk-elements-terminal-selection-textColor'),
+    selectionInactiveBackground: cssVar('--tk-elements-terminal-selection-backgroundColorInactive'),
+
+    // ansi escape code colors
+    black: cssVar('--tk-elements-terminal-color-black'),
+    red: cssVar('--tk-elements-terminal-color-red'),
+    green: cssVar('--tk-elements-terminal-color-green'),
+    yellow: cssVar('--tk-elements-terminal-color-yellow'),
+    blue: cssVar('--tk-elements-terminal-color-blue'),
+    magenta: cssVar('--tk-elements-terminal-color-magenta'),
+    cyan: cssVar('--tk-elements-terminal-color-cyan'),
+    white: cssVar('--tk-elements-terminal-color-white'),
+    brightBlack: cssVar('--tk-elements-terminal-color-brightBlack'),
+    brightRed: cssVar('--tk-elements-terminal-color-brightRed'),
+    brightGreen: cssVar('--tk-elements-terminal-color-brightGreen'),
+    brightYellow: cssVar('--tk-elements-terminal-color-brightYellow'),
+    brightBlue: cssVar('--tk-elements-terminal-color-brightBlue'),
+    brightMagenta: cssVar('--tk-elements-terminal-color-brightMagenta'),
+    brightCyan: cssVar('--tk-elements-terminal-color-brightCyan'),
+    brightWhite: cssVar('--tk-elements-terminal-color-brightWhite'),
+
+    ...overrides
+  };
+}
