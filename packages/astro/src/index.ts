@@ -1,6 +1,5 @@
 import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
-import Inspect from 'vite-plugin-inspect';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { WebContainerFiles } from './webcontainer-files.js';
@@ -61,7 +60,7 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
   return {
     name: '@tutorialkit/astro',
     hooks: {
-      'astro:config:setup'(options) {
+      async 'astro:config:setup'(options) {
         const { injectRoute, updateConfig, config } = options;
 
         updateConfig({
@@ -83,7 +82,10 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
             ssr: {
               noExternal: ['@tutorialkit/astro', '@tutorialkit/components-react'],
             },
-            plugins: [userlandCSS, process.env.TUTORIALKIT_DEV ? Inspect() : null],
+            plugins: [
+              userlandCSS,
+              process.env.TUTORIALKIT_DEV ? (await import('vite-plugin-inspect')).default() : null,
+            ],
           },
         });
 
