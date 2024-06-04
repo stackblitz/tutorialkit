@@ -3,8 +3,8 @@
 :root[data-theme='light'] {
   --tk-background-primary: theme('colors.gray.0');
   --tk-background-secondary: theme('colors.gray.50');
-  --tk-background-active: theme('colors.gray.100')
-  --tk-background-active-secondary: theme('colors.gray.0');;
+  --tk-background-active: theme('colors.gray.100');
+  --tk-background-active-secondary: theme('colors.gray.0');
   --tk-background-brighter: theme('colors.gray.0');
   --tk-background-accent: theme('colors.accent.600');
   --tk-background-accent-secondary: theme('colors.accent.600');
