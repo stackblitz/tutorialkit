@@ -76,7 +76,7 @@ export const PreviewPanel = memo(
     if (!hasPreviews) {
       return (
         <div className="flex flex-col h-full w-full">
-          <div className="panel-header border-y border-tk-elements-app-borderColor justify-between">
+          <div className="panel-header border-b border-tk-elements-app-borderColor justify-between">
             <div className="panel-title">
               <div className="panel-icon i-ph-lightning-duotone"></div>
               <span className="text-sm">Preparing Environment</span>
@@ -165,7 +165,7 @@ function Preview({ preview, iframe, onResize, previewCount, first, last, toggleT
   return (
     <div className="panel-container">
       <div
-        className={classNames('panel-header border-y border-tk-elements-app-borderColor justify-between', {
+        className={classNames('panel-header border-b border-tk-elements-app-borderColor justify-between', {
           'border-l border-tk-elements-app-borderColor': !first,
         })}
       >
