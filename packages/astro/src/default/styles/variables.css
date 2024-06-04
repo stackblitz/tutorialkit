@@ -39,7 +39,7 @@
   --tk-border-info: theme('colors.info.600');
   --tk-border-tip: theme('colors.tip.600');
 
-  /* Terminal colors */
+  /* Terminal Colors */
   --tk-terminal-background: theme('colors.gray.0');
   --tk-terminal-foreground: #333333;
   --tk-terminal-selection: #00000040;
@@ -102,7 +102,7 @@
   --tk-border-info: theme('colors.info.400');
   --tk-border-tip: theme('colors.tip.500');
 
-  /* Terminal colors */
+  /* Terminal Colors */
   --tk-terminal-background: theme('colors.gray.1000');
   --tk-terminal-foreground: #eff0eb;
   --tk-terminal-selection-background: #97979b33;

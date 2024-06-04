@@ -3,14 +3,8 @@ import type { ITheme } from '@xterm/xterm';
 const style = getComputedStyle(document.documentElement);
 const cssVar = (token: string) => style.getPropertyValue(token) || undefined;
 
-const THEME_CACHE = new Map<'light' | 'dark', ITheme>();
-
-export function getTerminalTheme(theme: 'light' | 'dark'): ITheme {
-  if (THEME_CACHE.has(theme)) {
-    return THEME_CACHE.get(theme)!;
-  }
-
-  const colors = {
+export function getTerminalTheme(): ITheme {
+  return {
     cursor: cssVar('--tk-elements-terminal-cursorColor'),
     cursorAccent: cssVar('--tk-elements-terminal-cursorColorAccent'),
     foreground: cssVar('--tk-elements-terminal-textColor'),
@@ -36,9 +30,5 @@ export function getTerminalTheme(theme: 'light' | 'dark'): ITheme {
     brightMagenta: cssVar('--tk-elements-terminal-color-brightMagenta'),
     brightCyan: cssVar('--tk-elements-terminal-color-brightCyan'),
     brightWhite: cssVar('--tk-elements-terminal-color-brightWhite'),
-  }
-
-  THEME_CACHE.set(theme, colors);
-
-  return colors;
+  };
 }
