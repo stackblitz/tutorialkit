@@ -1,26 +1,15 @@
 import type { WebContainer } from '@webcontainer/api';
 import { withResolvers } from '../utils/promises.js';
+import type { ITerminal } from '../terminal.js';
 
-export interface ITerminal {
-  reset: () => void;
-  onData: (cb: (data: string) => void) => void;
-  write: (data: string) => void;
-  cols: number;
-  rows: number;
-}
-
-export async function newShellProcess(webcontainer: WebContainer, signal: AbortSignal, terminal: ITerminal) {
+export async function newJSHProcess(webcontainer: WebContainer, terminal: ITerminal) {
+  // we spawn a JSH process with a fallback cols and rows in case the process is not attached yet to a visible terminal
   const process = await webcontainer.spawn('/bin/jsh', ['--osc'], {
     terminal: {
-      cols: terminal.cols,
-      rows: terminal.rows,
+      cols: terminal.cols ?? 80,
+      rows: terminal.rows ?? 15,
     }
   });
-
-  if (signal.aborted) {
-    process.kill();
-    signal.throwIfAborted();
-  }
 
   const input = process.input.getWriter();
   const output = process.output;
@@ -51,14 +40,7 @@ export async function newShellProcess(webcontainer: WebContainer, signal: AbortS
     }
   });
 
-  const abortListener = () => process.kill();
-
-  // if the task is aborted we kill the process
-  signal.addEventListener('abort', abortListener, { once: true });
-
   await jshReady.promise;
-
-  signal.removeEventListener('abort', abortListener);
 
   return process;
 }

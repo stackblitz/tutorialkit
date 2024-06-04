@@ -71,18 +71,14 @@ export function TerminalPanel({ theme, tutorialRunner }: TerminalPanelProps) {
           domLoaded &&
             <Suspense>
             {
-              terminalConfig.panels.map(({ type }, index) => (
+              terminalConfig.panels.map(({ id, type }, index) => (
                 <Terminal
-                  key={index}
+                  key={id}
                   className={tabIndex !== index ? 'hidden' : ''}
                   theme={theme}
                   readonly={type === 'output'}
                   onTerminalReady={(terminal) => {
-                    if (type === 'output') {
-                      tutorialRunner.attachOutputPanel(terminal);
-                    } else {
-                      tutorialRunner.attachTerminal(terminal);
-                    }
+                    tutorialRunner.attachTerminal(id, terminal);
                   }}
                   onTerminalResize={(cols, rows) => {
                     tutorialRunner.onTerminalResize(cols, rows);

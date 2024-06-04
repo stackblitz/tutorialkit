@@ -1,4 +1,6 @@
 import type { TerminalSchema } from '@tutorialkit/types';
+import type { WebContainerProcess } from '@webcontainer/api';
+import type { ITerminal } from '../terminal.js';
 
 export type TerminalPanelType = 'output' | 'terminal';
 
@@ -30,7 +32,13 @@ const TERMINAL_PANEL_NAMES: Record<TerminalPanelType, string> = {
   terminal: 'Terminal'
 };
 
-export class TerminalPanel {
+let globalId = 0;
+
+/**
+ * This class contains the state for a terminal panel. This is a panel which is attached to a process and renders
+ * the process output to a screen.
+ */
+export class TerminalPanel implements ITerminal {
   static panelCount: Record<TerminalPanelType, number> = {
     output: 0,
     terminal: 0,
@@ -44,11 +52,18 @@ export class TerminalPanel {
   }
 
   readonly name: string;
+  readonly id: string;
+
+  private _terminal?: ITerminal;
+  private _process?: WebContainerProcess;
+  private _data: string[] = [];
+  private _onData?: (data: string) => void;
 
   constructor(
     readonly type: TerminalPanelType,
     name?: string
   ) {
+    // automatically infer a name if no name is provided
     if (!name) {
       name = TERMINAL_PANEL_NAMES[type];
 
@@ -63,25 +78,112 @@ export class TerminalPanel {
     }
 
     this.name = name;
+    this.id = type === 'output' ? 'output' : `${type}-${globalId++}`;
+  }
+
+  get terminal() {
+    return this._terminal;
+  }
+
+  get process() {
+    return this._process;
+  }
+
+  // #region ITerminal methods
+  get cols() {
+    // we fallback to a default
+    return this._terminal?.cols;
+  }
+
+  get rows() {
+    return this._terminal?.rows;
+  }
+
+  reset() {
+    if (this._terminal) {
+      this._terminal.reset();
+    } else {
+      this._data = [];
+    }
+  }
+
+  write(data: string) {
+    if (this._terminal) {
+      this._terminal.write(data);
+    } else {
+      this._data.push(data);
+    }
+  }
+
+  onData(callback: (data: string) => void) {
+    if (this._terminal) {
+      this._terminal.onData(callback)
+    } else {
+      this._onData = callback;
+    }
+  }
+  // #endregion
+
+  /**
+   * Attach a WebContainer process to this panel.
+   *
+   * @param process The WebContainer process
+   */
+  attachProcess(process: WebContainerProcess) {
+    this._process = process;
+
+    if (this.cols != null && this.rows != null) {
+      this._process.resize({ cols: this.cols, rows: this.rows });
+    }
+  }
+
+  /**
+   * Attach a terminal to this panel.
+   *
+   * @param terminal The terminal.
+   */
+  attachTerminal(terminal: ITerminal) {
+    for (const data of this._data) {
+      terminal.write(data);
+    }
+
+    this._data = [];
+    this._terminal = terminal;
+
+    if (this._onData) {
+      terminal.onData(this._onData);
+    }
+
+    if (this.cols != null && this.rows != null) {
+      this._process?.resize({ cols: this.cols, rows: this.rows });
+    }
   }
 }
 
+/**
+ * Normalize the provided configuration to a configuration which is easier to parse.
+ *
+ * @param config The terminal configuration.
+ * @returns A normalized terminal configuration.
+ */
 function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalConfig {
+  // reset the count so that the auto-infered names are indexed properly
   TerminalPanel.resetCount();
 
   let activePanel = 0;
-  let panels: TerminalPanel[] = [new TerminalPanel('output')];
 
   // if no config is set, we just render the output panel
   if (config === undefined) {
     return {
-      panels,
+      panels: [new TerminalPanel('output')],
       activePanel,
     };
   }
 
   // if the config is `true`, we add a single terminal
   if (typeof config === 'boolean') {
+    const panels = [new TerminalPanel('output')];
+
     if (config) {
       panels.push(new TerminalPanel('terminal'));
     }
@@ -92,12 +194,9 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
     };
   }
 
+  const panels: TerminalPanel[] = [];
+
   if (config.panels && config.panels !== 'output') {
-    TerminalPanel.resetCount();
-
-    // clear the default output panel
-    panels = [];
-
     if (config.panels === 'terminal') {
       panels.push(new TerminalPanel('terminal'));
     } else if (Array.isArray(config.panels)) {

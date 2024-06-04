@@ -43,27 +43,49 @@ export const terminalSchema = z.union([
 
   z.strictObject({
     panels: z.union([
-      // either literally just `output` or `terminal`
+      // either literally just `output`
       z.literal('output'),
+
+      // or literally `terminal`
       z.literal('terminal'),
 
-      // or an array of `output` and/or `terminal` literals, e.g. ['output', 'terminal', 'terminal']
+      /**
+       * Or an array of `output` and/or `terminal` literals and/or tuples where the first value is either `output` or
+       * `terminal`, and the second being the name.
+       */
       z.array(
         z.union([
-          z.literal('output'),
-          z.literal('terminal')
-        ])
-      ),
-
-      // or an array of tuples where the first value is either `output` or `terminal`, and the second being the name
-      z.array(
-        z.tuple([
           z.union([
             z.literal('output'),
             z.literal('terminal')
           ]),
-          z.string()
+          z.tuple([
+            z.union([
+              z.literal('output'),
+              z.literal('terminal')
+            ]),
+            z.string()
+          ])
         ])
+      ).refine(
+        (arg) => {
+          let output = 0;
+
+          for (const value of arg) {
+            if (value === 'output' || (Array.isArray(value) && value[0] === 'output')) {
+              output++;
+            }
+
+            if (output > 1) {
+              return false;
+            }
+          }
+
+          return true;
+        },
+        {
+          message: 'Only a single output panel can be defined.'
+        }
       )
     ]),
     activePanel: z.number().positive().optional(),

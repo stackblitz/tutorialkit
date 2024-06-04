@@ -3,16 +3,15 @@ import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { auth } from '@webcontainer/api';
 import { atom } from 'nanostores';
 import { newTask, type Task, type TaskCancelled } from './tasks.js';
-import { escapeCodes } from './terminal.js';
+import { escapeCodes, type ITerminal } from './terminal.js';
 import { tick } from './utils/promises.js';
 import { isWebContainerSupported } from './utils/support.js';
 import { Command, Commands } from './webcontainer/command.js';
 import { PreviewInfo } from './webcontainer/preview-info.js';
-import { newShellProcess, type ITerminal } from './webcontainer/shell.js';
+import { newJSHProcess } from './webcontainer/shell.js';
 import { StepsController } from './webcontainer/steps.js';
 import { diffFiles, toFileTree } from './webcontainer/utils/files.js';
-import { TerminalConfig } from './webcontainer/terminal-config.js';
-import { Output } from './output.js';
+import { TerminalConfig, TerminalPanel } from './webcontainer/terminal-config.js';
 
 interface LoadFilesOptions {
   /**
@@ -54,15 +53,6 @@ interface RunCommandsOptions extends CommandsSchema {
   abortPreviousRun?: boolean;
 }
 
-
-class Terminal {
-  constructor(private readonly process: WebContainerProcess) {}
-
-  resize(cols: number, rows: number) {
-    this.process.resize({ cols, rows });
-  }
-}
-
 /**
  * The idea behind this class is that it manages the state of WebContainer and exposes
  * an interface that makes sense to every component of TutorialKit.
@@ -77,8 +67,7 @@ export class TutorialRunner {
   private _currentTemplate: Files | undefined = undefined;
   private _currentFiles: Files | undefined = undefined;
   private _currentRunCommands: Commands | undefined = undefined;
-  private _output = new Output();
-  private _terminals: Terminal[] = [];
+  private _output?: ITerminal;
   private _packageJsonDirty = false;
 
   // this strongly assumes that there's a single package json which might not be true
@@ -188,7 +177,50 @@ export class TutorialRunner {
   }
 
   setTerminalConfiguration(config?: TerminalSchema) {
-    this.terminalConfig.set(new TerminalConfig(config));
+    const oldTerminalConfig = this.terminalConfig.get();
+    const newTerminalConfig = new TerminalConfig(config);
+
+    // iterate over the old terminal config and make a list of all terminal panels
+    const panelMap = new Map<string, TerminalPanel>(oldTerminalConfig.panels.map((panel) => [panel.id, panel]));
+
+    // iterate over the new terminal panels and try to re-use the old terminal with the new panel
+    for (const panel of newTerminalConfig.panels) {
+      try {
+        const oldPanel = panelMap.get(panel.id);
+
+        panelMap.delete(panel.id);
+
+        if (oldPanel?.terminal) {
+          // if we found a previous panel with the same id, attach that terminal to the new panel
+          panel.attachTerminal(oldPanel.terminal);
+        }
+
+        if (panel.type === 'output') {
+          if (this._currentCommandProcess) {
+            // attach the current command process to the output panel
+            panel.attachProcess(this._currentCommandProcess);
+          }
+
+          this._output = panel;
+        }
+
+        if (panel.type === 'terminal' && !oldPanel) {
+          // if the panel is a terminal panel, and this panel didn't exist before, spawn a new JSH process
+          this._bootWebContainer(panel).then(async (webcontainerInstance) => {
+            panel.attachProcess(await newJSHProcess(webcontainerInstance, panel));
+          });
+        }
+      } catch {
+        // do nothing
+      }
+    }
+
+    // kill all old processes which we couldn't re-use
+    for (const panel of panelMap.values()) {
+      panel.process?.kill();
+    }
+
+    this.terminalConfig.set(newTerminalConfig);
   }
 
   /**
@@ -291,35 +323,20 @@ export class TutorialRunner {
   }
 
   /**
-   * Connects the output panel to the runner in order to get output of processes executed by the
-   * `TutorialRunner`.
+   * Attaches the provided terminal with the panel matching the provided ID.
    *
-   * @param terminal The output terminal to hook up to the processes.
-   */
-  attachOutputPanel(terminal: ITerminal) {
-    this._output.register(terminal);
-
-    try {
-      this._bootWebContainer(terminal);
-    } catch {
-      // do nothing if it fails, it means WebContainer is not supported
-    }
-  }
-
-  /**
-   * Connects the terminal panel to a fresh JSH process which acts as a real terminal that can be interacted with.
-   *
+   * @param id The ID of the panel to attach the terminal with.
    * @param terminal The terminal to hook up to the JSH process.
    */
-  attachTerminal(terminal: ITerminal) {
+  async attachTerminal(id: string, terminal: ITerminal) {
     try {
-      this._bootWebContainer(terminal).then(async (webcontainerInstance) => {
-        const controller = new AbortController();
+      const panel = this.terminalConfig.get().panels.find((panel) => panel.id === id)
 
-        const process = await newShellProcess(webcontainerInstance, controller.signal, terminal);
+      if (!panel) {
+        return;
+      }
 
-        this._terminals.push(new Terminal(process));
-      });
+      panel.attachTerminal(terminal);
     } catch {
       // do nothing if it fails, it means WebContainer is not supported
     }
@@ -327,14 +344,9 @@ export class TutorialRunner {
 
   onTerminalResize(cols: number, rows: number) {
     if (cols && rows) {
-      this._output.resize(cols, rows);
-
-      // resize the current command process which is visible in the output panel
-      this._currentCommandProcess?.resize({ cols, rows });
-
-      // iterate over all terminals and call resize
-      for (const terminal of this._terminals) {
-        terminal.resize(cols, rows);
+      // iterate over all terminal panels and resize all processes
+      for (const panel of this.terminalConfig.get().panels) {
+        panel.process?.resize({ cols, rows });
       }
     }
   }
@@ -537,11 +549,15 @@ export class TutorialRunner {
 
     this._output?.write(`${escapeCodes.magenta('❯')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
 
+    /**
+     * We spawn the process and use a fallback for cols and rows in case the output is not connected to a visible
+     * terminal yet.
+     */
     const process = await webcontainer.spawn(command, args, {
       terminal: this._output
         ? {
-            cols: this._output.cols,
-            rows: this._output.rows,
+            cols: this._output.cols ?? 80,
+            rows: this._output.rows ?? 15,
           }
         : undefined,
     });
@@ -607,7 +623,9 @@ export class TutorialRunner {
   private async _bootWebContainer(terminal: ITerminal) {
     validateWebContainerSupported(terminal);
 
-    if (this._useAuth && !this._webcontainerLoaded) {
+    const isLoaded = this._webcontainerLoaded;
+
+    if (this._useAuth && !isLoaded) {
       terminal.write('Waiting for authentication to complete...');
 
       await auth.loggedIn();
@@ -615,14 +633,16 @@ export class TutorialRunner {
       clearTerminal(terminal);
     }
 
-    if (!this._webcontainerLoaded) {
+    if (!isLoaded) {
       terminal.write('Booting WebContainer...');
     }
 
     try {
       const webcontainerInstance = await this._webcontainer;
 
-      clearTerminal(terminal);
+      if (!isLoaded) {
+        clearTerminal(terminal);
+      }
 
       return webcontainerInstance;
     } catch (error) {
@@ -647,9 +667,9 @@ export class TutorialRunner {
   }
 }
 
-function clearTerminal(output: { reset: () => void, write: (data: string) => void; }) {
-  output.reset();
-  output.write(escapeCodes.clear);
+function clearTerminal(output: ITerminal | undefined) {
+  output?.reset();
+  output?.write(escapeCodes.clear);
 }
 
 function commandsToList(commands: Commands | CommandsSchema) {
