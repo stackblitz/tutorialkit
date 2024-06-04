@@ -3,7 +3,7 @@ import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm, type ITheme } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import { useEffect, useRef } from 'react';
-import { darkTheme, lightTheme } from './theme.js';
+import { getTerminalTheme } from './theme.js';
 
 export interface Props {
   theme: 'dark' | 'light';
@@ -32,7 +32,7 @@ export function Terminal({ theme, className, readonly = true, onTerminalReady, o
       cursorBlink: true,
       convertEol: true,
       disableStdin: readonly,
-      theme: getTheme(theme, readonly ? { cursor: '#00000000'} : {}),
+      theme: getTerminalTheme(readonly ? { cursor: '#00000000'} : {}),
       fontSize: 13,
       fontFamily: 'Menlo, courier-new, courier, monospace',
     });
@@ -68,18 +68,11 @@ export function Terminal({ theme, className, readonly = true, onTerminalReady, o
     const terminal = terminalRef.current;
 
     // we render a transparent cursor in case the terminal is readonly
-    terminal.options.theme = getTheme(theme, readonly ? { cursor: '#00000000'} : {});
+    terminal.options.theme = getTerminalTheme(readonly ? { cursor: '#00000000'} : {});
     terminal.options.disableStdin = readonly;
   }, [theme, readonly]);
 
   return <div className={`h-full ${className}`} ref={divRef} />;
-}
-
-function getTheme(theme: string, overrides?: ITheme) {
-  return {
-    ...(theme === 'dark' ? darkTheme : lightTheme),
-    ...overrides
-  };
 }
 
 export default Terminal;
