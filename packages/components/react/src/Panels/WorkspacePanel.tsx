@@ -41,8 +41,6 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
   const fileTree = editor === undefined || editor === true || (editor !== false && editor?.fileTree !== false);
   const hasTerminal = typeof terminal !== 'object' || !Array.isArray(terminal.panels) || terminal.panels.length > 0;
 
-  console.log(hasTerminal);
-
   const terminalConfig = useStore(tutorialRunner.terminalConfig);
 
   const editorPanelRef = useRef<ImperativePanelHandle>(null);
