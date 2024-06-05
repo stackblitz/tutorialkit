@@ -16,8 +16,13 @@ export function hasWorkspace(lesson: Lesson) {
     return true;
   }
 
-  if (typeof lesson.data.terminal !== 'object' || !Array.isArray(lesson.data.terminal.panels)) {
-    // it's not possible to hide the terminal completely without passing in an object
+  if (lesson.data.terminal === false) {
+    // if the value is explicitly false, it will render nothing
+    return false;
+  }
+
+  if (lesson.data.terminal === true || !Array.isArray(lesson.data.terminal?.panels)) {
+    // if the value is explicitly true, or `panels` is not an array, we have to render the terminal
     return true;
   }
 
