@@ -270,6 +270,19 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
 
+  packages/create-tutorial:
+    dependencies:
+      tutorialkit:
+        specifier: workspace:*
+        version: link:../cli
+    devDependencies:
+      '@types/node':
+        specifier: ^20.12.7
+        version: 20.12.7
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
   packages/runtime:
     dependencies:
       '@tutorialkit/types':
