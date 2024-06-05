@@ -101,7 +101,7 @@ export const terminalSchema = z.union([
         }
       )
     ]),
-    activePanel: z.number().positive().optional(),
+    activePanel: z.number().gte(0).optional(),
   })
 ]);
 
