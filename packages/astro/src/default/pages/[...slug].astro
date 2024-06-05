@@ -10,6 +10,7 @@ import '../styles/base.css';
 import '@tutorialkit/custom.css';
 import { RESIZABLE_PANELS } from '../utils/constants';
 import { generateStaticRoutes } from '../utils/routes';
+import { hasWorkspace } from '../utils/workspace';
 
 export async function getStaticPaths() {
   return generateStaticRoutes();
@@ -18,6 +19,8 @@ export async function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { lesson, navList, title } = Astro.props as Props;
+
+const showWorkspacePanel = hasWorkspace(lesson);
 ---
 
 <Layout title={title}>
@@ -34,9 +37,9 @@ const { lesson, navList, title } = Astro.props as Props;
     >
       <div class="h-full flex flex-col bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor" slot="a">
         <Nav client:load lesson={lesson} navList={navList} />
-        <TutorialContent lesson={lesson} slot="a" />
+        <TutorialContent lesson={lesson} />
       </div>
-      <div class="h-full border-l border-tk-elements-app-borderColor" slot="b">
+      <div class="h-full border-l border-tk-elements-app-borderColor" slot={showWorkspacePanel ? 'b' : 'hide'}>
         <WorkspacePanel lesson={lesson} client:load transition:persist />
       </div>
     </ResizablePanel>

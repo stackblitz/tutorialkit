@@ -16,7 +16,6 @@ import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';
 import { classNames } from '../utils/classnames.js';
 
-const DEFAULT_EDITOR_SIZE = 50;
 const DEFAULT_TERMINAL_SIZE = 25;
 
 interface Props {
@@ -37,13 +36,17 @@ type EditorState = Record<string, EditorDocument>;
  * This component is the orchestrator between various interactive components.
  */
 export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
-  const { editor } = lesson.data;
+  const { editor, previews, terminal } = lesson.data;
 
   const fileTree = editor === undefined || editor === true || (editor !== false && editor?.fileTree !== false);
+  const hasTerminal = typeof terminal !== 'object' || !Array.isArray(terminal.panels) || terminal.panels.length > 0;
+
+  console.log(hasTerminal);
 
   const terminalConfig = useStore(tutorialRunner.terminalConfig);
 
   const editorPanelRef = useRef<ImperativePanelHandle>(null);
+  const previewPanelRef = useRef<ImperativePanelHandle>(null);
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
   const previewRef = useRef<ImperativePreviewHandle>(null);
   const terminalExpanded = useRef(false);
@@ -239,53 +242,59 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
       setHelpAction('reset');
     }
 
-    // collapse the editor if it should be hidden entirely
-    if (lesson.data.editor !== false) {
-      if (editorPanelRef.current?.isCollapsed()) {
-        editorPanelRef.current?.resize(DEFAULT_EDITOR_SIZE);
-        editorPanelRef.current?.expand();
-      }
-    } else {
-      if (!editorPanelRef.current?.isCollapsed()) {
-        editorPanelRef.current?.collapse();
-      }
-    }
-
     return () => task.cancel();
   }, [lesson]);
 
   useEffect(() => {
     if (terminalConfig.panels.length === 0) {
       // force hide the terminal if we don't have any panels to show
-      toggleTerminal(true);
+      hideTerminal();
+
+      terminalExpanded.current = false;
     }
   }, [terminalConfig]);
 
-  const toggleTerminal = useCallback((hide?: boolean) => {
+  const showTerminal = useCallback(() => {
     const { current: terminal } = terminalPanelRef;
 
     if (!terminal) {
       return;
     }
 
-    if (terminal.isCollapsed() && hide !== true) {
-      if (!terminalExpanded.current) {
-        terminalExpanded.current = true;
-        terminal.resize(DEFAULT_TERMINAL_SIZE);
-      } else {
-        terminal.expand();
-      }
+    if (!terminalExpanded.current) {
+      terminalExpanded.current = true;
+      terminal.resize(DEFAULT_TERMINAL_SIZE);
     } else {
-      terminal.collapse();
+      terminal.expand();
     }
-  }, [terminalPanelRef]);
+  }, []);
+
+  const hideTerminal = useCallback(() => {
+    terminalPanelRef.current?.collapse();
+  }, []);
+
+  const toggleTerminal = useCallback(() => {
+    const { current: terminal } = terminalPanelRef;
+
+    if (!terminal) {
+      return;
+    }
+
+    if (terminalPanelRef.current?.isCollapsed()) {
+      showTerminal();
+    } else {
+      hideTerminal();
+    }
+  }, []);
 
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
       <Panel
-        defaultSize={editor === false ? 0 : DEFAULT_EDITOR_SIZE}
-        minSize={editor === false ? 0 : 10}
-        collapsible
+        id={editor === false ? 'editor-closed' : 'editor-opened'}
+        defaultSize={editor === false ? 0 : 50}
+        minSize={10}
+        maxSize={editor === false ? 0 : 100}
+        collapsible={editor === false}
         ref={editorPanelRef}
       >
         <EditorPanel
@@ -306,8 +315,12 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
         disabled={editor === false}
       />
       <Panel
-        defaultSize={50}
+        id={previews === false ? 'previews-closed' : 'previews-opened'}
+        defaultSize={previews === false ? 0 : 50}
         minSize={10}
+        maxSize={previews === false ? 0 : 100}
+        collapsible={previews === false}
+        ref={previewPanelRef}
         className={classNames({
           'border-t border-tk-elements-app-borderColor': editor !== false
         })}>
@@ -320,16 +333,20 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
       <PanelResizeHandle
         className={resizePanelStyles.PanelResizeHandle}
         hitAreaMargins={{ fine: 5, coarse: 5 }}
-        disabled={terminalConfig.panels.length === 0}
+        disabled={terminalConfig.panels.length === 0 || previews === false}
       />
       <Panel
-        defaultSize={0}
-        minSize={10}
-        collapsible
+        id={!hasTerminal ? 'terminal-none' : previews === false && editor === false ? 'terminal-full' : previews === false ? 'terminal-opened' : 'terminal-closed'}
+        defaultSize={!hasTerminal ? 0 : previews === false && editor === false ? 100 : previews === false ? DEFAULT_TERMINAL_SIZE : 0}
+        minSize={hasTerminal ? 10 : 0}
+        collapsible={previews !== false}
         ref={terminalPanelRef}
         onExpand={() => {
           terminalExpanded.current = true;
         }}
+        className={classNames({
+          'border-t border-tk-elements-app-borderColor': editor !== false && previews !== false
+        })}
       >
         <TerminalPanel tutorialRunner={tutorialRunner} theme={theme} />
       </Panel>
