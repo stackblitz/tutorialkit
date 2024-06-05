@@ -39,9 +39,8 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
   const { editor, previews, terminal } = lesson.data;
 
   const fileTree = editor === undefined || editor === true || (editor !== false && editor?.fileTree !== false);
-  const hasTerminal = typeof terminal !== 'object' || !Array.isArray(terminal.panels) || terminal.panels.length > 0;
-
-  const terminalConfig = useStore(tutorialRunner.terminalConfig);
+  const hideTerminalPanel =
+    terminal === false || (typeof terminal === 'object' && Array.isArray(terminal.panels) && terminal.panels.length === 0);
 
   const editorPanelRef = useRef<ImperativePanelHandle>(null);
   const previewPanelRef = useRef<ImperativePanelHandle>(null);
@@ -244,13 +243,13 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
   }, [lesson]);
 
   useEffect(() => {
-    if (terminalConfig.panels.length === 0) {
+    if (hideTerminalPanel) {
       // force hide the terminal if we don't have any panels to show
       hideTerminal();
 
       terminalExpanded.current = false;
     }
-  }, [terminalConfig]);
+  }, [hideTerminalPanel]);
 
   const showTerminal = useCallback(() => {
     const { current: terminal } = terminalPanelRef;
@@ -325,18 +324,18 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
         <PreviewPanel
           tutorialRunner={tutorialRunner}
           ref={previewRef}
-          showToggleTerminal={terminalConfig.panels.length > 0}
+          showToggleTerminal={!hideTerminalPanel}
           toggleTerminal={toggleTerminal} />
       </Panel>
       <PanelResizeHandle
         className={resizePanelStyles.PanelResizeHandle}
         hitAreaMargins={{ fine: 5, coarse: 5 }}
-        disabled={terminalConfig.panels.length === 0 || previews === false}
+        disabled={hideTerminalPanel || previews === false}
       />
       <Panel
-        id={!hasTerminal ? 'terminal-none' : previews === false && editor === false ? 'terminal-full' : previews === false ? 'terminal-opened' : 'terminal-closed'}
-        defaultSize={!hasTerminal ? 0 : previews === false && editor === false ? 100 : previews === false ? DEFAULT_TERMINAL_SIZE : 0}
-        minSize={hasTerminal ? 10 : 0}
+        id={hideTerminalPanel ? 'terminal-none' : previews === false && editor === false ? 'terminal-full' : previews === false ? 'terminal-opened' : 'terminal-closed'}
+        defaultSize={hideTerminalPanel ? 0 : previews === false && editor === false ? 100 : previews === false ? DEFAULT_TERMINAL_SIZE : 0}
+        minSize={hideTerminalPanel ? 0 : 10}
         collapsible={previews !== false}
         ref={terminalPanelRef}
         onExpand={() => {

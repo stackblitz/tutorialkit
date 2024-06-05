@@ -48,7 +48,7 @@ const panelType = z.union([
 ]);
 
 export const terminalSchema = z.union([
-  // will just show a terminal
+  // `false` if you want to disable the terminal entirely
   z.boolean(),
 
   z.strictObject({

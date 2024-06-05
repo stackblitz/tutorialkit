@@ -166,37 +166,33 @@ export class TerminalPanel implements ITerminal {
  * @returns A normalized terminal configuration.
  */
 function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalConfig {
+  let activePanel = 0;
+
+  if (config === false) {
+    // if the value is `false`, we don't render anything
+    return {
+      panels: [],
+      activePanel,
+    };
+  }
+
   // reset the count so that the auto-infered names are indexed properly
   TerminalPanel.resetCount();
 
-  let activePanel = 0;
-
-  // if no config is set, we just render the output panel
-  if (config === undefined) {
+  // if no config is set, or the value is `true`, we just render the output panel
+  if (config === undefined || config === true) {
     return {
       panels: [new TerminalPanel('output')],
       activePanel,
     };
   }
 
-  // if the config is `true`, we add a single terminal
-  if (typeof config === 'boolean') {
-    const panels = [new TerminalPanel('output')];
-
-    if (config) {
-      panels.push(new TerminalPanel('terminal'));
-    }
-
-    return {
-      panels,
-      activePanel
-    };
-  }
-
   const panels: TerminalPanel[] = [];
 
-  if (config.panels && config.panels !== 'output') {
-    if (config.panels === 'terminal') {
+  if (config.panels) {
+    if (config.panels === 'output') {
+      panels.push(new TerminalPanel('output'));
+    } else if (config.panels === 'terminal') {
       panels.push(new TerminalPanel('terminal'));
     } else if (Array.isArray(config.panels)) {
       for (const panel of config.panels) {
