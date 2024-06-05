@@ -128,7 +128,17 @@ export class TutorialRunner {
    * Set the expected port for the preview to show. If this is not set,
    * the port of the first server that is ready will be used.
    */
-  setPreviews(previews: PreviewSchema[] = []) {
+  setPreviews(config: PreviewSchema = true) {
+    if (config === false) {
+      // clear the previews if they are turned off
+      this.previews.set([]);
+
+      return;
+    }
+
+    // if the schema is `true`, we just use the default empty array
+    const previews = config === true ? [] : (config ?? []);
+
     const previewInfos = previews.map((preview) => {
       const info = new PreviewInfo(preview);
 

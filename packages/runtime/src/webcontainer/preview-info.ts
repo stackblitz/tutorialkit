@@ -13,7 +13,7 @@ export class PreviewInfo {
     }
   }
 
-  constructor(preview: PreviewSchema, ready?: boolean) {
+  constructor(preview: Exclude<PreviewSchema, boolean>[0], ready?: boolean) {
     if (typeof preview === 'number') {
       this.port = preview;
     } else if (Array.isArray(preview)) {

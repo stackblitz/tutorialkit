@@ -12,7 +12,17 @@ interface Props {
   classList?: string;
 }
 
-const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority = 'min', classList } = Astro.props;
+let { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority = 'min', classList } = Astro.props;
+
+// check if there is a `slot` defined with name `b`
+const hasSidePanel = Astro.slots.has('b');
+
+if (!hasSidePanel) {
+  // if we don't have a side panel, we make the first panel full width
+  pos = '100%';
+  min = '100%';
+  max = '100%';
+}
 ---
 
 <resizable-panel
@@ -26,7 +36,12 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
 >
   <div class=`container max-w-full ${type}` style=`--pos: ${pos}`>
     <!-- It's important to keep the inline script here because it restores the position and blocks rendering to avoid flickering -->
-    <script is:inline define:vars={{ id }}>
+    <script is:inline define:vars={{ id, hasSidePanel }}>
+      if (!hasSidePanel) {
+        // if we don't have a side panel, we don't have to restore the handle
+        return;
+      }
+
       const sessionStorageKey = `tk_resizable_panel_${id}`;
 
       const $container = document.querySelector(`resizable-panel[data-id="${id}"] > .container`);
@@ -39,10 +54,15 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
     <div class="panel">
       <slot name="a" />
     </div>
-    <div class="panel">
-      <slot name="b" />
-    </div>
-    <div class="divider"></div>
+    {
+      hasSidePanel &&
+        (
+          <div class="panel">
+            <slot name="b" />
+          </div>
+          <div class="divider"></div>
+        )
+    }
   </div>
 </resizable-panel>
 
@@ -62,13 +82,13 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
     #dragging = false;
 
     #container: HTMLElement;
-    #divider: HTMLElement;
+    #divider: HTMLElement | undefined;
 
     constructor() {
       super();
 
       this.#container = this.querySelector(':scope > .container') as HTMLElement;
-      this.#divider = this.#container.querySelector(':scope > .divider') as HTMLElement;
+      this.#divider = this.#container.querySelector(':scope > .divider') as HTMLElement | undefined;
 
       this.#width = this.#container.clientWidth;
       this.#height = this.#container.clientHeight;
@@ -82,18 +102,21 @@ const { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority
 
       resizeObserver.observe(this.#container);
 
-      this.#pos = sessionStorage.getItem(`tk_resizable_panel_${this.#id}`) ?? this.#pos;
+      // only if we have a divider, which means we have a side panel, we restore the position
+      if (this.#divider) {
+        this.#pos = sessionStorage.getItem(`tk_resizable_panel_${this.#id}`) ?? this.#pos;
 
-      this.#setPosition(this.#pos);
+        this.#setPosition(this.#pos);
+      }
     }
 
     connectedCallback() {
-      this.#divider.addEventListener('mousedown', this.#onMouseDown.bind(this));
-      this.#divider.addEventListener('touchstart', this.#onMouseDown.bind(this), { passive: true });
+      this.#divider?.addEventListener('mousedown', this.#onMouseDown.bind(this));
+      this.#divider?.addEventListener('touchstart', this.#onMouseDown.bind(this), { passive: true });
     }
 
     disconnectedCallback() {
-      this.#divider.removeEventListener('mousedown', this.#onMouseDown.bind(this));
+      this.#divider?.removeEventListener('mousedown', this.#onMouseDown.bind(this));
 
       window.removeEventListener('mouseup', this.#onMouseUp);
       window.removeEventListener('mousemove', this.#onMouseMove);

@@ -34,7 +34,7 @@ export function TerminalPanel({ theme, tutorialRunner }: TerminalPanelProps) {
 
   return (
     <div className="panel-container bg-tk-elements-app-backgroundColor">
-      <div className="panel-tabs-header border-t border-tk-elements-app-borderColor overflow-x-hidden">
+      <div className="panel-tabs-header overflow-x-hidden">
         <div className="panel-title w-full">
           <ul className="flex h-full border-b border-tk-elements-app-borderColor w-full" role="tablist" aria-orientation="horizontal">
             {

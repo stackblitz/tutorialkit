@@ -23,16 +23,21 @@ export const commandsSchema = z.object({
 export type CommandsSchema = z.infer<typeof commandsSchema>;
 
 export const previewSchema = z.union([
-  // a single number, the port for the preview
-  z.number(),
+  // `false` if you want to disable the preview entirely
+  z.boolean(),
 
-  // a tuple, the port followed by a title
-  z.tuple([z.number(), z.string()]),
+  z.union([
+    // a single number, the port for the preview
+    z.number(),
 
-  z.strictObject({
-    port: z.number(),
-    title: z.string(),
-  }),
+    // a tuple, the port followed by a title
+    z.tuple([z.number(), z.string()]),
+
+    z.strictObject({
+      port: z.number(),
+      title: z.string(),
+    }),
+  ]).array()
 ]);
 
 export type PreviewSchema = z.infer<typeof previewSchema>;
@@ -104,7 +109,7 @@ export type TerminalPanelType = z.infer<typeof panelType>;
 export type TerminalSchema = z.infer<typeof terminalSchema>;
 
 export const webcontainerSchema = commandsSchema.extend({
-  previews: previewSchema.array().optional(),
+  previews: previewSchema.optional(),
   autoReload: z.boolean().optional(),
   template: z.string().optional(),
   terminal: terminalSchema.optional(),
