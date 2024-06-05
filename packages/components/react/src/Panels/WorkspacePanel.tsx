@@ -342,7 +342,7 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
           terminalExpanded.current = true;
         }}
         className={classNames({
-          'border-t border-tk-elements-app-borderColor': editor !== false && previews !== false
+          'border-t border-tk-elements-app-borderColor': previews !== false
         })}
       >
         <TerminalPanel tutorialRunner={tutorialRunner} theme={theme} />

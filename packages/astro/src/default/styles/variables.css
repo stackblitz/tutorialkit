@@ -42,7 +42,7 @@
 
   /* Terminal Colors */
   --tk-terminal-foreground: #333333;
-  --tk-terminal-selection: #00000040;
+  --tk-terminal-selection-background: #00000040;
 
   --tk-terminal-black: #000000;
   --tk-terminal-red: #cd3131;
