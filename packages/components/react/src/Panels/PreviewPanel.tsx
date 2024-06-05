@@ -26,18 +26,16 @@ export const PreviewPanel = memo(
     const iframeRefs = useRef<IFrameRef[]>([]);
 
     const onResize = useCallback(() => {
-      const padding = 1;
-
       for (const { ref, container } of iframeRefs.current) {
         if (!ref || !container) {
           continue;
         }
 
         const { left, top, width, height } = container.getBoundingClientRect();
-        ref.style.left = `${Math.floor(left) - padding}px`;
-        ref.style.top = `${Math.floor(top) - padding}px`;
-        ref.style.height = `${Math.floor(height) + padding}px`;
-        ref.style.width = `${Math.floor(width) + padding}px`;
+        ref.style.left = `${left}px`;
+        ref.style.top = `${top}px`;
+        ref.style.height = `${height}px`;
+        ref.style.width = `${width}px`;
       }
     }, []);
 
@@ -210,7 +208,7 @@ function preparePreviewsContainer(previewCount: number) {
   while (previewsContainer.childElementCount < previewCount) {
     const iframe = document.createElement('iframe');
 
-    iframe.className = 'absolute -z-10';
+    iframe.className = 'absolute z-10';
 
     iframe.allow =
       document.featurePolicy?.allowedFeatures().join('; ') ??
