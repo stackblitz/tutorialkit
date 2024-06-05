@@ -24,7 +24,7 @@ export async function generateStaticRoutes() {
           },
           props: {
             navList: generateNavigationList(tutorial),
-            title: `${part.slug} / ${chapter.data.title} / ${lesson.data.title}`,
+            title: `${part.data.title} / ${chapter.data.title} / ${lesson.data.title}`,
             lesson: lesson as Lesson<AstroComponentFactory>,
           },
         } satisfies GetStaticPathsItem);
