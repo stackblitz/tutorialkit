@@ -5,7 +5,7 @@ import type { ITerminal } from '../terminal.js';
 type NormalizedTerminalConfig = {
   panels: TerminalPanel[];
   activePanel: number;
-}
+};
 
 export class TerminalConfig {
   private _config: NormalizedTerminalConfig;
@@ -27,7 +27,7 @@ export class TerminalConfig {
 
 const TERMINAL_PANEL_NAMES: Record<TerminalPanelType, string> = {
   output: 'Output',
-  terminal: 'Terminal'
+  terminal: 'Terminal',
 };
 
 let globalId = 0;
@@ -60,7 +60,7 @@ export class TerminalPanel implements ITerminal {
   constructor(
     readonly type: TerminalPanelType,
     name?: string,
-    id?: string
+    id?: string,
   ) {
     // automatically infer a name if no name is provided
     if (!name) {
@@ -116,7 +116,7 @@ export class TerminalPanel implements ITerminal {
 
   onData(callback: (data: string) => void) {
     if (this._terminal) {
-      this._terminal.onData(callback)
+      this._terminal.onData(callback);
     } else {
       this._onData = callback;
     }

@@ -79,17 +79,16 @@ export const PreviewPanel = memo(
               <div className="panel-icon i-ph-lightning-duotone"></div>
               <span className="text-sm">Preparing Environment</span>
             </div>
-            {
-              showToggleTerminal &&
-                <button
-                  className="panel-button px-2 py-0.5 -mr-1 -my-1"
-                  title="Toggle Terminal"
-                  onClick={() => toggleTerminal?.()}
-                >
-                  <span className="panel-button-icon i-ph-terminal-window-duotone"></span>
-                  <span className="text-sm">Toggle Terminal</span>
-                </button>
-            }
+            {showToggleTerminal && (
+              <button
+                className="panel-button px-2 py-0.5 -mr-1 -my-1"
+                title="Toggle Terminal"
+                onClick={() => toggleTerminal?.()}
+              >
+                <span className="panel-button-icon i-ph-terminal-window-duotone"></span>
+                <span className="text-sm">Toggle Terminal</span>
+              </button>
+            )}
           </div>
           <BootScreen tutorialRunner={tutorialRunner} />
         </div>
