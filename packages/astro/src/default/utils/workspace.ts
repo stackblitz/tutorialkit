@@ -27,5 +27,5 @@ export function hasWorkspace(lesson: Lesson) {
   }
 
   // we have a workspace if we have more than 0 terminal panels
-  return lesson.data.terminal.panels.length > 0
+  return lesson.data.terminal.panels.length > 0;
 }

@@ -40,7 +40,8 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
 
   const fileTree = editor === undefined || editor === true || (editor !== false && editor?.fileTree !== false);
   const hideTerminalPanel =
-    terminal === false || (typeof terminal === 'object' && Array.isArray(terminal.panels) && terminal.panels.length === 0);
+    terminal === false ||
+    (typeof terminal === 'object' && Array.isArray(terminal.panels) && terminal.panels.length === 0);
 
   const editorPanelRef = useRef<ImperativePanelHandle>(null);
   const previewPanelRef = useRef<ImperativePanelHandle>(null);
@@ -319,13 +320,15 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
         collapsible={previews === false}
         ref={previewPanelRef}
         className={classNames({
-          'border-t border-tk-elements-app-borderColor': editor !== false
-        })}>
+          'border-t border-tk-elements-app-borderColor': editor !== false,
+        })}
+      >
         <PreviewPanel
           tutorialRunner={tutorialRunner}
           ref={previewRef}
           showToggleTerminal={!hideTerminalPanel}
-          toggleTerminal={toggleTerminal} />
+          toggleTerminal={toggleTerminal}
+        />
       </Panel>
       <PanelResizeHandle
         className={resizePanelStyles.PanelResizeHandle}
@@ -333,8 +336,24 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
         disabled={hideTerminalPanel || previews === false}
       />
       <Panel
-        id={hideTerminalPanel ? 'terminal-none' : previews === false && editor === false ? 'terminal-full' : previews === false ? 'terminal-opened' : 'terminal-closed'}
-        defaultSize={hideTerminalPanel ? 0 : previews === false && editor === false ? 100 : previews === false ? DEFAULT_TERMINAL_SIZE : 0}
+        id={
+          hideTerminalPanel
+            ? 'terminal-none'
+            : previews === false && editor === false
+              ? 'terminal-full'
+              : previews === false
+                ? 'terminal-opened'
+                : 'terminal-closed'
+        }
+        defaultSize={
+          hideTerminalPanel
+            ? 0
+            : previews === false && editor === false
+              ? 100
+              : previews === false
+                ? DEFAULT_TERMINAL_SIZE
+                : 0
+        }
         minSize={hideTerminalPanel ? 0 : 10}
         collapsible={previews !== false}
         ref={terminalPanelRef}
@@ -342,7 +361,7 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
           terminalExpanded.current = true;
         }}
         className={classNames({
-          'border-t border-tk-elements-app-borderColor': previews !== false
+          'border-t border-tk-elements-app-borderColor': previews !== false,
         })}
       >
         <TerminalPanel tutorialRunner={tutorialRunner} theme={theme} />

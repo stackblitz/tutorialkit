@@ -8,7 +8,7 @@ export async function newJSHProcess(webcontainer: WebContainer, terminal: ITermi
     terminal: {
       cols: terminal.cols ?? 80,
       rows: terminal.rows ?? 15,
-    }
+    },
   });
 
   const input = process.input.getWriter();
@@ -17,22 +17,24 @@ export async function newJSHProcess(webcontainer: WebContainer, terminal: ITermi
   const jshReady = withResolvers<void>();
   let isInteractive = false;
 
-  output.pipeTo(new WritableStream({
-    write(data) {
-      if (!isInteractive) {
-        const [, osc] = data.match(/\x1b\]654;([^\x07]+)\x07/) || [];
+  output.pipeTo(
+    new WritableStream({
+      write(data) {
+        if (!isInteractive) {
+          const [, osc] = data.match(/\x1b\]654;([^\x07]+)\x07/) || [];
 
-        if (osc === 'interactive') {
-          // wait until we see the interactive OSC
-          isInteractive = true;
+          if (osc === 'interactive') {
+            // wait until we see the interactive OSC
+            isInteractive = true;
 
-          jshReady.resolve();
+            jshReady.resolve();
+          }
         }
-      }
 
-      terminal.write(data);
-    }
-  }));
+        terminal.write(data);
+      },
+    }),
+  );
 
   terminal.onData((data) => {
     if (isInteractive) {

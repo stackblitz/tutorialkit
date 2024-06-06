@@ -42,7 +42,7 @@ export async function runShellCommand(
 
       child.on('error', (code) => {
         reject(code);
-      })
+      });
     });
 
     child.stdout?.setEncoding('utf8');

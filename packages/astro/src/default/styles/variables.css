@@ -170,7 +170,6 @@
   --tk-elements-topBar-secondaryButton-iconColor: var(--tk-text-secondary);
   --tk-elements-topBar-secondaryButton-iconColorHover: var(--tk-text-primary);
 
-
   /* Previews */
   --tk-elements-previews-borderColor: theme('colors.gray.200');
 

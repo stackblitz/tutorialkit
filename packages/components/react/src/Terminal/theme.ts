@@ -31,6 +31,6 @@ export function getTerminalTheme(overrides?: ITheme): ITheme {
     brightCyan: cssVar('--tk-elements-terminal-color-brightCyan'),
     brightWhite: cssVar('--tk-elements-terminal-color-brightWhite'),
 
-    ...overrides
+    ...overrides,
   };
 }

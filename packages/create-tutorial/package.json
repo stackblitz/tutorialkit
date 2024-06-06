@@ -7,7 +7,7 @@
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
   "bin": {
-    "create-tutorial": "dist/index.js"
+    "create-tutorial": "./dist/index.js"
   },
   "scripts": {
     "build": "rm -rf dist && tsc -b",

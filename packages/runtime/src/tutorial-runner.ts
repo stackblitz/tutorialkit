@@ -137,7 +137,7 @@ export class TutorialRunner {
     }
 
     // if the schema is `true`, we just use the default empty array
-    const previews = config === true ? [] : (config ?? []);
+    const previews = config === true ? [] : config ?? [];
 
     const previewInfos = previews.map((preview) => {
       const info = new PreviewInfo(preview);
@@ -339,7 +339,7 @@ export class TutorialRunner {
    * @param terminal The terminal to hook up to the JSH process.
    */
   async attachTerminal(id: string, terminal: ITerminal) {
-    const panel = this.terminalConfig.get().panels.find((panel) => panel.id === id)
+    const panel = this.terminalConfig.get().panels.find((panel) => panel.id === id);
 
     if (!panel) {
       // if we don't have a panel with the provided id, just exit.

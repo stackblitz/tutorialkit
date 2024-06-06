@@ -1,0 +1,23 @@
+name: TutorialKit
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pnpm install
+      - name: Lint
+        run: pnpm prettier --check .
+      - name: Build
+        run: pnpm build
