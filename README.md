@@ -1,5 +1,3 @@
-# TutorialKit
-
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="media/logo-white.svg">
@@ -29,7 +27,6 @@
 
 Read our documentation on [tutorialkit.dev](https://tutorialkit.dev/guides/about)
 
-
 ## Development Setup
 
 ### Prerequisites
@@ -57,7 +54,6 @@ You can now start the development template of TutorialKit by running
 ```
 pnpm template:dev
 ```
-
 
 ## Community
 
