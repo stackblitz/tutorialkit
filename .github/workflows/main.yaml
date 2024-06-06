@@ -1,9 +1,12 @@
 name: CI
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+  pull_request:
 jobs:
-  main:
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Setup
