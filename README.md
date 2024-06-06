@@ -49,7 +49,7 @@ TutorialKit uses [pnpm workspaces](https://pnpm.io/workspaces). Just run the ins
 pnpm install
 ```
 
-You can now start the development template of TutorialKit by running
+You can now start the development template of TutorialKit by running:
 
 ```
 pnpm template:dev
