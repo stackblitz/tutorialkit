@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://tutorialkit.dev/guides/about/#getting-started">Get started</a>
+  <a href="https://tutorialkit.dev/guides/about/#getting-started">Get Started</a>
   ·
   <a href="https://demo.tutorialkit.dev/">Try Demo</a>
   <br>
