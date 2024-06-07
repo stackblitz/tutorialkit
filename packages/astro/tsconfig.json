@@ -3,6 +3,8 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "outDir": "dist"
   },
   "include": ["src"],

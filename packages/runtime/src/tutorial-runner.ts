@@ -1,17 +1,11 @@
-import type { CommandsSchema, Files, PreviewSchema, TerminalSchema } from '@tutorialkit/types';
+import type { CommandsSchema, Files } from '@tutorialkit/types';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
-import { auth } from '@webcontainer/api';
-import { atom } from 'nanostores';
 import { newTask, type Task, type TaskCancelled } from './tasks.js';
-import { escapeCodes, type ITerminal } from './terminal.js';
-import { tick } from './utils/promises.js';
-import { isWebContainerSupported } from './utils/support.js';
+import { clearTerminal, escapeCodes, type ITerminal } from './utils/terminal.js';
 import { Command, Commands } from './webcontainer/command.js';
-import { PreviewInfo } from './webcontainer/preview-info.js';
-import { newJSHProcess } from './webcontainer/shell.js';
 import { StepsController } from './webcontainer/steps.js';
 import { diffFiles, toFileTree } from './webcontainer/utils/files.js';
-import { TerminalConfig, TerminalPanel } from './webcontainer/terminal-config.js';
+import type { TerminalStore } from './store/terminal.js';
 
 interface LoadFilesOptions {
   /**
@@ -60,177 +54,25 @@ interface RunCommandsOptions extends CommandsSchema {
  * There should be only a single instance of this class.
  */
 export class TutorialRunner {
-  private _webcontainerLoaded: boolean = false;
   private _currentLoadTask: Task<void | TaskCancelled> | undefined = undefined;
   private _currentProcessTask: Task<void | TaskCancelled> | undefined = undefined;
   private _currentCommandProcess: WebContainerProcess | undefined = undefined;
   private _currentTemplate: Files | undefined = undefined;
   private _currentFiles: Files | undefined = undefined;
   private _currentRunCommands: Commands | undefined = undefined;
-  private _output: ITerminal | undefined = undefined;
   private _packageJsonDirty = false;
 
   // this strongly assumes that there's a single package json which might not be true
   private _packageJsonContent = '';
 
-  private _availablePreviews = new Map<number, PreviewInfo>();
-  private _previewsLayout: PreviewInfo[] = [];
-  private _stepController = new StepsController();
-
-  /**
-   * Steps that the runner is or will be executing.
-   */
-  get steps() {
-    return this._stepController.steps;
-  }
-
-  /**
-   * Atom representing the current previews. If it's an empty array or none of
-   * the previews are ready, then no preview can be shown.
-   */
-  previews = atom<PreviewInfo[]>([]);
-
-  terminalConfig = atom<TerminalConfig>(new TerminalConfig());
-
   constructor(
     private _webcontainer: Promise<WebContainer>,
-    private _useAuth: boolean = false,
-  ) {
-    this._init();
-  }
+    private _terminalStore: TerminalStore,
+    private _stepController: StepsController,
+  ) {}
 
-  private async _init() {
-    const webcontainer = await this._webcontainer;
-
-    this._webcontainerLoaded = true;
-
-    webcontainer.on('port', (port, type, url) => {
-      let previewInfo = this._availablePreviews.get(port);
-
-      if (!previewInfo) {
-        previewInfo = new PreviewInfo(port, type === 'open');
-        this._availablePreviews.set(port, previewInfo);
-      }
-
-      previewInfo.ready = type === 'open';
-      previewInfo.baseUrl = url;
-
-      if (this._previewsLayout.length === 0) {
-        this.previews.set([previewInfo]);
-      } else {
-        this._previewsLayout = [...this._previewsLayout];
-        this.previews.set(this._previewsLayout);
-      }
-    });
-  }
-
-  /**
-   * Set the expected port for the preview to show. If this is not set,
-   * the port of the first server that is ready will be used.
-   */
-  setPreviews(config: PreviewSchema = true) {
-    if (config === false) {
-      // clear the previews if they are turned off
-      this.previews.set([]);
-
-      return;
-    }
-
-    // if the schema is `true`, we just use the default empty array
-    const previews = config === true ? [] : config ?? [];
-
-    const previewInfos = previews.map((preview) => {
-      const info = new PreviewInfo(preview);
-
-      let previewInfo = this._availablePreviews.get(info.port);
-
-      if (!previewInfo) {
-        previewInfo = info;
-
-        this._availablePreviews.set(previewInfo.port, previewInfo);
-      } else {
-        previewInfo.title = info.title;
-      }
-
-      return previewInfo;
-    });
-
-    let areDifferent = previewInfos.length != this._previewsLayout.length;
-
-    if (!areDifferent) {
-      for (let i = 0; i < previewInfos.length; i++) {
-        areDifferent = !PreviewInfo.equals(previewInfos[i], this._previewsLayout[i]);
-
-        if (areDifferent) {
-          break;
-        }
-      }
-    }
-
-    if (!areDifferent) {
-      return;
-    }
-
-    this._previewsLayout = previewInfos;
-
-    /**
-     * If a port is provided and the preview is already ready we update the previewUrl.
-     * If no port is provided we default to the first preview ever to ready if there are any.
-     */
-    if (previews.length === 0) {
-      const firstPreview = this._availablePreviews.values().next().value as PreviewInfo | undefined;
-
-      this.previews.set(firstPreview ? [firstPreview] : []);
-    } else {
-      this.previews.set(this._previewsLayout);
-    }
-  }
-
-  setTerminalConfiguration(config?: TerminalSchema) {
-    const oldTerminalConfig = this.terminalConfig.get();
-    const newTerminalConfig = new TerminalConfig(config);
-
-    // iterate over the old terminal config and make a list of all terminal panels
-    const panelMap = new Map<string, TerminalPanel>(oldTerminalConfig.panels.map((panel) => [panel.id, panel]));
-
-    // iterate over the new terminal panels and try to re-use the old terminal with the new panel
-    for (const panel of newTerminalConfig.panels) {
-      try {
-        const oldPanel = panelMap.get(panel.id);
-
-        panelMap.delete(panel.id);
-
-        if (oldPanel?.terminal) {
-          // if we found a previous panel with the same id, attach that terminal to the new panel
-          panel.attachTerminal(oldPanel.terminal);
-        }
-
-        if (panel.type === 'output') {
-          if (this._currentCommandProcess) {
-            // attach the current command process to the output panel
-            panel.attachProcess(this._currentCommandProcess);
-          }
-
-          this._output = panel;
-        }
-
-        if (panel.type === 'terminal' && !oldPanel) {
-          // if the panel is a terminal panel, and this panel didn't exist before, spawn a new JSH process
-          this._bootWebContainer(panel).then(async (webcontainerInstance) => {
-            panel.attachProcess(await newJSHProcess(webcontainerInstance, panel));
-          });
-        }
-      } catch {
-        // do nothing
-      }
-    }
-
-    // kill all old processes which we couldn't re-use
-    for (const panel of panelMap.values()) {
-      panel.process?.kill();
-    }
-
-    this.terminalConfig.set(newTerminalConfig);
+  onTerminalResize(cols: number, rows: number) {
+    this._currentCommandProcess?.resize({ cols, rows });
   }
 
   /**
@@ -330,32 +172,6 @@ export class TutorialRunner {
     );
 
     return this._currentLoadTask.promise;
-  }
-
-  /**
-   * Attaches the provided terminal with the panel matching the provided ID.
-   *
-   * @param id The ID of the panel to attach the terminal with.
-   * @param terminal The terminal to hook up to the JSH process.
-   */
-  async attachTerminal(id: string, terminal: ITerminal) {
-    const panel = this.terminalConfig.get().panels.find((panel) => panel.id === id);
-
-    if (!panel) {
-      // if we don't have a panel with the provided id, just exit.
-      return;
-    }
-
-    panel.attachTerminal(terminal);
-  }
-
-  onTerminalResize(cols: number, rows: number) {
-    if (cols && rows) {
-      // iterate over all terminal panels and resize all processes
-      for (const panel of this.terminalConfig.get().panels) {
-        panel.process?.resize({ cols, rows });
-      }
-    }
   }
 
   /**
@@ -466,7 +282,9 @@ export class TutorialRunner {
   }
 
   private async _runCommands(webcontainer: WebContainer, commands: Commands, signal: AbortSignal) {
-    clearTerminal(this._output);
+    const output = this._terminalStore.getOutputPanel();
+
+    clearTerminal(output);
 
     const abortListener = () => this._currentCommandProcess?.kill();
     signal.addEventListener('abort', abortListener, { once: true });
@@ -500,12 +318,12 @@ export class TutorialRunner {
 
         // print newlines between commands to visually separate them from one another
         if (runnableCommands > 0) {
-          this._output?.write('\n');
+          output?.write('\n');
         }
 
         runnableCommands++;
 
-        this._currentCommandProcess = await this._newProcess(webcontainer, command.shellCommand);
+        this._currentCommandProcess = await this._newProcess(webcontainer, output, command.shellCommand);
 
         try {
           signal.throwIfAborted();
@@ -551,25 +369,25 @@ export class TutorialRunner {
     }
   }
 
-  private async _newProcess(webcontainer: WebContainer, shellCommand: string) {
+  private async _newProcess(webcontainer: WebContainer, output: ITerminal | undefined, shellCommand: string) {
     const [command, ...args] = shellCommand.split(' ');
 
-    this._output?.write(`${escapeCodes.magenta('❯')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
+    output?.write(`${escapeCodes.magenta('❯')} ${escapeCodes.green(command)} ${args.join(' ')}\n`);
 
     /**
      * We spawn the process and use a fallback for cols and rows in case the output is not connected to a visible
      * terminal yet.
      */
     const process = await webcontainer.spawn(command, args, {
-      terminal: this._output
+      terminal: output
         ? {
-            cols: this._output.cols ?? 80,
-            rows: this._output.rows ?? 15,
+            cols: output.cols ?? 80,
+            rows: output.rows ?? 15,
           }
         : undefined,
     });
 
-    process.output.pipeTo(new WritableStream({ write: (data) => this._output?.write(data) }));
+    process.output.pipeTo(new WritableStream({ write: (data) => output?.write(data) }));
 
     return process;
   }
@@ -626,57 +444,6 @@ export class TutorialRunner {
 
     return false;
   }
-
-  private async _bootWebContainer(terminal: ITerminal) {
-    validateWebContainerSupported(terminal);
-
-    const isLoaded = this._webcontainerLoaded;
-
-    if (this._useAuth && !isLoaded) {
-      terminal.write('Waiting for authentication to complete...');
-
-      await auth.loggedIn();
-
-      clearTerminal(terminal);
-    }
-
-    if (!isLoaded) {
-      terminal.write('Booting WebContainer...');
-    }
-
-    try {
-      const webcontainerInstance = await this._webcontainer;
-
-      if (!isLoaded) {
-        clearTerminal(terminal);
-      }
-
-      return webcontainerInstance;
-    } catch (error) {
-      clearTerminal(terminal);
-
-      await tick();
-
-      terminal.write(
-        [
-          escapeCodes.red(`Looks like your browser's configuration is blocking WebContainers.`),
-          '',
-          `Let's troubleshoot this!`,
-          '',
-          'Read more at:',
-          'https://webcontainers.io/guides/browser-config',
-          '',
-        ].join('\n'),
-      );
-
-      throw error;
-    }
-  }
-}
-
-function clearTerminal(terminal?: ITerminal) {
-  terminal?.reset();
-  terminal?.write(escapeCodes.clear);
 }
 
 function commandsToList(commands: Commands | CommandsSchema) {
@@ -695,22 +462,4 @@ async function updateFiles(webcontainer: WebContainer, previousFiles: Files, new
   }
 
   await webcontainer.mount(toFileTree(addedOrModified));
-}
-
-function validateWebContainerSupported(terminal: ITerminal) {
-  if (!isWebContainerSupported()) {
-    terminal.write(
-      [
-        escapeCodes.red('Incompatible Web Browser'),
-        '',
-        `WebContainers currently work in Chromium-based browsers, Firefox, and Safari 16.4. We're hoping to add support for more browsers as they implement the necessary Web Platform features.`,
-        '',
-        'Read more about browser support:',
-        'https://webcontainers.io/guides/browser-support',
-        '',
-      ].join('\n'),
-    );
-
-    throw new Error('Incompatible Web Browser');
-  }
 }

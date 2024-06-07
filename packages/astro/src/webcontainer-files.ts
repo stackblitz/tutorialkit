@@ -162,7 +162,7 @@ class FileMapCache {
 
     this._readyness = promise;
 
-    let shouldReloadPage = false;
+    const hotFileRefs: string[] = [];
 
     while (this._requestsQueue.size > 0) {
       const requests = [...this._requestsQueue].map((folderPath) => {
@@ -171,10 +171,12 @@ class FileMapCache {
 
       this._requestsQueue.clear();
 
-      shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));
-
       await Promise.all(
         requests.map(async ([fileRef, folderPath]) => {
+          if (this._hotPaths.has(fileRef)) {
+            hotFileRefs.push(fileRef);
+          }
+
           const timeNow = performance.now();
 
           this._cache.set(fileRef, await createFileMap(folderPath));
@@ -188,9 +190,9 @@ class FileMapCache {
     // the cache is now ready to be used
     resolve();
 
-    if (shouldReloadPage) {
+    if (hotFileRefs.length > 0) {
       this._hotPaths.clear();
-      this._server.hot.send({ type: 'full-reload' });
+      this._server.hot.send({ type: 'custom', event: 'tk:refresh-wc-files', data: hotFileRefs });
     }
 
     this._timeoutId = null;
