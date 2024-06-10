@@ -7,6 +7,7 @@ import type {
   Tutorial,
   TutorialSchema,
 } from '@tutorialkit/types';
+import { folderPathToFilesRef } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
@@ -229,7 +230,9 @@ async function getFilesRef(pathToFolder: string): Promise<FilesRef> {
 
   filePaths.sort();
 
-  return [pathToFolder, filePaths];
+  const filesRef = folderPathToFilesRef(pathToFolder);
+
+  return [filesRef, filePaths];
 }
 
 interface CollectionEntryTutorial {

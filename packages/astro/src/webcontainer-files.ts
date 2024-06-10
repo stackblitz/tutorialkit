@@ -1,12 +1,13 @@
+import { folderPathToFilesRef } from '@tutorialkit/types';
 import type { AstroIntegrationLogger } from 'astro';
-import type { IncomingMessage } from 'http';
-import type { AstroServerSetupOptions, ViteDevServer, AstroBuildDoneOptions, Files } from './types.js';
 import { FSWatcher, watch } from 'chokidar';
 import glob from 'fast-glob';
+import type { IncomingMessage } from 'http';
 import { dim } from 'kleur/colors';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { AstroBuildDoneOptions, AstroServerSetupOptions, Files, ViteDevServer } from './types.js';
 import { withResolvers } from './utils.js';
 
 const FILES_FOLDER_NAME = '_files';
@@ -63,12 +64,12 @@ export class WebContainerFiles {
 
     await Promise.all(
       folders.map(async (folder) => {
-        const fileRef = getFilesRef(folder, { contentDir, templatesDir });
-        const dest = fileURLToPath(new URL(fileRef, dir));
+        const filesRef = getFilesRef(folder, { contentDir, templatesDir });
+        const dest = fileURLToPath(new URL(filesRef, dir));
 
         await fs.promises.writeFile(dest, await createFileMap(folder));
 
-        logger.info(`${dim(fileRef)}`);
+        logger.info(`${dim(filesRef)}`);
       }),
     );
   }
@@ -94,7 +95,7 @@ class FileMapCache {
   private _requestsQueue = new Set<string>();
 
   // a promise to wait on before serving a request for the end user
-  private _readyness = Promise.resolve();
+  private _readiness = Promise.resolve();
 
   // this is to know which FileMaps are in use to decide whether or not the page should be reloaded
   private _hotPaths = new Set<string>();
@@ -141,7 +142,7 @@ class FileMapCache {
 
     // if the value is not present the cache is not fresh
     if (typeof cacheValue === 'undefined') {
-      await this._readyness;
+      await this._readiness;
 
       cacheValue = this._cache.get(fileMapPath);
     }
@@ -160,9 +161,9 @@ class FileMapCache {
   private _generateFileMaps = async () => {
     const { promise, resolve } = withResolvers<void>();
 
-    this._readyness = promise;
+    this._readiness = promise;
 
-    let shouldReloadPage = false;
+    const hotFileRefs: string[] = [];
 
     while (this._requestsQueue.size > 0) {
       const requests = [...this._requestsQueue].map((folderPath) => {
@@ -171,10 +172,12 @@ class FileMapCache {
 
       this._requestsQueue.clear();
 
-      shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));
-
       await Promise.all(
         requests.map(async ([fileRef, folderPath]) => {
+          if (this._hotPaths.has(fileRef)) {
+            hotFileRefs.push(fileRef);
+          }
+
           const timeNow = performance.now();
 
           this._cache.set(fileRef, await createFileMap(folderPath));
@@ -188,9 +191,9 @@ class FileMapCache {
     // the cache is now ready to be used
     resolve();
 
-    if (shouldReloadPage) {
+    if (hotFileRefs.length > 0) {
       this._hotPaths.clear();
-      this._server.hot.send({ type: 'full-reload' });
+      this._server.hot.send({ type: 'custom', event: 'tk:refresh-wc-files', data: hotFileRefs });
     }
 
     this._timeoutId = null;
@@ -201,6 +204,9 @@ async function createFileMap(dir: string) {
   const filePaths = await glob(`${dir}/**/*`, {
     onlyFiles: true,
   });
+
+  // files are assumed to be sorted so that FileTree can skip some logic at runtime
+  filePaths.sort();
 
   const files: Files = {};
 
@@ -261,5 +267,5 @@ function getFilesRef(pathToFolder: string, { contentDir, templatesDir }: Content
     pathToFolder = 'template' + pathToFolder.slice(templatesDir.length);
   }
 
-  return encodeURIComponent(pathToFolder.replaceAll('/', '-').replaceAll('_', '')) + '.json';
+  return folderPathToFilesRef(pathToFolder);
 }
