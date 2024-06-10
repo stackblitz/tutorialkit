@@ -50,8 +50,8 @@ export class TutorialStore {
 
     /**
      * By having this code under `import.meta.hot`, it gets:
-     *  - Ignored on server side where it shouldn't run
-     *  - Discarded when doing a production build
+     *  - ignored on server side where it shouldn't run
+     *  - discarded when doing a production build
      */
     if (import.meta.hot) {
       import.meta.hot.on('tk:refresh-wc-files', async (hotFileRefs: string[]) => {
