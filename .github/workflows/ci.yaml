@@ -21,3 +21,8 @@ jobs:
         run: pnpm prettier --check .
       - name: Build
         run: pnpm build
+      - name: Create and build template
+        run:
+          - node packages/cli/dist/index.js foobar --defaults
+          - cd foobar
+          - npm run build
