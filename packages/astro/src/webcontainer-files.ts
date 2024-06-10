@@ -54,6 +54,8 @@ export class WebContainerFiles {
   }
 
   async buildAssets(projectRoot: string, { dir, logger }: AstroBuildDoneOptions) {
+    console.log('building the assets!');
+
     const { contentDir, templatesDir } = this._folders(projectRoot);
 
     console.log([
