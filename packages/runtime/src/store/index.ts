@@ -145,8 +145,6 @@ export class TutorialStore {
       return false;
     }
 
-    // TODO: move to EditorStore
-
     const { editor } = this._lesson.data;
 
     return editor === undefined || editor === true || (editor !== false && editor?.fileTree !== false);
@@ -157,8 +155,6 @@ export class TutorialStore {
       return false;
     }
 
-    // TODO: move to EditorStore
-
     const { editor } = this._lesson.data;
 
     return editor !== false;
@@ -168,8 +164,6 @@ export class TutorialStore {
     if (!this._lesson) {
       return false;
     }
-
-    // TODO: move to EditorStore
 
     const { previews } = this._lesson.data;
 
