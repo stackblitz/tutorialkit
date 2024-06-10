@@ -77,6 +77,7 @@ async function getPackageManager() {
   const installedPackageManagers = await getInstalledPackageManagers();
 
   let initialValue = process.env.npm_config_user_agent?.split('/')[0] as PackageManager | undefined;
+
   if (!installedPackageManagers.includes(initialValue)) {
     initialValue = 'npm';
   }
