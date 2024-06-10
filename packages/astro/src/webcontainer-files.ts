@@ -56,6 +56,12 @@ export class WebContainerFiles {
   async buildAssets(projectRoot: string, { dir, logger }: AstroBuildDoneOptions) {
     const { contentDir, templatesDir } = this._folders(projectRoot);
 
+    console.log([
+      `${contentDir}/**/${FILES_FOLDER_NAME}`,
+      `${contentDir}/**/${SOLUTION_FOLDER_NAME}`,
+      `${templatesDir}/*`,
+    ]);
+
     const folders = await glob(
       [`${contentDir}/**/${FILES_FOLDER_NAME}`, `${contentDir}/**/${SOLUTION_FOLDER_NAME}`, `${templatesDir}/*`],
       { onlyDirectories: true },
