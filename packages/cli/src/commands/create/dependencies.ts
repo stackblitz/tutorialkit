@@ -76,7 +76,10 @@ export async function installDependencies(cwd: string, flags: CreateOptions) {
 async function getPackageManager() {
   const installedPackageManagers = await getInstalledPackageManagers();
 
-  const initialValue = process.env.npm_config_user_agent?.split('/')[0] ?? 'npm';
+  let initialValue = process.env.npm_config_user_agent?.split('/')[0] as PackageManager | undefined;
+  if (!installedPackageManagers.includes(initialValue)) {
+    initialValue = 'npm';
+  }
 
   const answer = await prompts.select({
     message: 'What package manager should we use?',
