@@ -30,5 +30,11 @@
     "prettier-plugin-astro": "^0.13.0",
     "typescript": "^5.4.5",
     "unocss": "^0.59.4"
+  },
+  "overrides": {
+    "jiti": "1.21.3"
+  },
+  "resolutions": {
+    "jiti": "1.21.3"
   }
 }
