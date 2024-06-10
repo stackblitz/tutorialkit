@@ -24,6 +24,6 @@ export function generateNavigationList(tutorial: Tutorial): NavList {
 
 function objectToSortedArray<T extends Record<any, any>>(object: T): Array<T[keyof T]> {
   return Object.keys(object)
-    .sort()
+    .sort((a, b) => Number(a) - Number(b))
     .map((key) => object[key]);
 }
