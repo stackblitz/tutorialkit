@@ -7,7 +7,9 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on:
+      - ubuntu-latest
+      - windows-latest
     steps:
       - name: Setup
         uses: pnpm/action-setup@v4
