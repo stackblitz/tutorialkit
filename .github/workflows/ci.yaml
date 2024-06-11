@@ -11,8 +11,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        node-version: [18, 20, 22]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: Setup
         uses: pnpm/action-setup@v4
         with:
