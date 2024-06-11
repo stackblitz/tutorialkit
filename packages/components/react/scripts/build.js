@@ -7,7 +7,7 @@ spawnSync('ls node_modules', { stdio: 'inherit' });
 spawnSync('pwd', { stdio: 'inherit' });
 
 // build everything with typescript
-const { status, error } = spawnSync('npx', ['tsc', '-b'], { stdio: 'inherit' });
+const { status, error } = spawnSync('pnpm', ['exec', 'tsc', '-b'], { stdio: 'inherit' });
 
 if (error) {
   console.error(error);
