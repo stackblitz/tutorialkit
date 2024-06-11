@@ -1,6 +1,6 @@
 import type { WebContainer } from '@webcontainer/api';
 import { withResolvers } from '../utils/promises.js';
-import type { ITerminal } from '../terminal.js';
+import type { ITerminal } from '../utils/terminal.js';
 
 export async function newJSHProcess(webcontainer: WebContainer, terminal: ITerminal) {
   // we spawn a JSH process with a fallback cols and rows in case the process is not attached yet to a visible terminal

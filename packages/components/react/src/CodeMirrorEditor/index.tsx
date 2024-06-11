@@ -14,7 +14,7 @@ import {
   scrollPastEnd,
 } from '@codemirror/view';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
-import type { Theme } from '../types';
+import type { Theme } from '../types.js';
 import { debounce } from '../utils/debounce.js';
 import { BinaryContent } from './BinaryContent.js';
 import { getTheme, reconfigureTheme } from './cm-theme.js';
@@ -46,7 +46,7 @@ export type OnChangeCallback = (update: EditorUpdate) => void;
 export type OnScrollCallback = (position: ScrollPosition) => void;
 
 interface Props {
-  reset?: unknown;
+  id?: unknown;
   doc?: EditorDocument;
   debounceChange?: number;
   debounceScroll?: number;
@@ -59,7 +59,7 @@ interface Props {
 type EditorStates = Map<string, EditorState>;
 
 export function CodeMirrorEditor({
-  reset,
+  id,
   doc,
   debounceScroll = 100,
   debounceChange = 150,
@@ -143,7 +143,7 @@ export function CodeMirrorEditor({
 
   useEffect(() => {
     editorStatesRef.current = new Map<string, EditorState>();
-  }, [reset]);
+  }, [id]);
 
   useEffect(() => {
     const editorStates = editorStatesRef.current!;

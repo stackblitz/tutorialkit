@@ -2,7 +2,7 @@ import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { Compartment, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import '../styles/cm.css';
-import type { Theme } from '../types';
+import type { Theme } from '../types.js';
 import { vscodeDarkTheme } from './themes/vscode-dark.js';
 
 export const darkTheme = EditorView.theme({}, { dark: true });
