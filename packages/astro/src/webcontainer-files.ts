@@ -54,15 +54,7 @@ export class WebContainerFiles {
   }
 
   async buildAssets(projectRoot: string, { dir, logger }: AstroBuildDoneOptions) {
-    console.log('building the assets!');
-
     const { contentDir, templatesDir } = this._folders(projectRoot);
-
-    console.log([
-      path.join(contentDir, `**/${FILES_FOLDER_NAME}`),
-      path.join(contentDir, `**/${SOLUTION_FOLDER_NAME}`),
-      path.join(templatesDir, '*'),
-    ]);
 
     const folders = await glob(
       [
@@ -72,6 +64,8 @@ export class WebContainerFiles {
       ],
       { onlyDirectories: true },
     );
+
+    console.log('FOLDERS', JSON.stringify(folders));
 
     await Promise.all(
       folders.map(async (folder) => {
@@ -178,6 +172,8 @@ class FileMapCache {
     this._readyness = promise;
 
     let shouldReloadPage = false;
+
+    console.log('generating maps', this._requestsQueue.size);
 
     while (this._requestsQueue.size > 0) {
       const requests = [...this._requestsQueue].map((folderPath) => {
