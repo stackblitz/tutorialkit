@@ -17,7 +17,6 @@
     "build": "node ./scripts/build.js"
   },
   "dependencies": {
-    "@tutorialkit/runtime": "workspace:*",
     "@codemirror/autocomplete": "^6.16.0",
     "@codemirror/commands": "^6.4.0",
     "@codemirror/lang-css": "^6.2.1",
@@ -32,6 +31,7 @@
     "@lezer/highlight": "^1.2.0",
     "@nanostores/react": "0.7.2",
     "@radix-ui/react-accordion": "^1.1.2",
+    "@tutorialkit/runtime": "workspace:*",
     "@webcontainer/api": "beta",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/addon-web-links": "^0.11.0",
@@ -43,9 +43,10 @@
     "react-resizable-panels": "^2.0.17"
   },
   "devDependencies": {
+    "@codemirror/search": "^6.5.6",
     "@tutorialkit/types": "workspace:*",
     "@types/react": "^18.2.75",
-    "@codemirror/search": "^6.5.6",
+    "execa": "^9.2.0",
     "fast-glob": "^3.3.2",
     "typescript": "^5.4.5"
   }
