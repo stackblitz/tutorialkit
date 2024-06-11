@@ -18,6 +18,9 @@ test('test creating and building a template', async (options) => {
     },
   });
 
+  console.log(await fs.readlink(path.join(dest, 'node_modules/@tutorialkit/astro')));
+  console.log(await fs.readdir(path.join(dest, 'node_modules/@tutorialkit/astro')));
+
   console.log(await fs.readFile(path.join(dest, 'package.json'), 'utf8'));
 
   await execa('npm', ['run', 'build'], {
