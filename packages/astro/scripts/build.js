@@ -1,19 +1,17 @@
 import assert from 'node:assert';
 import { existsSync } from 'node:fs';
-import { spawn, spawnSync } from 'node:child_process';
 import { cp, rm } from 'node:fs/promises';
+import { execa } from 'execa';
 import esbuild from 'esbuild';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
 
 // clean dist
 await rm('dist', { recursive: true, force: true });
 
-spawnSync('ls', { stdio: 'inherit' });
-spawnSync('pwd', { stdio: 'inherit' });
-
 // only do typechecking and emit the type declarations with tsc
-spawnSync('npx', ['tsc', '--emitDeclarationOnly', '--project', './tsconfig.build.json'], {
+execa('tsc', ['--emitDeclarationOnly', '--project', './tsconfig.build.json'], {
   stdio: 'inherit',
+  preferLocal: true,
 });
 
 // build with esbuild

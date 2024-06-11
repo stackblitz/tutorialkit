@@ -27,6 +27,6 @@ jobs:
         run: pnpm build
       - name: Create and build template
         run: |
-          node packages/cli/dist/index.js create foobar --defaults
+          NODE_ENV=testing node packages/cli/dist/index.js create foobar --defaults
           cd foobar
           npm run build

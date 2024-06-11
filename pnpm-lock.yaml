@@ -120,6 +120,9 @@ importers:
       esbuild-node-externals:
         specifier: ^1.13.0
         version: 1.13.0(esbuild@0.20.2)
+      execa:
+        specifier: ^9.2.0
+        version: 9.2.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5

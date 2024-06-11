@@ -51,6 +51,7 @@
     "@types/mdast": "^4.0.3",
     "esbuild": "^0.20.2",
     "esbuild-node-externals": "^1.13.0",
+    "execa": "^9.2.0",
     "typescript": "^5.4.5",
     "vite-plugin-inspect": "0.8.4"
   },
