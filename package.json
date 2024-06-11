@@ -4,6 +4,7 @@
     "build": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit --filter=create-tutorial build",
     "template:dev": "TUTORIALKIT_DEV=true pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
+    "test": "pnpm run --filter=tutorialkit test",
     "prepare": "is-ci || husky install",
     "clean": "./scripts/clean.sh"
   },

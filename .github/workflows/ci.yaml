@@ -34,10 +34,5 @@ jobs:
         run: pnpm prettier --check .
       - name: Build
         run: pnpm build
-      - name: Create and build template
-        env:
-          NODE_ENV: testing
-        run: |
-          node packages/cli/dist/index.js create foobar --defaults
-          cd foobar
-          npm run build
+      - name: Test
+        run: pnpm test
