@@ -56,12 +56,6 @@ export class WebContainerFiles {
   async buildAssets(projectRoot: string, { dir, logger }: AstroBuildDoneOptions) {
     const { contentDir, templatesDir } = this._folders(projectRoot);
 
-    console.log([
-      `${glob.convertPathToPattern(contentDir)}/**/${FILES_FOLDER_NAME}`,
-      `${glob.convertPathToPattern(contentDir)}/**/${SOLUTION_FOLDER_NAME}`,
-      `${glob.convertPathToPattern(templatesDir)}/*`,
-    ]);
-
     const folders = await glob(
       [
         `${glob.convertPathToPattern(contentDir)}/**/${FILES_FOLDER_NAME}`,
@@ -219,7 +213,7 @@ class FileMapCache {
 }
 
 async function createFileMap(dir: string) {
-  const filePaths = await glob(path.join(dir, '**/*'), {
+  const filePaths = await glob(`${glob.convertPathToPattern(dir)}/**/*`, {
     onlyFiles: true,
   });
 
@@ -282,5 +276,5 @@ function getFilesRef(pathToFolder: string, { contentDir, templatesDir }: Content
     pathToFolder = 'template' + pathToFolder.slice(templatesDir.length);
   }
 
-  return encodeURIComponent(pathToFolder.replaceAll('/', '-').replaceAll('_', '')) + '.json';
+  return encodeURIComponent(pathToFolder.replaceAll(/[\/\\]+/, '-').replaceAll('_', '')) + '.json';
 }
