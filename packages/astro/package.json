@@ -46,9 +46,6 @@
     "unocss": "^0.59.4",
     "zod": "3.23.8"
   },
-  "peerDependencies": {
-    "astro": "^4.8.6"
-  },
   "devDependencies": {
     "@tutorialkit/types": "workspace:*",
     "@types/mdast": "^4.0.3",
@@ -56,5 +53,8 @@
     "esbuild-node-externals": "^1.13.0",
     "typescript": "^5.4.5",
     "vite-plugin-inspect": "0.8.4"
+  },
+  "peerDependencies": {
+    "astro": "^4.10.1"
   }
 }
