@@ -9,7 +9,7 @@
 import { watch } from 'chokidar';
 import fs from 'fs/promises';
 import path from 'path';
-import type { ViteDevServer, VitePlugin } from './types.js';
+import type { ViteDevServer, VitePlugin } from '../types.js';
 import type { AstroIntegrationLogger } from 'astro';
 
 const CUSTOM_PATHS = ['theme.css', 'theme/index.css'];
