@@ -120,6 +120,8 @@ class FileMapCache {
   generateFileMapForPath(filePath: string) {
     const fileMapFolderPath = resolveFilesFolderPath(filePath, this._logger, this._dirs);
 
+    console.log(`Find ${filePath} in ${JSON.stringify(this._dirs)}`);
+
     if (!fileMapFolderPath) {
       this._logger.warn(`File ${filePath} is not part of the tutorial or templates folders.`);
       return;
