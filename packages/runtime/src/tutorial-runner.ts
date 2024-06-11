@@ -74,7 +74,7 @@ export class TutorialRunner {
 
   /**
    *
-   * @param commands Commands schema
+   * @param commands The commands schema.
    */
   setCommands(commands: CommandsSchema) {
     const newCommands = new Commands(commands);
