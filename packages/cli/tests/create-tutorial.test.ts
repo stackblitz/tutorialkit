@@ -14,7 +14,7 @@ test('test creating and building a template', async (options) => {
     cwd: dir,
     stdio: 'inherit',
     env: {
-      TK_DIRECTORY: dir,
+      TK_DIRECTORY: dest,
     },
   });
 
