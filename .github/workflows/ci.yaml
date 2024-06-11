@@ -11,8 +11,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest]
         node-version: [18, 20, 22]
-        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: macos-latest
+            node_version: 20
+          - os: windows-latest
+            node_version: 20.13.1 # 20.14.0 keeps causing a native `node::SetCppgcReference+18123` error in Vitest
     steps:
       - uses: actions/setup-node@v4
         with:
