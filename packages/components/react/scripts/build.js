@@ -3,6 +3,9 @@ import fastGlob from 'fast-glob';
 import { cp } from 'fs/promises';
 import { join } from 'path';
 
+spawnSync('ls', { stdio: 'inherit' });
+spawnSync('pwd', { stdio: 'inherit' });
+
 // build everything with typescript
 const { status, error } = spawnSync('npx', ['tsc', '-b'], { stdio: 'inherit' });
 
