@@ -38,7 +38,7 @@ interface LoadFilesOptions {
   signal?: AbortSignal;
 }
 
-interface RunCommandsOptions extends CommandsSchema {
+interface RunCommandsOptions {
   /**
    * Abort the previous run commands operation.
    *
@@ -61,6 +61,7 @@ export class TutorialRunner {
   private _currentFiles: Files | undefined = undefined;
   private _currentRunCommands: Commands | undefined = undefined;
   private _packageJsonDirty = false;
+  private _commandsChanged = false;
 
   // this strongly assumes that there's a single package json which might not be true
   private _packageJsonContent = '';
@@ -70,6 +71,22 @@ export class TutorialRunner {
     private _terminalStore: TerminalStore,
     private _stepController: StepsController,
   ) {}
+
+  /**
+   *
+   * @param commands Commands schema
+   */
+  setCommands(commands: CommandsSchema) {
+    const newCommands = new Commands(commands);
+    let anyChange = this._changeDetection(commands);
+
+    // if we already know that there's a change we can update the steps now
+    if (anyChange) {
+      this._stepController.setFromCommands([...newCommands]);
+      this._currentRunCommands = newCommands;
+      this._commandsChanged = true;
+    }
+  }
 
   onTerminalResize(cols: number, rows: number) {
     this._currentCommandProcess?.resize({ cols, rows });
@@ -175,7 +192,7 @@ export class TutorialRunner {
   }
 
   /**
-   * Runs a list of commands.
+   * Runs the list of commands set with `setCommands`.
    *
    * This function always wait for any previous `runCommands` call to have completed before sending the next one.
    * It will cancel the previous operation if `options.abortPreviousRun` was set to true.
@@ -187,16 +204,14 @@ export class TutorialRunner {
    *
    * @see {LoadFilesOptions}
    */
-  runCommands({ abortPreviousRun = true, ...commands }: RunCommandsOptions): void {
+  runCommands({ abortPreviousRun = true }: RunCommandsOptions = {}): void {
     const previousTask = this._currentProcessTask;
     const loadPromise = this._currentLoadTask?.promise;
+    const newCommands = this._currentRunCommands;
+    const commandsChanged = this._commandsChanged;
 
-    const newCommands = new Commands(commands);
-    let anyChange = this._changeDetection(commands);
-
-    // if we already know that there's a change we can update the steps now
-    if (anyChange) {
-      this._stepController.setFromCommands([...newCommands]);
+    if (!newCommands) {
+      throw new Error('setCommands should be called before runCommands');
     }
 
     this._currentProcessTask = newTask(
@@ -214,7 +229,7 @@ export class TutorialRunner {
 
         signal.throwIfAborted();
 
-        anyChange ||= this._changeDetection(commands);
+        const anyChange = this._packageJsonDirty || commandsChanged;
 
         if (!anyChange) {
           /**
@@ -235,11 +250,12 @@ export class TutorialRunner {
           return;
         }
 
+        // there were changes so we reset the "commands changed"
+        this._commandsChanged = false;
+
         if (abortPreviousRun) {
           previousTask?.cancel();
         }
-
-        this._currentRunCommands = newCommands;
 
         await previousTask?.promise;
 
@@ -257,15 +273,15 @@ export class TutorialRunner {
    * Restart the last run commands that were submitted.
    */
   restartLastRunCommands() {
-    if (!this._currentRunCommands) {
+    if (!this._currentRunCommands || !this._currentProcessTask) {
       return;
     }
 
     const previousRunCommands = this._currentRunCommands;
-    const previousProcessPromise = this._currentProcessTask?.promise;
+    const previousProcessPromise = this._currentProcessTask.promise;
     const loadPromise = this._currentLoadTask?.promise;
 
-    this._currentProcessTask?.cancel();
+    this._currentProcessTask.cancel();
 
     this._currentProcessTask = newTask(
       async (signal) => {

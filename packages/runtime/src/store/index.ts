@@ -61,6 +61,7 @@ export class TutorialStore {
 
     this._previewsStore.setPreviews(lesson.data.previews ?? true);
     this._terminalStore.setTerminalConfiguration(lesson.data.terminal);
+    this._runner.setCommands(lesson.data);
     this._editorStore.setDocuments(lesson.files);
 
     if (options.ssr) {
@@ -74,7 +75,7 @@ export class TutorialStore {
 
         const preparePromise = this._runner.prepareFiles({ template: templatePromise, files: filesPromise, signal });
 
-        this._runner.runCommands(lesson.data);
+        this._runner.runCommands();
 
         const [template, solution, files] = await Promise.all([
           templatePromise,
