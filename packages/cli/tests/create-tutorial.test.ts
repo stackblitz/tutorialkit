@@ -14,7 +14,7 @@ test('test creating and building a template', async (options) => {
     cwd: dir,
     stdio: 'inherit',
     env: {
-      TK_DIRECTORY: dest,
+      TK_DIRECTORY: path.join(dest, 'packages'),
     },
   });
 
