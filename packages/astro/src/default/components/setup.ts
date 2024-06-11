@@ -3,7 +3,7 @@
  * This ensures that when the authentication flow is complete in a popup, the popup is closed quickly.
  */
 import { auth } from '@webcontainer/api';
-import { authStore } from '../stores/auth-store';
+import { authStore } from '../stores/auth-store.js';
 
 const authConfig = __WC_CONFIG__;
 

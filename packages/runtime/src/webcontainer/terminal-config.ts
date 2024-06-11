@@ -1,6 +1,6 @@
 import type { TerminalPanelType, TerminalSchema } from '@tutorialkit/types';
 import type { WebContainerProcess } from '@webcontainer/api';
-import type { ITerminal } from '../terminal.js';
+import type { ITerminal } from '../utils/terminal.js';
 
 type NormalizedTerminalConfig = {
   panels: TerminalPanel[];

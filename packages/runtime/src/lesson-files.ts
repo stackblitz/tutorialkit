@@ -105,8 +105,6 @@ export class LessonFilesFetcher {
   }
 }
 
-export const lessonFilesFetcher = new LessonFilesFetcher();
-
 function convertToFiles(json: Record<string, string | { base64: string }>): Files {
   const result: Files = {};
 

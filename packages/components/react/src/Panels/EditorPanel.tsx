@@ -9,48 +9,42 @@ import {
 } from '../CodeMirrorEditor/index.js';
 import { FileTree } from '../FileTree.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
-import type { Theme } from '../types';
+import type { Theme } from '../types.js';
 
 const DEFAULT_FILE_TREE_SIZE = 25;
 
 interface Props {
   theme: Theme;
-  lesson: Lesson;
+  id: unknown;
+  files: string[];
+  hideRoot?: boolean;
+  fileTreeScope?: string;
   showFileTree?: boolean;
   helpAction?: 'solve' | 'reset';
   editorDocument?: EditorDocument;
+  selectedFile?: string | undefined;
   onEditorChange?: OnEditorChange;
   onEditorScroll?: OnEditorScroll;
   onHelpClick?: () => void;
-  onFileClick?: (value?: string) => void;
+  onFileSelect?: (value?: string) => void;
 }
 
 export function EditorPanel({
   theme,
-  lesson,
+  id,
+  files,
+  hideRoot,
+  fileTreeScope,
   showFileTree = true,
   helpAction,
   editorDocument,
+  selectedFile,
   onEditorChange,
   onEditorScroll,
   onHelpClick,
-  onFileClick,
+  onFileSelect,
 }: Props) {
   const fileTreePanelRef = useRef<ImperativePanelHandle>(null);
-  const [selectedFile, setSelectedFile] = useState(lesson.data.focus);
-
-  const onFileClickWrapped = useCallback(
-    (fullPath: string) => {
-      setSelectedFile(fullPath);
-      onFileClick?.(fullPath);
-    },
-    [onFileClick],
-  );
-
-  // when the lesson changes we reset the selected file
-  useEffect(() => {
-    setSelectedFile(lesson.data.focus);
-  }, [lesson]);
 
   useEffect(() => {
     const { current: fileTreePanel } = fileTreePanelRef;
@@ -66,7 +60,7 @@ export function EditorPanel({
     } else if (!showFileTree) {
       fileTreePanel.collapse();
     }
-  }, [lesson]);
+  }, [id]);
 
   return (
     <PanelGroup className="bg-tk-elements-app-backgroundColor" direction="horizontal">
@@ -80,10 +74,10 @@ export function EditorPanel({
         <FileTree
           className="flex-grow py-2 border-r border-tk-elements-app-borderColor text-sm"
           selectedFile={selectedFile}
-          hideRoot={lesson.data.hideRoot ?? true}
-          files={lesson.files[1]}
-          scope={lesson.data.scope}
-          onFileClick={onFileClickWrapped}
+          hideRoot={hideRoot ?? true}
+          files={files}
+          scope={fileTreeScope}
+          onFileSelect={onFileSelect}
         />
       </Panel>
       <PanelResizeHandle
@@ -96,7 +90,7 @@ export function EditorPanel({
         <div className="h-full flex-1 overflow-hidden">
           <CodeMirrorEditor
             theme={theme}
-            reset={lesson}
+            id={id}
             doc={editorDocument}
             autoFocusOnDocumentChange={true}
             onScroll={onEditorScroll}

@@ -1,6 +1,6 @@
-import { useAuth } from './setup';
+import { useAuth } from './setup.js';
 import { auth, WebContainer } from '@webcontainer/api';
-import { TutorialRunner } from '@tutorialkit/runtime';
+import { TutorialStore } from '@tutorialkit/runtime';
 
 interface WebContainerContext {
   useAuth: boolean;
@@ -20,7 +20,7 @@ if (!import.meta.env.SSR) {
   });
 }
 
-export const tutorialRunner = new TutorialRunner(webcontainer, useAuth);
+export const tutorialStore = new TutorialStore({ webcontainer, useAuth });
 
 export async function login() {
   auth.startAuthFlow({ popup: true });

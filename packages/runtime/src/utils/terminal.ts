@@ -17,3 +17,8 @@ export const escapeCodes = {
   green: (text: string) => `\x1b[1;32m${text}${reset}`,
   magenta: (text: string) => `\x1b[35m${text}${reset}`,
 };
+
+export function clearTerminal(terminal?: ITerminal) {
+  terminal?.reset();
+  terminal?.write(escapeCodes.clear);
+}
