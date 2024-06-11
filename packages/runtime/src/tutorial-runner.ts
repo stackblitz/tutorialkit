@@ -77,7 +77,7 @@ export class TutorialRunner {
    *
    * This function is safe to call server side.
    *
-   * To actually run them in webcontainer see `runCommands`.
+   * To actually run them in WebContainer see `runCommands`.
    *
    * @param commands The commands schema.
    */
