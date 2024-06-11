@@ -18,11 +18,13 @@ test('test creating and building a template', async (options) => {
     },
   });
 
+  console.log(await fs.readFile(path.join(dest, 'package.json'), 'utf8'));
+
   await execa('npm', ['run', 'build'], {
     cwd: dest,
   });
 
-  console.log(fs.readdir(dest));
+  console.log(await fs.readdir(dest));
 
   expect(false).toBe(true);
 });
