@@ -59,8 +59,8 @@ export class WebContainerFiles {
     const { contentDir, templatesDir } = this._folders(projectRoot);
 
     console.log([
-      path.join(contentDir, '**', FILES_FOLDER_NAME),
-      path.join(contentDir, '**', SOLUTION_FOLDER_NAME),
+      path.join(contentDir, `**/${FILES_FOLDER_NAME}`),
+      path.join(contentDir, `**/${SOLUTION_FOLDER_NAME}`),
       path.join(templatesDir, '*'),
     ]);
 
@@ -139,6 +139,8 @@ class FileMapCache {
       return;
     }
 
+    console.log('GENERATE FILE MAPS');
+
     this._timeoutId = setTimeout(this._generateFileMaps, 10);
   }
 
@@ -211,7 +213,7 @@ class FileMapCache {
 }
 
 async function createFileMap(dir: string) {
-  const filePaths = await glob(`${dir}/**/*`, {
+  const filePaths = await glob(path.join(dir, '**/*'), {
     onlyFiles: true,
   });
 

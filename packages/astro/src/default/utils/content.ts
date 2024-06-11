@@ -222,7 +222,7 @@ async function getFilesRef(pathToFolder: string): Promise<FilesRef> {
   const root = path.join(CONTENT_DIR, pathToFolder);
 
   const filePaths = (
-    await glob(`${root}/**/*`, {
+    await glob(path.join(root, '**/*'), {
       onlyFiles: true,
     })
   ).map((filePath) => `/${path.relative(root, filePath)}`);
