@@ -29,6 +29,7 @@ jobs:
         env:
           NODE_ENV: testing
         run: |
+          node --version
           node packages/cli/dist/index.js create foobar --defaults
           cd foobar
           npm run build

@@ -67,11 +67,7 @@ export class WebContainerFiles {
 
     await Promise.all(
       folders.map(async (folder) => {
-        const tmp = folder;
-
         folder = path.normalize(folder);
-
-        console.log(tmp, folder);
 
         const fileRef = getFilesRef(folder, { contentDir, templatesDir });
         const dest = fileURLToPath(new URL(fileRef, dir));
@@ -120,7 +116,6 @@ class FileMapCache {
     const fileMapFolderPath = resolveFilesFolderPath(filePath, this._logger, this._dirs);
 
     if (!fileMapFolderPath) {
-      console.log(`Find ${filePath} in ${JSON.stringify(this._dirs)}`);
       this._logger.warn(`File ${filePath} is not part of the tutorial or templates folders.`);
       return;
     }
@@ -175,33 +170,25 @@ class FileMapCache {
 
     let shouldReloadPage = false;
 
-    console.log('generating maps', this._requestsQueue.size);
+    while (this._requestsQueue.size > 0) {
+      const requests = [...this._requestsQueue].map((folderPath) => {
+        return [getFilesRef(folderPath, this._dirs), folderPath] as const;
+      });
 
-    try {
-      while (this._requestsQueue.size > 0) {
-        const requests = [...this._requestsQueue].map((folderPath) => {
-          return [getFilesRef(folderPath, this._dirs), folderPath] as const;
-        });
+      this._requestsQueue.clear();
 
-        this._requestsQueue.clear();
+      shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));
 
-        shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));
+      await Promise.all(
+        requests.map(async ([fileRef, folderPath]) => {
+          const timeNow = performance.now();
 
-        await Promise.all(
-          requests.map(async ([fileRef, folderPath]) => {
-            const timeNow = performance.now();
+          this._cache.set(fileRef, await createFileMap(folderPath));
 
-            this._cache.set(fileRef, await createFileMap(folderPath));
-
-            const elapsed = performance.now() - timeNow;
-            this._logger.info(`Generated ${fileRef} ${dim(Math.round(elapsed) + 'ms')}`);
-          }),
-        );
-      }
-    } catch (error) {
-      console.log(error);
-
-      throw error;
+          const elapsed = performance.now() - timeNow;
+          this._logger.info(`Generated ${fileRef} ${dim(Math.round(elapsed) + 'ms')}`);
+        }),
+      );
     }
 
     // the cache is now ready to be used
