@@ -57,16 +57,16 @@ export class WebContainerFiles {
     const { contentDir, templatesDir } = this._folders(projectRoot);
 
     console.log([
-      glob.convertPathToPattern(path.join(contentDir, '**', FILES_FOLDER_NAME)),
-      glob.convertPathToPattern(path.join(contentDir, '**', SOLUTION_FOLDER_NAME)),
-      glob.convertPathToPattern(path.join(templatesDir, '*')),
+      `${glob.convertPathToPattern(contentDir)}/**/${FILES_FOLDER_NAME}`,
+      `${glob.convertPathToPattern(contentDir)}/**/${SOLUTION_FOLDER_NAME}`,
+      `${glob.convertPathToPattern(templatesDir)}/*`,
     ]);
 
     const folders = await glob(
       [
-        glob.convertPathToPattern(path.join(contentDir, '**', FILES_FOLDER_NAME)),
-        glob.convertPathToPattern(path.join(contentDir, '**', SOLUTION_FOLDER_NAME)),
-        glob.convertPathToPattern(path.join(templatesDir, '*')),
+        `${glob.convertPathToPattern(contentDir)}/**/${FILES_FOLDER_NAME}`,
+        `${glob.convertPathToPattern(contentDir)}/**/${SOLUTION_FOLDER_NAME}`,
+        `${glob.convertPathToPattern(templatesDir)}/*`,
       ],
       { onlyDirectories: true },
     );
