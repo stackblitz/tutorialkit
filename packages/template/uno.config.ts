@@ -2,7 +2,7 @@ import { theme } from '@tutorialkit/astro';
 import transformerDirectives from '@unocss/transformer-directives';
 import { globSync, convertPathToPattern } from 'fast-glob';
 import fs from 'node:fs/promises';
-import { basename, dirname } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { defineConfig, presetIcons, presetUno } from 'unocss';
 
 const iconPaths = globSync('./icons/languages/*.svg');
@@ -20,16 +20,16 @@ const customIconCollection = iconPaths.reduce(
   {} as Record<string, Record<string, () => Promise<string>>>,
 );
 
-console.log('CSS', `${convertPathToPattern(require.resolve('@tutorialkit/components-react'))}/../**/*.js`);
+console.log('CSS', `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`);
 
 export default defineConfig({
   theme,
   content: {
-    inline: globSync(`${convertPathToPattern(require.resolve('@tutorialkit/components-react'))}/../**/*.js`).map(
-      (filePath) => {
-        return () => fs.readFile(filePath, { encoding: 'utf8' });
-      },
-    ),
+    inline: globSync(
+      `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`,
+    ).map((filePath) => {
+      return () => fs.readFile(filePath, { encoding: 'utf8' });
+    }),
   },
   rules: [
     ['scrollbar-transparent', { 'scrollbar-color': '#0000004d transparent' }],
