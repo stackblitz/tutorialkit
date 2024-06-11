@@ -1,35 +1,56 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { expect, test } from 'vitest';
-import { temporaryDirectory } from 'tempy';
+import { afterAll, beforeAll, expect, test } from 'vitest';
 import { execa } from 'execa';
 
 const cwd = process.cwd();
-const dir = temporaryDirectory();
+const tmpDir = path.join(__dirname, '.tmp');
 
-console.log('LOC', path.resolve(cwd, '..'));
+beforeAll(async () => {
+  await fs.rm(tmpDir, { force: true, recursive: true });
+  await fs.mkdir(tmpDir);
+});
 
-test('test creating and building a template', async (options) => {
-  const dest = path.join(dir, 'foobar');
+afterAll(async () => {
+  await fs.rm(tmpDir, { force: true, recursive: true });
+});
 
-  await execa('node', [path.join(cwd, 'dist/index.js'), 'create', 'foobar', '--defaults'], {
-    cwd: dir,
+test('test creating a project', async () => {
+  const name = 'test-1';
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [path.join(cwd, 'dist/index.js'), 'create', name, '--no-install', '--no-git', '--defaults'], {
+    cwd: tmpDir,
     stdio: 'inherit',
     env: {
       TK_DIRECTORY: path.resolve(cwd, '..'),
     },
   });
 
-  console.log(await fs.readlink(path.join(dest, 'node_modules/@tutorialkit/astro')));
-  console.log(await fs.readdir(path.join(dest, 'node_modules/@tutorialkit/astro')));
+  const projectFiles = await fs.readdir(dest, { recursive: true });
 
-  console.log(await fs.readFile(path.join(dest, 'package.json'), 'utf8'));
+  expect(projectFiles).toMatchSnapshot();
+});
+
+test('test creating and building a project', async () => {
+  const name = 'test-2';
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [path.join(cwd, 'dist/index.js'), 'create', name, '--no-git', '--defaults'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: path.resolve(cwd, '..'),
+    },
+  });
 
   await execa('npm', ['run', 'build'], {
     cwd: dest,
   });
 
-  console.log(await fs.readdir(dest));
+  // remove `_astro` before taking the snapshot
+  await fs.rm(path.join(dest, 'dist/_astro'), { force: true, recursive: true });
 
-  expect(false).toBe(true);
+  const distFiles = await fs.readdir(path.join(dest, 'dist'), { recursive: true });
+
+  expect(distFiles).toMatchSnapshot();
 });

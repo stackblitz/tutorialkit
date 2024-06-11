@@ -20,3 +20,4 @@ dist-ssr
 .pnpm-store
 /tutorialkit/template
 tsconfig.tsbuildinfo
+.tmp
