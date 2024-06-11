@@ -7,7 +7,7 @@ import { execa } from 'execa';
 const cwd = process.cwd();
 const dir = temporaryDirectory();
 
-console.log('LOC', path.join(cwd, 'packages'));
+console.log('LOC', path.resolve(cwd, '..'));
 
 test('test creating and building a template', async (options) => {
   const dest = path.join(dir, 'foobar');
@@ -16,7 +16,7 @@ test('test creating and building a template', async (options) => {
     cwd: dir,
     stdio: 'inherit',
     env: {
-      TK_DIRECTORY: path.join(cwd, 'packages'),
+      TK_DIRECTORY: path.resolve(cwd, '..'),
     },
   });
 
