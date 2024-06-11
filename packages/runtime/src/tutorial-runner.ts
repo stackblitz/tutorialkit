@@ -73,12 +73,17 @@ export class TutorialRunner {
   ) {}
 
   /**
+   * Set the commands to run. This updates the reported `steps` if any have changed.
+   *
+   * This function is safe to call server side.
+   *
+   * To actually run them in webcontainer see `runCommands`.
    *
    * @param commands The commands schema.
    */
   setCommands(commands: CommandsSchema) {
     const newCommands = new Commands(commands);
-    let anyChange = this._changeDetection(commands);
+    const anyChange = this._changeDetection(commands);
 
     // if we already know that there's a change we can update the steps now
     if (anyChange) {
