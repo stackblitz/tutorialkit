@@ -2,7 +2,7 @@ import type { AstroIntegrationLogger } from 'astro';
 import type { IncomingMessage } from 'http';
 import type { AstroServerSetupOptions, ViteDevServer, AstroBuildDoneOptions, Files } from './types.js';
 import { FSWatcher, watch } from 'chokidar';
-import glob, { convertPathToPattern } from 'fast-glob';
+import glob from 'fast-glob';
 import { dim } from 'kleur/colors';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -86,8 +86,8 @@ export class WebContainerFiles {
     const templatesDir = path.join(projectRoot, './src/templates');
 
     return {
-      contentDir: convertPathToPattern(contentDir),
-      templatesDir: convertPathToPattern(templatesDir),
+      contentDir: glob.convertPathToPattern(contentDir),
+      templatesDir: glob.convertPathToPattern(templatesDir),
     };
   }
 }

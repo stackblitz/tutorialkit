@@ -220,7 +220,13 @@ function updateWorkspaceVersions(dependencies: Record<string, string>, version: 
     const depVersion = dependencies[dependency];
 
     if (depVersion === 'workspace:*') {
-      dependencies[dependency] = version;
+      if (process.env.NODE_ENV === 'testing' && process.env.CI) {
+        const name = dependency.split('/')[1];
+
+        dependencies[dependency] = `file:../packages/${name.replace('-', '/')}`;
+      } else {
+        dependencies[dependency] = version;
+      }
     }
   }
 }
