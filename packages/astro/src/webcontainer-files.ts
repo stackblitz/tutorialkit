@@ -67,10 +67,13 @@ export class WebContainerFiles {
 
     await Promise.all(
       folders.map(async (folder) => {
+        const tmp = folder;
+
+        folder = path.normalize(folder);
+
+        console.log(tmp, folder);
+
         const fileRef = getFilesRef(folder, { contentDir, templatesDir });
-
-        console.log(`${fileRef} - ${dir}`);
-
         const dest = fileURLToPath(new URL(fileRef, dir));
 
         await fs.promises.writeFile(dest, await createFileMap(folder));
