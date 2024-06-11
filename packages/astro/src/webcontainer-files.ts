@@ -276,5 +276,5 @@ function getFilesRef(pathToFolder: string, { contentDir, templatesDir }: Content
     pathToFolder = 'template' + pathToFolder.slice(templatesDir.length);
   }
 
-  return encodeURIComponent(pathToFolder.replaceAll(/[\/\\]+/, '-').replaceAll('_', '')) + '.json';
+  return encodeURIComponent(pathToFolder.replaceAll(/[\/\\]+/g, '-').replaceAll('_', '')) + '.json';
 }
