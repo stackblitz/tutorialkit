@@ -28,7 +28,7 @@ test('test creating a project', async () => {
 
   const projectFiles = await fs.readdir(dest, { recursive: true });
 
-  expect(projectFiles.map(normaliseSlash)).toMatchSnapshot();
+  expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
 test('test creating and building a project', async () => {
@@ -51,7 +51,7 @@ test('test creating and building a project', async () => {
 
   const distFiles = await fs.readdir(path.join(dest, 'dist'), { recursive: true });
 
-  expect(distFiles.map(normaliseSlash)).toMatchSnapshot();
+  expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
 function normaliseSlash(filePath: string) {
