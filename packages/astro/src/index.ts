@@ -57,8 +57,6 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
 
   let _config: AstroConfig;
 
-  let warnEmitted = false;
-
   return {
     name: '@tutorialkit/astro',
     hooks: {
