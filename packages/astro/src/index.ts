@@ -110,9 +110,17 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
         config.integrations.splice(selfIndex + 1, 0, ...extraIntegrations());
       },
       'astro:config:done'({ config }) {
+        console.log('config done', config);
+
         _config = config;
       },
       'astro:server:setup'(options) {
+        if (!_config) {
+          console.warn('no config setup');
+
+          return;
+        }
+
         const { server, logger } = options;
         const projectRoot = fileURLToPath(_config.root);
 
