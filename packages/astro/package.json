@@ -56,6 +56,6 @@
     "vite-plugin-inspect": "0.8.4"
   },
   "peerDependencies": {
-    "astro": "^4.10.1"
+    "astro": "^4.10.2"
   }
 }
