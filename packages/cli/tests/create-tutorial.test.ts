@@ -21,7 +21,6 @@ test('test creating a project', async () => {
 
   await execa('node', [path.join(cwd, 'dist/index.js'), 'create', name, '--no-install', '--no-git', '--defaults'], {
     cwd: tmpDir,
-    stdio: 'inherit',
     env: {
       TK_DIRECTORY: path.resolve(cwd, '..'),
     },
