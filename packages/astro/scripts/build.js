@@ -9,7 +9,9 @@ import { nodeExternalsPlugin } from 'esbuild-node-externals';
 await rm('dist', { recursive: true, force: true });
 
 // only do typechecking and emit the type declarations with tsc
-spawnSync('tsc', ['--emitDeclarationOnly', '--project', './tsconfig.build.json'], { stdio: 'inherit' });
+spawnSync('node_modulues/.bin/tsc', ['--emitDeclarationOnly', '--project', './tsconfig.build.json'], {
+  stdio: 'inherit',
+});
 
 // build with esbuild
 esbuild.build({

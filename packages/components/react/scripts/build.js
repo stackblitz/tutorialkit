@@ -4,7 +4,7 @@ import { cp } from 'fs/promises';
 import { join } from 'path';
 
 // build everything with typescript
-spawnSync('tsc', ['-b'], { stdio: 'inherit' });
+spawnSync('node_modules/.bin/tsc', ['-b'], { stdio: 'inherit' });
 
 // copy css files unmodified
 const filePaths = fastGlob.globSync(`./src/**/*.css`, {
