@@ -56,11 +56,17 @@ export class WebContainerFiles {
   async buildAssets(projectRoot: string, { dir, logger }: AstroBuildDoneOptions) {
     const { contentDir, templatesDir } = this._folders(projectRoot);
 
+    console.log([
+      glob.convertPathToPattern(path.join(contentDir, '**', FILES_FOLDER_NAME)),
+      glob.convertPathToPattern(path.join(contentDir, '**', SOLUTION_FOLDER_NAME)),
+      glob.convertPathToPattern(path.join(templatesDir, '*')),
+    ]);
+
     const folders = await glob(
       [
-        path.join(contentDir, '**', FILES_FOLDER_NAME),
-        path.join(contentDir, '**', SOLUTION_FOLDER_NAME),
-        path.join(templatesDir, '*'),
+        glob.convertPathToPattern(path.join(contentDir, '**', FILES_FOLDER_NAME)),
+        glob.convertPathToPattern(path.join(contentDir, '**', SOLUTION_FOLDER_NAME)),
+        glob.convertPathToPattern(path.join(templatesDir, '*')),
       ],
       { onlyDirectories: true },
     );
@@ -133,8 +139,6 @@ class FileMapCache {
       return;
     }
 
-    console.log('GENERATE FILE MAPS');
-
     this._timeoutId = setTimeout(this._generateFileMaps, 10);
   }
 
@@ -175,25 +179,31 @@ class FileMapCache {
 
     console.log('generating maps', this._requestsQueue.size);
 
-    while (this._requestsQueue.size > 0) {
-      const requests = [...this._requestsQueue].map((folderPath) => {
-        return [getFilesRef(folderPath, this._dirs), folderPath] as const;
-      });
+    try {
+      while (this._requestsQueue.size > 0) {
+        const requests = [...this._requestsQueue].map((folderPath) => {
+          return [getFilesRef(folderPath, this._dirs), folderPath] as const;
+        });
 
-      this._requestsQueue.clear();
+        this._requestsQueue.clear();
 
-      shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));
+        shouldReloadPage ||= requests.some(([fileRef]) => this._hotPaths.has(fileRef));
 
-      await Promise.all(
-        requests.map(async ([fileRef, folderPath]) => {
-          const timeNow = performance.now();
+        await Promise.all(
+          requests.map(async ([fileRef, folderPath]) => {
+            const timeNow = performance.now();
 
-          this._cache.set(fileRef, await createFileMap(folderPath));
+            this._cache.set(fileRef, await createFileMap(folderPath));
 
-          const elapsed = performance.now() - timeNow;
-          this._logger.info(`Generated ${fileRef} ${dim(Math.round(elapsed) + 'ms')}`);
-        }),
-      );
+            const elapsed = performance.now() - timeNow;
+            this._logger.info(`Generated ${fileRef} ${dim(Math.round(elapsed) + 'ms')}`);
+          }),
+        );
+      }
+    } catch (error) {
+      console.log(error);
+
+      throw error;
     }
 
     // the cache is now ready to be used
