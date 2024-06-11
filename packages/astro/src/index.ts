@@ -112,18 +112,10 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
         config.integrations.splice(selfIndex + 1, 0, ...extraIntegrations());
       },
       'astro:config:done'({ config }) {
-        if (warnEmitted) {
-          console.warn('config:done after server:setup');
-        }
-
         _config = config;
       },
       'astro:server:setup'(options) {
         if (!_config) {
-          warnEmitted = true;
-
-          console.warn('NO CONFIG SET!');
-
           return;
         }
 
