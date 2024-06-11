@@ -3,7 +3,7 @@ import fastGlob from 'fast-glob';
 import { cp } from 'fs/promises';
 import { join } from 'path';
 
-spawnSync('ls node_modules/.bin', { stdio: 'inherit' });
+spawnSync('ls node_modules', { stdio: 'inherit' });
 spawnSync('pwd', { stdio: 'inherit' });
 
 // build everything with typescript
