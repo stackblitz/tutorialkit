@@ -20,7 +20,7 @@ const customIconCollection = iconPaths.reduce(
   {} as Record<string, Record<string, () => Promise<string>>>,
 );
 
-console.log('CSS', `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`);
+console.log(globSync(`${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`));
 
 export default defineConfig({
   theme,
