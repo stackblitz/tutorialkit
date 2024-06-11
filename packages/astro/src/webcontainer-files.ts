@@ -20,8 +20,8 @@ export class WebContainerFiles {
     const cache = new FileMapCache(logger, server, { contentDir, templatesDir });
 
     this._watcher = watch([
-      `${contentDir}/**/${FILES_FOLDER_NAME}/**/*`,
-      `${contentDir}/**/${SOLUTION_FOLDER_NAME}/**/*`,
+      path.join(contentDir, `**/${FILES_FOLDER_NAME}/**/*`),
+      path.join(contentDir, `**/${SOLUTION_FOLDER_NAME}/**/*`),
       templatesDir,
     ]);
 
@@ -85,10 +85,7 @@ export class WebContainerFiles {
     const contentDir = path.join(projectRoot, './src/content/tutorial');
     const templatesDir = path.join(projectRoot, './src/templates');
 
-    return {
-      contentDir: glob.convertPathToPattern(contentDir),
-      templatesDir: glob.convertPathToPattern(templatesDir),
-    };
+    return { contentDir, templatesDir };
   }
 }
 
@@ -120,9 +117,8 @@ class FileMapCache {
   generateFileMapForPath(filePath: string) {
     const fileMapFolderPath = resolveFilesFolderPath(filePath, this._logger, this._dirs);
 
-    console.log(`Find ${filePath} in ${JSON.stringify(this._dirs)}`);
-
     if (!fileMapFolderPath) {
+      console.log(`Find ${filePath} in ${JSON.stringify(this._dirs)}`);
       this._logger.warn(`File ${filePath} is not part of the tutorial or templates folders.`);
       return;
     }
