@@ -4,7 +4,7 @@ import { cp } from 'fs/promises';
 import { join } from 'path';
 
 // build everything with typescript
-const { status, error } = spawnSync('node_modules/.bin/tsc', ['-b'], { stdio: 'inherit' });
+const { status, error } = spawnSync('../node_modules/.bin/tsc', ['-b'], { stdio: 'inherit' });
 
 if (error) {
   console.error(error);
