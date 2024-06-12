@@ -12,6 +12,7 @@ import { withResolvers } from './utils.js';
 
 const FILES_FOLDER_NAME = '_files';
 const SOLUTION_FOLDER_NAME = '_solution';
+const IGNORED_FILES = ['**/.DS_Store', '**/*.swp'];
 
 export class WebContainerFiles {
   private _watcher: FSWatcher | undefined;
@@ -20,11 +21,16 @@ export class WebContainerFiles {
     const { contentDir, templatesDir } = this._folders(projectRoot);
     const cache = new FileMapCache(logger, server, { contentDir, templatesDir });
 
-    this._watcher = watch([
-      path.join(contentDir, `**/${FILES_FOLDER_NAME}/**/*`),
-      path.join(contentDir, `**/${SOLUTION_FOLDER_NAME}/**/*`),
-      templatesDir,
-    ]);
+    this._watcher = watch(
+      [
+        path.join(contentDir, `**/${FILES_FOLDER_NAME}/**/*`),
+        path.join(contentDir, `**/${SOLUTION_FOLDER_NAME}/**/*`),
+        templatesDir,
+      ],
+      {
+        ignored: IGNORED_FILES,
+      },
+    );
 
     this._watcher.on('all', (eventName, filePath) => {
       // new directories don't affect the file tree
@@ -63,7 +69,7 @@ export class WebContainerFiles {
         `${glob.convertPathToPattern(contentDir)}/**/${SOLUTION_FOLDER_NAME}`,
         `${glob.convertPathToPattern(templatesDir)}/*`,
       ],
-      { onlyDirectories: true },
+      { onlyDirectories: true, ignore: IGNORED_FILES },
     );
 
     await Promise.all(
@@ -209,6 +215,7 @@ class FileMapCache {
 async function createFileMap(dir: string) {
   const filePaths = await glob(`${glob.convertPathToPattern(dir)}/**/*`, {
     onlyFiles: true,
+    ignore: IGNORED_FILES,
   });
 
   // files are assumed to be sorted so that FileTree can skip some logic at runtime
