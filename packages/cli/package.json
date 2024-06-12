@@ -1,6 +1,6 @@
 {
   "name": "tutorialkit",
-  "version": "0.0.1-alpha.22",
+  "version": "0.0.1-alpha.23",
   "description": "Interactive tutorials powered by WebContainer API",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
