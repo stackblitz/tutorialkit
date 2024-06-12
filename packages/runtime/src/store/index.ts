@@ -71,6 +71,8 @@ export class TutorialStore {
                 this._lesson.files[1] = Object.keys(result.files).sort();
                 this._lessonFiles = result.files;
               }
+
+              break;
             }
             case 'solution': {
               if (this._lesson?.solution[0] === filesRef) {
@@ -79,11 +81,15 @@ export class TutorialStore {
                 this._lesson.solution[1] = Object.keys(result.files).sort();
                 this._lessonSolution = result.files;
               }
+
+              break;
             }
             case 'template': {
               shouldUpdate = true;
 
               this._lessonTemplate = result.files;
+
+              break;
             }
           }
         }

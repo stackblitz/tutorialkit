@@ -19,7 +19,7 @@ export class LessonFilesFetcher {
       return { type: 'none' };
     }
 
-    const type = fromFilesRefToType(filesRef);
+    const type = getTypeFromFilesRef(filesRef);
 
     let files: Files;
 
@@ -157,6 +157,14 @@ function convertToFiles(json: Record<string, string | { base64: string }>): File
   return result;
 }
 
-function fromFilesRefToType(filesRef: string): 'template' | 'files' | 'solution' {
-  return filesRef.startsWith('template-') ? 'template' : filesRef.endsWith('files.json') ? 'files' : 'solution';
+function getTypeFromFilesRef(filesRef: string): 'template' | 'files' | 'solution' {
+  if (filesRef.startsWith('template-')) {
+    return 'template';
+  }
+
+  if (filesRef.endsWith('files.json')) {
+    return 'files';
+  }
+
+  return 'solution';
 }
