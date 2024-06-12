@@ -13,3 +13,8 @@ export function withResolvers<T>(): PromiseWithResolvers<T> {
     promise,
   };
 }
+
+export function normalizeImportPath(importPath: string): string {
+  // this is a fix for windows where import path should still use forward slashes
+  return importPath.replaceAll('\\', '/');
+}
