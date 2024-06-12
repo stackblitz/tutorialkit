@@ -1,6 +1,6 @@
 import { theme } from '@tutorialkit/astro';
 import transformerDirectives from '@unocss/transformer-directives';
-import { globSync } from 'fast-glob';
+import { globSync, convertPathToPattern } from 'fast-glob';
 import fs from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { defineConfig, presetIcons, presetUno } from 'unocss';
@@ -23,7 +23,9 @@ const customIconCollection = iconPaths.reduce(
 export default defineConfig({
   theme,
   content: {
-    inline: globSync(join(require.resolve('@tutorialkit/components-react'), '../**/*.js')).map((filePath) => {
+    inline: globSync(
+      `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`,
+    ).map((filePath) => {
       return () => fs.readFile(filePath, { encoding: 'utf8' });
     }),
   },
