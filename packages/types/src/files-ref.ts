@@ -1,3 +1,3 @@
 export function folderPathToFilesRef(pathToFolder: string): string {
-  return encodeURIComponent(pathToFolder.replaceAll('/', '-').replaceAll('\\', '-').replaceAll('_', '')) + '.json';
+  return encodeURIComponent(pathToFolder.replaceAll(/[\/\\]+/g, '-').replaceAll('_', '')) + '.json';
 }
