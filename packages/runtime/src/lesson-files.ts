@@ -1,4 +1,4 @@
-import type { Files, FilesRef, Lesson } from '@tutorialkit/types';
+import type { Files, FilesRefList, Lesson } from '@tutorialkit/types';
 import { newTask, type Task } from './tasks.js';
 import { wait } from './utils/promises.js';
 
@@ -52,11 +52,11 @@ export class LessonFilesFetcher {
   }
 
   getLessonFiles(lesson: Lesson): Promise<Files> {
-    return this._getContentForFilesRef(lesson.files);
+    return this._getFilesFromFilesRefList(lesson.files);
   }
 
   getLessonSolution(lesson: Lesson): Promise<Files> {
-    return this._getContentForFilesRef(lesson.solution);
+    return this._getFilesFromFilesRefList(lesson.solution);
   }
 
   private _fetchTemplate(templatePathname: string) {
@@ -84,13 +84,13 @@ export class LessonFilesFetcher {
     return task;
   }
 
-  private async _getContentForFilesRef(filesRef: FilesRef): Promise<Files> {
+  private async _getFilesFromFilesRefList(filesRefList: FilesRefList): Promise<Files> {
     // the ref does not have any content
-    if (filesRef[1].length === 0) {
+    if (filesRefList[1].length === 0) {
       return {};
     }
 
-    const pathname = filesRef[0];
+    const pathname = filesRefList[0];
 
     if (this._map.has(pathname)) {
       return this._map.get(pathname)!;
@@ -157,10 +157,6 @@ function convertToFiles(json: Record<string, string | { base64: string }>): File
   return result;
 }
 
-function fromFilesRefToType(filesRef: FilesRef | string): 'template' | 'files' | 'solution' {
-  if (typeof filesRef !== 'string') {
-    filesRef = filesRef[0];
-  }
-
+function fromFilesRefToType(filesRef: string): 'template' | 'files' | 'solution' {
   return filesRef.startsWith('template-') ? 'template' : filesRef.endsWith('files.json') ? 'files' : 'solution';
 }
