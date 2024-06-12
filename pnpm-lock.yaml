@@ -335,6 +335,9 @@ importers:
       '@types/node':
         specifier: ^20.12.7
         version: 20.12.7
+      '@types/react':
+        specifier: ^18.2.75
+        version: 18.2.75
       '@unocss/reset':
         specifier: ^0.59.4
         version: 0.59.4
