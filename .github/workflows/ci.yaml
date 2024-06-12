@@ -7,17 +7,32 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [18, 20, 22]
+        include:
+          - os: macos-latest
+            node_version: 20
+          - os: windows-latest
+            node_version: 20.13.1 # 20.14.0 keeps causing a native `node::SetCppgcReference+18123` error in Vitest
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: Setup
         uses: pnpm/action-setup@v4
         with:
           version: 8
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install dependencies
         run: pnpm install
       - name: Lint
         run: pnpm prettier --check .
       - name: Build
         run: pnpm build
+      - name: Test
+        run: pnpm test

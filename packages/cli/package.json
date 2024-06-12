@@ -16,7 +16,8 @@
   "scripts": {
     "build": "node scripts/build.js",
     "prepack": "node scripts/pre-pack.js",
-    "postpack": "node scripts/cleanup.js"
+    "postpack": "node scripts/cleanup.js",
+    "test": "vitest --testTimeout=180000"
   },
   "files": [
     "dist",
@@ -24,8 +25,8 @@
     "template/.gitignore"
   ],
   "dependencies": {
-    "@babel/parser": "7.24.5",
     "@babel/generator": "7.24.5",
+    "@babel/parser": "7.24.5",
     "@babel/traverse": "7.24.5",
     "@babel/types": "7.24.5",
     "@clack/prompts": "^0.7.0",
@@ -42,7 +43,9 @@
     "@types/yargs-parser": "^21.0.3",
     "esbuild": "^0.20.2",
     "esbuild-node-externals": "^1.13.0",
-    "fs-extra": "^11.2.0"
+    "execa": "^9.2.0",
+    "fs-extra": "^11.2.0",
+    "vitest": "^1.6.0"
   },
   "engines": {
     "node": ">=18.18.0"

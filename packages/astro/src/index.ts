@@ -117,6 +117,10 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
         _config = config;
       },
       'astro:server:setup'(options) {
+        if (!_config) {
+          return;
+        }
+
         const { server, logger } = options;
         const projectRoot = fileURLToPath(_config.root);
 

@@ -220,7 +220,13 @@ function updateWorkspaceVersions(dependencies: Record<string, string>, version: 
     const depVersion = dependencies[dependency];
 
     if (depVersion === 'workspace:*') {
-      dependencies[dependency] = version;
+      if (process.env.TK_DIRECTORY) {
+        const name = dependency.split('/')[1];
+
+        dependencies[dependency] = `file:${process.env.TK_DIRECTORY}/packages/${name.replace('-', '/')}`;
+      } else {
+        dependencies[dependency] = version;
+      }
     }
   }
 }
