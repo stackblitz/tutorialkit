@@ -33,6 +33,7 @@ export class TutorialStore {
 
   private _lessonFiles: Files | undefined;
   private _lessonSolution: Files | undefined;
+  private _lessonTemplate: Files | undefined;
 
   /**
    * Whether or not the current lesson is fully loaded in WebContainer
@@ -46,6 +47,73 @@ export class TutorialStore {
     this._previewsStore = new PreviewsStore(this._webcontainer);
     this._terminalStore = new TerminalStore(this._webcontainer, useAuth);
     this._runner = new TutorialRunner(this._webcontainer, this._terminalStore, this._stepController);
+
+    /**
+     * By having this code under `import.meta.hot`, it gets:
+     *  - ignored on server side where it shouldn't run
+     *  - discarded when doing a production build
+     */
+    if (import.meta.hot) {
+      import.meta.hot.on('tk:refresh-wc-files', async (hotFilesRefs: string[]) => {
+        let shouldUpdate = false;
+
+        for (const filesRef of hotFilesRefs) {
+          const result = await this._lessonFilesFetcher.invalidate(filesRef);
+
+          switch (result.type) {
+            case 'none': {
+              break;
+            }
+            case 'files': {
+              if (this._lesson?.files[0] === filesRef) {
+                shouldUpdate = true;
+
+                this._lesson.files[1] = Object.keys(result.files).sort();
+                this._lessonFiles = result.files;
+              }
+
+              break;
+            }
+            case 'solution': {
+              if (this._lesson?.solution[0] === filesRef) {
+                shouldUpdate = true;
+
+                this._lesson.solution[1] = Object.keys(result.files).sort();
+                this._lessonSolution = result.files;
+              }
+
+              break;
+            }
+            case 'template': {
+              shouldUpdate = true;
+
+              this._lessonTemplate = result.files;
+
+              break;
+            }
+          }
+        }
+
+        if (shouldUpdate && this._lesson) {
+          this._lessonTask?.cancel();
+
+          const files = this._lessonFiles ?? {};
+          const template = this._lessonTemplate;
+
+          this._lessonTask = newTask(
+            async (signal) => {
+              const preparePromise = this._runner.prepareFiles({ template, files, signal });
+
+              this._runner.runCommands();
+              this._editorStore.setDocuments(files);
+
+              await preparePromise;
+            },
+            { ignoreCancel: true },
+          );
+        }
+      });
+    }
   }
 
   setLesson(lesson: Lesson, options: { ssr?: boolean } = {}) {
@@ -85,6 +153,7 @@ export class TutorialStore {
 
         signal.throwIfAborted();
 
+        this._lessonTemplate = template;
         this._lessonFiles = files;
         this._lessonSolution = solution;
 

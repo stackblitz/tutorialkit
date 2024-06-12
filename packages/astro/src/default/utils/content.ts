@@ -1,12 +1,13 @@
 import type {
   ChapterSchema,
-  FilesRef,
+  FilesRefList,
   Lesson,
   LessonSchema,
   PartSchema,
   Tutorial,
   TutorialSchema,
 } from '@tutorialkit/types';
+import { folderPathToFilesRef } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
@@ -66,8 +67,8 @@ export async function getTutorial(): Promise<Tutorial> {
       const filesDir = path.join(lessonDir, '_files');
       const solutionDir = path.join(lessonDir, '_solution');
 
-      const files = await getFilesRef(filesDir);
-      const solution = await getFilesRef(solutionDir);
+      const files = await getFilesRefList(filesDir);
+      const solution = await getFilesRefList(solutionDir);
 
       const lesson: Lesson = {
         data,
@@ -218,7 +219,7 @@ function getSlug(entry: CollectionEntryTutorial) {
   return slug;
 }
 
-async function getFilesRef(pathToFolder: string): Promise<FilesRef> {
+async function getFilesRefList(pathToFolder: string): Promise<FilesRefList> {
   const root = path.join(CONTENT_DIR, pathToFolder);
 
   const filePaths = (
@@ -229,7 +230,9 @@ async function getFilesRef(pathToFolder: string): Promise<FilesRef> {
 
   filePaths.sort();
 
-  return [pathToFolder, filePaths];
+  const filesRef = folderPathToFilesRef(pathToFolder);
+
+  return [filesRef, filePaths];
 }
 
 interface CollectionEntryTutorial {

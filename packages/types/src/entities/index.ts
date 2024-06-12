@@ -8,7 +8,7 @@ export type Files = Record<string, string | Uint8Array>;
  * This tuple contains a "ref" which points to a file to fetch with the `LessonFilesFetcher` and
  * the list of file paths included by that ref.
  */
-export type FilesRef = [ref: string, files: string[]];
+export type FilesRefList = [ref: string, files: string[]];
 
 export interface LessonLink {
   href: string;
@@ -35,8 +35,8 @@ export interface Lesson<T = unknown> {
   part: { id: string; title: string };
   chapter: { id: string; title: string };
   slug: string;
-  files: FilesRef;
-  solution: FilesRef;
+  files: FilesRefList;
+  solution: FilesRefList;
   next?: LessonLink;
   prev?: LessonLink;
 

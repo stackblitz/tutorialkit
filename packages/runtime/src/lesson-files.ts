@@ -1,14 +1,42 @@
-import type { Files, FilesRef, Lesson } from '@tutorialkit/types';
+import type { Files, FilesRefList, Lesson } from '@tutorialkit/types';
 import { newTask, type Task } from './tasks.js';
 import { wait } from './utils/promises.js';
+
+type InvalidationResult =
+  | {
+      type: 'template' | 'files' | 'solution';
+      files: Files;
+    }
+  | { type: 'none' };
 
 export class LessonFilesFetcher {
   private _map = new Map<string, Files>();
   private _templateLoadTask?: Task<Files>;
   private _templateLoaded: string | undefined;
 
+  async invalidate(filesRef: string): Promise<InvalidationResult> {
+    if (!this._map.has(filesRef)) {
+      return { type: 'none' };
+    }
+
+    const type = getTypeFromFilesRef(filesRef);
+
+    let files: Files;
+
+    if (this._templateLoaded === filesRef) {
+      files = await this._fetchTemplate(filesRef).promise;
+    } else {
+      files = await this._fetchFiles(filesRef);
+    }
+
+    return {
+      type,
+      files,
+    };
+  }
+
   async getLessonTemplate(lesson: Lesson): Promise<Files> {
-    const templatePathname = `template-${lesson.data.template}`;
+    const templatePathname = `template-${lesson.data.template}.json`;
 
     if (this._map.has(templatePathname)) {
       return this._map.get(templatePathname)!;
@@ -18,10 +46,24 @@ export class LessonFilesFetcher {
       return this._templateLoadTask.promise;
     }
 
+    const task = this._fetchTemplate(templatePathname);
+
+    return task.promise;
+  }
+
+  getLessonFiles(lesson: Lesson): Promise<Files> {
+    return this._getFilesFromFilesRefList(lesson.files);
+  }
+
+  getLessonSolution(lesson: Lesson): Promise<Files> {
+    return this._getFilesFromFilesRefList(lesson.solution);
+  }
+
+  private _fetchTemplate(templatePathname: string) {
     this._templateLoadTask?.cancel();
 
     const task = newTask(async (signal) => {
-      const response = await fetch(`/${templatePathname}.json`, { signal });
+      const response = await fetch(`/${templatePathname}`, { signal });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch: status ${response.status}`);
@@ -39,24 +81,16 @@ export class LessonFilesFetcher {
     this._templateLoadTask = task;
     this._templateLoaded = templatePathname;
 
-    return task.promise;
+    return task;
   }
 
-  getLessonFiles(lesson: Lesson): Promise<Files> {
-    return this._getContentForFilesRef(lesson.files);
-  }
-
-  getLessonSolution(lesson: Lesson): Promise<Files> {
-    return this._getContentForFilesRef(lesson.solution);
-  }
-
-  private async _getContentForFilesRef(filesRef: FilesRef): Promise<Files> {
+  private async _getFilesFromFilesRefList(filesRefList: FilesRefList): Promise<Files> {
     // the ref does not have any content
-    if (filesRef[1].length === 0) {
+    if (filesRefList[1].length === 0) {
       return {};
     }
 
-    const pathname = this._getPathToFetch(filesRef[0]);
+    const pathname = filesRefList[0];
 
     if (this._map.has(pathname)) {
       return this._map.get(pathname)!;
@@ -97,12 +131,6 @@ export class LessonFilesFetcher {
       await wait(1000);
     }
   }
-
-  private _getPathToFetch(folder: string) {
-    const pathToFetch = encodeURIComponent(folder.replaceAll('/', '-').replaceAll('_', '')) + '.json';
-
-    return pathToFetch;
-  }
 }
 
 function convertToFiles(json: Record<string, string | { base64: string }>): Files {
@@ -127,4 +155,16 @@ function convertToFiles(json: Record<string, string | { base64: string }>): File
   }
 
   return result;
+}
+
+function getTypeFromFilesRef(filesRef: string): 'template' | 'files' | 'solution' {
+  if (filesRef.startsWith('template-')) {
+    return 'template';
+  }
+
+  if (filesRef.endsWith('files.json')) {
+    return 'files';
+  }
+
+  return 'solution';
 }

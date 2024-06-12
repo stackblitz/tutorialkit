@@ -1,4 +1,4 @@
-import type { FilesRef, Files } from '@tutorialkit/types';
+import type { FilesRefList, Files } from '@tutorialkit/types';
 import { atom, computed } from 'nanostores';
 
 export interface EditorDocument {
@@ -31,7 +31,7 @@ export class EditorStore {
     this.selectedFile.set(filePath);
   }
 
-  setDocuments(files: FilesRef | Files) {
+  setDocuments(files: FilesRefList | Files) {
     // check if it is a FilesRef
     if (Array.isArray(files)) {
       this.documents.set(

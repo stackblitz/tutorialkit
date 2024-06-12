@@ -313,6 +313,9 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
+      vite:
+        specifier: ^5.2.11
+        version: 5.2.13(@types/node@20.12.7)
 
   packages/template:
     dependencies:

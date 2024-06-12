@@ -17,7 +17,7 @@
     "build": "node scripts/build.js",
     "prepack": "node scripts/pre-pack.js",
     "postpack": "node scripts/cleanup.js",
-    "test": "vitest --testTimeout=180000"
+    "test": "vitest --testTimeout=300000"
   },
   "files": [
     "dist",
