@@ -45,7 +45,7 @@ exports[`create a project 1`] = `
   "src/content/tutorial/1-basics/1-introduction/2-foo/_files/src/index.html",
   "src/content/tutorial/1-basics/1-introduction/2-foo/_files/src/unicorn.js",
   "src/content/tutorial/1-basics/1-introduction/2-foo/_files/src/windows_xp.png",
-  "src/content/tutorial/1-basics/1-introduction/2-foo/content.md",
+  "src/content/tutorial/1-basics/1-introduction/2-foo/content.mdx",
   "src/content/tutorial/1-basics/1-introduction/3-bar",
   "src/content/tutorial/1-basics/1-introduction/3-bar/_files",
   "src/content/tutorial/1-basics/1-introduction/3-bar/_files/src",
