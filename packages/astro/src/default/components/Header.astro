@@ -14,8 +14,9 @@ const LOGO_EXTENSIONS = [
 
 let logo;
 
-for (const logoFilename of LOGO_EXTENSIONS) {
-  const exists = fs.existsSync(path.join('public', `logo.${logoFilename}`));
+for (const logoExt of LOGO_EXTENSIONS) {
+  const logoFilename = `logo.${logoExt}`;
+  const exists = fs.existsSync(path.join('public', logoFilename));
 
   if (exists) {
     logo = `/${logoFilename}`;

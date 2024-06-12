@@ -114,6 +114,7 @@ export const webcontainerSchema = commandsSchema.extend({
   autoReload: z.boolean().optional(),
   template: z.string().optional(),
   terminal: terminalSchema.optional(),
+  focus: z.string().optional(),
   editor: z.union([
     // can either be completely removed by setting it to `false`
     z.boolean().optional(),
