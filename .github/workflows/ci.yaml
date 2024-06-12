@@ -27,7 +27,7 @@ jobs:
         with:
           version: 8
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install dependencies
         run: pnpm install
       - name: Lint
