@@ -14,19 +14,19 @@ export class LessonFilesFetcher {
   private _templateLoadTask?: Task<Files>;
   private _templateLoaded: string | undefined;
 
-  async invalidate(fileRef: string): Promise<InvalidationResult> {
-    if (!this._map.has(fileRef)) {
+  async invalidate(filesRef: string): Promise<InvalidationResult> {
+    if (!this._map.has(filesRef)) {
       return { type: 'none' };
     }
 
-    const type = fileRef.startsWith('template-') ? 'template' : fileRef.endsWith('files.json') ? 'files' : 'solution';
+    const type = fromFilesRefToType(filesRef);
 
     let files: Files;
 
-    if (this._templateLoaded === fileRef) {
-      files = await this._fetchTemplate(fileRef).promise;
+    if (this._templateLoaded === filesRef) {
+      files = await this._fetchTemplate(filesRef).promise;
     } else {
-      files = await this._fetchFiles(fileRef);
+      files = await this._fetchFiles(filesRef);
     }
 
     return {
@@ -155,4 +155,12 @@ function convertToFiles(json: Record<string, string | { base64: string }>): File
   }
 
   return result;
+}
+
+function fromFilesRefToType(filesRef: FilesRef | string): 'template' | 'files' | 'solution' {
+  if (typeof filesRef !== 'string') {
+    filesRef = filesRef[0];
+  }
+
+  return filesRef.startsWith('template-') ? 'template' : filesRef.endsWith('files.json') ? 'files' : 'solution';
 }
