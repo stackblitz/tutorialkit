@@ -5,6 +5,12 @@ import { LoginButton } from './LoginButton';
 import { ThemeSwitch } from './ThemeSwitch';
 import { useAuth } from './setup';
 
+interface Props {
+  logoLink: string;
+}
+
+const { logoLink } = Astro.props;
+
 const LOGO_EXTENSIONS = [
   'svg',
   'png',
@@ -34,7 +40,7 @@ if (!logo) {
 >
   <div class="flex flex-1">
     <a
-      href="/"
+      href={logoLink}
       class="flex items-center text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
     >
       {logo && <img class="h-5 w-auto" src={logo} />}

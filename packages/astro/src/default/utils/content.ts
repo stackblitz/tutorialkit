@@ -17,7 +17,9 @@ const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
 export async function getTutorial(): Promise<Tutorial> {
   const collection = sortCollection(await getCollection('tutorial'));
 
-  const _tutorial: Tutorial = {};
+  const _tutorial: Tutorial = {
+    parts: {},
+  };
 
   let tutorialMetaData: TutorialSchema | undefined;
 
@@ -34,30 +36,32 @@ export async function getTutorial(): Promise<Tutorial> {
 
       // default template if not specified
       tutorialMetaData.template ??= 'default';
+
+      _tutorial.logoLink = data.logoLink;
     } else if (type === 'part') {
-      _tutorial[partId] = {
+      _tutorial.parts[partId] = {
         id: partId,
         data,
         slug: getSlug(entry),
         chapters: {},
       };
     } else if (type === 'chapter') {
-      if (!_tutorial[partId]) {
+      if (!_tutorial.parts[partId]) {
         throw new Error(`Could not find part '${partId}'`);
       }
 
-      _tutorial[partId].chapters[chapterId] = {
+      _tutorial.parts[partId].chapters[chapterId] = {
         id: chapterId,
         data,
         slug: getSlug(entry),
         lessons: {},
       };
     } else if (type === 'lesson') {
-      if (!_tutorial[partId]) {
+      if (!_tutorial.parts[partId]) {
         throw new Error(`Could not find part '${partId}'`);
       }
 
-      if (!_tutorial[partId].chapters[chapterId]) {
+      if (!_tutorial.parts[partId].chapters[chapterId]) {
         throw new Error(`Could not find chapter '${partId}'`);
       }
 
@@ -75,11 +79,11 @@ export async function getTutorial(): Promise<Tutorial> {
         id: lessonId,
         part: {
           id: partId,
-          title: _tutorial[partId].data.title,
+          title: _tutorial.parts[partId].data.title,
         },
         chapter: {
           id: chapterId,
-          title: _tutorial[partId].chapters[chapterId].data.title,
+          title: _tutorial.parts[partId].chapters[chapterId].data.title,
         },
         Markdown: Content,
         slug: getSlug(entry),
@@ -89,7 +93,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lessons.push(lesson);
 
-      _tutorial[partId].chapters[chapterId].lessons[lessonId] = lesson;
+      _tutorial.parts[partId].chapters[chapterId].lessons[lessonId] = lesson;
     }
   }
 
@@ -111,8 +115,8 @@ export async function getTutorial(): Promise<Tutorial> {
     const prevLesson = i > 0 ? lessons.at(i - 1) : undefined;
     const nextLesson = lessons.at(i + 1);
 
-    const partMetadata = _tutorial[lesson.part.id].data;
-    const chapterMetadata = _tutorial[lesson.part.id].chapters[lesson.chapter.id].data;
+    const partMetadata = _tutorial.parts[lesson.part.id].data;
+    const chapterMetadata = _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].data;
 
     lesson.data = {
       ...pick(
@@ -123,8 +127,8 @@ export async function getTutorial(): Promise<Tutorial> {
     };
 
     if (prevLesson) {
-      const partSlug = _tutorial[prevLesson.part.id].slug;
-      const chapterSlug = _tutorial[prevLesson.part.id].chapters[prevLesson.chapter.id].slug;
+      const partSlug = _tutorial.parts[prevLesson.part.id].slug;
+      const chapterSlug = _tutorial.parts[prevLesson.part.id].chapters[prevLesson.chapter.id].slug;
 
       lesson.prev = {
         title: prevLesson.data.title,
@@ -133,8 +137,8 @@ export async function getTutorial(): Promise<Tutorial> {
     }
 
     if (nextLesson) {
-      const partSlug = _tutorial[nextLesson.part.id].slug;
-      const chapterSlug = _tutorial[nextLesson.part.id].chapters[nextLesson.chapter.id].slug;
+      const partSlug = _tutorial.parts[nextLesson.part.id].slug;
+      const chapterSlug = _tutorial.parts[nextLesson.part.id].chapters[nextLesson.chapter.id].slug;
 
       lesson.next = {
         title: nextLesson.data.title,
