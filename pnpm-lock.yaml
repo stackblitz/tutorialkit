@@ -208,6 +208,9 @@ importers:
       '@codemirror/lang-sass':
         specifier: ^6.0.2
         version: 6.0.2(@codemirror/view@6.26.3)
+      '@codemirror/lang-wast':
+        specifier: ^6.0.2
+        version: 6.0.2
       '@codemirror/language':
         specifier: ^6.10.1
         version: 6.10.1
@@ -1143,6 +1146,15 @@ packages:
       '@lezer/sass': 1.0.6
     transitivePeerDependencies:
       - '@codemirror/view'
+    dev: false
+
+  /@codemirror/lang-wast@6.0.2:
+    resolution: {integrity: sha512-Imi2KTpVGm7TKuUkqyJ5NRmeFWF7aMpNiwHnLQe0x9kmrxElndyH0K6H/gXtWwY6UshMRAhpENsgfpSwsgmC6Q==}
+    dependencies:
+      '@codemirror/language': 6.10.1
+      '@lezer/common': 1.2.1
+      '@lezer/highlight': 1.2.0
+      '@lezer/lr': 1.4.0
     dev: false
 
   /@codemirror/language@6.10.1:
