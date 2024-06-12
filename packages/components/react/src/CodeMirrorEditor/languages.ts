@@ -71,6 +71,13 @@ export const supportedLanguages = [
       return import('@codemirror/lang-markdown').then((module) => module.markdown());
     },
   }),
+  LanguageDescription.of({
+    name: 'Wasm',
+    extensions: ['wat'],
+    async load() {
+      return import('@codemirror/lang-wast').then((module) => module.wast());
+    },
+  }),
 ];
 
 export async function getLanguage(fileName: string) {
