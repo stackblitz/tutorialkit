@@ -16,6 +16,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@types/react": "^18.2.75",
     "@astrojs/check": "^0.7.0",
     "@astrojs/react": "^3.5.0",
     "@iconify-json/ph": "^1.1.12",

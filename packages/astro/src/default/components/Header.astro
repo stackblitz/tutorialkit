@@ -1,15 +1,30 @@
 ---
 import fs from 'node:fs';
+import path from 'node:path';
 import { LoginButton } from './LoginButton';
 import { ThemeSwitch } from './ThemeSwitch';
 import { useAuth } from './setup';
 
+const LOGO_EXTENSIONS = [
+  'svg',
+  'png',
+  'jpeg',
+  'jpg',
+];
+
 let logo;
 
-try {
-  logo = fs.readFileSync('./public/logo.svg', { encoding: 'utf8' });
-} catch {
-  console.warn('No logo.svg found in public/');
+for (const logoFilename of LOGO_EXTENSIONS) {
+  const exists = fs.existsSync(path.join('public', `logo.${logoFilename}`));
+
+  if (exists) {
+    logo = `/${logoFilename}`;
+    break;
+  }
+}
+
+if (!logo) {
+  console.warn(`No logo found in public/. Supported filenames are: logo.(${LOGO_EXTENSIONS.join('|')})`);
 }
 ---
 
@@ -18,12 +33,10 @@ try {
 >
   <div class="flex flex-1">
     <a
-      href="#"
+      href="/"
       class="flex items-center text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
     >
-      <span class="h-5 w-auto">
-        {logo && <Fragment set:html={logo} />}
-      </span>
+      {logo && <img class="h-5 w-auto" src={logo} />}
     </a>
   </div>
   <div>

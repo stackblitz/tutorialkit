@@ -3,7 +3,9 @@ import { fileURLToPath } from 'node:url';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { WebContainerFiles } from './webcontainer-files.js';
-import { userlandCSS, watchUserlandCSS } from './css.js';
+import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
+import { tutorialkitStore } from './vite-plugins/store.js';
+import { tutorialkitCore } from './vite-plugins/core.js';
 
 export { theme } from './theme.js';
 
@@ -84,6 +86,8 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
             },
             plugins: [
               userlandCSS,
+              tutorialkitStore,
+              tutorialkitCore,
               process.env.TUTORIALKIT_DEV ? (await import('vite-plugin-inspect')).default() : null,
             ],
           },
