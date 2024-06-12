@@ -5,7 +5,7 @@
  * The virtual module can be imported as:
  *
  * ```ts
- * import { tutorialStore } from 'tutorialkit:state';
+ * import tutorialStore from 'tutorialkit:store';
  *
  * export const MyComponent = () => (
  *   <button onClick={() => tutorialStore.reset()}>Reset</button>
@@ -17,11 +17,11 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const virtualModuleId = 'tutorialkit:state';
+const virtualModuleId = 'tutorialkit:store';
 const resolvedVirtualModuleId = `${virtualModuleId}`;
 
-export const tutorialkitState: VitePlugin = {
-  name: 'tutorialkit-state-virtual-mod-plugin',
+export const tutorialkitStore: VitePlugin = {
+  name: 'tutorialkit-store-virtual-mod-plugin',
   resolveId(id) {
     if (id === virtualModuleId) {
       return resolvedVirtualModuleId;
@@ -32,7 +32,8 @@ export const tutorialkitState: VitePlugin = {
       const pathToInit = path.join(__dirname, 'default', 'components', 'webcontainer.ts');
 
       return `
-        export { tutorialStore, webcontainer } from '${pathToInit}';
+        import { tutorialStore } from '${pathToInit}';
+        export default tutorialStore;
       `;
     }
   },
