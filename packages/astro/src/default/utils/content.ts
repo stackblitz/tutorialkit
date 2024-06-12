@@ -223,7 +223,7 @@ async function getFilesRefList(pathToFolder: string): Promise<FilesRefList> {
   const root = path.join(CONTENT_DIR, pathToFolder);
 
   const filePaths = (
-    await glob(`${root}/**/*`, {
+    await glob(`${glob.convertPathToPattern(root)}/**/*`, {
       onlyFiles: true,
     })
   ).map((filePath) => `/${path.relative(root, filePath)}`);

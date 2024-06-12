@@ -21,8 +21,8 @@ export class WebContainerFiles {
     const cache = new FileMapCache(logger, server, { contentDir, templatesDir });
 
     this._watcher = watch([
-      `${contentDir}/**/${FILES_FOLDER_NAME}/**/*`,
-      `${contentDir}/**/${SOLUTION_FOLDER_NAME}/**/*`,
+      path.join(contentDir, `**/${FILES_FOLDER_NAME}/**/*`),
+      path.join(contentDir, `**/${SOLUTION_FOLDER_NAME}/**/*`),
       templatesDir,
     ]);
 
@@ -58,12 +58,18 @@ export class WebContainerFiles {
     const { contentDir, templatesDir } = this._folders(projectRoot);
 
     const folders = await glob(
-      [`${contentDir}/**/${FILES_FOLDER_NAME}`, `${contentDir}/**/${SOLUTION_FOLDER_NAME}`, `${templatesDir}/*`],
+      [
+        `${glob.convertPathToPattern(contentDir)}/**/${FILES_FOLDER_NAME}`,
+        `${glob.convertPathToPattern(contentDir)}/**/${SOLUTION_FOLDER_NAME}`,
+        `${glob.convertPathToPattern(templatesDir)}/*`,
+      ],
       { onlyDirectories: true },
     );
 
     await Promise.all(
       folders.map(async (folder) => {
+        folder = path.normalize(folder);
+
         const filesRef = getFilesRef(folder, { contentDir, templatesDir });
         const dest = fileURLToPath(new URL(filesRef, dir));
 
@@ -201,7 +207,7 @@ class FileMapCache {
 }
 
 async function createFileMap(dir: string) {
-  const filePaths = await glob(`${dir}/**/*`, {
+  const filePaths = await glob(`${glob.convertPathToPattern(dir)}/**/*`, {
     onlyFiles: true,
   });
 
