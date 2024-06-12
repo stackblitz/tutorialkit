@@ -12,9 +12,10 @@
  * );
  * ```
  */
-import type { VitePlugin } from '../types.js';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import type { VitePlugin } from '../types.js';
+import { normalizeImportPath } from '../utils.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const virtualModuleId = 'tutorialkit:store';
@@ -29,7 +30,7 @@ export const tutorialkitStore: VitePlugin = {
   },
   async load(id) {
     if (id === resolvedVirtualModuleId) {
-      const pathToInit = path.join(__dirname, 'default', 'components', 'webcontainer.ts');
+      const pathToInit = normalizeImportPath(path.join(__dirname, 'default/components/webcontainer.ts'));
 
       return `
         import { tutorialStore } from '${pathToInit}';
