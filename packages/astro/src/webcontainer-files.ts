@@ -115,10 +115,10 @@ class FileMapCache {
       return;
     }
 
-    const fileRef = getFilesRef(fileMapFolderPath, this._dirs);
+    const filesRef = getFilesRef(fileMapFolderPath, this._dirs);
 
     // clear the existing cache value (mark it as stale)
-    this._cache.set(fileRef, undefined);
+    this._cache.set(filesRef, undefined);
 
     // add this file as required to be processed
     this._requestsQueue.add(fileMapFolderPath);
@@ -163,7 +163,7 @@ class FileMapCache {
 
     this._readiness = promise;
 
-    const hotFileRefs: string[] = [];
+    const hotFilesRefs: string[] = [];
 
     while (this._requestsQueue.size > 0) {
       const requests = [...this._requestsQueue].map((folderPath) => {
@@ -173,17 +173,17 @@ class FileMapCache {
       this._requestsQueue.clear();
 
       await Promise.all(
-        requests.map(async ([fileRef, folderPath]) => {
-          if (this._hotPaths.has(fileRef)) {
-            hotFileRefs.push(fileRef);
+        requests.map(async ([filesRef, folderPath]) => {
+          if (this._hotPaths.has(filesRef)) {
+            hotFilesRefs.push(filesRef);
           }
 
           const timeNow = performance.now();
 
-          this._cache.set(fileRef, await createFileMap(folderPath));
+          this._cache.set(filesRef, await createFileMap(folderPath));
 
           const elapsed = performance.now() - timeNow;
-          this._logger.info(`Generated ${fileRef} ${dim(Math.round(elapsed) + 'ms')}`);
+          this._logger.info(`Generated ${filesRef} ${dim(Math.round(elapsed) + 'ms')}`);
         }),
       );
     }
@@ -191,9 +191,9 @@ class FileMapCache {
     // the cache is now ready to be used
     resolve();
 
-    if (hotFileRefs.length > 0) {
+    if (hotFilesRefs.length > 0) {
       this._hotPaths.clear();
-      this._server.hot.send({ type: 'custom', event: 'tk:refresh-wc-files', data: hotFileRefs });
+      this._server.hot.send({ type: 'custom', event: 'tk:refresh-wc-files', data: hotFilesRefs });
     }
 
     this._timeoutId = null;

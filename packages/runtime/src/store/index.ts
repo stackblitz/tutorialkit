@@ -54,18 +54,18 @@ export class TutorialStore {
      *  - discarded when doing a production build
      */
     if (import.meta.hot) {
-      import.meta.hot.on('tk:refresh-wc-files', async (hotFileRefs: string[]) => {
+      import.meta.hot.on('tk:refresh-wc-files', async (hotFilesRefs: string[]) => {
         let shouldUpdate = false;
 
-        for (const fileRef of hotFileRefs) {
-          const result = await this._lessonFilesFetcher.invalidate(fileRef);
+        for (const filesRef of hotFilesRefs) {
+          const result = await this._lessonFilesFetcher.invalidate(filesRef);
 
           switch (result.type) {
             case 'none': {
               break;
             }
             case 'files': {
-              if (this._lesson?.files[0] === fileRef) {
+              if (this._lesson?.files[0] === filesRef) {
                 shouldUpdate = true;
 
                 this._lesson.files[1] = Object.keys(result.files).sort();
@@ -73,7 +73,7 @@ export class TutorialStore {
               }
             }
             case 'solution': {
-              if (this._lesson?.solution[0] === fileRef) {
+              if (this._lesson?.solution[0] === filesRef) {
                 shouldUpdate = true;
 
                 this._lesson.solution[1] = Object.keys(result.files).sort();
