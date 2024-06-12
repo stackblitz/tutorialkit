@@ -15,7 +15,7 @@ afterAll(async () => {
   await fs.rm(tmpDir, { force: true, recursive: true });
 });
 
-test('test creating a project', async () => {
+test('create a project', async () => {
   const name = 'test-1';
   const dest = path.join(tmpDir, name);
 
@@ -31,7 +31,7 @@ test('test creating a project', async () => {
   expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
-test('test creating and building a project', async () => {
+test('create and build a project', async () => {
   const name = 'test-2';
   const dest = path.join(tmpDir, name);
 
