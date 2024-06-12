@@ -7,14 +7,14 @@ const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 interface Props {
   files: string[];
   selectedFile?: string;
-  onFileClick: (filePath: string) => void;
+  onFileSelect?: (filePath: string) => void;
   hideRoot: boolean;
   scope?: string;
   hiddenFiles?: Array<string | RegExp>;
   className?: string;
 }
 
-export function FileTree({ files, onFileClick, selectedFile, hideRoot, scope, hiddenFiles, className }: Props) {
+export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, hiddenFiles, className }: Props) {
   const computedHiddenFiles = useMemo(() => [...DEFAULT_HIDDEN_FILES, ...(hiddenFiles ?? [])], [hiddenFiles]);
 
   const fileList = useMemo(
@@ -82,7 +82,7 @@ export function FileTree({ files, onFileClick, selectedFile, hideRoot, scope, hi
                 key={fileOrFolder.id}
                 selected={selectedFile === fileOrFolder.fullPath}
                 file={fileOrFolder}
-                onClick={() => onFileClick(fileOrFolder.fullPath)}
+                onClick={() => onFileSelect?.(fileOrFolder.fullPath)}
               />
             );
           case 'folder':

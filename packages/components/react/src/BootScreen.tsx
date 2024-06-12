@@ -1,14 +1,14 @@
 import { useStore } from '@nanostores/react';
-import type { Step, TutorialRunner } from '@tutorialkit/runtime';
+import type { Step, TutorialStore } from '@tutorialkit/runtime';
 import { classNames } from './utils/classnames.js';
 
 interface Props {
   className?: string;
-  tutorialRunner: TutorialRunner;
+  tutorialStore: TutorialStore;
 }
 
-export function BootScreen({ className, tutorialRunner }: Props) {
-  const steps = useStore(tutorialRunner.steps);
+export function BootScreen({ className, tutorialStore }: Props) {
+  const steps = useStore(tutorialStore.steps);
 
   return (
     <div

@@ -1,5 +1,5 @@
 import { BootScreen } from '../BootScreen.js';
-import type { PreviewInfo, TutorialRunner } from '@tutorialkit/runtime';
+import type { PreviewInfo, TutorialStore } from '@tutorialkit/runtime';
 import { useStore } from '@nanostores/react';
 import resizePanelStyles from '../styles/resize-panel.module.css';
 import { classNames } from '../utils/classnames.js';
@@ -9,7 +9,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 interface Props {
   showToggleTerminal?: boolean;
   toggleTerminal?: () => void;
-  tutorialRunner: TutorialRunner;
+  tutorialStore: TutorialStore;
 }
 
 const previewsContainer = globalThis.document ? document.getElementById('previews-container')! : ({} as HTMLElement);
@@ -21,8 +21,8 @@ export type ImperativePreviewHandle = {
 };
 
 export const PreviewPanel = memo(
-  forwardRef<ImperativePreviewHandle, Props>(({ showToggleTerminal, toggleTerminal, tutorialRunner }, ref) => {
-    const expectedPreviews = useStore(tutorialRunner.previews);
+  forwardRef<ImperativePreviewHandle, Props>(({ showToggleTerminal, toggleTerminal, tutorialStore }, ref) => {
+    const expectedPreviews = useStore(tutorialStore.previews);
     const iframeRefs = useRef<IFrameRef[]>([]);
 
     const onResize = useCallback(() => {
@@ -90,7 +90,7 @@ export const PreviewPanel = memo(
               </button>
             )}
           </div>
-          <BootScreen tutorialRunner={tutorialRunner} />
+          <BootScreen tutorialStore={tutorialStore} />
         </div>
       );
     }

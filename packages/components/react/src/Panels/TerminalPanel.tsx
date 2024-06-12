@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
-import type { TutorialRunner } from '@tutorialkit/runtime';
+import type { TutorialStore } from '@tutorialkit/runtime';
 import type { TerminalPanelType } from '@tutorialkit/types';
 import { classNames } from '../utils/classnames.js';
 
@@ -8,7 +8,7 @@ const Terminal = lazy(() => import('../Terminal/index.js'));
 
 interface TerminalPanelProps {
   theme: 'dark' | 'light';
-  tutorialRunner: TutorialRunner;
+  tutorialStore: TutorialStore;
 }
 
 const ICON_MAP = new Map<TerminalPanelType, string>([
@@ -16,8 +16,8 @@ const ICON_MAP = new Map<TerminalPanelType, string>([
   ['terminal', 'i-ph-terminal-window-duotone'],
 ]);
 
-export function TerminalPanel({ theme, tutorialRunner }: TerminalPanelProps) {
-  const terminalConfig = useStore(tutorialRunner.terminalConfig);
+export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
+  const terminalConfig = useStore(tutorialStore.terminalConfig);
 
   const [domLoaded, setDomLoaded] = useState(false);
 
@@ -86,10 +86,10 @@ export function TerminalPanel({ theme, tutorialRunner }: TerminalPanelProps) {
                 theme={theme}
                 readonly={type === 'output'}
                 onTerminalReady={(terminal) => {
-                  tutorialRunner.attachTerminal(id, terminal);
+                  tutorialStore.attachTerminal(id, terminal);
                 }}
                 onTerminalResize={(cols, rows) => {
-                  tutorialRunner.onTerminalResize(cols, rows);
+                  tutorialStore.onTerminalResize(cols, rows);
                 }}
               />
             ))}

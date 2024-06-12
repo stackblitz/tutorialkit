@@ -1,16 +1,13 @@
-import { TutorialRunner, lessonFilesFetcher } from '@tutorialkit/runtime';
-import { newTask } from '@tutorialkit/runtime/tasks';
-import type { Files, Lesson } from '@tutorialkit/types';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { TutorialStore } from '@tutorialkit/runtime';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import type {
-  EditorDocument,
   OnChangeCallback as OnEditorChange,
   OnScrollCallback as OnEditorScroll,
 } from '../CodeMirrorEditor/index.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
-import type { Theme } from '../types';
+import type { Theme } from '../types.js';
 import { EditorPanel } from './EditorPanel.js';
 import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';
@@ -19,29 +16,18 @@ import { classNames } from '../utils/classnames.js';
 const DEFAULT_TERMINAL_SIZE = 25;
 
 interface Props {
-  lesson: Lesson;
-  tutorialRunner: TutorialRunner;
+  tutorialStore: TutorialStore;
   theme: Theme;
 }
-
-interface LoadedFiles {
-  solution?: Files;
-  files?: Files;
-  template?: Files;
-}
-
-type EditorState = Record<string, EditorDocument>;
 
 /**
  * This component is the orchestrator between various interactive components.
  */
-export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
-  const { editor, previews, terminal } = lesson.data;
-
-  const fileTree = editor === undefined || editor === true || (editor !== false && editor?.fileTree !== false);
-  const hideTerminalPanel =
-    terminal === false ||
-    (typeof terminal === 'object' && Array.isArray(terminal.panels) && terminal.panels.length === 0);
+export function WorkspacePanel({ tutorialStore, theme }: Props) {
+  const fileTree = tutorialStore.hasFileTree();
+  const hasEditor = tutorialStore.hasEditor();
+  const hasPreviews = tutorialStore.hasPreviews();
+  const hideTerminalPanel = !tutorialStore.hasTerminalPanel();
 
   const editorPanelRef = useRef<ImperativePanelHandle>(null);
   const previewPanelRef = useRef<ImperativePanelHandle>(null);
@@ -49,199 +35,65 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
   const previewRef = useRef<ImperativePreviewHandle>(null);
   const terminalExpanded = useRef(false);
 
-  const [loadedFiles, setLoadedFiles] = useState<LoadedFiles>({});
   const [helpAction, setHelpAction] = useState<'solve' | 'reset'>('reset');
-  const [editorState, setEditorState] = useState<EditorState>({});
-  const [selectedFile, setSelectedFile] = useState<string | undefined>();
 
-  const editorDocument = useMemo(() => {
-    if (!selectedFile) {
-      return undefined;
-    }
+  const selectedFile = useStore(tutorialStore.selectedFile);
+  const currentDocument = useStore(tutorialStore.currentDocument);
 
-    return editorState[selectedFile];
-  }, [editorState, selectedFile]);
+  const lesson = tutorialStore.lesson!;
 
-  const onEditorChange = useCallback<OnEditorChange>(
-    (update) => {
-      if (!editorDocument) {
-        return;
-      }
+  const onEditorChange = useCallback<OnEditorChange>((update) => {
+    tutorialStore.setCurrentDocumentContent(update.content);
+  }, []);
 
-      const { filePath } = editorDocument;
-      const documentState = editorState[filePath];
+  const onEditorScroll = useCallback<OnEditorScroll>((position) => {
+    tutorialStore.setCurrentDocumentScrollPosition(position);
+  }, []);
 
-      if (!documentState) {
-        return;
-      }
-
-      const currentContent = documentState.value;
-      const newContent = update.content;
-      const contentChanged = currentContent !== newContent;
-
-      documentState.value = newContent;
-
-      if (contentChanged) {
-        tutorialRunner.updateFile(filePath, documentState.value);
-      }
-    },
-    [editorDocument, editorState],
-  );
-
-  const onEditorScroll = useCallback<OnEditorScroll>(
-    (position) => {
-      if (!editorDocument) {
-        return;
-      }
-
-      const { filePath } = editorDocument;
-
-      const documentState = editorState[filePath];
-
-      if (!documentState) {
-        return;
-      }
-
-      documentState.scroll = position;
-    },
-    [editorDocument, editorState],
-  );
+  const onFileSelect = useCallback((filePath: string | undefined) => {
+    tutorialStore.setSelectedFile(filePath);
+  }, []);
 
   const onHelpClick = useCallback(() => {
-    const setFiles = (files: Files) => {
-      setEditorState((editorState) => {
-        const newEditorState = { ...editorState };
-
-        for (const filePath in files) {
-          newEditorState[filePath] = {
-            ...newEditorState[filePath],
-            value: files[filePath],
-          };
-        }
-
-        return newEditorState;
-      });
-
-      tutorialRunner.updateFiles(files);
-    };
-
-    if (hasSolution(lesson)) {
+    if (tutorialStore.hasSolution()) {
       setHelpAction((action) => {
         if (action === 'reset') {
-          setLoadedFiles((loadedFiles) => {
-            setFiles(loadedFiles.files ?? {});
-
-            return loadedFiles;
-          });
+          tutorialStore.reset();
 
           return 'solve';
         } else {
-          setLoadedFiles((loadedFiles) => {
-            setFiles(loadedFiles.solution ?? {});
-
-            return loadedFiles;
-          });
+          tutorialStore.solve();
 
           return 'reset';
         }
       });
     } else {
-      setLoadedFiles((loadedFiles) => {
-        setFiles(loadedFiles.files ?? {});
-
-        return loadedFiles;
-      });
+      tutorialStore.reset();
     }
-  }, [lesson]);
+  }, [tutorialStore.ref]);
 
   useEffect(() => {
-    setEditorState(
-      Object.fromEntries(
-        lesson.files[1].map((filePath) => {
-          return [
-            filePath,
-            {
-              value: '',
-              loading: true,
-              filePath,
-            },
-          ];
-        }),
-      ),
-    );
+    const lesson = tutorialStore.lesson!;
 
-    tutorialRunner.setPreviews(lesson.data.previews);
-    tutorialRunner.setTerminalConfiguration(lesson.data.terminal);
+    const unsubscribe = tutorialStore.lessonFullyLoaded.subscribe((loaded) => {
+      if (loaded && lesson.data.autoReload) {
+        /**
+         * @todo This causes some race with the preview where the iframe can show the "wrong" page.
+         * I think the reason is that when the ports are different then we render new frames which
+         * races against the reload which will internally reset the `src` attribute.
+         */
+        // previewRef.current?.reload();
+      }
+    });
 
-    const task = newTask(
-      async (signal) => {
-        const templatePromise = lessonFilesFetcher.getLessonTemplate(lesson);
-        const filesPromise = lessonFilesFetcher.getLessonFiles(lesson);
-
-        const preparePromise = tutorialRunner.prepareFiles({ template: templatePromise, files: filesPromise, signal });
-
-        tutorialRunner.runCommands(lesson.data);
-
-        const [template, solution, files] = await Promise.all([
-          templatePromise,
-          lessonFilesFetcher.getLessonSolution(lesson),
-          filesPromise,
-        ]);
-
-        signal.throwIfAborted();
-
-        setLoadedFiles({
-          template,
-          solution,
-          files,
-        });
-
-        setEditorState((previousState) => {
-          return Object.fromEntries(
-            Object.entries(files).map(([filePath, value]) => {
-              return [
-                filePath,
-                {
-                  value,
-                  loading: false,
-                  filePath,
-                  scroll: previousState[filePath]?.scroll,
-                },
-              ];
-            }),
-          ) satisfies EditorState;
-        });
-
-        if (lesson.data.focus === undefined) {
-          setSelectedFile(undefined);
-        } else if (files[lesson.data.focus] !== undefined) {
-          setSelectedFile(lesson.data.focus);
-        }
-
-        await preparePromise;
-
-        signal.throwIfAborted();
-
-        if (lesson.data.autoReload) {
-          /**
-           * @todo This causes some race with the preview where the iframe can show the "wrong" page.
-           * I think the reason is that when the ports are different then we render new frames which
-           * races against the reload which will internally reset the `src` attribute.
-           */
-          // previewRef.current?.reload();
-        }
-      },
-      { ignoreCancel: true },
-    );
-
-    if (hasSolution(lesson)) {
+    if (tutorialStore.hasSolution()) {
       setHelpAction('solve');
     } else {
       setHelpAction('reset');
     }
 
-    return () => task.cancel();
-  }, [lesson]);
+    return () => unsubscribe();
+  }, [tutorialStore.ref]);
 
   useEffect(() => {
     if (hideTerminalPanel) {
@@ -288,21 +140,24 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
       <Panel
-        id={editor === false ? 'editor-closed' : 'editor-opened'}
-        defaultSize={editor === false ? 0 : 50}
+        id={hasEditor ? 'editor-opened' : 'editor-closed'}
+        defaultSize={hasEditor ? 50 : 0}
         minSize={10}
-        maxSize={editor === false ? 0 : 100}
-        collapsible={editor === false}
+        maxSize={hasEditor ? 100 : 0}
+        collapsible={!hasEditor}
         ref={editorPanelRef}
       >
         <EditorPanel
+          id={tutorialStore.ref}
           theme={theme}
           showFileTree={fileTree}
-          editorDocument={editorDocument}
-          lesson={lesson}
+          editorDocument={currentDocument}
+          files={lesson.files[1]}
+          hideRoot={lesson.data.hideRoot}
           helpAction={helpAction}
           onHelpClick={onHelpClick}
-          onFileClick={setSelectedFile}
+          onFileSelect={onFileSelect}
+          selectedFile={selectedFile}
           onEditorScroll={onEditorScroll}
           onEditorChange={onEditorChange}
         />
@@ -310,21 +165,21 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
       <PanelResizeHandle
         className={resizePanelStyles.PanelResizeHandle}
         hitAreaMargins={{ fine: 5, coarse: 5 }}
-        disabled={editor === false}
+        disabled={!hasEditor}
       />
       <Panel
-        id={previews === false ? 'previews-closed' : 'previews-opened'}
-        defaultSize={previews === false ? 0 : 50}
+        id={hasPreviews ? 'previews-opened' : 'previews-closed'}
+        defaultSize={hasPreviews ? 50 : 0}
         minSize={10}
-        maxSize={previews === false ? 0 : 100}
-        collapsible={previews === false}
+        maxSize={hasPreviews ? 100 : 0}
+        collapsible={!hasPreviews}
         ref={previewPanelRef}
         className={classNames({
-          'border-t border-tk-elements-app-borderColor': editor !== false,
+          'border-t border-tk-elements-app-borderColor': hasEditor,
         })}
       >
         <PreviewPanel
-          tutorialRunner={tutorialRunner}
+          tutorialStore={tutorialStore}
           ref={previewRef}
           showToggleTerminal={!hideTerminalPanel}
           toggleTerminal={toggleTerminal}
@@ -333,43 +188,33 @@ export function WorkspacePanel({ lesson, tutorialRunner, theme }: Props) {
       <PanelResizeHandle
         className={resizePanelStyles.PanelResizeHandle}
         hitAreaMargins={{ fine: 5, coarse: 5 }}
-        disabled={hideTerminalPanel || previews === false}
+        disabled={hideTerminalPanel || !hasPreviews}
       />
       <Panel
         id={
           hideTerminalPanel
             ? 'terminal-none'
-            : previews === false && editor === false
+            : !hasPreviews && !hasEditor
               ? 'terminal-full'
-              : previews === false
+              : !hasPreviews
                 ? 'terminal-opened'
                 : 'terminal-closed'
         }
         defaultSize={
-          hideTerminalPanel
-            ? 0
-            : previews === false && editor === false
-              ? 100
-              : previews === false
-                ? DEFAULT_TERMINAL_SIZE
-                : 0
+          hideTerminalPanel ? 0 : !hasPreviews && !hasEditor ? 100 : !hasPreviews ? DEFAULT_TERMINAL_SIZE : 0
         }
         minSize={hideTerminalPanel ? 0 : 10}
-        collapsible={previews !== false}
+        collapsible={hasPreviews}
         ref={terminalPanelRef}
         onExpand={() => {
           terminalExpanded.current = true;
         }}
         className={classNames({
-          'border-t border-tk-elements-app-borderColor': previews !== false,
+          'border-t border-tk-elements-app-borderColor': hasPreviews,
         })}
       >
-        <TerminalPanel tutorialRunner={tutorialRunner} theme={theme} />
+        <TerminalPanel tutorialStore={tutorialStore} theme={theme} />
       </Panel>
     </PanelGroup>
   );
-}
-
-function hasSolution(lesson: Lesson): boolean {
-  return Object.keys(lesson.solution).length >= 1;
 }
