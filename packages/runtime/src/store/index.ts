@@ -91,7 +91,6 @@ export class TutorialStore {
         if (shouldUpdate && this._lesson) {
           this._lessonTask?.cancel();
 
-          const lesson = this._lesson;
           const files = this._lessonFiles ?? {};
           const template = this._lessonTemplate;
 
@@ -99,7 +98,7 @@ export class TutorialStore {
             async (signal) => {
               const preparePromise = this._runner.prepareFiles({ template, files, signal });
 
-              this._runner.runCommands(lesson.data);
+              this._runner.runCommands();
               this._editorStore.setDocuments(files);
 
               await preparePromise;
