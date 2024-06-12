@@ -223,7 +223,7 @@ function updateWorkspaceVersions(dependencies: Record<string, string>, version: 
       if (process.env.TK_DIRECTORY) {
         const name = dependency.split('/')[1];
 
-        dependencies[dependency] = `file:${process.env.TK_DIRECTORY}/${name.replace('-', '/')}`;
+        dependencies[dependency] = `file:${process.env.TK_DIRECTORY}/packages/${name.replace('-', '/')}`;
       } else {
         dependencies[dependency] = version;
       }

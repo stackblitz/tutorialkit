@@ -3,8 +3,10 @@ import fs from 'node:fs/promises';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 import { execa } from 'execa';
 
-const cwd = process.cwd();
 const tmpDir = path.join(__dirname, '.tmp');
+const baseDir = path.resolve(__dirname, '../../..');
+
+const cli = path.join(baseDir, 'packages/cli/dist/index.js');
 
 beforeAll(async () => {
   await fs.rm(tmpDir, { force: true, recursive: true });
@@ -15,14 +17,14 @@ afterAll(async () => {
   await fs.rm(tmpDir, { force: true, recursive: true });
 });
 
-test('create a project', async () => {
-  const name = 'test-1';
+test('create a project', async (context) => {
+  const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [path.join(cwd, 'dist/index.js'), 'create', name, '--no-install', '--no-git', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--defaults'], {
     cwd: tmpDir,
     env: {
-      TK_DIRECTORY: path.resolve(cwd, '..'),
+      TK_DIRECTORY: baseDir,
     },
   });
 
@@ -31,14 +33,14 @@ test('create a project', async () => {
   expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
-test('create and build a project', async () => {
-  const name = 'test-2';
+test('create and build a project', async (context) => {
+  const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [path.join(cwd, 'dist/index.js'), 'create', name, '--no-git', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--defaults'], {
     cwd: tmpDir,
     env: {
-      TK_DIRECTORY: path.resolve(cwd, '..'),
+      TK_DIRECTORY: baseDir,
     },
   });
 
