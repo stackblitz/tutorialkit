@@ -30,6 +30,7 @@ export class TutorialStore {
   private _lessonTask: Task<unknown> | undefined;
   private _lesson: Lesson | undefined;
   private _ref: number = 1;
+  private _themeRef = atom(1);
 
   private _lessonFiles: Files | undefined;
   private _lessonSolution: Files | undefined;
@@ -203,6 +204,10 @@ export class TutorialStore {
     return this._ref;
   }
 
+  get themeRef(): ReadableAtom<unknown> {
+    return this._themeRef;
+  }
+
   /**
    * Steps that the runner is or will be executing.
    */
@@ -317,5 +322,13 @@ export class TutorialStore {
       this._terminalStore.onTerminalResize(cols, rows);
       this._runner.onTerminalResize(cols, rows);
     }
+  }
+
+  onDocumentChanged(filePath: string, callback: (document: Readonly<EditorDocument>) => void) {
+    return this._editorStore.onDocumentChanged(filePath, callback);
+  }
+
+  refreshStyles() {
+    this._themeRef.set(this._themeRef.get() + 1);
   }
 }

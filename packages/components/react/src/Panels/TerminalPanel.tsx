@@ -1,8 +1,9 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import type { TutorialStore } from '@tutorialkit/runtime';
 import type { TerminalPanelType } from '@tutorialkit/types';
 import { classNames } from '../utils/classnames.js';
+import type { TerminalRef } from '../Terminal/index.js';
 
 const Terminal = lazy(() => import('../Terminal/index.js'));
 
@@ -19,6 +20,8 @@ const ICON_MAP = new Map<TerminalPanelType, string>([
 export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
   const terminalConfig = useStore(tutorialStore.terminalConfig);
 
+  const terminalRefs = useRef<Record<number, TerminalRef>>({});
+
   const [domLoaded, setDomLoaded] = useState(false);
 
   // select the terminal tab by default
@@ -31,6 +34,14 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
   useEffect(() => {
     setTabIndex(terminalConfig.activePanel);
   }, [terminalConfig]);
+
+  useEffect(() => {
+    return tutorialStore.themeRef.subscribe(() => {
+      for (const ref of Object.values(terminalRefs.current)) {
+        ref.reloadStyles();
+      }
+    });
+  }, []);
 
   return (
     <div className="panel-container bg-tk-elements-app-backgroundColor">
@@ -85,6 +96,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
                 className={tabIndex !== index ? 'hidden' : ''}
                 theme={theme}
                 readonly={type === 'output'}
+                ref={(ref) => (terminalRefs.current[index] = ref!)}
                 onTerminalReady={(terminal) => {
                   tutorialStore.attachTerminal(id, terminal);
                 }}

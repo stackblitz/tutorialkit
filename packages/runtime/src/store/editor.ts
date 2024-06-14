@@ -1,5 +1,5 @@
 import type { FilesRefList, Files } from '@tutorialkit/types';
-import { atom, computed } from 'nanostores';
+import { atom, map, computed } from 'nanostores';
 
 export interface EditorDocument {
   value: string | Uint8Array;
@@ -17,7 +17,7 @@ export type EditorDocuments = Record<string, EditorDocument>;
 
 export class EditorStore {
   selectedFile = atom<string | undefined>();
-  documents = atom<EditorDocuments>({});
+  documents = map<EditorDocuments>({});
 
   currentDocument = computed([this.documents, this.selectedFile], (documents, selectedFile) => {
     if (!selectedFile) {
@@ -76,7 +76,10 @@ export class EditorStore {
       return;
     }
 
-    documentState.scroll = position;
+    this.documents.setKey(filePath, {
+      ...documentState,
+      scroll: position,
+    });
   }
 
   updateFile(filePath: string, content: string): boolean {
@@ -90,9 +93,46 @@ export class EditorStore {
     const contentChanged = currentContent !== content;
 
     if (contentChanged) {
-      documentState.value = content;
+      this.documents.setKey(filePath, {
+        ...documentState,
+        value: content,
+      });
     }
 
     return contentChanged;
+  }
+
+  onDocumentChanged(filePath: string, callback: (document: Readonly<EditorDocument>) => void) {
+    const unsubscribeFromCurrentDocument = this.currentDocument.subscribe((document) => {
+      if (document?.filePath === filePath) {
+        callback(document);
+      }
+    });
+
+    const unsubscribeFromDocuments = this.documents.subscribe((documents) => {
+      const document = documents[filePath];
+
+      /**
+       * We grab the document from the store, but only call the callback if it is not loading anymore which means
+       * the content is loaded.
+       */
+      if (document && !document.loading) {
+        /**
+         * call this in a `queueMicrotask` because the subscribe callback is called synchronoulsy, which causes
+         * the `unsubscribeFromDocuments` to not exist yet.
+         */
+        queueMicrotask(() => {
+          callback(document);
+
+          unsubscribeFromDocuments();
+        });
+      }
+    });
+
+    return () => {
+      unsubscribeFromDocuments();
+
+      unsubscribeFromCurrentDocument();
+    };
   }
 }
