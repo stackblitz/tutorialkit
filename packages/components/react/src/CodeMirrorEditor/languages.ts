@@ -5,7 +5,9 @@ export const supportedLanguages = [
     name: 'TS',
     extensions: ['ts'],
     async load() {
-      return import('@codemirror/lang-javascript').then((module) => module.javascript({ typescript: true }));
+      return import('@codemirror/lang-javascript').then((module) => {
+        return module.javascript({ typescript: true });
+      });
     },
   }),
   LanguageDescription.of({
@@ -19,14 +21,18 @@ export const supportedLanguages = [
     name: 'TSX',
     extensions: ['tsx'],
     async load() {
-      return import('@codemirror/lang-javascript').then((module) => module.javascript({ jsx: true, typescript: true }));
+      return import('@codemirror/lang-javascript').then((module) => {
+        return module.javascript({ jsx: true, typescript: true });
+      });
     },
   }),
   LanguageDescription.of({
     name: 'JSX',
     extensions: ['jsx'],
     async load() {
-      return import('@codemirror/lang-javascript').then((module) => module.javascript({ jsx: true }));
+      return import('@codemirror/lang-javascript').then((module) => {
+        return module.javascript({ jsx: true });
+      });
     },
   }),
   LanguageDescription.of({
@@ -47,14 +53,18 @@ export const supportedLanguages = [
     name: 'SASS',
     extensions: ['sass'],
     async load() {
-      return import('@codemirror/lang-sass').then((module) => module.sass({ indented: true }));
+      return import('@codemirror/lang-sass').then((module) => {
+        return module.sass({ indented: true });
+      });
     },
   }),
   LanguageDescription.of({
     name: 'SCSS',
     extensions: ['scss'],
     async load() {
-      return import('@codemirror/lang-sass').then((module) => module.sass({ indented: false }));
+      return import('@codemirror/lang-sass').then((module) => {
+        return module.sass({ indented: false });
+      });
     },
   }),
   LanguageDescription.of({
