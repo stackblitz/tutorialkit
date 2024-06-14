@@ -3,9 +3,11 @@
 
 ### Bug Fixes
 
+* generate root changelog + changelog per package ([24d4131](https://github.com/stackblitz/tutorialkit/commit/24d4131ff5ffca9fde614cb3dd7682d6eca60433))
 * hydration error after runtime refactor ([#63](https://github.com/stackblitz/tutorialkit/issues/63)) ([8f90338](https://github.com/stackblitz/tutorialkit/commit/8f9033816cd122be49ade2b85e0040469ed9fb1c))
 * ignore platform specific files ([#69](https://github.com/stackblitz/tutorialkit/issues/69)) ([186e2db](https://github.com/stackblitz/tutorialkit/commit/186e2dba86b529fcc5816861e689edf128f520e2))
 * **logo:** support multiple formats and remove styling requirements ([#62](https://github.com/stackblitz/tutorialkit/issues/62)) ([79cb18d](https://github.com/stackblitz/tutorialkit/commit/79cb18dca4e6b80a1f12ec96e1e627678f7b377d))
+* **nav:** make sure nav is on top of the content ([#72](https://github.com/stackblitz/tutorialkit/issues/72)) ([cd4ecc7](https://github.com/stackblitz/tutorialkit/commit/cd4ecc756dde3d2d74326154c7ba700c967f8b97))
 * sort navigation items numerically in `objectToSortedArray` function ([#56](https://github.com/stackblitz/tutorialkit/issues/56)) ([e45f62b](https://github.com/stackblitz/tutorialkit/commit/e45f62b68952228dd1facd55c2db5bd9f5247e42))
 * support inheritance for `editor`/`focus` and fix bug with logo ([#67](https://github.com/stackblitz/tutorialkit/issues/67)) ([a7eb31d](https://github.com/stackblitz/tutorialkit/commit/a7eb31dcaa039292870a78fae979efd6c0ece134))
 * **validation:** allow activePanel to be 0 ([#46](https://github.com/stackblitz/tutorialkit/issues/46)) ([4ab76f5](https://github.com/stackblitz/tutorialkit/commit/4ab76f54e94dd7d47400ae558257f23763919ea9))
@@ -19,6 +21,7 @@
 * allow custom components that modify the tutorial state ([#64](https://github.com/stackblitz/tutorialkit/issues/64)) ([1279917](https://github.com/stackblitz/tutorialkit/commit/1279917be042580033f23605e92f903ecd186e19))
 * hot reload for files in webcontainer ([#61](https://github.com/stackblitz/tutorialkit/issues/61)) ([949fcf3](https://github.com/stackblitz/tutorialkit/commit/949fcf3438e3bf17902d753089372fbc03911136))
 * set default package manager to the one used with `create` command ([#57](https://github.com/stackblitz/tutorialkit/issues/57)) ([c97278e](https://github.com/stackblitz/tutorialkit/commit/c97278e94292a2f4cfd76a75cb31e540b5c0d230))
+* **store:** fix current document and add onDocumentChanged ([#74](https://github.com/stackblitz/tutorialkit/issues/74)) ([05b1688](https://github.com/stackblitz/tutorialkit/commit/05b1688718ab6e8d7d55c09e892c7f1faef9116e))
 
 
 
