@@ -9,6 +9,7 @@
     "clean": "./scripts/clean.sh"
   },
   "license": "MIT",
+  "packageManager": "pnpm@8.10.5",
   "devDependencies": {
     "@commitlint/config-conventional": "^19.2.2",
     "commitlint": "^19.3.0",
