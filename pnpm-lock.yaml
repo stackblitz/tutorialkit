@@ -11,12 +11,18 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.2.2
         version: 19.2.2
+      add-stream:
+        specifier: ^1.0.0
+        version: 1.0.0
+      chalk:
+        specifier: ^5.3.0
+        version: 5.3.0
       commitlint:
         specifier: ^19.3.0
         version: 19.3.0(@types/node@20.12.7)(typescript@5.4.5)
-      conventional-changelog-cli:
-        specifier: ^5.0.0
-        version: 5.0.0
+      conventional-changelog:
+        specifier: ^6.0.0
+        version: 6.0.0
       husky:
         specifier: ^9.0.11
         version: 9.0.11
@@ -26,6 +32,9 @@ importers:
       prettier:
         specifier: ^3.3.1
         version: 3.3.1
+      tempfile:
+        specifier: ^5.0.0
+        version: 5.0.0
 
   packages/astro:
     dependencies:
@@ -3634,19 +3643,6 @@ packages:
   /conventional-changelog-atom@5.0.0:
     resolution: {integrity: sha512-WfzCaAvSCFPkznnLgLnfacRAzjgqjLUjvf3MftfsJzQdDICqkOOpcMtdJF3wTerxSpv2IAAjX8doM3Vozqle3g==}
     engines: {node: '>=18'}
-    dev: true
-
-  /conventional-changelog-cli@5.0.0:
-    resolution: {integrity: sha512-9Y8fucJe18/6ef6ZlyIlT2YQUbczvoQZZuYmDLaGvcSBP+M6h+LAvf7ON7waRxKJemcCII8Yqu5/8HEfskTxJQ==}
-    engines: {node: '>=18'}
-    hasBin: true
-    dependencies:
-      add-stream: 1.0.0
-      conventional-changelog: 6.0.0
-      meow: 13.2.0
-      tempfile: 5.0.0
-    transitivePeerDependencies:
-      - conventional-commits-filter
     dev: true
 
   /conventional-changelog-codemirror@5.0.0:

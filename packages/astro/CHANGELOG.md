@@ -1,10 +1,8 @@
-## [0.0.1-alpha.23](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.22...0.0.1-alpha.23) (2024-06-14)
+## [0.0.1-alpha.23](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.22...0.0.1-alpha.23) "@tutorialkit/astro" (2024-06-14)
 
-Special thanks to @EmNudge and @morinokami for their first contributions!! 🥳
 
 ### Bug Fixes
 
-* feature request issue template ([cc8423a](https://github.com/stackblitz/tutorialkit/commit/cc8423abe2c613f82d73179ca82f39e4ac0929c9))
 * hydration error after runtime refactor ([#63](https://github.com/stackblitz/tutorialkit/issues/63)) ([8f90338](https://github.com/stackblitz/tutorialkit/commit/8f9033816cd122be49ade2b85e0040469ed9fb1c))
 * ignore platform specific files ([#69](https://github.com/stackblitz/tutorialkit/issues/69)) ([186e2db](https://github.com/stackblitz/tutorialkit/commit/186e2dba86b529fcc5816861e689edf128f520e2))
 * **logo:** support multiple formats and remove styling requirements ([#62](https://github.com/stackblitz/tutorialkit/issues/62)) ([79cb18d](https://github.com/stackblitz/tutorialkit/commit/79cb18dca4e6b80a1f12ec96e1e627678f7b377d))
