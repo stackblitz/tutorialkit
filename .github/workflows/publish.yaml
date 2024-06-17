@@ -1,0 +1,15 @@
+name: Publish
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish'
+        required: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print
+        run: echo ${{ inputs.version }}
