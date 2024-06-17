@@ -1,0 +1,23 @@
+{
+  "name": "webcontainer-api-mock",
+  "version": "1.0.0",
+  "description": "A mock for the WebContainer API",
+  "type": "module",
+  "bugs": "https://github.com/stackblitz/tutorialkit/issues",
+  "homepage": "https://github.com/stackblitz/tutorialkit",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "devDependencies": {
+    "@webcontainer/api": "1.2.0",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
