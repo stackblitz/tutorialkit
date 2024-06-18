@@ -68,6 +68,15 @@ export const terminalSchema = z.union([
             // the type of the panel
             panelType,
 
+            // or a tuple with the type and the name of the panel
+            z.tuple([
+              // the type of the panel
+              panelType,
+
+              // the name of the panel which is shown in the tab
+              z.string(),
+            ]),
+
             // or an object defining the panel
             z.strictObject({
               // the type of the panel

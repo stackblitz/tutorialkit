@@ -215,6 +215,10 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
 
         if (typeof panel === 'string') {
           terminalPanel = new TerminalPanel(panel);
+        } else if (Array.isArray(panel)) {
+          terminalPanel = new TerminalPanel(panel[0], {
+            name: panel[1],
+          });
         } else {
           terminalPanel = new TerminalPanel(panel.type, {
             id: panel.id,
