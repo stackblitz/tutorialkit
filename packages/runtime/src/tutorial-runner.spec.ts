@@ -1,7 +1,7 @@
-import 'webcontainer-api-mock';
+import 'test-utils';
 import { WebContainer } from '@webcontainer/api';
 import { describe, test, expect, beforeAll, vi, afterAll, beforeEach } from 'vitest';
-import type { MockedWebContainer } from 'webcontainer-api-mock';
+import type { MockedWebContainer } from 'test-utils';
 import { TutorialRunner } from '../src/tutorial-runner.js';
 import { StepsController } from '../src/webcontainer/steps.js';
 import { TerminalStore } from '../src/store/terminal.js';

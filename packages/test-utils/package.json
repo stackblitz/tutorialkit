@@ -1,8 +1,9 @@
 {
-  "name": "webcontainer-api-mock",
+  "name": "test-utils",
   "version": "1.0.0",
-  "description": "A mock for the WebContainer API",
+  "description": "Test utilities for TutorialKit",
   "type": "module",
+  "private": true,
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",

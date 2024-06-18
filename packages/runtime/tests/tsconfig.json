@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": ".."
-  },
-  "include": ["../src", "."],
-  "references": [{ "path": "../../types" }, { "path": "../../webcontainer-api-mock" }]
-}

@@ -22,7 +22,7 @@
     }
   },
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc -b tsconfig.build.json",
     "test": "vitest"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "@tutorialkit/types": "workspace:*"
   },
   "devDependencies": {
-    "webcontainer-api-mock": "workspace:*",
+    "test-utils": "workspace:*",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
     "vitest": "^1.6.0"

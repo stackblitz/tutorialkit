@@ -310,6 +310,9 @@ importers:
         specifier: ^0.10.3
         version: 0.10.3
     devDependencies:
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -319,9 +322,6 @@ importers:
       vitest:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.12.7)
-      webcontainer-api-mock:
-        specifier: workspace:*
-        version: link:../webcontainer-api-mock
 
   packages/template:
     dependencies:
@@ -381,17 +381,7 @@ importers:
         specifier: ^0.59.4
         version: 0.59.4(postcss@8.4.38)(vite@5.2.13)
 
-  packages/types:
-    dependencies:
-      zod:
-        specifier: 3.23.8
-        version: 3.23.8
-    devDependencies:
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
-
-  packages/webcontainer-api-mock:
+  packages/test-utils:
     devDependencies:
       '@webcontainer/api':
         specifier: 1.2.0
@@ -402,6 +392,16 @@ importers:
       vitest:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.12.7)
+
+  packages/types:
+    dependencies:
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
 
 packages:
 
@@ -6667,7 +6667,7 @@ packages:
     hasBin: true
     dependencies:
       cac: 6.7.14
-      debug: 4.3.4
+      debug: 4.3.5
       pathe: 1.1.2
       picocolors: 1.0.0
       vite: 5.2.13(@types/node@20.12.7)
