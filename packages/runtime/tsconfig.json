@@ -6,5 +6,5 @@
     "composite": true
   },
   "include": ["src"],
-  "references": [{ "path": "../types" }, { "path": "../test-utils"}]
+  "references": [{ "path": "../types" }, { "path": "../test-utils" }]
 }
