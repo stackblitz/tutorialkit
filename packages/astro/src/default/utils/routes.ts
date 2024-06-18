@@ -9,7 +9,7 @@ export async function generateStaticRoutes() {
 
   const routes = [];
 
-  const parts = Object.values(tutorial);
+  const parts = Object.values(tutorial.parts);
 
   for (const part of parts) {
     const chapters = Object.values(part.chapters);
@@ -23,6 +23,7 @@ export async function generateStaticRoutes() {
             slug: `/${part.slug}/${chapter.slug}/${lesson.slug}`,
           },
           props: {
+            logoLink: tutorial.logoLink,
             navList: generateNavigationList(tutorial),
             title: `${part.data.title} / ${chapter.data.title} / ${lesson.data.title}`,
             lesson: lesson as Lesson<AstroComponentFactory>,

@@ -3,7 +3,7 @@ import { getTutorial } from '../utils/content';
 
 const tutorial = await getTutorial();
 
-const parts = Object.values(tutorial);
+const parts = Object.values(tutorial.parts);
 const part = parts[0];
 const chapter = part.chapters[1];
 const lesson = chapter.lessons[1];

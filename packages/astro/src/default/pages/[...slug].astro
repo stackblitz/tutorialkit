@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { lesson, navList, title } = Astro.props as Props;
+const { lesson, logoLink, navList, title } = Astro.props as Props;
 
 const showWorkspacePanel = hasWorkspace(lesson);
 ---
@@ -26,7 +26,7 @@ const showWorkspacePanel = hasWorkspace(lesson);
 <Layout title={title}>
   <div id="previews-container"></div>
   <main class="max-w-full flex flex-col h-screen overflow-hidden" data-swap-root>
-    <Header />
+    <Header logoLink={logoLink ?? '/'} />
     <ResizablePanel
       classList="h-full overflow-hidden"
       id={RESIZABLE_PANELS.Main}
