@@ -2,9 +2,33 @@ import type { WebContainer } from '@webcontainer/api';
 import { withResolvers } from '../utils/promises.js';
 import type { ITerminal } from '../utils/terminal.js';
 
-export async function newJSHProcess(webcontainer: WebContainer, terminal: ITerminal) {
+interface ProcessOptions {
+  /**
+   * Set to `true` if you want to allow redirecting output (e.g. `echo foo > bar`).
+   */
+  allowRedirects: boolean;
+
+  /**
+   * List of commands that are allowed by the JSH process.
+   */
+  allowCommands?: string[];
+}
+
+export async function newJSHProcess(webcontainer: WebContainer, terminal: ITerminal, options: ProcessOptions) {
+  const args: string[] = [];
+
+  if (!options.allowRedirects) {
+    // if redirects are turned off, start JSH with `--no-redirects`
+    args.push('--no-redirects');
+  }
+
+  if (Array.isArray(options.allowCommands)) {
+    // if only a subset of commands is allowed, pass it down to JSH
+    args.push('--allow-commands', options.allowCommands.join(','));
+  }
+
   // we spawn a JSH process with a fallback cols and rows in case the process is not attached yet to a visible terminal
-  const process = await webcontainer.spawn('/bin/jsh', ['--osc'], {
+  const process = await webcontainer.spawn('/bin/jsh', ['--osc', ...args], {
     terminal: {
       cols: terminal.cols ?? 80,
       rows: terminal.rows ?? 15,

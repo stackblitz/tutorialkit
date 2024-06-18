@@ -2,10 +2,17 @@ import type { TerminalPanelType, TerminalSchema } from '@tutorialkit/types';
 import type { WebContainerProcess } from '@webcontainer/api';
 import type { ITerminal } from '../utils/terminal.js';
 
-type NormalizedTerminalConfig = {
+interface NormalizedTerminalConfig {
   panels: TerminalPanel[];
   activePanel: number;
-};
+}
+
+interface TerminalPanelOptions {
+  name?: string;
+  id?: string;
+  allowRedirects?: boolean;
+  allowCommands?: string[];
+}
 
 export class TerminalConfig {
   private _config: NormalizedTerminalConfig;
@@ -59,9 +66,10 @@ export class TerminalPanel implements ITerminal {
 
   constructor(
     readonly type: TerminalPanelType,
-    name?: string,
-    id?: string,
+    private readonly options?: TerminalPanelOptions,
   ) {
+    let name = options?.name;
+
     // automatically infer a name if no name is provided
     if (!name) {
       name = TERMINAL_PANEL_NAMES[type];
@@ -77,7 +85,7 @@ export class TerminalPanel implements ITerminal {
     }
 
     this.name = name;
-    this.id = id ?? (type === 'output' ? 'output' : `${type}-${globalId++}`);
+    this.id = options?.id ?? (type === 'output' ? 'output' : `${type}-${globalId++}`);
   }
 
   get terminal() {
@@ -86,6 +94,13 @@ export class TerminalPanel implements ITerminal {
 
   get process() {
     return this._process;
+  }
+
+  get processOptions() {
+    return {
+      allowRedirects: this.options?.allowRedirects ?? false,
+      allowCommands: this.options?.allowCommands,
+    };
   }
 
   // #region ITerminal methods
@@ -196,19 +211,20 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
       panels.push(new TerminalPanel('terminal'));
     } else if (Array.isArray(config.panels)) {
       for (const panel of config.panels) {
-        const [type, config = {}] = Array.isArray(panel) ? panel : [panel];
+        let terminalPanel: TerminalPanel;
 
-        let name: string | undefined;
-        let id: string | undefined;
-
-        if (typeof config === 'string') {
-          name = config;
+        if (typeof panel === 'string') {
+          terminalPanel = new TerminalPanel(panel);
         } else {
-          name = config.name;
-          id = config.id;
+          terminalPanel = new TerminalPanel(panel.type, {
+            id: panel.id,
+            name: panel.name,
+            allowRedirects: panel.allowRedirects ?? config.allowRedirects,
+            allowCommands: panel.allowCommands ?? config.allowCommands,
+          });
         }
 
-        panels.push(new TerminalPanel(type, name, id));
+        panels.push(terminalPanel);
       }
     }
   }
