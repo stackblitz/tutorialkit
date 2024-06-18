@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { TerminalConfig } from '../../src/webcontainer/terminal-config.js';
+import { TerminalConfig } from './terminal-config.js';
 
 describe('TerminalConfig', () => {
   it('should have panels and activePanel', () => {

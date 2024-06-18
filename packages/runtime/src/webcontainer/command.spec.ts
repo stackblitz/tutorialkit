@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Commands, Command } from '../../src/webcontainer/command.js';
+import { Commands, Command } from './command.js';
 
 describe('Commands', () => {
   it('should accept shell like commands', () => {

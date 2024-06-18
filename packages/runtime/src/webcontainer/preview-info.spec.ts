@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PreviewInfo } from '../../src/webcontainer/preview-info.js';
+import { PreviewInfo } from './preview-info.js';
 
 describe('PreviewInfo', () => {
   it('should accept a port', () => {

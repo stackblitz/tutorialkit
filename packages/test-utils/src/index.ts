@@ -1,10 +1,55 @@
-import type { DirectoryNode, FileNode, FileSystemTree, WebContainer } from '@webcontainer/api';
+import type { DirectoryNode, FileNode, FileSystemTree, SpawnOptions, WebContainer } from '@webcontainer/api';
 import { vi, type Mocked } from 'vitest';
 import path from 'node:path';
 
+interface FakeProcess {
+  pid: number;
+
+  command: string;
+  args: string[];
+  options?: SpawnOptions;
+
+  exit: Promise<number>;
+  output: ReadableStream<string>;
+  input: WritableStream<string>;
+  kill(): void;
+  resize(cols: number, rows: number): void;
+}
+
 export type MockedWebContainer = Mocked<WebContainer> & {
   _fakeFs: FileSystemTree;
+  _fakeProcesses: FakeProcess[];
 };
+
+export type FakeProcessFactory = (
+  command: string,
+  args: string[],
+  options?: SpawnOptions,
+) => readonly [exit: Promise<number>, output: ReadableStream<string>, input: WritableStream<string>];
+
+const defaultProcessFactory: FakeProcessFactory = () => {
+  return [
+    Promise.resolve(0),
+    new ReadableStream<string>({
+      start(controller) {
+        controller.close();
+      },
+    }),
+    new WritableStream<string>({
+      write() {},
+    }),
+  ];
+};
+
+let fakeProcessFactory = defaultProcessFactory;
+
+export function setProcessFactory(factory: FakeProcessFactory) {
+  fakeProcessFactory = factory;
+}
+
+export function resetProcessFactory() {
+  fakeProcessFactory = defaultProcessFactory;
+}
 
 vi.mock('@webcontainer/api', () => {
   const WebContainer = vi.fn<[], MockedWebContainer>(function (this: MockedWebContainer) {
@@ -53,6 +98,7 @@ vi.mock('@webcontainer/api', () => {
     };
 
     this._fakeFs = {};
+    this._fakeProcesses = [];
 
     return this;
   });
@@ -61,13 +107,41 @@ vi.mock('@webcontainer/api', () => {
     return new WebContainer();
   });
 
-  WebContainer.prototype.spawn = vi.fn(async () => {
-    return {
-      id: '1',
-      exitCode: 0,
-      stdout: '',
-      stderr: '',
+  WebContainer.prototype.spawn = vi.fn(async function (
+    this: MockedWebContainer,
+    command: string,
+    args: string[],
+    options?: SpawnOptions,
+  ) {
+    const [exit, output, input] = fakeProcessFactory(command, args, options);
+    const fakeProcess: FakeProcess = {
+      pid: this._fakeProcesses.length,
+      command,
+      args,
+      options,
+      exit,
+      output,
+      input,
+      kill: () => {
+        output.cancel();
+        input.close();
+        this._fakeProcesses = this._fakeProcesses.filter((p) => p !== fakeProcess);
+      },
+      resize() {},
     };
+
+    Object.defineProperties(fakeProcess, {
+      pid: { enumerable: false },
+      exit: { enumerable: false },
+      output: { enumerable: false },
+      input: { enumerable: false },
+      kill: { enumerable: false },
+      resize: { enumerable: false },
+    });
+
+    this._fakeProcesses.push(fakeProcess);
+
+    return fakeProcess;
   });
 
   WebContainer.prototype.dispose = vi.fn();

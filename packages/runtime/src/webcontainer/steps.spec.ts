@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
-import { StepsController } from '../../src/webcontainer/steps.js';
-import { Command } from '../../src/webcontainer/command.js';
+import { StepsController } from './steps.js';
+import { Command } from './command.js';
 
 describe('StepsController', () => {
   test('setFromCommands should set steps from commands', () => {

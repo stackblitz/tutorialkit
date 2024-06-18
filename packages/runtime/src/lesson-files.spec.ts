@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeAll, vi, afterAll, beforeEach } from 'vitest';
-import { LessonFilesFetcher } from '../src/lesson-files.js';
+import { LessonFilesFetcher } from './lesson-files.js';
 
 const originalFetch = global.fetch;
 

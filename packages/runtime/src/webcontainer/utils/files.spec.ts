@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { areFilesEqual, diffFiles, toFileTree } from '../../../src/webcontainer/utils/files.js';
+import { areFilesEqual, diffFiles, toFileTree } from './files.js';
 
 describe('areFilesEqual', () => {
   it('should return true if files are equal', () => {
