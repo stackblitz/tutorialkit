@@ -30,7 +30,12 @@ const logo = readLogoFile('logo');
 const logoDark = readLogoFile('logo-dark') ?? logo;
 
 if (!logo) {
-  console.warn(`No logo found in public/. Supported filenames are: logo.(${LOGO_EXTENSIONS.join('|')})`);
+  console.warn(
+    [
+      `No logo found in public/. Supported filenames are: logo.(${LOGO_EXTENSIONS.join('|')}) `,
+      `(for the light theme) and logo-dark.(${LOGO_EXTENSIONS.join('|')}) (for the dark theme).`,
+    ].join(''),
+  );
 }
 ---
 
