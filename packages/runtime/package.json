@@ -22,15 +22,18 @@
     }
   },
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b tsconfig.build.json",
+    "test": "vitest"
   },
   "dependencies": {
-    "@webcontainer/api": "beta",
+    "@webcontainer/api": "1.2.0",
     "nanostores": "^0.10.3",
     "@tutorialkit/types": "workspace:*"
   },
   "devDependencies": {
+    "test-utils": "workspace:*",
     "typescript": "^5.4.5",
-    "vite": "^5.2.11"
+    "vite": "^5.2.11",
+    "vitest": "^1.6.0"
   }
 }

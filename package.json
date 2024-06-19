@@ -9,7 +9,7 @@
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
     "docs": "pnpm run --filter=tutorialkit.dev dev",
     "docs:build": "pnpm run --filter=tutorialkit.dev build",
-    "test": "pnpm run --filter=tutorialkit test"
+    "test": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit test"
   },
   "license": "MIT",
   "packageManager": "pnpm@8.10.5",
