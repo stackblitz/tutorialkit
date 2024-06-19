@@ -37,9 +37,7 @@ export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) 
       astroConfig,
     );
 
-    const output = generateAstroConfig(astroConfig);
-
-    fs.writeFileSync(configPath, output);
+    fs.writeFileSync(configPath, generateAstroConfig(astroConfig));
   }
 }
 
