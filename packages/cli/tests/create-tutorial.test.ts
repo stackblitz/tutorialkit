@@ -17,6 +17,19 @@ afterAll(async () => {
   await fs.rm(tmpDir, { force: true, recursive: true });
 });
 
+test('cannot create project without installing but with starting', async (context) => {
+  const name = context.task.id;
+
+  await expect(
+    execa('node', [cli, 'create', name, '--no-install', '--start'], {
+      cwd: tmpDir,
+      env: {
+        TK_DIRECTORY: baseDir,
+      },
+    }),
+  ).rejects.toThrow('Cannot start project without installing dependencies.');
+});
+
 test('create a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
@@ -37,7 +50,7 @@ test('create and build a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-start', '--defaults'], {
     cwd: tmpDir,
     env: {
       TK_DIRECTORY: baseDir,

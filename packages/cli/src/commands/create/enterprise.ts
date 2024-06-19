@@ -5,11 +5,14 @@ import { parseAstroConfig, replaceArgs } from './astro-config.js';
 import { generate } from './babel.js';
 
 export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) {
+  if (!flags.defaults && flags.enterprise === undefined) {
+    // early exit if `--defaults` is provided without `--enterprise`
+    return;
+  }
+
   let editorOrigin = flags.enterprise;
 
-  if (!flags.defaults && flags.enterprise === undefined) {
-    return;
-  } else if (editorOrigin) {
+  if (editorOrigin) {
     const error = validateEditorOrigin(editorOrigin);
 
     if (error) {

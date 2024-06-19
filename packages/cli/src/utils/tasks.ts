@@ -1,5 +1,5 @@
 import * as prompts from '@clack/prompts';
-import { errorLabel } from './messages';
+import { errorLabel } from './messages.js';
 
 interface Task {
   title: string;

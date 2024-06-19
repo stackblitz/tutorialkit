@@ -3,15 +3,17 @@ import chalk from 'chalk';
 import fs from 'node:fs';
 import path from 'node:path';
 import yargs from 'yargs-parser';
+import { execa } from 'execa';
 import { pkg } from '../../pkg.js';
-import { errorLabel, primaryLabel, printHelp } from '../../utils/messages.js';
+import { errorLabel, primaryLabel, printHelp, warnLabel } from '../../utils/messages.js';
 import { generateProjectName } from '../../utils/project.js';
 import { assertNotCanceled } from '../../utils/tasks.js';
-import { installDependencies, type PackageManager } from './dependencies.js';
 import { initGitRepo } from './git.js';
 import { DEFAULT_VALUES, type CreateOptions } from './options.js';
 import { setupEnterpriseConfig } from './enterprise.js';
 import { copyTemplate } from './template.js';
+import { selectPackageManager, type PackageManager } from './package-manager.js';
+import { installAndStart } from './install-start.js';
 
 const TUTORIALKIT_VERSION = pkg.version;
 
@@ -24,6 +26,7 @@ export async function createTutorial(flags: yargs.Arguments) {
         Options: [
           ['--dir, -d', 'The folder in which the tutorial gets created'],
           ['--install, --no-install', `Install dependencies (default ${chalk.yellow(DEFAULT_VALUES.install)})`],
+          ['--start, --no-start', `Start project (default ${chalk.yellow(DEFAULT_VALUES.start)})`],
           ['--git, --no-git', `Initialize a local git repository (default ${chalk.yellow(DEFAULT_VALUES.git)})`],
           ['--dry-run', `Walk through steps without executing (default ${chalk.yellow(DEFAULT_VALUES.dryRun)})`],
           [
@@ -46,6 +49,16 @@ export async function createTutorial(flags: yargs.Arguments) {
     return 0;
   }
 
+  applyAliases(flags);
+
+  try {
+    verifyFlags(flags);
+  } catch (error) {
+    console.error(`${errorLabel()} ${error.message}`);
+
+    process.exit(1);
+  }
+
   try {
     return _createTutorial(flags);
   } catch (error) {
@@ -60,8 +73,6 @@ export async function createTutorial(flags: yargs.Arguments) {
 }
 
 async function _createTutorial(flags: CreateOptions) {
-  applyAliases(flags);
-
   prompts.intro(primaryLabel(pkg.name));
 
   let tutorialName = flags._[1] !== undefined ? String(flags._[1]) : undefined;
@@ -131,7 +142,7 @@ async function _createTutorial(flags: CreateOptions) {
 
   updatePackageJson(resolvedDest, tutorialName, flags);
 
-  const { selectedPackageManager, dependenciesInstalled } = await installDependencies(resolvedDest, flags);
+  const selectedPackageManager = await selectPackageManager(flags);
 
   updateReadme(resolvedDest, selectedPackageManager, flags);
 
@@ -139,13 +150,44 @@ async function _createTutorial(flags: CreateOptions) {
 
   await initGitRepo(resolvedDest, flags);
 
+  const { install, start } = await installAndStart(flags);
+
   prompts.log.success(chalk.green('Tutorial successfully created!'));
 
-  printNextSteps(dest, selectedPackageManager, dependenciesInstalled);
+  if (install || start) {
+    if (install && !start) {
+      printNextSteps(dest, selectedPackageManager, true);
 
-  prompts.outro(`You're all set!`);
+      prompts.outro('Please wait while we install the dependencies...');
+    } else {
+      // we can't have start without install, so this means we have both
+      prompts.outro('Please wait while we install the dependencies and start your project...');
+    }
 
-  console.log('Until next time 👋');
+    await startProject(resolvedDest, selectedPackageManager, flags, start);
+  } else {
+    printNextSteps(dest, selectedPackageManager, false);
+
+    prompts.outro(`You're all set!`);
+
+    console.log('Until next time 👋');
+  }
+}
+
+async function startProject(cwd: string, packageManager: PackageManager, flags: CreateOptions, startProject: boolean) {
+  if (flags.dryRun) {
+    const message = startProject
+      ? 'Skipped dependency installation and project start'
+      : 'Skipped dependency installation';
+
+    console.warn(`${warnLabel('DRY RUN')} ${message}`);
+  } else {
+    await execa(packageManager, ['install'], { cwd, stdio: 'inherit' });
+
+    if (startProject) {
+      await execa(packageManager, ['run', 'dev'], { cwd, stdio: 'inherit' });
+    }
+  }
 }
 
 async function getTutorialDirectory(tutorialName: string, flags: CreateOptions) {
@@ -262,5 +304,11 @@ function applyAliases(flags: CreateOptions & Record<string, any>) {
 
   if (flags.e) {
     flags.enterprise = flags.e;
+  }
+}
+
+function verifyFlags(flags: CreateOptions) {
+  if (flags.install === false && flags.start) {
+    throw new Error('Cannot start project without installing dependencies.');
   }
 }
