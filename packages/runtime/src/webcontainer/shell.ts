@@ -14,15 +14,19 @@ interface ProcessOptions {
   allowCommands?: string[];
 }
 
-export async function newJSHProcess(webcontainer: WebContainer, terminal: ITerminal, options: ProcessOptions) {
+export async function newJSHProcess(
+  webcontainer: WebContainer,
+  terminal: ITerminal,
+  options: ProcessOptions | undefined,
+) {
   const args: string[] = [];
 
-  if (!options.allowRedirects) {
+  if (!options?.allowRedirects) {
     // if redirects are turned off, start JSH with `--no-redirects`
     args.push('--no-redirects');
   }
 
-  if (Array.isArray(options.allowCommands)) {
+  if (Array.isArray(options?.allowCommands)) {
     // if only a subset of commands is allowed, pass it down to JSH
     args.push('--allow-commands', options.allowCommands.join(','));
   }

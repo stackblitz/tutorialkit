@@ -97,6 +97,10 @@ export class TerminalPanel implements ITerminal {
   }
 
   get processOptions() {
+    if (this.type === 'output') {
+      return undefined;
+    }
+
     return {
       allowRedirects: this.options?.allowRedirects ?? false,
       allowCommands: this.options?.allowCommands,
@@ -204,20 +208,26 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
 
   const panels: TerminalPanel[] = [];
 
+  const options = {
+    allowRedirects: config.allowRedirects,
+    allowCommands: config.allowCommands,
+  };
+
   if (config.panels) {
     if (config.panels === 'output') {
       panels.push(new TerminalPanel('output'));
     } else if (config.panels === 'terminal') {
-      panels.push(new TerminalPanel('terminal'));
+      panels.push(new TerminalPanel('terminal', options));
     } else if (Array.isArray(config.panels)) {
       for (const panel of config.panels) {
         let terminalPanel: TerminalPanel;
 
         if (typeof panel === 'string') {
-          terminalPanel = new TerminalPanel(panel);
+          terminalPanel = new TerminalPanel(panel, options);
         } else if (Array.isArray(panel)) {
           terminalPanel = new TerminalPanel(panel[0], {
             name: panel[1],
+            ...options,
           });
         } else {
           terminalPanel = new TerminalPanel(panel.type, {
