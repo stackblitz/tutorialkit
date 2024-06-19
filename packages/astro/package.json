@@ -29,7 +29,7 @@
     "@tutorialkit/runtime": "workspace:*",
     "@tutorialkit/types": "workspace:*",
     "@types/react": "^18.2.75",
-    "@webcontainer/api": "beta",
+    "@webcontainer/api": "1.2.0",
     "astro-expressive-code": "^0.35.3",
     "chokidar": "3.6.0",
     "fast-glob": "^3.3.2",
