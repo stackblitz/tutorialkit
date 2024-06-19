@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import conventionalChangelog from 'conventional-changelog';
 import addStream from 'add-stream';
-import tempfile from 'tempfile';
-import path from 'node:path';
-import fs from 'node:fs';
 import chalk from 'chalk';
+import conventionalChangelog from 'conventional-changelog';
+import fs from 'node:fs';
+import path from 'node:path';
+import tempfile from 'tempfile';
 
 const PRESET = 'angular';
 
@@ -26,8 +26,10 @@ const PACKAGES = [
   { path: './packages/cli' },
   { path: './packages/components/react' },
   { path: './packages/runtime' },
+
   // we do not include this one because it is not published
   { path: './packages/template', excluded: true },
+
   // the CHANGELOG of this one is the same as the one from the cli so it's also excluded from this list
   { path: './packages/create-tutorial', sameAs: 'tutorialkit' },
 ];
@@ -78,7 +80,7 @@ async function processPackages() {
 }
 
 /**
- * Generate a changelog for the provided package. And aggregate the data
+ * Generate a changelog for the provided package and aggregate the data
  * for the root changelog.
  *
  * @param {Package} pkg the package
@@ -86,7 +88,9 @@ async function processPackages() {
 function generateChangelog(pkg) {
   const options = {
     preset: PRESET,
-    pkg: { path: pkg.path },
+    pkg: {
+      path: pkg.path,
+    },
     append: undefined,
     releaseCount: undefined,
     skipUnstable: undefined,
@@ -103,8 +107,8 @@ function generateChangelog(pkg) {
     path: pkg.gitPath ?? path.dirname(pkg.path),
   };
 
-  const changelogStream = conventionalChangelog(options, context, gitRawCommitsOpts).on('error', (err) => {
-    console.error(err.stack);
+  const changelogStream = conventionalChangelog(options, context, gitRawCommitsOpts).on('error', (error) => {
+    console.error(error.stack);
     process.exit(1);
   });
 

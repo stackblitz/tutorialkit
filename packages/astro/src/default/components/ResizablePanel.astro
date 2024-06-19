@@ -55,13 +55,14 @@ if (!hasSidePanel) {
       <slot name="a" />
     </div>
     {
-      hasSidePanel &&
-        (
+      hasSidePanel && (
+        <>
           <div class="panel">
             <slot name="b" />
           </div>
-          <div class="divider"></div>
-        )
+          <div class="divider" />
+        </>
+      )
     }
   </div>
 </resizable-panel>

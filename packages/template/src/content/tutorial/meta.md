@@ -1,5 +1,6 @@
 ---
 type: tutorial
+logoLink: https://tutorialkit.dev
 previews:
   - 8080
 autoReload: true

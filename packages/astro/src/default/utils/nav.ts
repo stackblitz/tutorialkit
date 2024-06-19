@@ -1,7 +1,7 @@
 import type { Tutorial, NavList } from '@tutorialkit/types';
 
 export function generateNavigationList(tutorial: Tutorial): NavList {
-  return objectToSortedArray(tutorial).map((part) => {
+  return objectToSortedArray(tutorial.parts).map((part) => {
     return {
       id: part.id,
       title: part.data.title,
