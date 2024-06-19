@@ -7,6 +7,8 @@
     "prepare": "is-ci || husky install",
     "template:dev": "TUTORIALKIT_DEV=true pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
+    "tkit": "pnpm run --filter=tutorialkit.dev dev",
+    "tkit:build": "pnpm run --filter=tutorialkit.dev build",
     "test": "pnpm run --filter=tutorialkit test"
   },
   "license": "MIT",
