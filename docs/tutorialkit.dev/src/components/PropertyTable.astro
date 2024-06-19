@@ -1,0 +1,33 @@
+---
+interface Props {
+  required?: boolean;
+  inherited?: boolean;
+  values?: string;
+  type?: string;
+}
+
+const { required = false, inherited = false, values, type } = Astro.props;
+---
+
+<table>
+  <thead>
+    <tr>
+      <th>Required</th>
+      <th>{values ? 'Values' : 'Type'}</th>
+      <th>Inherited</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{required ? 'yes' : 'no'}</td>
+      <td>{values ? values : type}</td>
+      <td>{inherited ? 'yes' : 'no'}</td>
+    </tr>
+  </tbody>
+</table>
+
+<style>
+  td {
+    text-align: center;
+  }
+</style>
