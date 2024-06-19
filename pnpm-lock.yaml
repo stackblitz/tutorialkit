@@ -32,6 +32,9 @@ importers:
       prettier:
         specifier: ^3.3.1
         version: 3.3.1
+      prettier-plugin-astro:
+        specifier: ^0.13.0
+        version: 0.13.0
       tempfile:
         specifier: ^5.0.0
         version: 5.0.0
@@ -5990,14 +5993,8 @@ packages:
     engines: {node: ^14.15.0 || >=16.0.0}
     dependencies:
       '@astrojs/compiler': 1.8.2
-      prettier: 3.2.5
+      prettier: 3.3.1
       sass-formatter: 0.7.9
-    dev: true
-
-  /prettier@3.2.5:
-    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
-    engines: {node: '>=14'}
-    hasBin: true
     dev: true
 
   /prettier@3.3.1:

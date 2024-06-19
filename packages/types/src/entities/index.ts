@@ -44,4 +44,7 @@ export interface Lesson<T = unknown> {
   Markdown: T;
 }
 
-export type Tutorial = Record<string, Part>;
+export interface Tutorial {
+  logoLink?: string;
+  parts: Record<string, Part>;
+}

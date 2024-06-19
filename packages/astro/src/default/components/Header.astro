@@ -1,44 +1,21 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
+import Logo from './Logo.astro';
 import { LoginButton } from './LoginButton';
 import { ThemeSwitch } from './ThemeSwitch';
 import { useAuth } from './setup';
 
-const LOGO_EXTENSIONS = [
-  'svg',
-  'png',
-  'jpeg',
-  'jpg',
-];
-
-let logo;
-
-for (const logoExt of LOGO_EXTENSIONS) {
-  const logoFilename = `logo.${logoExt}`;
-  const exists = fs.existsSync(path.join('public', logoFilename));
-
-  if (exists) {
-    logo = `/${logoFilename}`;
-    break;
-  }
+interface Props {
+  logoLink: string;
 }
 
-if (!logo) {
-  console.warn(`No logo found in public/. Supported filenames are: logo.(${LOGO_EXTENSIONS.join('|')})`);
-}
+const { logoLink } = Astro.props;
 ---
 
 <nav
   class="bg-tk-elements-topBar-backgroundColor border-b border-tk-elements-app-borderColor flex max-w-full items-center p-3 px-4 min-h-[56px]"
 >
   <div class="flex flex-1">
-    <a
-      href="/"
-      class="flex items-center text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
-    >
-      {logo && <img class="h-5 w-auto" src={logo} />}
-    </a>
+    <Logo logoLink={logoLink} />
   </div>
   <div>
     <ThemeSwitch client:load transition:persist />
