@@ -60,7 +60,7 @@ export const terminalSchema = z.union([
 
       /**
        * Or an array of `output` and/or `terminal` literals and/or tuples where the first value is either `output` or
-       * `terminal`, and the second being the name.
+       * `terminal`, and the second being the title and/or panel config objects.
        */
       z
         .array(
@@ -68,12 +68,12 @@ export const terminalSchema = z.union([
             // the type of the panel
             panelType,
 
-            // or a tuple with the type and the name of the panel
+            // or a tuple with the type and the title of the panel
             z.tuple([
               // the type of the panel
               panelType,
 
-              // the name of the panel which is shown in the tab
+              // the title of the panel which is shown in the tab
               z.string(),
             ]),
 
@@ -85,8 +85,8 @@ export const terminalSchema = z.union([
               // an id linking the terminal of multiple lessons together
               id: z.string().optional(),
 
-              // the name of the panel which is shown in the tab
-              name: z.string().optional(),
+              // the title of the panel which is shown in the tab
+              title: z.string().optional(),
 
               // `true` if you want to enable output redirects in the terminal, disabled by default
               allowRedirects: z.boolean().optional(),
@@ -101,7 +101,11 @@ export const terminalSchema = z.union([
             let output = 0;
 
             for (const value of arg) {
-              if (value === 'output' || (Array.isArray(value) && value[0] === 'output')) {
+              if (
+                value === 'output' ||
+                (Array.isArray(value) && value[0] === 'output') ||
+                (typeof value === 'object' && (value as any).type === 'output')
+              ) {
                 output++;
               }
 

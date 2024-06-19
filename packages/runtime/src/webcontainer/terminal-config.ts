@@ -8,8 +8,8 @@ interface NormalizedTerminalConfig {
 }
 
 interface TerminalPanelOptions {
-  name?: string;
   id?: string;
+  title?: string;
   allowRedirects?: boolean;
   allowCommands?: string[];
 }
@@ -32,7 +32,7 @@ export class TerminalConfig {
   }
 }
 
-const TERMINAL_PANEL_NAMES: Record<TerminalPanelType, string> = {
+const TERMINAL_PANEL_TITLES: Record<TerminalPanelType, string> = {
   output: 'Output',
   terminal: 'Terminal',
 };
@@ -56,8 +56,8 @@ export class TerminalPanel implements ITerminal {
     };
   }
 
-  readonly name: string;
   readonly id: string;
+  readonly title: string;
 
   private _terminal?: ITerminal;
   private _process?: WebContainerProcess;
@@ -68,23 +68,23 @@ export class TerminalPanel implements ITerminal {
     readonly type: TerminalPanelType,
     private readonly options?: TerminalPanelOptions,
   ) {
-    let name = options?.name;
+    let title = options?.title;
 
-    // automatically infer a name if no name is provided
-    if (!name) {
-      name = TERMINAL_PANEL_NAMES[type];
+    // automatically infer a title if no title is provided
+    if (!title) {
+      title = TERMINAL_PANEL_TITLES[type];
 
-      // we keep track of all unnamed panel and add an index to the name
+      // we keep track of all untitled panel and add an index to the title
       const count = TerminalPanel.panelCount[type];
 
       if (count > 0) {
-        name += ` ${count}`;
+        title += ` ${count}`;
       }
 
       TerminalPanel.panelCount[type]++;
     }
 
-    this.name = name;
+    this.title = title;
     this.id = options?.id ?? (type === 'output' ? 'output' : `${type}-${globalId++}`);
   }
 
@@ -195,7 +195,7 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
     };
   }
 
-  // reset the count so that the auto-infered names are indexed properly
+  // reset the count so that the auto-infered titles are indexed properly
   TerminalPanel.resetCount();
 
   // if no config is set, or the value is `true`, we just render the output panel
@@ -226,13 +226,13 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
           terminalPanel = new TerminalPanel(panel, options);
         } else if (Array.isArray(panel)) {
           terminalPanel = new TerminalPanel(panel[0], {
-            name: panel[1],
+            title: panel[1],
             ...options,
           });
         } else {
           terminalPanel = new TerminalPanel(panel.type, {
             id: panel.id,
-            name: panel.name,
+            title: panel.title,
             allowRedirects: panel.allowRedirects ?? config.allowRedirects,
             allowCommands: panel.allowCommands ?? config.allowCommands,
           });

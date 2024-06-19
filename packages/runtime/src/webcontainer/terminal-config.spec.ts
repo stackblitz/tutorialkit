@@ -22,14 +22,14 @@ describe('TerminalConfig', () => {
     const config = new TerminalConfig(true);
 
     expect(config.panels.length).toBe(1);
-    expect(config.panels[0].name).toBe('Output');
+    expect(config.panels[0].title).toBe('Output');
   });
 
   it('should have only output panel when config is undefined', () => {
     const config = new TerminalConfig();
 
     expect(config.panels.length).toBe(1);
-    expect(config.panels[0].name).toBe('Output');
+    expect(config.panels[0].title).toBe('Output');
   });
 
   it('should have panels with custom names', () => {
@@ -40,25 +40,25 @@ describe('TerminalConfig', () => {
       ],
     });
 
-    expect(config.panels[0].name).toBe('Foo');
-    expect(config.panels[1].name).toBe('Bar');
+    expect(config.panels[0].title).toBe('Foo');
+    expect(config.panels[1].title).toBe('Bar');
   });
 
   it('should have panels with custom names and ids', () => {
     const config = new TerminalConfig({
       panels: [
-        { type: 'terminal', name: 'Foo', id: 'foo' },
-        { type: 'terminal', name: 'Bar', id: 'bar' },
+        { type: 'terminal', title: 'Foo', id: 'foo' },
+        { type: 'terminal', title: 'Bar', id: 'bar' },
       ],
     });
 
-    expect(config.panels[0].name).toBe('Foo');
+    expect(config.panels[0].title).toBe('Foo');
     expect(config.panels[0].id).toBe('foo');
     expect(config.panels[0].processOptions).toEqual({
       allowRedirects: false,
       allowCommands: undefined,
     });
-    expect(config.panels[1].name).toBe('Bar');
+    expect(config.panels[1].title).toBe('Bar');
     expect(config.panels[1].id).toBe('bar');
     expect(config.panels[1].processOptions).toEqual({
       allowRedirects: false,
@@ -73,7 +73,7 @@ describe('TerminalConfig', () => {
       panels: 'terminal',
     });
 
-    expect(config.panels[0].name).toBe('Terminal');
+    expect(config.panels[0].title).toBe('Terminal');
     expect(config.panels[0].processOptions).toEqual({
       allowRedirects: true,
       allowCommands: ['echo'],
@@ -87,19 +87,19 @@ describe('TerminalConfig', () => {
       panels: ['terminal', 'terminal', 'output'],
     });
 
-    expect(config.panels[0].name).toBe('Terminal');
+    expect(config.panels[0].title).toBe('Terminal');
     expect(config.panels[0].processOptions).toEqual({
       allowRedirects: true,
       allowCommands: ['echo'],
     });
 
-    expect(config.panels[1].name).toBe('Terminal 1');
+    expect(config.panels[1].title).toBe('Terminal 1');
     expect(config.panels[1].processOptions).toEqual({
       allowRedirects: true,
       allowCommands: ['echo'],
     });
 
-    expect(config.panels[2].name).toBe('Output');
+    expect(config.panels[2].title).toBe('Output');
     expect(config.panels[2].processOptions).toBeUndefined();
   });
 
@@ -114,19 +114,19 @@ describe('TerminalConfig', () => {
       ],
     });
 
-    expect(config.panels[0].name).toBe('TERM 1');
+    expect(config.panels[0].title).toBe('TERM 1');
     expect(config.panels[0].processOptions).toEqual({
       allowRedirects: true,
       allowCommands: ['echo'],
     });
 
-    expect(config.panels[1].name).toBe('TERM 2');
+    expect(config.panels[1].title).toBe('TERM 2');
     expect(config.panels[1].processOptions).toEqual({
       allowRedirects: true,
       allowCommands: ['echo'],
     });
 
-    expect(config.panels[2].name).toBe('OUT');
+    expect(config.panels[2].title).toBe('OUT');
     expect(config.panels[2].processOptions).toBeUndefined();
   });
 
@@ -135,25 +135,25 @@ describe('TerminalConfig', () => {
       allowRedirects: true,
       allowCommands: ['echo'],
       panels: [
-        { type: 'terminal', name: 'TERM 1' },
-        { type: 'terminal', name: 'TERM 2' },
-        { type: 'output', name: 'OUT' },
+        { type: 'terminal', title: 'TERM 1' },
+        { type: 'terminal', title: 'TERM 2' },
+        { type: 'output', title: 'OUT' },
       ],
     });
 
-    expect(config.panels[0].name).toBe('TERM 1');
+    expect(config.panels[0].title).toBe('TERM 1');
     expect(config.panels[0].processOptions).toEqual({
       allowRedirects: true,
       allowCommands: ['echo'],
     });
 
-    expect(config.panels[1].name).toBe('TERM 2');
+    expect(config.panels[1].title).toBe('TERM 2');
     expect(config.panels[1].processOptions).toEqual({
       allowRedirects: true,
       allowCommands: ['echo'],
     });
 
-    expect(config.panels[2].name).toBe('OUT');
+    expect(config.panels[2].title).toBe('OUT');
     expect(config.panels[2].processOptions).toBeUndefined();
   });
 
@@ -162,25 +162,25 @@ describe('TerminalConfig', () => {
       allowRedirects: true,
       allowCommands: ['echo'],
       panels: [
-        { type: 'terminal', name: 'TERM 1', allowRedirects: false },
-        { type: 'terminal', name: 'TERM 2', allowCommands: ['ls'] },
-        { type: 'output', name: 'OUT', allowRedirects: false },
+        { type: 'terminal', title: 'TERM 1', allowRedirects: false },
+        { type: 'terminal', title: 'TERM 2', allowCommands: ['ls'] },
+        { type: 'output', title: 'OUT', allowRedirects: false },
       ],
     });
 
-    expect(config.panels[0].name).toBe('TERM 1');
+    expect(config.panels[0].title).toBe('TERM 1');
     expect(config.panels[0].processOptions).toEqual({
       allowRedirects: false,
       allowCommands: ['echo'],
     });
 
-    expect(config.panels[1].name).toBe('TERM 2');
+    expect(config.panels[1].title).toBe('TERM 2');
     expect(config.panels[1].processOptions).toEqual({
       allowRedirects: true,
       allowCommands: ['ls'],
     });
 
-    expect(config.panels[2].name).toBe('OUT');
+    expect(config.panels[2].title).toBe('OUT');
     expect(config.panels[2].processOptions).toBeUndefined();
   });
 
@@ -189,8 +189,8 @@ describe('TerminalConfig', () => {
       panels: ['output', 'terminal', 'terminal'],
     });
 
-    expect(config.panels[0].name).toBe('Output');
-    expect(config.panels[1].name).toBe('Terminal');
-    expect(config.panels[2].name).toBe('Terminal 1');
+    expect(config.panels[0].title).toBe('Output');
+    expect(config.panels[1].title).toBe('Terminal');
+    expect(config.panels[2].title).toBe('Terminal 1');
   });
 });
