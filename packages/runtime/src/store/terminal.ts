@@ -56,7 +56,7 @@ export class TerminalStore {
         // if the panel is a terminal panel, and this panel didn't exist before, spawn a new JSH process
         this._bootWebContainer(panel)
           .then(async (webcontainerInstance) => {
-            panel.attachProcess(await newJSHProcess(webcontainerInstance, panel));
+            panel.attachProcess(await newJSHProcess(webcontainerInstance, panel, panel.processOptions));
           })
           .catch(() => {
             // do nothing

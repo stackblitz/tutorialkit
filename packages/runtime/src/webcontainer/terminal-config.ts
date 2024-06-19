@@ -2,10 +2,17 @@ import type { TerminalPanelType, TerminalSchema } from '@tutorialkit/types';
 import type { WebContainerProcess } from '@webcontainer/api';
 import type { ITerminal } from '../utils/terminal.js';
 
-type NormalizedTerminalConfig = {
+interface NormalizedTerminalConfig {
   panels: TerminalPanel[];
   activePanel: number;
-};
+}
+
+interface TerminalPanelOptions {
+  id?: string;
+  title?: string;
+  allowRedirects?: boolean;
+  allowCommands?: string[];
+}
 
 export class TerminalConfig {
   private _config: NormalizedTerminalConfig;
@@ -25,7 +32,7 @@ export class TerminalConfig {
   }
 }
 
-const TERMINAL_PANEL_NAMES: Record<TerminalPanelType, string> = {
+const TERMINAL_PANEL_TITLES: Record<TerminalPanelType, string> = {
   output: 'Output',
   terminal: 'Terminal',
 };
@@ -49,8 +56,8 @@ export class TerminalPanel implements ITerminal {
     };
   }
 
-  readonly name: string;
   readonly id: string;
+  readonly title: string;
 
   private _terminal?: ITerminal;
   private _process?: WebContainerProcess;
@@ -59,25 +66,26 @@ export class TerminalPanel implements ITerminal {
 
   constructor(
     readonly type: TerminalPanelType,
-    name?: string,
-    id?: string,
+    private readonly options?: TerminalPanelOptions,
   ) {
-    // automatically infer a name if no name is provided
-    if (!name) {
-      name = TERMINAL_PANEL_NAMES[type];
+    let title = options?.title;
 
-      // we keep track of all unnamed panel and add an index to the name
+    // automatically infer a title if no title is provided
+    if (!title) {
+      title = TERMINAL_PANEL_TITLES[type];
+
+      // we keep track of all untitled panel and add an index to the title
       const count = TerminalPanel.panelCount[type];
 
       if (count > 0) {
-        name += ` ${count}`;
+        title += ` ${count}`;
       }
 
       TerminalPanel.panelCount[type]++;
     }
 
-    this.name = name;
-    this.id = id ?? (type === 'output' ? 'output' : `${type}-${globalId++}`);
+    this.title = title;
+    this.id = options?.id ?? (type === 'output' ? 'output' : `${type}-${globalId++}`);
   }
 
   get terminal() {
@@ -86,6 +94,17 @@ export class TerminalPanel implements ITerminal {
 
   get process() {
     return this._process;
+  }
+
+  get processOptions() {
+    if (this.type === 'output') {
+      return undefined;
+    }
+
+    return {
+      allowRedirects: this.options?.allowRedirects ?? false,
+      allowCommands: this.options?.allowCommands,
+    };
   }
 
   // #region ITerminal methods
@@ -176,7 +195,7 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
     };
   }
 
-  // reset the count so that the auto-infered names are indexed properly
+  // reset the count so that the auto-infered titles are indexed properly
   TerminalPanel.resetCount();
 
   // if no config is set, or the value is `true`, we just render the output panel
@@ -189,26 +208,37 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
 
   const panels: TerminalPanel[] = [];
 
+  const options = {
+    allowRedirects: config.allowRedirects,
+    allowCommands: config.allowCommands,
+  };
+
   if (config.panels) {
     if (config.panels === 'output') {
       panels.push(new TerminalPanel('output'));
     } else if (config.panels === 'terminal') {
-      panels.push(new TerminalPanel('terminal'));
+      panels.push(new TerminalPanel('terminal', options));
     } else if (Array.isArray(config.panels)) {
       for (const panel of config.panels) {
-        const [type, config = {}] = Array.isArray(panel) ? panel : [panel];
+        let terminalPanel: TerminalPanel;
 
-        let name: string | undefined;
-        let id: string | undefined;
-
-        if (typeof config === 'string') {
-          name = config;
+        if (typeof panel === 'string') {
+          terminalPanel = new TerminalPanel(panel, options);
+        } else if (Array.isArray(panel)) {
+          terminalPanel = new TerminalPanel(panel[0], {
+            title: panel[1],
+            ...options,
+          });
         } else {
-          name = config.name;
-          id = config.id;
+          terminalPanel = new TerminalPanel(panel.type, {
+            id: panel.id,
+            title: panel.title,
+            allowRedirects: panel.allowRedirects ?? config.allowRedirects,
+            allowCommands: panel.allowCommands ?? config.allowCommands,
+          });
         }
 
-        panels.push(new TerminalPanel(type, name, id));
+        panels.push(terminalPanel);
       }
     }
   }
