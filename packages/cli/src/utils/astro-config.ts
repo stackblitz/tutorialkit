@@ -167,9 +167,9 @@ function updateObject(properties: any, object: t.ObjectExpression | undefined): 
 
   object ??= t.objectExpression([]);
 
-  for (const property of properties) {
+  for (const property in properties) {
     const propertyInObject = object.properties.find((prop) => {
-      return prop.type === 'ObjectProperty' && prop.key === property;
+      return prop.type === 'ObjectProperty' && prop.key.type === 'Identifier' && prop.key.name === property;
     }) as t.ObjectProperty | undefined;
 
     if (!propertyInObject) {
@@ -200,6 +200,10 @@ function fromValue(value: any): t.Expression {
 
   if (typeof value === 'number') {
     return t.numericLiteral(value);
+  }
+
+  if (typeof value === 'boolean') {
+    return t.booleanLiteral(value);
   }
 
   if (Array.isArray(value)) {
