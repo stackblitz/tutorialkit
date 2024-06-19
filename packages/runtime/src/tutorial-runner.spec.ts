@@ -61,17 +61,9 @@ describe('TutorialRunner', () => {
     const processFactory = vi.fn(() => {
       resolve(JSON.stringify(mock._fakeFs, undefined, 2));
 
-      return [
-        new Promise<number>(() => {}),
-        new ReadableStream<string>({
-          start(controller) {
-            controller.close();
-          },
-        }),
-        new WritableStream<string>({
-          write() {},
-        }),
-      ] as const;
+      return {
+        exit: new Promise<number>(() => {}),
+      };
     });
 
     setProcessFactory(processFactory);

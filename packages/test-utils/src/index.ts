@@ -25,20 +25,12 @@ export type FakeProcessFactory = (
   command: string,
   args: string[],
   options?: SpawnOptions,
-) => readonly [exit: Promise<number>, output: ReadableStream<string>, input: WritableStream<string>];
+) => { exit: Promise<number>; output?: ReadableStream<string>; input?: WritableStream<string> };
 
 const defaultProcessFactory: FakeProcessFactory = () => {
-  return [
-    Promise.resolve(0),
-    new ReadableStream<string>({
-      start(controller) {
-        controller.close();
-      },
-    }),
-    new WritableStream<string>({
-      write() {},
-    }),
-  ];
+  return {
+    exit: Promise.resolve(0),
+  };
 };
 
 let fakeProcessFactory = defaultProcessFactory;
@@ -113,7 +105,17 @@ vi.mock('@webcontainer/api', () => {
     args: string[],
     options?: SpawnOptions,
   ) {
-    const [exit, output, input] = fakeProcessFactory(command, args, options);
+    const {
+      exit,
+      output = new ReadableStream<string>({
+        start(controller) {
+          controller.close();
+        },
+      }),
+      input = new WritableStream<string>({
+        write() {},
+      }),
+    } = fakeProcessFactory(command, args, options);
     const fakeProcess: FakeProcess = {
       pid: this._fakeProcesses.length,
       command,
