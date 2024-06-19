@@ -3,12 +3,13 @@
 import chalk from 'chalk';
 import yargs from 'yargs-parser';
 import { createTutorial } from './commands/create/index.js';
+import { ejectRoutes } from './commands/eject/index.js';
 import { pkg } from './pkg.js';
 import { errorLabel, primaryLabel, printHelp } from './utils/messages.js';
 
-type CLICommand = 'version' | 'help' | 'create';
+type CLICommand = 'version' | 'help' | 'create' | 'eject';
 
-const supportedCommands = new Set(['version', 'help', 'create']);
+const supportedCommands = new Set<string>(['version', 'help', 'create', 'eject'] satisfies CLICommand[]);
 
 cli();
 
@@ -51,6 +52,9 @@ async function runCommand(cmd: CLICommand, flags: yargs.Arguments): Promise<numb
     }
     case 'create': {
       return createTutorial(flags);
+    }
+    case 'eject': {
+      return ejectRoutes(flags);
     }
     default: {
       console.error(`${errorLabel()} Unknown command ${chalk.red(cmd)}`);

@@ -1,5 +1,5 @@
-import { randomValueFromArray } from './random';
-import { adjectives, nouns } from './words';
+import { randomValueFromArray } from './random.js';
+import { adjectives, nouns } from './words.js';
 
 export function generateProjectName() {
   const adjective = randomValueFromArray(adjectives);

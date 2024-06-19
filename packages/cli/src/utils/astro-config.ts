@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
-import type { Options } from '../../../../astro/src/index.js';
-import { parse, t, visit } from './babel.js';
+import type { Options } from '../../../astro/src/index.js';
+import { parse, t, visit, generate } from './babel.js';
 
 export async function parseAstroConfig(astroConfigPath: string): Promise<t.File> {
   const source = await fs.readFile(astroConfigPath, { encoding: 'utf-8' });
@@ -15,6 +15,17 @@ export async function parseAstroConfig(astroConfigPath: string): Promise<t.File>
   }
 
   return result;
+}
+
+export function generateAstroConfig(astroConfig: t.File): string {
+  const defaultExport = 'export default defineConfig';
+
+  let output = generate(astroConfig);
+
+  // add a new line
+  output = output.replace(defaultExport, `\n${defaultExport}`);
+
+  return output;
 }
 
 /**
