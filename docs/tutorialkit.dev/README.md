@@ -25,5 +25,5 @@ pnpm install
 You can now start the documentation website by running:
 
 ```
-pnpm tkit
+pnpm run docs
 ```
