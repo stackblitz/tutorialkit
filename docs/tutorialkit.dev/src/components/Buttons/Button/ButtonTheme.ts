@@ -1,1 +1,1 @@
-export type ButtonTheme = 'default'|'accent';
+export type ButtonTheme = 'default' | 'accent';

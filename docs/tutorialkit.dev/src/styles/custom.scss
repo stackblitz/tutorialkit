@@ -25,16 +25,16 @@ body {
     &::before {
       content: '';
     }
-    [data-theme="dark"] & {
-      background-image: radial-gradient(100% 100% at 50% 0%, transparent 60%, rgba(0,0,0,0.4) 100%);
+    [data-theme='dark'] & {
+      background-image: radial-gradient(100% 100% at 50% 0%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
       &::before {
-        background-image: linear-gradient(transparent 60%, rgba(0,0,0,0.8) 100%);
+        background-image: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.8) 100%);
       }
     }
-    [data-theme="light"] & {
-      background-image: radial-gradient(100% 100% at 50% 0%, #FFF 60%, #EFF0F3 100%);
+    [data-theme='light'] & {
+      background-image: radial-gradient(100% 100% at 50% 0%, #fff 60%, #eff0f3 100%);
       &::before {
-        background-image: linear-gradient(transparent 60%, rgba(255,255,255,0.8) 100%);
+        background-image: linear-gradient(transparent 60%, rgba(255, 255, 255, 0.8) 100%);
       }
     }
   }
@@ -129,14 +129,14 @@ site-search button[data-open-modal] {
   padding: 8px 10px;
   font-size: 0.84rem;
 
-  &[aria-current="page"] {
+  &[aria-current='page'] {
     color: var(--custom-color-text-strong);
-    box-shadow: inset  0 0 0 1px rgba(255,255,255,0.032);
-    background-color: rgba(255,255,255,0.032);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.032);
+    background-color: rgba(255, 255, 255, 0.032);
 
-    [data-theme="light"] & {
-      box-shadow: inset  0 0 0 1px rgba(0,0,0,0.04);
-      background-color: rgba(0,0,0,0.024);
+    [data-theme='light'] & {
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+      background-color: rgba(0, 0, 0, 0.024);
     }
   }
 }

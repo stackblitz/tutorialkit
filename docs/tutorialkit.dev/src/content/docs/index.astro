@@ -5,7 +5,10 @@ import tutorialkitThemesImg from '@assets/tutorialkit-themes.png';
 
 <div class="simple-page-hero">
   <h1>Increase Library Adoption with Interactive Coding Tutorials.</h1>
-  <p>TutorialKit by <a href="https://stackblitz.com" target="_blank" rel="noopener">StackBlitz</a> enables you to create interactive coding tutorials effortlessly, boosting the adoption of your framework, UI library or design system.</p>
+  <p>
+    TutorialKit by <a href="https://stackblitz.com" target="_blank" rel="noopener">StackBlitz</a> enables you to create interactive
+    coding tutorials effortlessly, boosting the adoption of your framework, UI library or design system.
+  </p>
   <div class="simple-page-hero__links">
     <Button url="/guides/about/#getting-started" theme="accent">Get Started</Button>
     <Button url="https://demo.tutorialkit.dev">Try Demo</Button>
@@ -16,115 +19,115 @@ import tutorialkitThemesImg from '@assets/tutorialkit-themes.png';
 </div>
 
 <style lang="scss">
-@import '../../styles/breakpoints.scss';
+  @import '../../styles/breakpoints.scss';
 
-.simple-page-hero {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  width: 820px;
-  max-width: 100%;
-  margin: 9dvh auto 0;
-  padding: 0 24px;
-  overflow-y: hidden;
-  @media screen and (max-width: $breakpoint-tablet-small) {
-    gap: 8px;
-  }
-  @media screen and (max-width: $breakpoint-small) {
-    margin-top: 52px;
-    padding: 0;
-  }
-  @media screen and (max-width: $breakpoint-mobile) {
-    margin-top: 24px;
-  }
-}
-
-.simple-page-hero h1 {
-  font-size: 56px;
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -2px;
-  text-align: center;
-  @media screen and (max-width: $breakpoint-tablet-small) {
-    max-width: 620px;
-    font-size: 40px;
-    letter-spacing: -1px;
-  }
-  @media screen and (max-width: $breakpoint-mobile) {
-    font-size: 28px;
-    line-height: 1.2;
-  }
-  @media screen and (max-width: $breakpoint-tiny) {
-    // font-size: 24px;
-  }
-}
-
-.simple-page-hero p {
-  max-width: 680px;
-  font-size: 16px;
-  line-height: 1.8;
-  text-align: center;
-  @media screen and (max-width: $breakpoint-tablet-small) {
-    max-width: 680px;
-    text-wrap: pretty;
-  }
-  @media screen and (max-width: $breakpoint-small) {
-    font-size: 15px;
-    line-height: 1.72;
-  }
-  @media screen and (max-width: $breakpoint-mobile) {
-    font-size: 14px;
-  }
-  a {
-    color: var(--sl-color-text);
-    text-decoration: none;
-    transition: var(--transition-fast);
-    transition-property: color;
-    &:hover {
-      color: var(--custom-color-text-strong);
-    }
-  }
-}
-
-.simple-page-hero__links {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  @media screen and (max-width: $breakpoint-mobile) {
-    width: 100%;
+  .simple-page-hero {
+    display: flex;
     flex-direction: column;
-  }
-}
-
-.ui-example {
-  position: fixed;
-  top: max(532px, 50dvh);
-  width: 1400px;
-  max-width: 100%;
-  height: auto;
-  padding: 0 32px;
-  mask-image: radial-gradient(160% 100% at 50% 0%, #000 70%, transparent);
-  z-index: -1;
-  html[data-theme="light"] & {
-    mask-image: none;
-  }
-  @media screen and (max-width: $breakpoint-small) {
-    top: 524px;
-    padding: 0 16px;
-  }
-  @media screen and (max-width: $breakpoint-mobile) {
-    padding: 0;
-  }
-  img {
-    border-radius: 6px;
-    box-shadow:
-      -2px -2px 2px 0 hsla(0, 0%, 6%, 0.02),
-      0 0 0 1px rgba(0,0,0,0.032);
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    width: 820px;
+    max-width: 100%;
+    margin: 9dvh auto 0;
+    padding: 0 24px;
+    overflow-y: hidden;
+    @media screen and (max-width: $breakpoint-tablet-small) {
+      gap: 8px;
+    }
+    @media screen and (max-width: $breakpoint-small) {
+      margin-top: 52px;
+      padding: 0;
+    }
     @media screen and (max-width: $breakpoint-mobile) {
-      border-radius: 0;
+      margin-top: 24px;
     }
   }
-}
+
+  .simple-page-hero h1 {
+    font-size: 56px;
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -2px;
+    text-align: center;
+    @media screen and (max-width: $breakpoint-tablet-small) {
+      max-width: 620px;
+      font-size: 40px;
+      letter-spacing: -1px;
+    }
+    @media screen and (max-width: $breakpoint-mobile) {
+      font-size: 28px;
+      line-height: 1.2;
+    }
+    @media screen and (max-width: $breakpoint-tiny) {
+      // font-size: 24px;
+    }
+  }
+
+  .simple-page-hero p {
+    max-width: 680px;
+    font-size: 16px;
+    line-height: 1.8;
+    text-align: center;
+    @media screen and (max-width: $breakpoint-tablet-small) {
+      max-width: 680px;
+      text-wrap: pretty;
+    }
+    @media screen and (max-width: $breakpoint-small) {
+      font-size: 15px;
+      line-height: 1.72;
+    }
+    @media screen and (max-width: $breakpoint-mobile) {
+      font-size: 14px;
+    }
+    a {
+      color: var(--sl-color-text);
+      text-decoration: none;
+      transition: var(--transition-fast);
+      transition-property: color;
+      &:hover {
+        color: var(--custom-color-text-strong);
+      }
+    }
+  }
+
+  .simple-page-hero__links {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    @media screen and (max-width: $breakpoint-mobile) {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
+
+  .ui-example {
+    position: fixed;
+    top: max(532px, 50dvh);
+    width: 1400px;
+    max-width: 100%;
+    height: auto;
+    padding: 0 32px;
+    mask-image: radial-gradient(160% 100% at 50% 0%, #000 70%, transparent);
+    z-index: -1;
+    html[data-theme='light'] & {
+      mask-image: none;
+    }
+    @media screen and (max-width: $breakpoint-small) {
+      top: 524px;
+      padding: 0 16px;
+    }
+    @media screen and (max-width: $breakpoint-mobile) {
+      padding: 0;
+    }
+    img {
+      border-radius: 6px;
+      box-shadow:
+        -2px -2px 2px 0 hsla(0, 0%, 6%, 0.02),
+        0 0 0 1px rgba(0, 0, 0, 0.032);
+      @media screen and (max-width: $breakpoint-mobile) {
+        border-radius: 0;
+      }
+    }
+  }
 </style>

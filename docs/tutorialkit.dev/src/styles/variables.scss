@@ -16,20 +16,20 @@
 }
 
 :root,
-[data-theme="dark"] {
-  --custom-color-text: rgba(255,255,255,0.84);
+[data-theme='dark'] {
+  --custom-color-text: rgba(255, 255, 255, 0.84);
   --custom-color-text-strong: #fff;
-  
+
   --sl-color-bg-nav: var(--sl-color-bg) !important;
   --sl-color-bg-nav: transparent;
   --sl-color-bg-sidebar: var(--sl-color-bg);
 
-  --sl-color-text-accent: rgba(255,255,255,0.78);
+  --sl-color-text-accent: rgba(255, 255, 255, 0.78);
 }
 
-[data-theme="light"] {
-  --custom-color-text: rgba(0,0,0,0.72);
+[data-theme='light'] {
+  --custom-color-text: rgba(0, 0, 0, 0.72);
   --custom-color-text-strong: #000;
 
-  --sl-color-text-accent: rgba(0,0,0,0.8) !important;
+  --sl-color-text-accent: rgba(0, 0, 0, 0.8) !important;
 }

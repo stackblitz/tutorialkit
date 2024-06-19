@@ -17,39 +17,47 @@ export default defineConfig({
       logo: {
         dark: './src/assets/brand/tutorialkit-logo-dark.svg',
         light: './src/assets/brand/tutorialkit-logo-light.svg',
-        replacesTitle: true
+        replacesTitle: true,
       },
       plugins: [starlightLinksValidator()],
-      sidebar: [{
-        label: 'Guides',
-        items: [
-        // Each item here is one entry in the navigation menu.
+      sidebar: [
         {
-          label: 'About',
-          link: '/guides/about/'
-        }, {
-          label: 'Installation',
-          link: '/guides/installation/'
-        }, {
-          label: 'Creating a Lesson',
-          link: '/guides/creating-content/'
-        }, {
-          label: 'Configuration',
-          link: '/guides/configuration/'
-        }, {
-          label: 'Deployment',
-          link: '/guides/deployment/'
-        }, {
-          label: 'User Interface Reference',
-          link: '/guides/ui/'
-        }]
-      }],
+          label: 'Guides',
+          items: [
+            // Each item here is one entry in the navigation menu.
+            {
+              label: 'About',
+              link: '/guides/about/',
+            },
+            {
+              label: 'Installation',
+              link: '/guides/installation/',
+            },
+            {
+              label: 'Creating a Lesson',
+              link: '/guides/creating-content/',
+            },
+            {
+              label: 'Configuration',
+              link: '/guides/configuration/',
+            },
+            {
+              label: 'Deployment',
+              link: '/guides/deployment/',
+            },
+            {
+              label: 'User Interface Reference',
+              link: '/guides/ui/',
+            },
+          ],
+        },
+      ],
       // social: {
-        // github: 'https://github.com/withastro/starlight',
+      // github: 'https://github.com/withastro/starlight',
       // },
       tableOfContents: {
-        maxHeadingLevel: 5
-      }
+        maxHeadingLevel: 5,
+      },
     }),
   ],
 });
