@@ -111,8 +111,8 @@ importers:
         specifier: ^18.2.75
         version: 18.2.75
       '@webcontainer/api':
-        specifier: beta
-        version: 1.2.0-beta.3
+        specifier: 1.2.0
+        version: 1.2.0
       astro:
         specifier: ^4.10.2
         version: 4.10.2(@types/node@20.12.7)(sass@1.77.3)(typescript@5.4.5)
@@ -296,8 +296,8 @@ importers:
         specifier: workspace:*
         version: link:../../runtime
       '@webcontainer/api':
-        specifier: beta
-        version: 1.2.0-beta.3
+        specifier: 1.2.0
+        version: 1.2.0
       '@xterm/addon-fit':
         specifier: ^0.10.0
         version: 0.10.0(@xterm/xterm@5.5.0)
@@ -361,18 +361,24 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@webcontainer/api':
-        specifier: beta
-        version: 1.2.0-beta.3
+        specifier: 1.2.0
+        version: 1.2.0
       nanostores:
         specifier: ^0.10.3
         version: 0.10.3
     devDependencies:
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
       vite:
         specifier: ^5.2.11
         version: 5.2.13(@types/node@20.12.7)(sass@1.77.3)
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.12.7)
 
   packages/template:
     dependencies:
@@ -431,6 +437,18 @@ importers:
       unocss:
         specifier: ^0.59.4
         version: 0.59.4(postcss@8.4.38)(vite@5.2.13)
+
+  packages/test-utils:
+    devDependencies:
+      '@webcontainer/api':
+        specifier: 1.2.0
+        version: 1.2.0
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.12.7)
 
   packages/types:
     dependencies:
@@ -3287,9 +3305,8 @@ packages:
   /@vscode/l10n@0.0.18:
     resolution: {integrity: sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==}
 
-  /@webcontainer/api@1.2.0-beta.3:
-    resolution: {integrity: sha512-9MDal6jnj2W8lRhWsloC9Y6HnlVVFUlCwmVlzFSUxY+q4EBJznYXmvwS4XLFyV46ynX702zttWDFTn6dq0zlEg==}
-    dev: false
+  /@webcontainer/api@1.2.0:
+    resolution: {integrity: sha512-tzoKBd4lLdhHy5GHFpUkl+ndoSba8JqmB7x0ZQFnWfjbcbQOvKQfxA8MEMUYhgqjWHnbrWdAfnBEHz5f5lYG5A==}
 
   /@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0):
     resolution: {integrity: sha512-UFYkDm4HUahf2lnEyHvio51TNGiLK66mqP2JoATy7hRZeXaGMRDr00JiSF7m63vR5WKATF605yEggJKsw0JpMQ==}
@@ -7545,7 +7562,7 @@ packages:
     hasBin: true
     dependencies:
       cac: 6.7.14
-      debug: 4.3.4
+      debug: 4.3.5
       pathe: 1.1.2
       picocolors: 1.0.0
       vite: 5.2.13(@types/node@20.12.7)(sass@1.77.3)

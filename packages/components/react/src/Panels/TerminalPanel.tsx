@@ -52,7 +52,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
             role="tablist"
             aria-orientation="horizontal"
           >
-            {terminalConfig.panels.map(({ type, name }, index) => {
+            {terminalConfig.panels.map(({ type, title }, index) => {
               const selected = tabIndex === index;
 
               return (
@@ -69,7 +69,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
                         'border-l': index > 0,
                       },
                     )}
-                    title={name}
+                    title={title}
                     aria-selected={selected}
                     onClick={() => setTabIndex(index)}
                   >
@@ -79,7 +79,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
                         'text-tk-elements-panel-headerTab-iconColorActive': selected,
                       })}
                     ></span>
-                    {name}
+                    {title}
                   </button>
                 </li>
               );

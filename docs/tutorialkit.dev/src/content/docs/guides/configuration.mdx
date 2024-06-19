@@ -8,9 +8,9 @@ You can configure the appearance and behavior of a TutorialKit lesson by setting
 
 ## Note on inheritance
 
-Some options, like "title," will naturally be unique for each lesson. For others, like "template," the value might be the same across multiple lessons, chapters, or even an entire tutorial. That's why we've made it possible to set some properties on a **chapter**, **part**, or **tutorial** level. We call these values _inherited_. 
+Some options, like "title," will naturally be unique for each lesson. For others, like "template," the value might be the same across multiple lessons, chapters, or even an entire tutorial. That's why we've made it possible to set some properties on a **chapter**, **part**, or **tutorial** level. We call these values _inherited_.
 
-For instance, if you set `template: "simple"` for a given **part**, all chapters and lessons in this **part** will use the "simple" template. 
+For instance, if you set `template: "simple"` for a given **part**, all chapters and lessons in this **part** will use the "simple" template.
 
 It's also possible to override inherited properties on a lower level. For example, if you set `template: "simple"` for a **part**, but `template: "advanced"` for a **lesson**, that specific lesson will use the "advanced" template.
 
@@ -38,16 +38,16 @@ Defines which file should be opened in the [code editor](/guides/ui/#code-editor
 <PropertyTable inherited type="string" />
 
 ##### `previews`
-Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used. 
+Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used.
 
-You can optionally provide these as an array of tuples where the first element is the port number and the second is the name of the preview, or as an object.
+You can optionally provide these as an array of tuples where the first element is the port number and the second is the title of the preview, or as an object.
 <PropertyTable inherited type={'Preview[]'} />
 
 The `Preview` type has the following shape:
 
 ```ts
-type Preview = string 
-    | [port: number, title: string] 
+type Preview = string
+    | [port: number, title: string]
     | { port: number, title: string }
 
 ```
@@ -59,8 +59,8 @@ The main command to be executed. This command will run after the `prepareCommand
 The `Command` type has the following shape:
 
 ```ts
-type Command = string 
-    | [command: string, title: string] 
+type Command = string
+    | [command: string, title: string]
     | { command: string, title: string }
 
 ```
@@ -72,8 +72,8 @@ List of commands to execute sequentially. They are typically used to install dep
 The `Command` type has the following shape:
 
 ```ts
-type Command = string 
-    | [command: string, title: string] 
+type Command = string
+    | [command: string, title: string]
     | { command: string, title: string }
 
 ```
@@ -83,6 +83,10 @@ Configures one or more terminals. TutorialKit provides two types of terminals: r
 
 You can define which terminal panel will be active by default by specifying the `activePanel` value. The value is the given terminal's position in the `panels` array. If you omit the `activePanel` property, the first panel will be the active one.
 
+An interactive terminal will disable the output redirect syntax by default. For instance, you cannot create a file `world.txt` with the contents `hello` using the command `echo hello > world.txt`. The reason is that this could disrupt the lesson if a user overwrites certain files. To allow output redirection, you can change the behavior with the `allowRedirects` setting. You can define this setting either per panel or for all panels at once.
+
+Additionally, you may not want users to run arbitrary commands. For example, if you are creating a lesson about `vitest`, you could specify that the only command the user can run is `vitest` by providing a list of `allowCommands`. Any other command executed by the user will be blocked. You can define the `allowCommands` setting either per panel or for all panels at once.
+
 By default, in every new lesson terminals start a new session. If you want to keep the terminal session between lessons, you can specify the `id` property for a given terminal panel and keep the same `id` across lessons.
 <PropertyTable inherited type="Terminal" />
 
@@ -91,12 +95,14 @@ The `Terminal` type has the following shape:
 ```ts
 type Terminal = {
     panels: TerminalPanel[],
-    activePanel?: number
+    activePanel?: number,
+    allowRedirects?: boolean,
+    allowCommands?: string[]
 }
 
 type TerminalPanel = TerminalType
-    | [type: TerminalType, name: string]
-    | [type: TerminalType, { name: string, id: string }]
+    | [type: TerminalType, title: string]
+    | { type: TerminalType, title?: string, id?: string, allowRedirects?: boolean, allowCommands?: boolean }
 
 type TerminalType = 'terminal' | 'output'
 
@@ -106,10 +112,16 @@ Example value:
 
 ```yaml
 terminal:
+  activePanel: 1
   panels:
     - ['output', 'Dev Server']
-    - ['terminal', { name: 'Command Line', id: 'cmds' }]
-  activePanel: 1
+    - type: terminal
+      id: 'cmds'
+      title: 'Command Line'
+      allowRedirects: true,
+      allowCommands:
+        - ls
+        - echo
 
 ```
 
