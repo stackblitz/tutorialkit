@@ -9,6 +9,7 @@ import type {
 } from '@tutorialkit/types';
 import { folderPathToFilesRef } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
+import { logger } from './logger';
 import glob from 'fast-glob';
 import path from 'node:path';
 
@@ -22,14 +23,13 @@ export async function getTutorial(): Promise<Tutorial> {
   };
 
   let tutorialMetaData: TutorialSchema | undefined;
-
-  const lessons: Lesson[] = [];
+  let lessons: Lesson[] = [];
 
   for (const entry of collection) {
     const { id, data } = entry;
     const { type } = data;
 
-    const [partId, chapterId, lessonId] = parseId(id);
+    const [partId, chapterId, lessonId] = id.split('/');
 
     if (type === 'tutorial') {
       tutorialMetaData = data;
@@ -41,6 +41,7 @@ export async function getTutorial(): Promise<Tutorial> {
     } else if (type === 'part') {
       _tutorial.parts[partId] = {
         id: partId,
+        order: -1,
         data,
         slug: getSlug(entry),
         chapters: {},
@@ -52,6 +53,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       _tutorial.parts[partId].chapters[chapterId] = {
         id: chapterId,
+        order: -1,
         data,
         slug: getSlug(entry),
         lessons: {},
@@ -77,6 +79,7 @@ export async function getTutorial(): Promise<Tutorial> {
       const lesson: Lesson = {
         data,
         id: lessonId,
+        order: -1,
         part: {
           id: partId,
           title: _tutorial.parts[partId].data.title,
@@ -97,20 +100,133 @@ export async function getTutorial(): Promise<Tutorial> {
     }
   }
 
+  if (!tutorialMetaData) {
+    throw new Error(`Could not find tutorial 'meta.md' file`);
+  }
+
+  // let's now compute the order for everything
+  const partsOrder = getOrder(tutorialMetaData.parts, _tutorial.parts);
+
+  for (let p = 0; p < partsOrder.length; ++p) {
+    const partId = partsOrder[p];
+    const part = _tutorial.parts[partId];
+
+    if (!part) {
+      logger.warn(`Could not find '${partId}', it won't be part of the tutorial.`);
+      continue;
+    }
+
+    if (!_tutorial.firstPartId) {
+      _tutorial.firstPartId = partId;
+    }
+
+    part.order = p;
+
+    const chapterOrder = getOrder(part.data.chapters, part.chapters);
+
+    for (let c = 0; c < chapterOrder.length; ++c) {
+      const chapterId = chapterOrder[c];
+      const chapter = part.chapters[chapterId];
+
+      if (!chapter) {
+        logger.warn(`Could not find '${chapterId}', it won't be part of the part '${partId}'.`);
+        continue;
+      }
+
+      if (!part.firstChapterId) {
+        part.firstChapterId = chapterId;
+      }
+
+      chapter.order = c;
+
+      const lessonOrder = getOrder(chapter.data.lessons, chapter.lessons);
+
+      for (let l = 0; l < lessonOrder.length; ++l) {
+        const lessonId = lessonOrder[l];
+        const lesson = chapter.lessons[lessonId];
+
+        if (!lesson) {
+          logger.warn(`Could not find '${lessonId}', it won't be part of the chapter '${chapterId}'.`);
+          continue;
+        }
+
+        if (!chapter.firstLessonId) {
+          chapter.firstLessonId = lessonId;
+        }
+
+        lesson.order = l;
+      }
+    }
+  }
+
+  // removed orphaned lessons
+  lessons = lessons.filter(
+    (lesson) =>
+      lesson.order !== -1 &&
+      _tutorial.parts[lesson.part.id].order !== -1 &&
+      _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].order !== -1,
+  );
+
+  // find orphans discard them and print warnings
+  for (const partId in _tutorial.parts) {
+    const part = _tutorial.parts[partId];
+
+    if (part.order === -1) {
+      delete _tutorial.parts[partId];
+      logger.warn(
+        `An order was specified for the parts of the tutorial but '${partId}' is not included so it won't be visible.`,
+      );
+      continue;
+    }
+
+    for (const chapterId in part.chapters) {
+      const chapter = part.chapters[chapterId];
+
+      if (chapter.order === -1) {
+        delete part.chapters[chapterId];
+        logger.warn(
+          `An order was specified for part '${partId}' but chapter '${chapterId}' is not included, so it won't be visible.`,
+        );
+        continue;
+      }
+
+      for (const lessonId in chapter.lessons) {
+        const lesson = chapter.lessons[lessonId];
+
+        if (lesson.order === -1) {
+          delete chapter.lessons[lessonId];
+          logger.warn(
+            `An order was specified for chapter '${chapterId}' but lesson '${lessonId}' is not included, so it won't be visible.`,
+          );
+          continue;
+        }
+      }
+    }
+  }
+
+  // sort lessons
   lessons.sort((a, b) => {
-    const partsA = [a.part.id, a.chapter.id, a.id] as const;
-    const partsB = [b.part.id, b.chapter.id, b.id] as const;
+    const partsA = [
+      _tutorial.parts[a.part.id].order,
+      _tutorial.parts[a.part.id].chapters[a.chapter.id].order,
+      a.order,
+    ] as const;
+    const partsB = [
+      _tutorial.parts[b.part.id].order,
+      _tutorial.parts[b.part.id].chapters[b.chapter.id].order,
+      b.order,
+    ] as const;
 
     for (let i = 0; i < partsA.length; i++) {
       if (partsA[i] !== partsB[i]) {
-        return Number(partsA[i]) - Number(partsB[i]);
+        return partsA[i] - partsB[i];
       }
     }
 
     return 0;
   });
 
-  // now we link all tutorials together
+  // now we link all lessons together
   for (const [i, lesson] of lessons.entries()) {
     const prevLesson = i > 0 ? lessons.at(i - 1) : undefined;
     const nextLesson = lessons.at(i + 1);
@@ -167,6 +283,14 @@ function pick<T extends Record<any, any>>(objects: (T | undefined)[], properties
   return newObject;
 }
 
+function getOrder(order: string[] | undefined, fallbackSourceForOrder: Record<string, any>): string[] {
+  if (order) {
+    return order;
+  }
+
+  return Object.keys(fallbackSourceForOrder).sort((a, b) => Number(a) - Number(b));
+}
+
 function sortCollection(collection: CollectionEntryTutorial[]) {
   return collection.sort((a, b) => {
     const splitA = a.id.split('/');
@@ -180,30 +304,13 @@ function sortCollection(collection: CollectionEntryTutorial[]) {
     }
 
     for (let i = 0; i < splitA.length; i++) {
-      const numA = parseInt(splitA[i], 10);
-      const numB = parseInt(splitB[i], 10);
-
-      if (!isNaN(numA) && !isNaN(numB) && numA !== numB) {
-        return numA - numB;
-      } else {
-        if (splitA[i] !== splitB[i]) {
-          return splitA[i].localeCompare(splitB[i]);
-        }
+      if (splitA[i] !== splitB[i]) {
+        return splitA[i].localeCompare(splitB[i]);
       }
     }
 
     return 0;
   });
-}
-
-function parseId(id: string) {
-  const [part, chapter, lesson] = id.split('/');
-
-  const [partId] = part.split('-');
-  const [chapterId] = chapter?.split('-') ?? [];
-  const [lessonId] = lesson?.split('-') ?? [];
-
-  return [partId, chapterId, lessonId];
 }
 
 function getSlug(entry: CollectionEntryTutorial) {
