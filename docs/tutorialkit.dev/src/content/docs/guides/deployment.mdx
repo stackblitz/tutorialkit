@@ -1,0 +1,110 @@
+---
+title: "Deployment"
+description: "Deploying TutorialKit to production"
+---
+import PackageManagerTabs from '@components/Tabs/PackageManagerTabs.astro'
+
+Your TutorialKit project is a static site built using two key technologies: [Astro](https://astro.build/) and [WebContainers](https://webcontainers.io/). These two elements shape the details how you deploy TutorialKit to production. 
+
+In the following sections you will learn more about the build process and the deployment configuration.
+
+## Build command
+
+To prepare the production build of your TutorialKit project, run the following command:
+
+<PackageManagerTabs>
+  <Fragment slot="npm">
+  ```shell
+  npm run build
+  ```
+  </Fragment>
+  <Fragment slot="pnpm">
+  ```shell
+  pnpm build
+  ```
+  </Fragment>
+  <Fragment slot="yarn">
+  ```shell
+  yarn build
+  ```
+  </Fragment>
+</PackageManagerTabs>
+
+This will generate a `dist` directory containing the static files that make up your TutorialKit project. 
+
+You can learn more about the build process in the [Astro documentation](https://docs.astro.build/en/reference/cli-reference/#astro-build).
+
+## Headers configuration
+
+The preview and terminal features in TutorialKit rely on WebContainers technology. To ensure that this technology works correctly, you need to configure the headers of your web server to ensure the site is cross-origin isolated (you can read more about this at [webcontainers.io](https://webcontainers.io/guides/configuring-headers)).
+
+To do that it is required that the tutorial page is server with the following headers:
+
+```yaml
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Opener-Policy: same-origin
+```
+
+You can refer to your hosting provider's documentation on how to set headers, but in the following sections, you can find several examples of how to configure them for some of the popular services: [Cloudflare](#cloudflare), [Netlify](#netlify), and [Vercel](#vercel).
+
+### Cloudflare
+
+You can configure headers in your `_headers` file:
+
+```yaml [_headers]
+/*
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Opener-Policy: same-origin
+```
+
+Note that this file must be placed in the `dist` directory. Assuming you keep it in the root of your project, you can make Cloudflare automatically copy it to the `dist` directory after the build by adding the following postbuild script to your `package.json`:
+
+```json [package.json]
+{
+  "scripts": {
+    "postbuild": "cp _headers ./dist/"
+  }
+}
+```
+
+Read more about [headers on Cloudflare](https://developers.cloudflare.com/pages/platform/headers).
+
+### Netlify
+
+You can configure headers in your `netlify.toml` file:
+
+```yaml [netlify.toml]
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+```
+
+Read more about [headers on Netlify](https://docs.netlify.com/routing/headers/).
+
+### Vercel
+
+You can configure headers your `vercel.json` file:
+
+```json [vercel.json]
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Read more about [headers on Vercel](https://vercel.com/docs/concepts/projects/project-configuration#headers).

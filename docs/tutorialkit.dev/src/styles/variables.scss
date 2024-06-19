@@ -1,0 +1,35 @@
+:root {
+  --layout-content-width: 1440px;
+  --layout-content-padding-large: 52px;
+  --layout-content-padding: 24px;
+  --layout-content-padding-small: 18px;
+
+  --transition-fast: 0.1s ease;
+  --transition-med: 0.16s ease;
+
+  --sl-sidebar-width: 19rem;
+
+  --sl-text-h1: 2.4rem;
+  --sl-text-h2: 2rem;
+  --sl-text-h3: 1.8rem;
+  --sl-text-h4: 1.6rem;
+}
+
+:root,
+[data-theme='dark'] {
+  --custom-color-text: rgba(255, 255, 255, 0.84);
+  --custom-color-text-strong: #fff;
+
+  --sl-color-bg-nav: var(--sl-color-bg) !important;
+  --sl-color-bg-nav: transparent;
+  --sl-color-bg-sidebar: var(--sl-color-bg);
+
+  --sl-color-text-accent: rgba(255, 255, 255, 0.78);
+}
+
+[data-theme='light'] {
+  --custom-color-text: rgba(0, 0, 0, 0.72);
+  --custom-color-text-strong: #000;
+
+  --sl-color-text-accent: rgba(0, 0, 0, 0.8) !important;
+}
