@@ -1,0 +1,123 @@
+---
+title: Configuration
+description: 'Configure and Customize TutorialKit to fit your needs.'
+---
+import PropertyTable from '@components/PropertyTable.astro'
+
+You can configure the appearance and behavior of a TutorialKit lesson by setting up properties in the [lesson's frontmatter block](/guides/creating-content/#a-lesson-content-file).
+
+## Note on inheritance
+
+Some options, like "title," will naturally be unique for each lesson. For others, like "template," the value might be the same across multiple lessons, chapters, or even an entire tutorial. That's why we've made it possible to set some properties on a **chapter**, **part**, or **tutorial** level. We call these values _inherited_. 
+
+For instance, if you set `template: "simple"` for a given **part**, all chapters and lessons in this **part** will use the "simple" template. 
+
+It's also possible to override inherited properties on a lower level. For example, if you set `template: "simple"` for a **part**, but `template: "advanced"` for a **lesson**, that specific lesson will use the "advanced" template.
+
+## Configuration location
+
+- In case of a **lesson**, set the configuration in the frontmatter of the `content.md` file.
+- For a **chapter**, **part** or the whole **tutorial**, set the configuration in the frontmatter of the `meta.md` file on the respective level.
+
+## Options reference
+
+##### `type`
+Defines the type of the metadata.
+<PropertyTable required values="'part', 'chapter' or 'lesson'" />
+
+##### `title`
+The title of the part, chapter, or lesson.
+<PropertyTable required type="string" />
+
+##### `slug`
+Lets you customize the URL segment which is `/:partSlug/:chapterSlug/:lessonSlug`
+<PropertyTable type="string" />
+
+##### `focus`
+Defines which file should be opened in the [code editor](/guides/ui/#code-editor) by default when lesson loads.
+<PropertyTable inherited type="string" />
+
+##### `previews`
+Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used. 
+
+You can optionally provide these as an array of tuples where the first element is the port number and the second is the name of the preview, or as an object.
+<PropertyTable inherited type={'Preview[]'} />
+
+The `Preview` type has the following shape:
+
+```ts
+type Preview = string 
+    | [port: number, title: string] 
+    | { port: number, title: string }
+
+```
+
+##### `mainCommand`
+The main command to be executed. This command will run after the `prepareCommands`.
+<PropertyTable inherited type="Command" />
+
+The `Command` type has the following shape:
+
+```ts
+type Command = string 
+    | [command: string, title: string] 
+    | { command: string, title: string }
+
+```
+
+##### `prepareCommands`
+List of commands to execute sequentially. They are typically used to install dependencies or to run scripts.
+<PropertyTable inherited type="Command[]" />
+
+The `Command` type has the following shape:
+
+```ts
+type Command = string 
+    | [command: string, title: string] 
+    | { command: string, title: string }
+
+```
+
+##### `terminal`
+Configures one or more terminals. TutorialKit provides two types of terminals: read-only, called `output`, and interactive, called `terminal`. Note, that there can be only one `output` terminal.
+
+You can define which terminal panel will be active by default by specifying the `activePanel` value. The value is the given terminal's position in the `panels` array. If you omit the `activePanel` property, the first panel will be the active one.
+
+By default, in every new lesson terminals start a new session. If you want to keep the terminal session between lessons, you can specify the `id` property for a given terminal panel and keep the same `id` across lessons.
+<PropertyTable inherited type="Terminal" />
+
+The `Terminal` type has the following shape:
+
+```ts
+type Terminal = {
+    panels: TerminalPanel[],
+    activePanel?: number
+}
+
+type TerminalPanel = TerminalType
+    | [type: TerminalType, name: string]
+    | [type: TerminalType, { name: string, id: string }]
+
+type TerminalType = 'terminal' | 'output'
+
+```
+
+Example value:
+
+```yaml
+terminal:
+  panels:
+    - ['output', 'Dev Server']
+    - ['terminal', { name: 'Command Line', id: 'cmds' }]
+  activePanel: 1
+
+```
+
+##### `autoReload`
+Navigating to a lesson that specifies `autoReload` will always reload the preview. This is typically only needed if your server does not support HMR.
+<PropertyTable inherited type="boolean" />
+
+##### `template`
+Specified which folder from the `src/templates/` directory should be used as the basis for the code. See the "[Code templates](/guides/creating-content/#code-templates)" guide for a detailed explainer.
+<PropertyTable inherited type="string" />
+

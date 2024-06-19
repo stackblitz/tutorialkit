@@ -1,0 +1,111 @@
+---
+title: Creating a Lesson
+description: 'Creating lessons in TutorialKit.'
+---
+import { FileTree } from '@astrojs/starlight/components';
+
+From an information architecture perspective, tutorial content is divided into **parts**, which are further divided into **chapters**, each consisting of **lessons**.
+
+For instance, a Vite tutorial might be structured like this:
+
+```plaintext
+- Part 1: Basics of Vite
+  - Chapter 1: Introduction
+    - Lesson 1: Welcome!
+    - Lesson 2: Why Vite?
+    - …
+  - Chapter 2: Your first Vite project
+- Part 2: Vite CLI
+  - …
+```
+
+This structure is reflected in the directory structure of your TutorialKit project. When you open the project in the code editor and navigate to the `src/content/tutorial` directory, you will see a several numbered folders. These represent the **parts** of your tutorial.
+
+<FileTree>
+- src
+  - content
+    - tutorial
+      - 1-basics
+        - 1-introduction/
+        - 2-your-first-vite-project/
+      - 2-vite-cli/
+      - meta.md
+  - config.ts
+  - templates/
+</FileTree>
+
+Navigate into one of these folders to see another folder that represents a **chapter**. Inside the chapter folder, you will find one or more **lesson** folders.
+
+## A lesson content file
+
+Navigate to the `src/content/tutorial/1-basics/1-introduction/1-welcome` folder and open the `content.md` in your editor. You will see a file structured like this:
+
+```markdown
+---
+type: lesson
+title: Welcome to TutorialKit
+# ...
+---
+
+# Kitchen Sink [Heading 1]
+Lorem ipsum dolor 
+<!--  ... -->
+```
+
+This is a Markdown file with a frontmatter block at the top (marked by a single `---` line at the beginning of the file and another `---` line to close the block). 
+
+The frontmatter block contains metadata about the lesson, such as the title, description, and other properties that will allow you to configure this specific lesson.
+
+Everything below the frontmatter block is the lesson content itself. You can write your lesson content in [Markdown format](https://www.markdownguide.org/basic-syntax/), using headings, lists, images, and other Markdown features. You can also use the [MDX](https://mdxjs.com/) format by changing the file extension from the default `.md` to `.mdx`.
+
+Try changing the content of the `content.md` file and see the changes reflected in the browser.
+
+## Adding a lesson
+
+To add a new lesson, create a new folder inside the chapter folder. Name it with a number that is not yet used in the chapter. For example, if the last lesson in the chapter is `1-welcome`, you can name the new lesson folder `2-why-vite`.
+
+The numbers you prefix the lesson folders with are used to order the lessons in the tutorial.
+
+You might notice that the name of the lesson folder is also used in the URL segment of the lesson in the tutorial app. For example, the URL of the lesson `1-welcome` will look something like `localhost:4321/1-basics/1-introduction/1-welcome`. You can change that by modifying the `slug` property in the lesson's frontmatter block:
+
+```markdown
+---
+title: Welcome!
+slug: hello-world
+---
+```
+
+This will change the URL of the lesson to `localhost:4321/1-basics/1-introduction/hello-world`.
+
+## A lesson code
+
+Beside the `content.md` file in a lesson's directory, you will find two folders: 
+- `_files` 
+- `_solution` 
+
+The `_files` folder contains any code files that are part of the lesson. For example, if the lesson revolves around React components, you might have a `Button.jsx` file there. The content of this file will be displayed in the tutorial app's code editor and will be run in its preview. You can place any number of files in this folder.
+
+:::note[How does the lesson code make an app?]
+To get a better understanding of how the code you create in each lesson results in the app displayed in the preview of each lesson make sure to also [read about code templates](#code-templates).
+:::
+
+The `_solution` folder contains the code for the lesson in its solved state. This is the code that the user will see when they click the "Solve" button in the tutorial app. The folder usually contains the same files as the `_files` folder, but with the code filled in. It may also include additional files.
+
+## Code templates
+
+For the code to run in the preview, it must be an actual, working application, including a dev server and any necessary configuration files. Usually, it's not practical to include this kind of boilerplate files in a lesson content (and copy it for every further lesson!). Instead, you can use the `template` feature of TutorialKit to provide a base project that will be used for all lessons.
+
+To display the code in the preview of a lesson, TutorialKit will use the template project and apply the content of the `_files` (or `_solution`) folder on top of it. 
+
+You can find the default template in the `src/templates/default` directory. This is a Vite project which is a great starting point for a vanilla JavaScript app. Note, that when you navigate to that folder and run `npm run dev` inside, it will be a fully working Vite project. 
+
+You can modify this template to fit your needs, or create a new one from scratch. You can also have multiple templates and switch between them for different parts of your tutorial. To do that, you need to specify the template name in the **lesson's**, **chapter's**, or **part's** front matter block:
+
+```markdown {3}
+---
+title: Advanced Topics
+template: my-advanced-template 
+---
+```
+
+This declaration will make TutorialKit use the `src/templates/my-advanced-template` directory as the base for the lesson.
