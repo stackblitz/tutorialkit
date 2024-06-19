@@ -1,0 +1,31 @@
+{
+  "name": "tutorialkit.dev",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.7.0",
+    "@astrojs/react": "^3.4.0",
+    "@astrojs/starlight": "^0.23.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "astro": "^4.8.6",
+    "classnames": "^2.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sass": "^1.77.3",
+    "sharp": "^0.32.5",
+    "starlight-links-validator": "^0.9.0",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@types/gtag.js": "^0.0.20"
+  }
+}
