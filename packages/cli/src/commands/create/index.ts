@@ -155,14 +155,17 @@ async function _createTutorial(flags: CreateOptions) {
   prompts.log.success(chalk.green('Tutorial successfully created!'));
 
   if (install || start) {
-    if (install && !start) {
-      printNextSteps(dest, selectedPackageManager, true);
+    let message = 'Please wait while we install the dependencies and start your project...';
 
-      prompts.outro('Please wait while we install the dependencies...');
-    } else {
-      // we can't have start without install, so this means we have both
-      prompts.outro('Please wait while we install the dependencies and start your project...');
+    if (install && !start) {
+      // change the message if we're only installing dependencies
+      message = 'Please wait while we install the dependencies...';
+
+      // print the next steps without the install step in case we only install dependencies
+      printNextSteps(dest, selectedPackageManager, true);
     }
+
+    prompts.outro(message);
 
     await startProject(resolvedDest, selectedPackageManager, flags, start);
   } else {
