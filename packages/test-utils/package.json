@@ -4,9 +4,6 @@
   "description": "Test utilities for TutorialKit",
   "type": "module",
   "private": true,
-  "bugs": "https://github.com/stackblitz/tutorialkit/issues",
-  "homepage": "https://github.com/stackblitz/tutorialkit",
-  "license": "MIT",
   "exports": {
     ".": "./src/index.ts"
   },
