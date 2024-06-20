@@ -232,6 +232,7 @@ exports[`create and eject a project 1`] = `
   "src/utils",
   "src/utils/constants.ts",
   "src/utils/content.ts",
+  "src/utils/logger.ts",
   "src/utils/nav.ts",
   "src/utils/routes.ts",
   "src/utils/workspace.ts",
