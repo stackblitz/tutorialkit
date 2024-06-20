@@ -12,21 +12,21 @@
   },
   "dependencies": {
     "@tutorialkit/components-react": "workspace:*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.75",
     "@astrojs/check": "^0.7.0",
-    "@astrojs/react": "^3.5.0",
-    "@iconify-json/ph": "^1.1.12",
+    "@astrojs/react": "^3.6.0",
+    "@iconify-json/ph": "^1.1.13",
     "@iconify-json/svg-spinners": "^1.1.2",
     "@tutorialkit/astro": "workspace:*",
     "@tutorialkit/types": "workspace:*",
-    "@types/node": "^20.12.7",
+    "@types/node": "^20.14.6",
+    "@types/react": "^18.3.3",
     "@unocss/reset": "^0.59.4",
     "@unocss/transformer-directives": "^0.59.4",
-    "astro": "4.10.2",
+    "astro": "4.10.3",
     "fast-glob": "^3.3.2",
     "prettier-plugin-astro": "^0.13.0",
     "typescript": "^5.4.5",

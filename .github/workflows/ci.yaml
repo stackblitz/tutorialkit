@@ -36,3 +36,22 @@ jobs:
         run: pnpm build
       - name: Test
         run: pnpm test
+
+  docs:
+    name: Docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build
+        run: pnpm build
+      - name: Build docs
+        run: |
+          pnpm run docs:build
+          pnpm run demo:build

@@ -1,0 +1,28 @@
+fieldset {
+  /* Add the styles here */
+
+  border-style: solid;
+  margin: 1em auto;
+  padding: 1em;
+  max-width: 500px;
+}
+
+legend {
+  /* and here */
+
+  color: #718096;
+  font-size: 90%;
+  padding: 0.2em 0.5em;
+}
+
+fieldset > div {
+  padding: 0.3em 0.5em;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+input {
+  border: solid 2px #e2e8f0;
+  padding: 4px;
+  font-size: 1em;
+}
