@@ -1,0 +1,6 @@
+# generated types
+.astro
+
+# environment variables
+.env
+.env.production
