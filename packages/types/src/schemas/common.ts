@@ -153,7 +153,7 @@ export const webcontainerSchema = commandsSchema.extend({
 
 export const baseSchema = webcontainerSchema.extend({
   title: z.string(),
-  slug: z.optional(z.string()),
+  slug: z.string().optional(),
 });
 
 export type BaseSchema = z.infer<typeof baseSchema>;
