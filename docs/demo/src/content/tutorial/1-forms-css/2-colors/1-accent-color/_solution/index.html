@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      body {
+        display: grid;
+        gap: 0 16px;
+        grid-template-columns: 1fr 1fr;
+        justify-items: end;
+        align-items: center;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      }
+
+      body > :not(label) {
+        justify-self: start;
+      }
+
+      label {
+        margin: 1.2rem 0 0.8rem;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+      }
+
+      label[for='color'] {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-weight: normal;
+        padding: 0;
+      }
+
+      input,
+      meter,
+      progress {
+        transform-origin: left;
+        transform: scale(1.5);
+      }
+    </style>
+  </head>
+  <body>
+    <label for="i2">&lt;input type="range" /&gt;</label>
+    <input type="range" id="i2" />
+
+    <label for="i3">&lt;input type="radio" /&gt;</label>
+    <input type="radio" id="i3" checked />
+
+    <label for="i4">&lt;input type="checkbox" /&gt;</label>
+    <input type="checkbox" id="i4" checked />
+
+    <label for="i5">&lt;progress&gt;&lt;/progress&gt;</label>
+    <progress value="50" id="i5"></progress>
+  </body>
+</html>

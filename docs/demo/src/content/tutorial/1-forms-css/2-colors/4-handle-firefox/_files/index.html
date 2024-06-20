@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      body {
+        display: grid;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        place-items: center;
+      }
+
+      label {
+        margin: 1.2rem 0 0.8rem;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+      }
+
+      label[for='color'] {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-weight: normal;
+        padding: 0;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <label>&lt;progress value="75" max="100"&gt;</label>
+      <progress value="75" max="100"></progress>
+    </div>
+  </body>
+</html>
