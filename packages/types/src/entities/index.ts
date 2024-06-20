@@ -17,20 +17,25 @@ export interface LessonLink {
 
 export interface Part {
   id: string;
+  order: number;
   slug: string;
   data: PartSchema;
+  firstChapterId?: string;
   chapters: Record<string, Chapter>;
 }
 
 export interface Chapter {
   id: string;
+  order: number;
   slug: string;
   data: ChapterSchema;
+  firstLessonId?: string;
   lessons: Record<string, Lesson>;
 }
 
 export interface Lesson<T = unknown> {
   id: string;
+  order: number;
   data: LessonSchema;
   part: { id: string; title: string };
   chapter: { id: string; title: string };
@@ -46,5 +51,6 @@ export interface Lesson<T = unknown> {
 
 export interface Tutorial {
   logoLink?: string;
+  firstPartId?: string;
   parts: Record<string, Part>;
 }

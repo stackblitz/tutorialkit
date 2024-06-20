@@ -3,10 +3,9 @@ import { getTutorial } from '../utils/content';
 
 const tutorial = await getTutorial();
 
-const parts = Object.values(tutorial.parts);
-const part = parts[0];
-const chapter = part.chapters[1];
-const lesson = chapter.lessons[1];
+const part = tutorial.parts[tutorial.firstPartId!];
+const chapter = part.chapters[part?.firstChapterId!];
+const lesson = chapter.lessons[chapter?.firstLessonId!];
 
 const redirect = `/${part.slug}/${chapter.slug}/${lesson.slug}`;
 ---
