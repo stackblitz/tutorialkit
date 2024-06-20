@@ -293,23 +293,10 @@ function getOrder(order: string[] | undefined, fallbackSourceForOrder: Record<st
 
 function sortCollection(collection: CollectionEntryTutorial[]) {
   return collection.sort((a, b) => {
-    const splitA = a.id.split('/');
-    const splitB = b.id.split('/');
+    const depthA = a.id.split('/').length;
+    const depthB = b.id.split('/').length;
 
-    const depthA = splitA.length;
-    const depthB = splitB.length;
-
-    if (depthA !== depthB) {
-      return depthA - depthB;
-    }
-
-    for (let i = 0; i < splitA.length; i++) {
-      if (splitA[i] !== splitB[i]) {
-        return splitA[i].localeCompare(splitB[i]);
-      }
-    }
-
-    return 0;
+    return depthA - depthB;
   });
 }
 
