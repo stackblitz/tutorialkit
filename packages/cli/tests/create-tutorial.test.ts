@@ -69,6 +69,66 @@ test('create and build a project', async (context) => {
   expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
+test('create and eject a project', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [cli, 'create', name, '--no-git', '--no-start', '--defaults'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: baseDir,
+    },
+  });
+
+  await execa('node', [cli, 'eject', name, '--force'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: baseDir,
+    },
+  });
+
+  // remove `node_modules` before taking the snapshot
+  await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true });
+
+  const projectFiles = await fs.readdir(dest, { recursive: true });
+
+  expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
+});
+
+test('create, eject and build a project', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [cli, 'create', name, '--no-git', '--no-start', '--defaults'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: baseDir,
+    },
+  });
+
+  await execa('node', [cli, 'eject', name, '--force'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: baseDir,
+    },
+  });
+
+  await execa('npm', ['install'], {
+    cwd: dest,
+  });
+
+  await execa('npm', ['run', 'build'], {
+    cwd: dest,
+  });
+
+  // remove `_astro` before taking the snapshot
+  await fs.rm(path.join(dest, 'dist/_astro'), { force: true, recursive: true });
+
+  const distFiles = await fs.readdir(path.join(dest, 'dist'), { recursive: true });
+
+  expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
+});
+
 function normaliseSlash(filePath: string) {
   return filePath.replace(/\\/g, '/');
 }

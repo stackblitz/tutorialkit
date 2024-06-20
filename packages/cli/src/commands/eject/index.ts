@@ -4,8 +4,17 @@ import path from 'node:path';
 import type { Arguments } from 'yargs-parser';
 import { pkg } from '../../pkg.js';
 import { DEFAULT_VALUES, type EjectOptions } from './options.js';
-import { errorLabel, printHelp } from '../../utils/messages.js';
+import { errorLabel, printHelp, primaryLabel } from '../../utils/messages.js';
 import { parseAstroConfig, replaceArgs, generateAstroConfig } from '../../utils/astro-config.js';
+import { updateWorkspaceVersions } from '../../utils/workspace-version.js';
+
+interface PackageJson {
+  dependencies: Record<string, string>;
+  devDependencies: Record<string, string>;
+}
+
+const TUTORIALKIT_VERSION = pkg.version;
+const REQUIRED_DEPENDENCIES = ['@tutorialkit/runtime', '@webcontainer/api', 'nanostores', '@nanostores/react'];
 
 export function ejectRoutes(flags: Arguments) {
   if (flags._[1] === 'help' || flags.help || flags.h) {
@@ -53,10 +62,13 @@ async function _eject(flags: EjectOptions) {
    *
    * If there are any and `force` was not specified we abort.
    */
-  const { astroConfigPath, srcPath, srcDestPath } = validateDestination(folderPath, flags.force);
+  const { astroConfigPath, srcPath, pkgJsonPath, astroIntegrationPath, srcDestPath } = validateDestination(
+    folderPath,
+    flags.force,
+  );
 
   /**
-   * We now proceed with the astro configuration.
+   * We proceed with the astro configuration.
    *
    * There we must disable the default routes so that the
    * new routes that we're copying will be automatically picked up.
@@ -68,21 +80,48 @@ async function _eject(flags: EjectOptions) {
   fs.writeFileSync(astroConfigPath, generateAstroConfig(astroConfig));
 
   /**
-   * We now finalize by copying all the assets from the `default` folder
-   * into the `src` folder.
+   * We copy all assets from the `default` folder into the `src` folder.
    */
   fs.cpSync(srcPath, srcDestPath, { recursive: true });
+
+  /**
+   * Last, we ensure that the package.json contains the extra dependencies.
+   * If any are missing we suggest to install the new dependencies.
+   */
+  const pkgJson: PackageJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
+  const astroIntegrationPkgJson: PackageJson = JSON.parse(
+    fs.readFileSync(path.join(astroIntegrationPath, 'package.json'), 'utf-8'),
+  );
+
+  let hasChanged = false;
+
+  for (const dep of REQUIRED_DEPENDENCIES) {
+    if (!(dep in pkgJson.dependencies) && !(dep in pkgJson.devDependencies)) {
+      pkgJson.dependencies[dep] = astroIntegrationPkgJson.dependencies[dep];
+
+      hasChanged = true;
+    }
+  }
+
+  updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION);
+
+  if (hasChanged) {
+    fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2), { encoding: 'utf-8' });
+
+    console.log(primaryLabel('INFO'), 'New dependencies added, install the new dependencies before proceeding');
+  }
 }
 
 function validateDestination(folder: string, force: boolean) {
   assertExists(folder);
 
+  const pkgJsonPath = assertExists(path.join(folder, 'package.json'));
   const astroConfigPath = assertExists(path.join(folder, 'astro.config.ts'));
   const srcDestPath = assertExists(path.join(folder, 'src'));
 
-  const localAstroIntegration = assertExists(path.resolve(folder, 'node_modules', '@tutorialkit', 'astro'));
+  const astroIntegrationPath = assertExists(path.resolve(folder, 'node_modules', '@tutorialkit', 'astro'));
 
-  const srcPath = path.join(localAstroIntegration, 'dist', 'default');
+  const srcPath = path.join(astroIntegrationPath, 'dist', 'default');
 
   // check that there are no collision
   if (!force) {
@@ -99,6 +138,8 @@ function validateDestination(folder: string, force: boolean) {
 
   return {
     astroConfigPath,
+    astroIntegrationPath,
+    pkgJsonPath,
     srcPath,
     srcDestPath,
   };
