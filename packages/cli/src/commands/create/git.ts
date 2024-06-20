@@ -6,12 +6,12 @@ import { pkg } from '../../pkg.js';
 import { warnLabel } from '../../utils/messages.js';
 import { runShellCommand } from '../../utils/shell.js';
 import { assertNotCanceled, runTask } from '../../utils/tasks.js';
-import { DEFAULT_VALUES, type CreateOptions } from './options.js';
+import { DEFAULT_VALUES, readFlag, type CreateOptions } from './options.js';
 
 export async function initGitRepo(cwd: string, flags: CreateOptions) {
-  let shouldInitGitRepo = flags.git ?? DEFAULT_VALUES.git;
+  let shouldInitGitRepo = readFlag(flags, 'git');
 
-  if (!flags.defaults && flags.git === undefined) {
+  if (shouldInitGitRepo === undefined) {
     const answer = await prompts.confirm({
       message: 'Initialize a new git repository?',
       initialValue: DEFAULT_VALUES.git,

@@ -60,25 +60,40 @@ export const terminalSchema = z.union([
 
       /**
        * Or an array of `output` and/or `terminal` literals and/or tuples where the first value is either `output` or
-       * `terminal`, and the second being the name.
+       * `terminal`, and the second being the title and/or panel config objects.
        */
       z
         .array(
           z.union([
+            // the type of the panel
             panelType,
-            z.tuple([
-              panelType,
-              z.union([
-                // either the name of the panel
-                z.string(),
 
-                // or an object with a name and/or id
-                z.strictObject({
-                  name: z.string().optional(),
-                  id: z.string().optional(),
-                }),
-              ]),
+            // or a tuple with the type and the title of the panel
+            z.tuple([
+              // the type of the panel
+              panelType,
+
+              // the title of the panel which is shown in the tab
+              z.string(),
             ]),
+
+            // or an object defining the panel
+            z.strictObject({
+              // the type of the panel
+              type: panelType,
+
+              // an id linking the terminal of multiple lessons together
+              id: z.string().optional(),
+
+              // the title of the panel which is shown in the tab
+              title: z.string().optional(),
+
+              // `true` if you want to enable output redirects in the terminal, disabled by default
+              allowRedirects: z.boolean().optional(),
+
+              // list of command that are allowed in the terminal, if not provided, all commands are allowed
+              allowCommands: z.array(z.string()).optional(),
+            }),
           ]),
         )
         .refine(
@@ -86,7 +101,11 @@ export const terminalSchema = z.union([
             let output = 0;
 
             for (const value of arg) {
-              if (value === 'output' || (Array.isArray(value) && value[0] === 'output')) {
+              if (
+                value === 'output' ||
+                (Array.isArray(value) && value[0] === 'output') ||
+                (typeof value === 'object' && (value as any).type === 'output')
+              ) {
                 output++;
               }
 
@@ -103,6 +122,12 @@ export const terminalSchema = z.union([
         ),
     ]),
     activePanel: z.number().gte(0).optional(),
+
+    // `true` if you want to enable output redirects in the terminal, disabled by default
+    allowRedirects: z.boolean().optional(),
+
+    // list of command that are allowed in the terminal, if not provided, all commands are allowed
+    allowCommands: z.array(z.string()).optional(),
   }),
 ]);
 
