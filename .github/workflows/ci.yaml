@@ -52,4 +52,6 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Build docs
-        run: pnpm run docs:build
+        run: |
+          pnpm run docs:build
+          pnpm run demo:build

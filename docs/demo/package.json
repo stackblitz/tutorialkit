@@ -12,20 +12,20 @@
     "start": "astro dev"
   },
   "dependencies": {
-    "@tutorialkit/components-react": "0.0.1-alpha.22",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@tutorialkit/components-react": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.7.0",
-    "@astrojs/react": "^3.3.4",
-    "@iconify-json/ph": "^1.1.12",
+    "@astrojs/react": "^3.6.0",
+    "@iconify-json/ph": "^1.1.13",
     "@iconify-json/svg-spinners": "^1.1.2",
-    "@tutorialkit/astro": "0.0.1-alpha.22",
-    "@tutorialkit/types": "0.0.1-alpha.22",
+    "@tutorialkit/astro": "workspace:*",
+    "@tutorialkit/types": "workspace:*",
     "@unocss/reset": "^0.60.4",
     "@unocss/transformer-directives": "^0.60.4",
-    "astro": "^4.9.3",
+    "astro": "^4.10.3",
     "fast-glob": "^3.3.2",
     "prettier-plugin-astro": "^0.14.0",
     "typescript": "^5.4.5",
