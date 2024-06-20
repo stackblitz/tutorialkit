@@ -1,0 +1,56 @@
+fieldset {
+  background: #f7fafc;
+  border-color: #e2e8f0;
+  border-style: solid;
+  margin: 1em auto;
+  padding: 1em;
+  max-width: 500px;
+}
+
+legend {
+  color: #718096;
+  font-size: 90%;
+  padding: 0.2em 0.5em;
+  border: solid 2px #e2e8f0;
+  border-radius: 4px;
+  background: #fff;
+}
+
+fieldset > div {
+  padding: 0.3em 0.5em;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+progress {
+  border: none;
+  margin: 20px 130px 10px;
+}
+
+progress::-webkit-progress-bar {
+  background: #f6cd86;
+  border-radius: 5px;
+}
+
+progress::-webkit-progress-value {
+  background: tomato;
+  border-radius: 5px;
+}
+
+input {
+  border: solid 2px #e2e8f0;
+  padding: 4px;
+  font-size: 1em;
+  accent-color: #ff3399;
+}
+
+input[type='checkbox'] {
+  justify-self: end;
+  margin-right: 14px;
+  width: 20px;
+}
+
+label {
+  padding: 0.5em;
+  text-align: right;
+}
