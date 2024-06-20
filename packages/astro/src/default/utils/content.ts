@@ -288,7 +288,13 @@ function getOrder(order: string[] | undefined, fallbackSourceForOrder: Record<st
     return order;
   }
 
-  return Object.keys(fallbackSourceForOrder).sort((a, b) => Number(a) - Number(b));
+  // default to an order based on having each folder prefixed by their order: `1-foo`, `2-bar`, ...
+  return Object.keys(fallbackSourceForOrder).sort((a, b) => {
+    const numA = parseInt(a, 10);
+    const numB = parseInt(b, 10);
+
+    return numA - numB;
+  });
 }
 
 function sortCollection(collection: CollectionEntryTutorial[]) {
