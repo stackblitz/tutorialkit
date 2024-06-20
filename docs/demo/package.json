@@ -5,12 +5,11 @@
   "private": true,
   "scripts": {
     "astro": "astro",
-    "build_with_check": "astro check && astro build",
-    "build": "astro build",
+    "build_with_check": "astro check && npm run build",
+    "build": "astro build && cp _headers ./dist/",
     "dev": "astro dev",
     "preview": "astro preview",
-    "start": "astro dev",
-    "postbuild": "cp _headers ./dist/"
+    "start": "astro dev"
   },
   "dependencies": {
     "@tutorialkit/components-react": "0.0.1-alpha.22",
