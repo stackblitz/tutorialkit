@@ -103,7 +103,9 @@ async function _eject(flags: EjectOptions) {
     }
   }
 
-  updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION);
+  updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION, (dependency) =>
+    REQUIRED_DEPENDENCIES.includes(dependency),
+  );
 
   if (hasChanged) {
     fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2), { encoding: 'utf-8' });

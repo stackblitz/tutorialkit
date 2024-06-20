@@ -1,8 +1,12 @@
-export function updateWorkspaceVersions(dependencies: Record<string, string>, version: string) {
+export function updateWorkspaceVersions(
+  dependencies: Record<string, string>,
+  version: string,
+  filterDependency: (dependency: string) => boolean = allowAll,
+) {
   for (const dependency in dependencies) {
     const depVersion = dependencies[dependency];
 
-    if (depVersion === 'workspace:*') {
+    if (depVersion === 'workspace:*' && filterDependency(dependency)) {
       if (process.env.TK_DIRECTORY) {
         const name = dependency.split('/')[1];
 
@@ -12,4 +16,8 @@ export function updateWorkspaceVersions(dependencies: Record<string, string>, ve
       }
     }
   }
+}
+
+function allowAll() {
+  return true;
 }
