@@ -49,9 +49,9 @@ async function _eject(flags: EjectOptions) {
 
   /**
    * First we make sure that the destination has the correct files
-   * and that there won't be any files overriden in the process.
+   * and that there won't be any files overwritten in the process.
    *
-   * If they are any and `force` was not specified we abort.
+   * If there are any and `force` was not specified we abort.
    */
   const { astroConfigPath, srcPath, srcDestPath } = validateDestination(folderPath, flags.force);
 
@@ -84,14 +84,14 @@ function validateDestination(folder: string, force: boolean) {
 
   const srcPath = path.join(localAstroIntegration, 'dist', 'default');
 
-  // check that they are no collision
+  // check that there are no collision
   if (!force) {
     walk(srcPath, (relativePath) => {
       const destination = path.join(srcDestPath, relativePath);
 
       if (fs.existsSync(destination)) {
         throw new Error(
-          `Eject aborted because '${destination}' would be overriden by this command. Use --force to ignore this error.`,
+          `Eject aborted because '${destination}' would be overwritten by this command. Use --force to ignore this error.`,
         );
       }
     });
