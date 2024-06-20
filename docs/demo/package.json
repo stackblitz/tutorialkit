@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "astro": "astro",
-    "build_with_check": "astro check && npm run build",
+    "build_with_check": "astro check && pnpm run build",
     "build": "astro build && cp _headers ./dist/",
     "dev": "astro dev",
     "preview": "astro preview",
