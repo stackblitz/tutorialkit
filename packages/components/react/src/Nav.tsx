@@ -109,14 +109,12 @@ function renderParts(navList: NavList, currentLesson: Lesson) {
                     navStyles.AccordionTrigger,
                     'flex items-center gap-1 w-full hover:text-primary-700',
                     {
-                      'font-semibold': isPartActive,
+                      [`font-semibold ${navStyles.AccordionTriggerActive}`]: isPartActive,
                     },
                   )}
                 >
-                  <span
-                    className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80 text-tk-elements-breadcrumbs-dropdown-accordionToggleIconColor`}
-                  ></span>
-                  <span className={navStyles.AccordionTriggerText}>{`Part ${partIndex + 1}: ${part.title}`}</span>
+                  <span className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80`}></span>
+                  <span>{`Part ${partIndex + 1}: ${part.title}`}</span>
                 </Accordion.Trigger>
                 <Accordion.Content className={navStyles.AccordionContent}>
                   {renderChapters(currentLesson, part, isPartActive)}
@@ -150,16 +148,20 @@ function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: bool
                     navStyles.AccordionTrigger,
                     'flex items-center gap-1 w-full hover:text-primary-700',
                     {
-                      'font-semibold': isChapterActive,
+                      [`font-semibold ${navStyles.AccordionTriggerActive}`]: isChapterActive,
                     },
                   )}
                 >
                   <span
-                    className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80 text-gray-300`}
+                    className={classNames(
+                      navStyles.AccordionTriggerIcon,
+                      'i-ph-caret-right-bold scale-80 text-gray-300',
+                      {
+                        [navStyles.AccordionTriggerActive]: isChapterActive,
+                      },
+                    )}
                   ></span>
-                  <span className="text-tk-elements-breadcrumbs-dropdown-accordionTextColor hover:text-tk-elements-breadcrumbs-dropdown-accordionTextColorHover">
-                    {chapter.title}
-                  </span>
+                  <span>{chapter.title}</span>
                 </Accordion.Trigger>
                 <Accordion.Content className={navStyles.AccordionContent}>
                   {renderLessons(currentLesson, chapter, isPartActive, isChapterActive)}
@@ -183,10 +185,11 @@ function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: bo
           <li key={lessonIndex} className="mr-3">
             <a
               className={classNames(
-                'w-full inline-block border border-transparent pr-3 hover:text-tk-elements-breadcrumbs-dropdown-textColorHover px-3 py-1 rounded-1',
+                'w-full inline-block border border-transparent pr-3 text-tk-elements-breadcrumbs-dropdown-lessonTextColor hover:text-tk-elements-breadcrumbs-dropdown-lessonTextColorHover px-3 py-1 rounded-1',
                 {
                   'bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColor': !isActiveLesson,
-                  'font-semibold bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected': isActiveLesson,
+                  'font-semibold text-tk-elements-breadcrumbs-dropdown-lessonTextColorSelected bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected':
+                    isActiveLesson,
                 },
               )}
               href={lesson.href}
