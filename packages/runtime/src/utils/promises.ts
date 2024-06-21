@@ -19,7 +19,7 @@ export function withResolvers<T>(): PromiseWithResolvers<T> {
 }
 
 export function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, 10_000));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**

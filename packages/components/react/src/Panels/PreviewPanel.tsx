@@ -61,6 +61,13 @@ export const PreviewPanel = memo(
       [],
     );
 
+    // we update the iframes position at ~30fps
+    useEffect(() => {
+      const intervalId = setInterval(onResize, 20);
+
+      return () => clearInterval(intervalId);
+    }, []);
+
     adjustLength(iframeRefs.current, activePreviewsCount, newIframeRef);
     preparePreviewsContainer(activePreviewsCount);
 

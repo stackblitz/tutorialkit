@@ -8,11 +8,24 @@ interface Props {
   pos?: string;
   min?: string;
   max?: string;
-  priority?: 'min' | 'max';
-  classList?: string;
+  class?: string;
+  sidePanelClass?: string;
 }
 
-let { id, type = 'horizontal', min = '0%', pos = '50%', max = '100%', priority = 'min', classList } = Astro.props;
+export interface IResizablePanel {
+  mainPanel(): HTMLDivElement;
+  sidePanel(): HTMLDivElement | undefined;
+}
+
+let {
+  id,
+  type = 'horizontal',
+  min = '0%',
+  pos = '50%',
+  max = '100%',
+  class: className = '',
+  sidePanelClass = '',
+} = Astro.props;
 
 // check if there is a `slot` defined with name `b`
 const hasSidePanel = Astro.slots.has('b');
@@ -23,18 +36,16 @@ if (!hasSidePanel) {
   min = '100%';
   max = '100%';
 }
+
+const panelClass = `overflow-hidden ${type === 'horizontal' ? 'h-full' : ''}`;
 ---
 
-<resizable-panel
-  class={classList ?? ''}
-  data-id={id}
-  data-type={type}
-  data-pos={pos}
-  data-min={min}
-  data-priority={priority}
-  data-max={max}
->
-  <div class=`container max-w-full ${type}` style=`--pos: ${pos}`>
+<resizable-panel class={className} data-id={id} data-type={type} data-pos={pos} data-min={min} data-max={max}>
+  <div
+    data-id="container"
+    class=`sm:grid relative w-full h-full max-w-full ${type === 'horizontal' ? 'sm:grid-cols-[var(--pos)_1fr]' : 'sm:grid-rows-[var(--pos)_1fr]'}`
+    style=`--pos: ${pos}`
+  >
     <!-- It's important to keep the inline script here because it restores the position and blocks rendering to avoid flickering -->
     <script is:inline define:vars={{ id, hasSidePanel }}>
       if (!hasSidePanel) {
@@ -44,23 +55,26 @@ if (!hasSidePanel) {
 
       const sessionStorageKey = `tk_resizable_panel_${id}`;
 
-      const $container = document.querySelector(`resizable-panel[data-id="${id}"] > .container`);
+      const $container = document.querySelector(`resizable-panel[data-id="${id}"] > div`);
       const pos = sessionStorage.getItem(sessionStorageKey);
 
       if (pos) {
         $container.style.setProperty('--pos', pos);
       }
     </script>
-    <div class="panel">
+    <div class={panelClass}>
       <slot name="a" />
     </div>
     {
       hasSidePanel && (
         <>
-          <div class="panel">
+          <div class={`${panelClass} ${sidePanelClass}`}>
             <slot name="b" />
           </div>
-          <div class="divider" />
+          <div
+            data-id="divider"
+            class={`absolute z-90 transition-colors hover:bg-gray-500/13 ${type === 'horizontal' ? 'w-0 h-full left-[var(--pos)] cursor-ew-resize p-0 px-1.5 -translate-x-1/2' : 'w-full h-0 top-[var(--pos)] cursor-ns-resize p-0 py-2 -translate-y-1/2'}`}
+          />
         </>
       )
     }
@@ -68,12 +82,11 @@ if (!hasSidePanel) {
 </resizable-panel>
 
 <script>
-  import type { Priority, Type } from './ResizablePanel.astro';
+  import type { Type, IResizablePanel } from './ResizablePanel.astro';
 
-  class ResizablePanel extends HTMLElement {
+  class ResizablePanel extends HTMLElement implements IResizablePanel {
     readonly #id = this.dataset.id as string;
     readonly #type = this.dataset.type as Type;
-    readonly #priority = this.dataset.min as Priority;
     readonly #min = this.dataset.min as string;
     readonly #max = this.dataset.max as string;
 
@@ -88,8 +101,8 @@ if (!hasSidePanel) {
     constructor() {
       super();
 
-      this.#container = this.querySelector(':scope > .container') as HTMLElement;
-      this.#divider = this.#container.querySelector(':scope > .divider') as HTMLElement | undefined;
+      this.#container = this.querySelector(':scope > [data-id="container"]') as HTMLElement;
+      this.#divider = this.#container.querySelector(':scope > [data-id="divider"]') as HTMLElement | undefined;
 
       this.#width = this.#container.clientWidth;
       this.#height = this.#container.clientHeight;
@@ -109,6 +122,14 @@ if (!hasSidePanel) {
 
         this.#setPosition(this.#pos);
       }
+    }
+
+    mainPanel(): HTMLDivElement {
+      return this.#container.children[1] as HTMLDivElement;
+    }
+
+    sidePanel(): HTMLDivElement | undefined {
+      return this.#container.children[2] as HTMLDivElement | undefined;
     }
 
     connectedCallback() {
@@ -179,7 +200,6 @@ if (!hasSidePanel) {
     }
 
     #setPosition(pos: string) {
-      const priority = this.#priority;
       const size = this.#type === 'horizontal' ? this.#width : this.#height;
 
       let minPx = parseFloat(this.#min);
@@ -198,7 +218,7 @@ if (!hasSidePanel) {
         maxPx += size;
       }
 
-      posPx = priority === 'min' ? Math.max(minPx, Math.min(maxPx, posPx)) : Math.min(maxPx, Math.max(minPx, posPx));
+      posPx = Math.max(minPx, Math.min(maxPx, posPx));
 
       this.#pos = `${(100 * posPx) / size}%`;
 
@@ -208,89 +228,3 @@ if (!hasSidePanel) {
 
   customElements.define('resizable-panel', ResizablePanel);
 </script>
-
-<style>
-  .container {
-    --divider-thickness: var(--thickness, 10px);
-    --divider-after-size: 10px;
-
-    display: grid;
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-
-  .container .panel {
-    overflow: hidden;
-  }
-
-  .container > .divider:hover {
-    background-color: #8882;
-  }
-
-  .container.horizontal > .panel {
-    height: 100%;
-  }
-
-  .container.vertical {
-    grid-template-rows: var(--pos) 1fr;
-  }
-
-  .container.horizontal {
-    grid-template-columns: var(--pos) 1fr;
-  }
-
-  .divider {
-    position: absolute;
-    z-index: 999;
-  }
-
-  .divider::after {
-    content: '';
-    position: absolute;
-    background-color: transparent;
-    transition: background-color 0.2s ease;
-  }
-
-  .horizontal > .divider {
-    width: 0;
-    height: 100%;
-    left: var(--pos);
-    cursor: ew-resize;
-    padding: 0 calc(0.5 * var(--divider-thickness));
-    transform: translate(calc(-0.5 * var(--divider-thickness)), 0);
-  }
-
-  .vertical > .divider {
-    width: 100%;
-    height: 0;
-    top: var(--pos);
-    cursor: ns-resize;
-    padding: calc(0.5 * var(--divider-thickness)) 0;
-    transform: translate(0, calc(-0.5 * var(--divider-thickness)));
-  }
-
-  .horizontal > .divider::after {
-    left: 50%;
-    top: 0;
-    width: 0px;
-    height: 100%;
-  }
-
-  .vertical > .divider::after {
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 1px;
-  }
-
-  .horizontal > .divider:hover:after {
-    left: calc(50% - var(--divider-after-size) / 2);
-    width: var(--divider-after-size);
-  }
-
-  .vertical > .divider:hover:after {
-    top: calc(50% - var(--divider-after-size) / 2);
-    height: var(--divider-after-size);
-  }
-</style>

@@ -1,9 +1,9 @@
 import { useAuth } from './setup.js';
 import { auth, WebContainer } from '@webcontainer/api';
-import { TutorialStore } from '@tutorialkit/runtime';
+import { TutorialStore, safeBoot, webContainerBootStatus } from '@tutorialkit/runtime';
 
 interface WebContainerContext {
-  useAuth: boolean;
+  readonly useAuth: boolean;
   loggedIn: () => Promise<void>;
   loaded: boolean;
 }
@@ -11,9 +11,7 @@ interface WebContainerContext {
 export let webcontainer: Promise<WebContainer> = new Promise(() => {});
 
 if (!import.meta.env.SSR) {
-  webcontainer = Promise.resolve(useAuth ? auth.loggedIn() : null).then(() =>
-    WebContainer.boot({ workdirName: 'tutorial' }),
-  );
+  webcontainer = Promise.resolve(useAuth ? auth.loggedIn() : null).then(() => safeBoot({ workdirName: 'tutorial' }));
 
   webcontainer.then(() => {
     webcontainerContext.loaded = true;
@@ -30,6 +28,10 @@ export async function login() {
 
 export function logout() {
   auth.logout({ ignoreRevokeError: true });
+}
+
+export function forceBoot() {
+  webContainerBootStatus().unblock();
 }
 
 export const webcontainerContext: WebContainerContext = {

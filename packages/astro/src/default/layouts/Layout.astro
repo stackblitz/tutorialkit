@@ -9,7 +9,7 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" transition:animate="none" class="h-full">
+<html lang="en" transition:animate="none" class="h-full overflow-hidden">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="TutorialKit" />
@@ -49,6 +49,9 @@ const { title } = Astro.props;
 
           if (newMain && oldMain) {
             builtInSwap.swapBodyElement(newMain, oldMain);
+
+            // delete extraneous route announcer
+            document.querySelector('.astro-route-announcer')?.remove();
           } else {
             // fallback to built-in body swap semantics
             builtInSwap.swapBodyElement(newDocument.body, document.body);
@@ -74,7 +77,7 @@ const { title } = Astro.props;
       }
     </script>
   </head>
-  <body class="h-full text-black">
+  <body class="h-full text-black relative overflow-hidden">
     <slot />
   </body>
 </html>
