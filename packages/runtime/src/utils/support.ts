@@ -18,7 +18,7 @@ export function isWebContainerSupported() {
       return majorVersion > 16 || (majorVersion === 16 && minorVersion >= 4);
     }
 
-    // Allow overriding the support check with localStorage.webcontainer_any_ua = 1
+    // allow overriding the support check with localStorage.webcontainer_any_ua = 1
     return Boolean(localStorage.getItem('webcontainer_any_ua'));
   } catch {
     return false;

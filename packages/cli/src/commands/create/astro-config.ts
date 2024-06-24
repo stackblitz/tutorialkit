@@ -21,14 +21,14 @@ export async function parseAstroConfig(astroConfigPath: string): Promise<t.File>
  * This function modifies the arguments provided to the tutorialkit integration in the astro
  * configuration.
  *
- * For instance if `tutorialkit` is currently invoked as:
+ * For example:
  *
  * ```ts
  * tutorialkit({ isolation: 'require-corp' })
  * ```
  *
- * and this function is called with `{ enterprise: {} }` as the new tutorialkit object, then
- * the modified config will contain:
+ * If `tutorialkit` is currently invoked as, and this function is called with `{ enterprise: {} }`
+ * as the new tutorialkit object, then the modified config will contain:
  *
  * ```ts
  * tutorialkit({ isolation: 'require-corp', enterprise: {} })
@@ -80,7 +80,7 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
         throw new Error('TutorialKit is not part of the exported config');
       }
 
-      let integrationsProp = configObject.properties.find((prop) => {
+      const integrationsProp = configObject.properties.find((prop) => {
         if (prop.type !== 'ObjectProperty') {
           return false;
         }
@@ -171,6 +171,8 @@ function updateObject(properties: any, object: t.ObjectExpression | undefined): 
       }
     }
   }
+
+  return object;
 }
 
 /**

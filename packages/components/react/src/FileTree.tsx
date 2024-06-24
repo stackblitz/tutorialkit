@@ -76,7 +76,7 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
     <div className={classNames(className, 'bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
-          case 'file':
+          case 'file': {
             return (
               <File
                 key={fileOrFolder.id}
@@ -85,7 +85,8 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
                 onClick={() => onFileSelect?.(fileOrFolder.fullPath)}
               />
             );
-          case 'folder':
+          }
+          case 'folder': {
             return (
               <Folder
                 key={fileOrFolder.id}
@@ -94,6 +95,7 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
                 onClick={() => toggleCollapseState(fileOrFolder.id)}
               />
             );
+          }
         }
       })}
     </div>

@@ -4,21 +4,25 @@ const net = require('net');
 
 const fileWatch =
   process.platform !== 'linux'
-    ? (x, cb) => fs.watch(x, { recursive: true }, cb)
-    : (x, cb) => {
-        if (fs.statSync(x).isDirectory()) {
-          fs.watch(x, cb);
-          fs.readdirSync(x).forEach((xx) => fileWatch(`${x}/${xx}`, cb));
+    ? (path, cb) => fs.watch(path, { recursive: true }, cb)
+    : (path, cb) => {
+        if (fs.statSync(path).isDirectory()) {
+          fs.watch(path, cb);
+          fs.readdirSync(path).forEach((xx) => fileWatch(`${path}/${xx}`, cb));
         }
       };
 
 module.exports.fileWatch = fileWatch;
 
 const usePort = (port = 0) =>
-  new Promise((ok, x) => {
-    const s = net.createServer();
-    s.on('error', x);
-    s.listen(port, () => (a = s.address()) && s.close(() => ok(a.port)));
+  new Promise((resolve, reject) => {
+    const server = net.createServer();
+
+    server.on('error', reject);
+
+    server.listen(port, () => {
+      return (address = server.address()) && server.close(() => resolve(address.port));
+    });
   });
 
 module.exports.usePort = usePort;

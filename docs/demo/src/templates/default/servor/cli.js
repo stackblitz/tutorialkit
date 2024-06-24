@@ -23,44 +23,48 @@ const open = process.platform == 'darwin' ? 'open' : process.platform == 'win32'
   if (args[0] && args[0].startsWith('gh:')) {
     const repo = args[0].replace('gh:', '');
     const dest = repo.split('/')[1];
+
     if (!fs.existsSync(dest)) {
       try {
         require('child_process').execSync(`git clone https://github.com/${repo}`, { stdio: 'ignore' });
-      } catch (e) {
+      } catch (error) {
         console.log(`\n  ⚠️  Could not clone from https://github.com/${repo}\n`);
         process.exit();
       }
     }
+
     args[0] = dest;
   }
 
   if (~process.argv.indexOf('--editor')) {
     try {
       require('child_process').execSync(`code ${args[0] || '.'}`);
-    } catch (e) {
+    } catch (error) {
       console.log(`\n  ⚠️  Could not open code editor for ${args[0] || '.'}`);
     }
   }
 
-  // Generate ssl certificates
+  // generate ssl certificates
 
   if (~process.argv.indexOf('--secure')) {
     admin && certify();
     admin && process.platform === 'darwin' && process.setuid(501);
+
     try {
       credentials = readCredentials();
-    } catch (e) {
+    } catch (error) {
       certify();
+
       try {
         credentials = readCredentials();
-      } catch (e) {
+      } catch (error) {
         console.log('\n  ⚠️  There was a problem generating ssl credentials. Try removing `--secure`\n');
         process.exit();
       }
     }
   }
 
-  // Parse arguments from the command line
+  // parse arguments from the command line
 
   const { root, protocol, port, ips, url } = await servor({
     root: args[0],
@@ -72,7 +76,7 @@ const open = process.platform == 'darwin' ? 'open' : process.platform == 'win32'
     credentials,
   });
 
-  // Output server details to the console
+  // output server details to the console
 
   !~process.argv.indexOf('--silent') &&
     console.log(`
@@ -81,7 +85,7 @@ const open = process.platform == 'darwin' ? 'open' : process.platform == 'win32'
   ${ips.map((ip) => `📡 Network:\t${protocol}://${ip}:${port}`).join('\n  ')}
   `);
 
-  // Browser the server index
+  // open browser
 
   !!~process.argv.indexOf('--browse') && openBrowser(url);
 })();

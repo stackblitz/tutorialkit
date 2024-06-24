@@ -21,24 +21,26 @@ module.exports = async ({
   credentials,
   port,
 } = {}) => {
-  // Try start on specified port then fail or find a free port
+  // try start on specified port then fail or find a free port
 
   try {
     port = await usePort(port || process.env.PORT || 8080);
-  } catch (e) {
+  } catch (error) {
     if (port || process.env.PORT) {
       console.log('[ERR] The port you have specified is already in use!');
       process.exit();
     }
+
     port = await usePort();
   }
 
-  // Configure globals
+  // configure globals
 
   root = root.startsWith('/') ? root : path.join(process.cwd(), root);
 
   const reloadClients = [];
   const protocol = credentials ? 'https' : 'http';
+
   const server = credentials
     ? reload
       ? (cb) => https.createServer(credentials, cb)
@@ -57,7 +59,7 @@ module.exports = async ({
     `
     : '';
 
-  // Server utility functions
+  // server utility functions
 
   const isRouteRequest = (pathname) => !~pathname.split('/').pop().indexOf('.');
   const utf8 = (file) => Buffer.from(file, 'binary').toString('utf8');
@@ -77,6 +79,7 @@ module.exports = async ({
       file = zlib.gzipSync(utf8(file));
       encoding = 'utf8';
     }
+
     res.writeHead(status, { 'content-type': mimeTypes(ext) });
     res.write(file, encoding);
     res.end();
@@ -87,7 +90,7 @@ module.exports = async ({
     res.write('\n\n');
   };
 
-  // Respond to reload requests with keep alive
+  // respond to reload requests with keep alive
 
   const serveReload = (res) => {
     res.writeHead(200, {
@@ -95,70 +98,119 @@ module.exports = async ({
       'content-type': 'text/event-stream',
       'cache-control': 'no-cache',
     });
+
     sendMessage(res, 'connected', 'ready');
     setInterval(sendMessage, 60000, res, 'ping', 'waiting');
+
     reloadClients.push(res);
   };
 
-  // Respond to requests with a file extension
+  // respond to requests with a file extension
 
   const serveStaticFile = (res, pathname) => {
     const uri = path.join(root, pathname);
+
     let ext = uri.replace(/^.*[\.\/\\]/, '').toLowerCase();
-    if (!fs.existsSync(uri)) return sendError(res, 404);
-    fs.readFile(uri, 'binary', (err, file) => (err ? sendError(res, 500) : sendFile(res, 200, file, ext)));
+
+    if (!fs.existsSync(uri)) {
+      return sendError(res, 404);
+    }
+
+    fs.readFile(uri, 'binary', (error, file) => {
+      return error ? sendError(res, 500) : sendFile(res, 200, file, ext);
+    });
+
+    return undefined;
   };
 
-  // Respond to requests without a file extension
+  // respond to requests without a file extension
 
   const serveRoute = (res, pathname) => {
     const index = static ? path.join(root, pathname, fallback) : path.join(root, fallback);
-    if (!fs.existsSync(index) || (pathname.endsWith('/') && pathname !== '/'))
+
+    if (!fs.existsSync(index) || (pathname.endsWith('/') && pathname !== '/')) {
       return serveDirectoryListing(res, pathname);
+    }
+
     fs.readFile(index, 'binary', (err, file) => {
-      if (err) return sendError(res, 500);
+      if (err) {
+        return sendError(res, 500);
+      }
+
       const status = pathname === '/' || static ? 200 : 301;
-      if (module) file = `<script type='module'>${file}</script>`;
-      if (static) file = baseDoc(pathname) + file;
+
+      if (module) {
+        file = `<script type='module'>${file}</script>`;
+      }
+
+      if (static) {
+        file = baseDoc(pathname) + file;
+      }
+
       file = file + inject + livereload;
+
       sendFile(res, status, file, 'html');
+
+      return undefined;
     });
+
+    return undefined;
   };
 
-  // Respond to requests with a trailing slash
+  // respond to requests with a trailing slash
 
   const serveDirectoryListing = (res, pathname) => {
     const uri = path.join(root, pathname);
-    if (!fs.existsSync(uri)) return sendError(res, 404);
+
+    if (!fs.existsSync(uri)) {
+      return sendError(res, 404);
+    }
+
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write(baseDoc(pathname) + directoryListing(uri) + livereload);
     res.end();
+
+    return undefined;
   };
 
-  // Start the server and route requests
+  // start the server and route requests
 
   server((req, res) => {
     const pathname = decodeURI(url.parse(req.url).pathname);
+
     res.setHeader('access-control-allow-origin', '*');
-    if (reload && pathname === '/livereload') return serveReload(res);
-    if (!isRouteRequest(pathname)) return serveStaticFile(res, pathname);
+
+    if (reload && pathname === '/livereload') {
+      return serveReload(res);
+    }
+
+    if (!isRouteRequest(pathname)) {
+      return serveStaticFile(res, pathname);
+    }
+
     return serveRoute(res, pathname);
   }).listen(parseInt(port, 10));
 
-  // Notify livereload reloadClients on file change
+  // notify livereload reloadClients on file change
 
   reload &&
     fileWatch(root, () => {
-      while (reloadClients.length > 0) sendMessage(reloadClients.pop(), 'message', 'reload');
+      while (reloadClients.length > 0) {
+        sendMessage(reloadClients.pop(), 'message', 'reload');
+      }
     });
 
-  // Close socket connections on sigint
+  // close socket connections on sigint
 
   process.on('SIGINT', () => {
-    while (reloadClients.length > 0) reloadClients.pop().end();
+    while (reloadClients.length > 0) {
+      reloadClients.pop().end();
+    }
+
     process.exit();
   });
 
   const x = { url: `${protocol}://localhost:${port}` };
+
   return { ...x, root, protocol, port, ips: networkIps };
 };
