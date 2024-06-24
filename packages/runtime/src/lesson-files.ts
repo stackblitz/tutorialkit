@@ -14,7 +14,7 @@ export class LessonFilesFetcher {
   private _templateLoadTask?: Task<Files>;
   private _templateLoaded: string | undefined;
 
-  constructor(private _baseURL: string = '') {}
+  constructor(private _baseURL: string = '/') {}
 
   async invalidate(filesRef: string): Promise<InvalidationResult> {
     if (!this._map.has(filesRef)) {
