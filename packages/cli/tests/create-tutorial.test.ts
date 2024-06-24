@@ -190,7 +190,7 @@ test('cannot eject on an astro project that is not using TutorialKit', async (co
         TK_DIRECTORY: baseDir,
       },
     }),
-  ).rejects.toThrow('@tutorialkit/astro does not exists!');
+  ).rejects.toThrow(`@tutorialkit${path.sep}astro does not exists!`);
 });
 
 test('cannot eject on an astro project that is not using TutorialKit 2', async (context) => {
