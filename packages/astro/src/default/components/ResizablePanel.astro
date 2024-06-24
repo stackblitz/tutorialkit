@@ -13,8 +13,9 @@ interface Props {
 }
 
 export interface IResizablePanel {
-  mainPanel(): HTMLDivElement;
-  sidePanel(): HTMLDivElement | undefined;
+  mainPanel(): HTMLElement;
+  sidePanel(): HTMLElement | undefined;
+  divider(): HTMLElement | undefined;
 }
 
 let {
@@ -124,12 +125,16 @@ const panelClass = `overflow-hidden ${type === 'horizontal' ? 'h-full' : ''}`;
       }
     }
 
-    mainPanel(): HTMLDivElement {
-      return this.#container.children[1] as HTMLDivElement;
+    mainPanel(): HTMLElement {
+      return this.#container.children[1] as HTMLElement;
     }
 
-    sidePanel(): HTMLDivElement | undefined {
-      return this.#container.children[2] as HTMLDivElement | undefined;
+    sidePanel(): HTMLElement | undefined {
+      return this.#container.children[2] as HTMLElement | undefined;
+    }
+
+    divider(): HTMLElement | undefined {
+      return this.#divider;
     }
 
     connectedCallback() {

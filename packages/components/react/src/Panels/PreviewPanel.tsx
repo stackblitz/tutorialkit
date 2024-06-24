@@ -61,7 +61,7 @@ export const PreviewPanel = memo(
       [],
     );
 
-    // we update the iframes position at ~30fps
+    // we update the iframes position at ~30fps, needed for mobile
     useEffect(() => {
       const intervalId = setInterval(onResize, 20);
 
