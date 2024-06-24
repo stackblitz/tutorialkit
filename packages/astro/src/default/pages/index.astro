@@ -7,7 +7,7 @@ const part = tutorial.parts[tutorial.firstPartId!];
 const chapter = part.chapters[part?.firstChapterId!];
 const lesson = chapter.lessons[chapter?.firstLessonId!];
 
-const redirect = `/${part.slug}/${chapter.slug}/${lesson.slug}`;
+const redirect = `${import.meta.env.BASE_URL}/${part.slug}/${chapter.slug}/${lesson.slug}`;
 ---
 
 <!doctype html>

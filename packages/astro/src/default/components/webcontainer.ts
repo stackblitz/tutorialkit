@@ -20,7 +20,7 @@ if (!import.meta.env.SSR) {
   });
 }
 
-export const tutorialStore = new TutorialStore({ webcontainer, useAuth });
+export const tutorialStore = new TutorialStore({ webcontainer, useAuth, baseURL: import.meta.env.BASE_URL });
 
 export async function login() {
   auth.startAuthFlow({ popup: true });

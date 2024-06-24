@@ -226,6 +226,8 @@ export async function getTutorial(): Promise<Tutorial> {
     return 0;
   });
 
+  const baseURL = import.meta.env.BASE_URL;
+
   // now we link all lessons together
   for (const [i, lesson] of lessons.entries()) {
     const prevLesson = i > 0 ? lessons.at(i - 1) : undefined;
@@ -248,7 +250,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lesson.prev = {
         title: prevLesson.data.title,
-        href: `/${partSlug}/${chapterSlug}/${prevLesson.slug}`,
+        href: `${baseURL}/${partSlug}/${chapterSlug}/${prevLesson.slug}`,
       };
     }
 
@@ -258,7 +260,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lesson.next = {
         title: nextLesson.data.title,
-        href: `/${partSlug}/${chapterSlug}/${nextLesson.slug}`,
+        href: `${baseURL}/${partSlug}/${chapterSlug}/${nextLesson.slug}`,
       };
     }
   }

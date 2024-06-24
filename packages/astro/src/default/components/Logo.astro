@@ -16,7 +16,7 @@ function readLogoFile(logoPrefix: string) {
     const exists = fs.existsSync(path.join('public', logoFilename));
 
     if (exists) {
-      logo = `/${logoFilename}`;
+      logo = `${import.meta.env.BASE_URL}/${logoFilename}`;
       break;
     }
   }
