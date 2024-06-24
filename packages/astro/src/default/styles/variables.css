@@ -273,13 +273,20 @@
   --tk-elements-breadcrumbs-dropdown-textColor: var(--tk-elements-app-textColor);
   --tk-elements-breadcrumbs-dropdown-textColorHover: var(--tk-text-accent);
   --tk-elements-breadcrumbs-dropdown-accordionTextColor: var(--tk-elements-breadcrumbs-dropdown-textColor);
+  --tk-elements-breadcrumbs-dropdown-accordionTextColorSelected: var(
+    --tk-elements-breadcrumbs-dropdown-accordionTextColor
+  );
   --tk-elements-breadcrumbs-dropdown-accordionTextColorHover: var(--tk-text-active);
   --tk-elements-breadcrumbs-dropdown-accordionIconColor: var(--tk-text-disabled);
+  --tk-elements-breadcrumbs-dropdown-accordionIconColorSelected: var(
+    --tk-elements-breadcrumbs-dropdown-accordionIconColor
+  );
   --tk-elements-breadcrumbs-dropdown-accordionIconColorHover: var(--tk-text-primary);
   --tk-elements-breadcrumbs-dropdown-lessonBackgroundColor: var(--tk-elements-breadcrumbs-dropdown-backgroundColor);
   --tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected: var(--tk-background-secondary);
   --tk-elements-breadcrumbs-dropdown-lessonTextColor: var(--tk-elements-breadcrumbs-dropdown-textColor);
-  --tk-elements-breadcrumbs-dropdown-lessonTextColorHover: var(--tk-elements-breadcrumbs-dropdon-textColorHover);
+  --tk-elements-breadcrumbs-dropdown-lessonTextColorSelected: var(--tk-elements-breadcrumbs-dropdown-lessonTextColor);
+  --tk-elements-breadcrumbs-dropdown-lessonTextColorHover: var(--tk-elements-breadcrumbs-dropdown-textColorHover);
 
   /* Terminal */
   --tk-elements-terminal-backgroundColor: var(--tk-background-active-secondary);
