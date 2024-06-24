@@ -12,6 +12,7 @@ import { getCollection } from 'astro:content';
 import { logger } from './logger';
 import glob from 'fast-glob';
 import path from 'node:path';
+import { joinPaths } from './url';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
 
@@ -250,7 +251,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lesson.prev = {
         title: prevLesson.data.title,
-        href: `${baseURL}/${partSlug}/${chapterSlug}/${prevLesson.slug}`,
+        href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${prevLesson.slug}`),
       };
     }
 
@@ -260,7 +261,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lesson.next = {
         title: nextLesson.data.title,
-        href: `${baseURL}/${partSlug}/${chapterSlug}/${nextLesson.slug}`,
+        href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${nextLesson.slug}`),
       };
     }
   }

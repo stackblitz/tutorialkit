@@ -1,4 +1,5 @@
 import type { Tutorial, NavList } from '@tutorialkit/types';
+import { joinPaths } from './url';
 
 export function generateNavigationList(tutorial: Tutorial, baseURL: string): NavList {
   return objectToSortedArray(tutorial.parts).map((part) => {
@@ -13,7 +14,7 @@ export function generateNavigationList(tutorial: Tutorial, baseURL: string): Nav
             return {
               id: lesson.id,
               title: lesson.data.title,
-              href: `/${part.slug}/${chapter.slug}/${lesson.slug}`,
+              href: joinPaths(baseURL, `/${part.slug}/${chapter.slug}/${lesson.slug}`),
             };
           }),
         };
