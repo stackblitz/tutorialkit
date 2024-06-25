@@ -12,6 +12,7 @@ import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
 import { logger } from './logger';
+import { joinPaths } from './url';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
 
@@ -226,6 +227,8 @@ export async function getTutorial(): Promise<Tutorial> {
     return 0;
   });
 
+  const baseURL = import.meta.env.BASE_URL;
+
   // now we link all lessons together
   for (const [i, lesson] of lessons.entries()) {
     const prevLesson = i > 0 ? lessons.at(i - 1) : undefined;
@@ -248,7 +251,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lesson.prev = {
         title: prevLesson.data.title,
-        href: `/${partSlug}/${chapterSlug}/${prevLesson.slug}`,
+        href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${prevLesson.slug}`),
       };
     }
 
@@ -258,7 +261,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lesson.next = {
         title: nextLesson.data.title,
-        href: `/${partSlug}/${chapterSlug}/${nextLesson.slug}`,
+        href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${nextLesson.slug}`),
       };
     }
   }
