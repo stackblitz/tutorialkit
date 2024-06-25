@@ -1,6 +1,8 @@
+// must be imported first
 import { useAuth } from './setup.js';
-import { auth, WebContainer } from '@webcontainer/api';
+
 import { TutorialStore } from '@tutorialkit/runtime';
+import { auth, WebContainer } from '@webcontainer/api';
 import { joinPaths } from '../utils/url.js';
 
 interface WebContainerContext {
@@ -9,7 +11,9 @@ interface WebContainerContext {
   loaded: boolean;
 }
 
-export let webcontainer: Promise<WebContainer> = new Promise(() => {});
+export let webcontainer: Promise<WebContainer> = new Promise(() => {
+  // noop for ssr
+});
 
 if (!import.meta.env.SSR) {
   webcontainer = Promise.resolve(useAuth ? auth.loggedIn() : null).then(() =>

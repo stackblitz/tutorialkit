@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { primaryBlue } from './colors';
+import { primaryBlue } from './colors.js';
 
 interface HelpOptions {
   commandName: string;

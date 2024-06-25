@@ -1,6 +1,6 @@
-import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import starlight from '@astrojs/starlight';
+import { defineConfig } from 'astro/config';
 import starlightLinksValidator from 'starlight-links-validator';
 
 // https://astro.build/config
@@ -24,7 +24,7 @@ export default defineConfig({
         {
           label: 'Guides',
           items: [
-            // Each item here is one entry in the navigation menu.
+            // each item here is one entry in the navigation menu
             {
               label: 'About',
               link: '/guides/about/',
@@ -52,9 +52,6 @@ export default defineConfig({
           ],
         },
       ],
-      // social: {
-      // github: 'https://github.com/withastro/starlight',
-      // },
       tableOfContents: {
         maxHeadingLevel: 5,
       },

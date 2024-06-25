@@ -9,9 +9,9 @@ import type {
 } from '@tutorialkit/types';
 import { folderPathToFilesRef } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
-import { logger } from './logger';
 import glob from 'fast-glob';
 import path from 'node:path';
+import { logger } from './logger';
 import { joinPaths } from './url';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
@@ -291,7 +291,7 @@ function getOrder(order: string[] | undefined, fallbackSourceForOrder: Record<st
     return order;
   }
 
-  // default to an order based on having each folder prefixed by their order: `1-foo`, `2-bar`, ...
+  // default to an order based on having each folder prefixed by their order: `1-foo`, `2-bar`, etc.
   return Object.keys(fallbackSourceForOrder).sort((a, b) => {
     const numA = parseInt(a, 10);
     const numB = parseInt(b, 10);
@@ -349,7 +349,7 @@ interface CollectionEntryTutorial {
   collection: 'tutorial';
   data: TutorialSchema | PartSchema | ChapterSchema | LessonSchema;
   render(): Promise<{
-    Content: import('astro').MarkdownInstance<{}>['Content'];
+    Content: import('astro').MarkdownInstance<Record<any, any>>['Content'];
     headings: import('astro').MarkdownHeading[];
     remarkPluginFrontmatter: Record<string, any>;
   }>;

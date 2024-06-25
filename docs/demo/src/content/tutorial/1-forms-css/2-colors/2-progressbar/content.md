@@ -14,8 +14,8 @@ Although `accent-color` that we've set in the previous step already impacts this
 
 Let's start by setting removing the border from the element. As you do it, you will notice that it will also change other aspects of the default appearance, like the height and radius.
 
-```css add={2} 
+```css add={2}
 progress {
-    border: none;
+  border: none;
 }
 ```

@@ -15,11 +15,10 @@ Such colors might not fit your brand, or the current theme of your application.
 
 Thankfully, you can change them, and the good news is: you only need one CSS property to do that!
 
-
 Try setting `accent-color` for the whole document by adding the following code inside the `body` selector:
 
-```css add={2} 
+```css add={2}
 body {
-    accent-color: #ff3399;
+  accent-color: #ff3399;
 }
 ```
