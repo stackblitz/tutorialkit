@@ -106,7 +106,7 @@ export function remarkCalloutsPlugin() {
           const hideIcon = attributes.hideIcon === 'true';
 
           const classes = [
-            `callout callout-${variant} my-4 flex flex-col p-3 bg-tk-elements-markdown-callouts-backgroundColor`,
+            `callout callout-${variant} my-4 flex flex-col p-3 bg-tk-elements-markdown-callouts-backgroundColor text-tk-elements-markdown-callouts-textColor`,
             attributes.class ?? '',
             ...(noBorder ? [] : ['border-l-3', 'border-tk-elements-markdown-callouts-borderColor']),
           ];
