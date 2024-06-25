@@ -12,8 +12,8 @@ importers:
   .:
     devDependencies:
       '@blitz/eslint-plugin':
-        specifier: 0.1.0-alpha.1
-        version: 0.1.0-alpha.1(prettier@3.3.2)(typescript@5.4.5)
+        specifier: 0.1.0
+        version: 0.1.0(prettier@3.3.2)(typescript@5.4.5)
       '@commitlint/config-conventional':
         specifier: ^19.2.2
         version: 19.2.2
@@ -1160,8 +1160,8 @@ packages:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  /@blitz/eslint-plugin@0.1.0-alpha.1(prettier@3.3.2)(typescript@5.4.5):
-    resolution: {integrity: sha512-E40uQsGuOScuU/EUONF+65fpv+GAoZoj8Mnp8/0QeWE5tyCblSMzJm5kxYm0BLU9tKeQhkLnd+xAJ7PTDcu7cA==}
+  /@blitz/eslint-plugin@0.1.0(prettier@3.3.2)(typescript@5.4.5):
+    resolution: {integrity: sha512-mGEAFWCI5AQ4nrePhjp2WzvRen+UWR+SF4MvH70icIBClR08Gm3dT9MRa2jszOpfY00NyIYfm7/1CFZ37GvW4g==}
     engines: {node: ^18.0.0 || ^20.0.0}
     dependencies:
       '@stylistic/eslint-plugin-ts': 2.2.2(eslint@9.5.0)(typescript@5.4.5)
