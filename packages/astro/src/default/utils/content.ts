@@ -11,6 +11,7 @@ import { folderPathToFilesRef } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
+import { IGNORED_FILES } from './constants';
 import { logger } from './logger';
 import { joinPaths } from './url';
 
@@ -332,6 +333,8 @@ async function getFilesRefList(pathToFolder: string): Promise<FilesRefList> {
   const filePaths = (
     await glob(`${glob.convertPathToPattern(root)}/**/*`, {
       onlyFiles: true,
+      ignore: IGNORED_FILES,
+      dot: true,
     })
   ).map((filePath) => `/${path.relative(root, filePath)}`);
 
