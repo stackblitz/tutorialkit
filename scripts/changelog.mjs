@@ -104,7 +104,7 @@ function generateChangelog(pkg) {
   };
 
   const gitRawCommitsOpts = {
-    path: pkg.gitPath ?? path.dirname(pkg.path),
+    path: pkg.gitPath ?? pkg.path,
   };
 
   const changelogStream = conventionalChangelog(options, context, gitRawCommitsOpts).on('error', (error) => {
