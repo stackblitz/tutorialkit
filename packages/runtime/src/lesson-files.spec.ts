@@ -35,6 +35,16 @@ describe('LessonFilesFetcher', () => {
     expect(fetchSpy).toHaveBeenCalledWith('/template-default.json', expect.anything());
   });
 
+  test('getLessonTemplate should fetch at a different pathname if the fetcher is configured to use a different base', async () => {
+    fetchBody = { 'a.txt': 'content' };
+
+    const fetcher = new LessonFilesFetcher('/foo/');
+    const files = await fetcher.getLessonTemplate({ data: { template: 'default' } } as any);
+
+    expect(files).toEqual({ 'a.txt': 'content' });
+    expect(fetchSpy).toHaveBeenCalledWith('/foo/template-default.json', expect.anything());
+  });
+
   test('getLessonFiles should fetch files', async () => {
     fetchBody = { 'a.txt': 'content' };
 

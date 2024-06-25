@@ -24,7 +24,7 @@ if (!import.meta.env.SSR) {
 export const tutorialStore = new TutorialStore({
   webcontainer,
   useAuth,
-  baseURL: joinPaths(import.meta.env.BASE_URL, '/'),
+  basePathname: joinPaths(import.meta.env.BASE_URL, '/'),
 });
 
 export async function login() {

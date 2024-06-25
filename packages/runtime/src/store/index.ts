@@ -14,8 +14,12 @@ import { TerminalStore } from './terminal.js';
 
 interface StoreOptions {
   webcontainer: Promise<WebContainer>;
+
+  /** Whether or not authentication is used for the WebContainer API */
   useAuth: boolean;
-  baseURL?: string;
+
+  /** The base path to use when fetching files. */
+  basePathname?: string;
 }
 
 export class TutorialStore {
@@ -43,10 +47,10 @@ export class TutorialStore {
    */
   readonly lessonFullyLoaded = atom<boolean>(false);
 
-  constructor({ useAuth, webcontainer, baseURL }: StoreOptions) {
+  constructor({ useAuth, webcontainer, basePathname }: StoreOptions) {
     this._webcontainer = webcontainer;
     this._editorStore = new EditorStore();
-    this._lessonFilesFetcher = new LessonFilesFetcher(baseURL);
+    this._lessonFilesFetcher = new LessonFilesFetcher(basePathname);
     this._previewsStore = new PreviewsStore(this._webcontainer);
     this._terminalStore = new TerminalStore(this._webcontainer, useAuth);
     this._runner = new TutorialRunner(this._webcontainer, this._terminalStore, this._stepController);

@@ -7,6 +7,7 @@ describe('joinPaths', () => {
     expect(joinPaths('/a/', 'b')).toBe('/a/b');
     expect(joinPaths('/a', '/b')).toBe('/a/b');
     expect(joinPaths('/a/', '/b')).toBe('/a/b');
+    expect(joinPaths('/', '/')).toBe('/');
   });
 
   it('should join multiple paths', () => {

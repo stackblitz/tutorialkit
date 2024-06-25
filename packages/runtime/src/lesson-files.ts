@@ -14,7 +14,15 @@ export class LessonFilesFetcher {
   private _templateLoadTask?: Task<Files>;
   private _templateLoaded: string | undefined;
 
-  constructor(private _baseURL: string = '/') {}
+  /**
+   * Create a new instance of the LessonFilesFetcher.
+   *
+   * This class is responsible for fetching lesson files and templates.
+   * It caches the files in memory to avoid fetching them multiple times.
+   *
+   * @param _basePathname The base pathname to use when fetching files.
+   */
+  constructor(private _basePathname: string = '/') {}
 
   async invalidate(filesRef: string): Promise<InvalidationResult> {
     if (!this._map.has(filesRef)) {
@@ -65,7 +73,7 @@ export class LessonFilesFetcher {
     this._templateLoadTask?.cancel();
 
     const task = newTask(async (signal) => {
-      const response = await fetch(`${this._baseURL}${templatePathname}`, { signal });
+      const response = await fetch(`${this._basePathname}${templatePathname}`, { signal });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch: status ${response.status}`);
@@ -108,7 +116,7 @@ export class LessonFilesFetcher {
 
     while (true) {
       try {
-        const response = await fetch(`${this._baseURL}${pathname}`);
+        const response = await fetch(`${this._basePathname}${pathname}`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch ${pathname}: ${response.status} ${response.statusText}`);
