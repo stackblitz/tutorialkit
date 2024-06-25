@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { cp, rm } from 'node:fs/promises';
 import { execa } from 'execa';
 import esbuild from 'esbuild';
+import glob from 'fast-glob';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
 
 // clean dist
@@ -15,7 +16,7 @@ execa('tsc', ['--emitDeclarationOnly', '--project', './tsconfig.build.json'], {
 });
 
 // build with esbuild
-esbuild.build({
+await esbuild.build({
   entryPoints: ['src/index.ts'],
   bundle: true,
   tsconfig: './tsconfig.build.json',
@@ -34,3 +35,6 @@ if (existsSync('./dist/default')) {
 
 // copy default folder unmodified
 await cp('./src/default', './dist/default', { recursive: true });
+
+// remove tests files
+await glob('./dist/default/**/*.spec.ts').then((testFiles) => Promise.all(testFiles.map((testFile) => rm(testFile))));

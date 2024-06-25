@@ -1,7 +1,11 @@
 export function joinPaths(baseURL: string, ...paths: string[]): string {
-  let result = baseURL;
+  let result = baseURL || '/';
 
   for (const subpath of paths) {
+    if (subpath.length === 0) {
+      continue;
+    }
+
     const resultEndsWithSlash = result.endsWith('/');
     const subpathStartsWithSlash = subpath.startsWith('/');
 
