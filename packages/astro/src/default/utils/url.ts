@@ -1,5 +1,5 @@
-export function joinPaths(baseURL: string, ...paths: string[]): string {
-  let result = baseURL || '/';
+export function joinPaths(basePath: string, ...paths: string[]): string {
+  let result = basePath || '/';
 
   for (const subpath of paths) {
     if (subpath.length === 0) {

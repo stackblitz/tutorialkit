@@ -14,15 +14,11 @@ export class LessonFilesFetcher {
   private _templateLoadTask?: Task<Files>;
   private _templateLoaded: string | undefined;
 
-  /**
-   * Create a new instance of the LessonFilesFetcher.
-   *
-   * This class is responsible for fetching lesson files and templates.
-   * It caches the files in memory to avoid fetching them multiple times.
-   *
-   * @param _basePathname The base pathname to use when fetching files.
-   */
-  constructor(private _basePathname: string = '/') {}
+  constructor(private _basePathname: string = '/') {
+    if (!this._basePathname.endsWith('/')) {
+      this._basePathname = this._basePathname + '/';
+    }
+  }
 
   async invalidate(filesRef: string): Promise<InvalidationResult> {
     if (!this._map.has(filesRef)) {
