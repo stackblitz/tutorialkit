@@ -11,12 +11,7 @@ export function BootScreen({ className, tutorialStore }: Props) {
   const steps = useStore(tutorialStore.steps);
 
   return (
-    <div
-      className={classNames(
-        'flex-grow w-full flex justify-center items-center text-sm bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor',
-        className,
-      )}
-    >
+    <div className={classNames('flex-grow w-full flex justify-center items-center text-sm', className)}>
       {steps ? (
         <ul className="space-y-1">
           {steps.map((step, index) => (

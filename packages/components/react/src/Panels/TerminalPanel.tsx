@@ -44,7 +44,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
   }, []);
 
   return (
-    <div className="panel-container bg-tk-elements-app-backgroundColor">
+    <div className="panel-container bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor">
       <div className="panel-tabs-header overflow-x-hidden">
         <div className="panel-title w-full">
           <ul
