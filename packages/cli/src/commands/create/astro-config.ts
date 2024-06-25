@@ -27,8 +27,8 @@ export async function parseAstroConfig(astroConfigPath: string): Promise<t.File>
  * tutorialkit({ isolation: 'require-corp' })
  * ```
  *
- * If `tutorialkit` is currently invoked as, and this function is called with `{ enterprise: {} }`
- * as the new tutorialkit object, then the modified config will contain:
+ * If `tutorialkit` is currently invoked like in the example above, and this function is called
+ * with `{ enterprise: {} }` as the new tutorialkit object, then the modified config will contain:
  *
  * ```ts
  * tutorialkit({ isolation: 'require-corp', enterprise: {} })
@@ -151,7 +151,7 @@ export function replaceArgs(newTutorialKitArgs: Options, ast: t.File) {
  */
 function updateObject(properties: any, object: t.ObjectExpression | undefined): t.ObjectExpression {
   if (typeof properties !== 'object') {
-    return t.objectExpression([]);
+    return;
   }
 
   object ??= t.objectExpression([]);
@@ -171,8 +171,6 @@ function updateObject(properties: any, object: t.ObjectExpression | undefined): 
       }
     }
   }
-
-  return object;
 }
 
 /**
