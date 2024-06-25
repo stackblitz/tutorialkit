@@ -15,10 +15,14 @@ import { TerminalStore } from './terminal.js';
 interface StoreOptions {
   webcontainer: Promise<WebContainer>;
 
-  /** Whether or not authentication is used for the WebContainer API */
+  /**
+   * Whether or not authentication is used for the WebContainer API.
+   */
   useAuth: boolean;
 
-  /** The base path to use when fetching files. */
+  /**
+   * The base path to use when fetching files.
+   */
   basePathname?: string;
 }
 
