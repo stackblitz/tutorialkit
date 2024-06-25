@@ -15,7 +15,7 @@
     "test": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit test"
   },
   "license": "MIT",
-  "packageManager": "pnpm@8.10.5",
+  "packageManager": "pnpm@8.15.6",
   "devDependencies": {
     "@blitz/eslint-plugin": "0.1.0",
     "@commitlint/config-conventional": "^19.2.2",
@@ -43,7 +43,7 @@
   },
   "engines": {
     "node": ">=18.18.0",
-    "pnpm": "8.10.5"
+    "pnpm": "8.15.6"
   },
   "resolutions": {
     "@typescript-eslint/utils": "^8.0.0-alpha.30"
