@@ -31,7 +31,7 @@ function changeBySelectedLine(
   cb: (from: number, to: number | undefined, changes: ChangeSpec[], line: Line) => void,
 ) {
   return state.changeByRange((range) => {
-    let changes: ChangeSpec[] = [];
+    const changes: ChangeSpec[] = [];
 
     const line = state.doc.lineAt(range.from);
 

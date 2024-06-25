@@ -19,7 +19,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const templatePath = path.resolve(__dirname, process.env.TUTORIALKIT_TEMPLATE_PATH ?? '../_template');
 
 export const DEFAULT_VALUES = {
-  git: process.env.CI ? false : true,
+  git: !process.env.CI,
   install: true,
   start: true,
   dryRun: false,

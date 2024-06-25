@@ -11,6 +11,8 @@ export class PreviewInfo {
     if (this.baseUrl) {
       return new URL(this.pathname ?? '/', this.baseUrl).toString();
     }
+
+    return undefined;
   }
 
   constructor(preview: Exclude<PreviewSchema, boolean>[0], ready?: boolean) {

@@ -1,6 +1,6 @@
 /**
  * A plugin that let users write components that can access the internals
- * of TutorialKit
+ * of TutorialKit.
  *
  * The virtual module can be imported as:
  *
@@ -34,6 +34,8 @@ export const tutorialkitCore: VitePlugin = {
     if (id === virtualModuleId) {
       return resolvedVirtualModuleId;
     }
+
+    return undefined;
   },
   async load(id) {
     if (id === resolvedVirtualModuleId) {
@@ -43,5 +45,7 @@ export const tutorialkitCore: VitePlugin = {
         export { webcontainer } from '${pathToInit}';
       `;
     }
+
+    return undefined;
   },
 };
