@@ -19,7 +19,11 @@ export default defineConfig({
         light: './src/assets/brand/tutorialkit-logo-light.svg',
         replacesTitle: true,
       },
-      plugins: [starlightLinksValidator()],
+      plugins: [
+        starlightLinksValidator({
+          exclude: ['../guides/**/*'],
+        }),
+      ],
       sidebar: [
         {
           label: 'Guides',
