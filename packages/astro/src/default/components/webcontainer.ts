@@ -3,6 +3,7 @@ import { useAuth } from './setup.js';
 
 import { TutorialStore } from '@tutorialkit/runtime';
 import { auth, WebContainer } from '@webcontainer/api';
+import { joinPaths } from '../utils/url.js';
 
 interface WebContainerContext {
   useAuth: boolean;
@@ -24,7 +25,11 @@ if (!import.meta.env.SSR) {
   });
 }
 
-export const tutorialStore = new TutorialStore({ webcontainer, useAuth });
+export const tutorialStore = new TutorialStore({
+  webcontainer,
+  useAuth,
+  basePathname: joinPaths(import.meta.env.BASE_URL, '/'),
+});
 
 export async function login() {
   auth.startAuthFlow({ popup: true });
