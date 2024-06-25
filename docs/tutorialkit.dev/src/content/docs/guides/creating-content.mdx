@@ -48,11 +48,11 @@ title: Welcome to TutorialKit
 ---
 
 # Kitchen Sink [Heading 1]
-Lorem ipsum dolor 
+Lorem ipsum dolor
 <!--  ... -->
 ```
 
-This is a Markdown file with a frontmatter block at the top (marked by a single `---` line at the beginning of the file and another `---` line to close the block). 
+This is a Markdown file with a frontmatter block at the top (marked by a single `---` line at the beginning of the file and another `---` line to close the block).
 
 The frontmatter block contains metadata about the lesson, such as the title, description, and other properties that will allow you to configure this specific lesson.
 
@@ -79,9 +79,9 @@ This will change the URL of the lesson to `localhost:4321/1-basics/1-introductio
 
 ## A lesson code
 
-Beside the `content.md` file in a lesson's directory, you will find two folders: 
-- `_files` 
-- `_solution` 
+Beside the `content.md` file in a lesson's directory, you will find two folders:
+- `_files`
+- `_solution`
 
 The `_files` folder contains any code files that are part of the lesson. For example, if the lesson revolves around React components, you might have a `Button.jsx` file there. The content of this file will be displayed in the tutorial app's code editor and will be run in its preview. You can place any number of files in this folder.
 
@@ -95,16 +95,16 @@ The `_solution` folder contains the code for the lesson in its solved state. Thi
 
 For the code to run in the preview, it must be an actual, working application, including a dev server and any necessary configuration files. Usually, it's not practical to include this kind of boilerplate files in a lesson content (and copy it for every further lesson!). Instead, you can use the `template` feature of TutorialKit to provide a base project that will be used for all lessons.
 
-To display the code in the preview of a lesson, TutorialKit will use the template project and apply the content of the `_files` (or `_solution`) folder on top of it. 
+To display the code in the preview of a lesson, TutorialKit will use the template project and apply the content of the `_files` (or `_solution`) folder on top of it.
 
-You can find the default template in the `src/templates/default` directory. This is a Vite project which is a great starting point for a vanilla JavaScript app. Note, that when you navigate to that folder and run `npm run dev` inside, it will be a fully working Vite project. 
+You can find the default template in the `src/templates/default` directory. This is a Vite project which is a great starting point for a vanilla JavaScript app. Note, that when you navigate to that folder and run `npm run dev` inside, it will be a fully working Vite project.
 
 You can modify this template to fit your needs, or create a new one from scratch. You can also have multiple templates and switch between them for different parts of your tutorial. To do that, you need to specify the template name in the **lesson's**, **chapter's**, or **part's** front matter block:
 
 ```markdown {3}
 ---
 title: Advanced Topics
-template: my-advanced-template 
+template: my-advanced-template
 ---
 ```
 

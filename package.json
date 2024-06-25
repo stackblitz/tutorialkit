@@ -11,11 +11,13 @@
     "docs:build": "pnpm run --filter=tutorialkit.dev build",
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
     "demo:build": "pnpm run --filter=demo.tutorialkit.dev build",
+    "lint": "eslint \"{packages,docs}/**/*\"",
     "test": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit test"
   },
   "license": "MIT",
   "packageManager": "pnpm@8.10.5",
   "devDependencies": {
+    "@blitz/eslint-plugin": "0.1.0",
     "@commitlint/config-conventional": "^19.2.2",
     "add-stream": "^1.0.0",
     "chalk": "^5.3.0",
@@ -41,5 +43,8 @@
   },
   "engines": {
     "node": ">=18.18.0"
+  },
+  "resolutions": {
+    "@typescript-eslint/utils": "^8.0.0-alpha.30"
   }
 }

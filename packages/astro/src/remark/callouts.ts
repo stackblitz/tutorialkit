@@ -65,6 +65,7 @@ function transformUnhandledDirective(node: TextDirective | LeafDirective, index:
     type: 'text',
     value: toMarkdown(node, { extensions: [directiveToMarkdown()] }),
   } as const;
+
   if (node.type === 'textDirective') {
     parent.children[index] = textNode;
   } else {
@@ -164,7 +165,7 @@ function generate(title: string, children: any[], callout: Callout, hideIcon: bo
         hName: 'section',
         hProperties: { className: ['callout-content mt-1'] },
       },
-      children: children,
+      children,
     },
   ] satisfies Children;
 }

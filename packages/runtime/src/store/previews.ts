@@ -14,10 +14,10 @@ export class PreviewsStore {
   previews = atom<PreviewInfo[]>([]);
 
   constructor(webcontainerPromise: Promise<WebContainer>) {
-    this.init(webcontainerPromise);
+    this._init(webcontainerPromise);
   }
 
-  private async init(webcontainerPromise: Promise<WebContainer>) {
+  private async _init(webcontainerPromise: Promise<WebContainer>) {
     const webcontainer = await webcontainerPromise;
 
     webcontainer.on('port', (port, type, url) => {

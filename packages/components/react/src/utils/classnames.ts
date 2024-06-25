@@ -1,7 +1,8 @@
 /**
  * Copyright (c) 2018 Jed Watson.
- * Licensed under the MIT License (MIT), see
- * http://jedwatson.github.io/classnames
+ * Licensed under the MIT License (MIT), see:
+ *
+ * @link http://jedwatson.github.io/classnames
  */
 
 type ClassNamesArg = undefined | string | Record<string, boolean> | ClassNamesArg[];
@@ -33,7 +34,7 @@ function parseValue(arg: ClassNamesArg) {
   }
 
   if (Array.isArray(arg)) {
-    return classNames.apply(null, arg);
+    return classNames(...arg);
   }
 
   let classes = '';

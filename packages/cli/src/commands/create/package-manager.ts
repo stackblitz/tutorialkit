@@ -1,8 +1,8 @@
 import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
 import { lookpath } from 'lookpath';
-import { DEFAULT_VALUES, type CreateOptions } from './options.js';
 import { assertNotCanceled } from '../../utils/tasks.js';
+import { DEFAULT_VALUES, type CreateOptions } from './options.js';
 
 export type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 
@@ -57,7 +57,7 @@ async function getInstalledPackageManagers(): Promise<PackageManager[]> {
       if (await lookpath(pkgManager)) {
         packageManagers.push(pkgManager as PackageManager);
       }
-    } catch (error) {
+    } catch {
       // package manager not found, do nothing
     }
   }

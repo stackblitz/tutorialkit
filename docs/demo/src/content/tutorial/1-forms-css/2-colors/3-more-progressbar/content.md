@@ -8,7 +8,7 @@ template: default
 
 ## Styling the `<progress>`
 
-Now that the default appearance is turned off, we can start customizing the element. Progress bar consists of two parts: 
+Now that the default appearance is turned off, we can start customizing the element. Progress bar consists of two parts:
 
 - `progress-bar`
 - `progress-value`
@@ -17,11 +17,11 @@ Note: this part is not a standardized CSS yet, so when creating these two select
 
 ```css
 progress::-webkit-progress-bar {
- /* ... */
+  /* ... */
 }
 
 progress::-webkit-progress-value {
- /* ... */
+  /* ... */
 }
 ```
 
