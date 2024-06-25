@@ -21,7 +21,7 @@ export default defineConfig({
       },
       plugins: [
         starlightLinksValidator({
-          exclude: ['../guides/**/*'],
+          exclude: ['../../guides/**/*'],
         }),
       ],
       sidebar: [
@@ -56,8 +56,13 @@ export default defineConfig({
           ],
         },
         {
-          label: 'Theming',
-          link: '/theming/',
+          label: 'Reference',
+          items: [
+            {
+              label: 'Theming Reference',
+              link: '/reference/theming/',
+            },
+          ],
         },
       ],
       tableOfContents: {
