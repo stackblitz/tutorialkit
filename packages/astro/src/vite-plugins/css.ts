@@ -25,6 +25,8 @@ export const userlandCSS: VitePlugin = {
     if (id === virtualModuleId) {
       return resolvedVirtualModuleId;
     }
+
+    return undefined;
   },
   configResolved({ root }) {
     projectRoot = root;
@@ -39,6 +41,8 @@ export const userlandCSS: VitePlugin = {
         return '';
       }
     }
+
+    return undefined;
   },
 };
 

@@ -5,8 +5,8 @@ slug: a-legend
 focus: /index.html
 ---
 
-Even with the default styling `<fieldset>` already visually separates one group of form controls from another. 
-It might be better to explain to a form user what each group represents. That's the purpose of a `<legend>` element. 
+Even with the default styling `<fieldset>` already visually separates one group of form controls from another.
+It might be better to explain to a form user what each group represents. That's the purpose of a `<legend>` element.
 
 Let's add a legend to each of our fieldsets:
 

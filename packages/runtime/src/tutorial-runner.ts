@@ -1,11 +1,11 @@
 import type { CommandsSchema, Files } from '@tutorialkit/types';
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
+import type { TerminalStore } from './store/terminal.js';
 import { newTask, type Task, type TaskCancelled } from './tasks.js';
 import { clearTerminal, escapeCodes, type ITerminal } from './utils/terminal.js';
 import { Command, Commands } from './webcontainer/command.js';
 import { StepsController } from './webcontainer/steps.js';
 import { diffFiles, toFileTree } from './webcontainer/utils/files.js';
-import type { TerminalStore } from './store/terminal.js';
 
 interface LoadFilesOptions {
   /**
@@ -252,7 +252,7 @@ export class TutorialRunner {
             return previousTask.promise;
           }
 
-          return;
+          return undefined;
         }
 
         // there were changes so we reset the "commands changed"

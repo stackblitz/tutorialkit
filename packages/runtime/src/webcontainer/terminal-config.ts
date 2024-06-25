@@ -66,9 +66,9 @@ export class TerminalPanel implements ITerminal {
 
   constructor(
     readonly type: TerminalPanelType,
-    private readonly options?: TerminalPanelOptions,
+    private readonly _options?: TerminalPanelOptions,
   ) {
-    let title = options?.title;
+    let title = _options?.title;
 
     // automatically infer a title if no title is provided
     if (!title) {
@@ -85,7 +85,7 @@ export class TerminalPanel implements ITerminal {
     }
 
     this.title = title;
-    this.id = options?.id ?? (type === 'output' ? 'output' : `${type}-${globalId++}`);
+    this.id = _options?.id ?? (type === 'output' ? 'output' : `${type}-${globalId++}`);
   }
 
   get terminal() {
@@ -102,8 +102,8 @@ export class TerminalPanel implements ITerminal {
     }
 
     return {
-      allowRedirects: this.options?.allowRedirects ?? false,
-      allowCommands: this.options?.allowCommands,
+      allowRedirects: this._options?.allowRedirects ?? false,
+      allowCommands: this._options?.allowCommands,
     };
   }
 

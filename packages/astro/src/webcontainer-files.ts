@@ -45,7 +45,8 @@ export class WebContainerFiles {
       const result = await cache.canHandle(req);
 
       if (!result) {
-        return next();
+        next();
+        return;
       }
 
       res.writeHead(200, {
