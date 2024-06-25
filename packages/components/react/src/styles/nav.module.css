@@ -6,12 +6,20 @@
   --at-apply: text-tk-elements-breadcrumbs-dropdown-accordionTextColor;
 }
 
+.AccordionTrigger.AccordionTriggerActive {
+  --at-apply: text-tk-elements-breadcrumbs-dropdown-accordionTextColorSelected;
+}
+
 .AccordionTrigger:hover {
   --at-apply: text-tk-elements-breadcrumbs-dropdown-accordionTextColorHover;
 }
 
 .AccordionTrigger .AccordionTriggerIcon {
   --at-apply: transition-color duration-100 text-tk-elements-breadcrumbs-dropdown-accordionIconColor;
+}
+
+.AccordionTrigger.AccordionTriggerActive .AccordionTriggerIcon {
+  --at-apply: text-tk-elements-breadcrumbs-dropdown-accordionIconColorSelected;
 }
 
 .AccordionTrigger:hover .AccordionTriggerIcon {
