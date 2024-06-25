@@ -312,6 +312,7 @@ export const theme: ConfigBase['theme'] = {
         markdown: {
           callouts: {
             backgroundColor: 'var(--tk-elements-markdown-callouts-backgroundColor)',
+            textColor: 'var(--tk-elements-markdown-callouts-textColor)',
             borderColor: 'var(--tk-elements-markdown-callouts-borderColor)',
             titleTextColor: 'var(--tk-elements-markdown-callouts-titleTextColor)',
             iconColor: 'var(--tk-elements-markdown-callouts-iconColor)',
