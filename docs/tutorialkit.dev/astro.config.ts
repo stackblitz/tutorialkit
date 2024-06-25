@@ -51,6 +51,10 @@ export default defineConfig({
             },
           ],
         },
+        {
+          label: 'Theming',
+          link: '/theming/',
+        },
       ],
       tableOfContents: {
         maxHeadingLevel: 5,
