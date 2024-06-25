@@ -4,6 +4,7 @@ title: Style up your forms!
 slug: welcome
 focus: /welcome.css
 ---
+
 :::info{noBorder=true title="Welcome!"}
 This is a demo tutorial built with <a href="https://tutorialkit.dev" target="_blank">TutorialKit</a>. Although we use it for demonstration purposes, the lessons include actual CSS techniques, so we hope you'll enjoy them and learn something new!
 :::

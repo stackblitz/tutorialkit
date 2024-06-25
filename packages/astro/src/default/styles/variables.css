@@ -334,31 +334,46 @@
 
   /* Callouts > Tip */
   --tk-elements-callouts-tip-backgroundColor: var(--tk-background-tip);
+  --tk-elements-callouts-tip-textColor: var(--tk-elements-content-textColor);
   --tk-elements-callouts-tip-borderColor: var(--tk-border-tip);
   --tk-elements-callouts-tip-titleTextColor: var(--tk-text-tip);
   --tk-elements-callouts-tip-iconColor: var(--tk-elements-callouts-tip-titleTextColor);
+  --tk-elements-callouts-tip-codeColor: var(--tk-text-primary);
+  --tk-elements-callouts-tip-codeBackgroundColor: var(--tk-background-secondary);
 
   /* Callouts > Info */
   --tk-elements-callouts-info-backgroundColor: var(--tk-background-info);
+  --tk-elements-callouts-info-textColor: var(--tk-elements-content-textColor);
   --tk-elements-callouts-info-borderColor: var(--tk-border-info);
   --tk-elements-callouts-info-titleTextColor: var(--tk-text-info);
   --tk-elements-callouts-info-iconColor: var(--tk-elements-callouts-info-titleTextColor);
+  --tk-elements-callouts-info-codeColor: var(--tk-text-primary);
+  --tk-elements-callouts-info-codeBackgroundColor: var(--tk-background-secondary);
 
   /* Callouts > Warning */
   --tk-elements-callouts-warning-backgroundColor: var(--tk-background-warning);
+  --tk-elements-callouts-warning-textColor: var(--tk-elements-content-textColor);
   --tk-elements-callouts-warning-borderColor: var(--tk-border-warning);
   --tk-elements-callouts-warning-titleTextColor: var(--tk-text-warning);
   --tk-elements-callouts-warning-iconColor: var(--tk-elements-callouts-warning-titleTextColor);
+  --tk-elements-callouts-warning-codeColor: var(--tk-text-primary);
+  --tk-elements-callouts-warning-codeBackgroundColor: var(--tk-background-secondary);
 
   /* Callouts > Danger */
   --tk-elements-callouts-danger-backgroundColor: var(--tk-background-negative);
+  --tk-elements-callouts-danger-textColor: var(--tk-elements-content-textColor);
   --tk-elements-callouts-danger-borderColor: var(--tk-border-negative);
   --tk-elements-callouts-danger-titleTextColor: var(--tk-text-negative);
   --tk-elements-callouts-danger-iconColor: var(--tk-elements-callouts-danger-titleTextColor);
+  --tk-elements-callouts-danger-codeColor: var(--tk-text-primary);
+  --tk-elements-callouts-danger-codeBackgroundColor: var(--tk-background-secondary);
 
   /* Callouts > Success */
   --tk-elements-callouts-success-backgroundColor: var(--tk-background-positive);
+  --tk-elements-callouts-success-textColor: var(--tk-elements-content-textColor);
   --tk-elements-callouts-success-borderColor: var(--tk-border-positive);
   --tk-elements-callouts-success-titleTextColor: var(--tk-text-positive);
   --tk-elements-callouts-success-iconColor: var(--tk-elements-callouts-success-titleTextColor);
+  --tk-elements-callouts-success-codeColor: var(--tk-text-primary);
+  --tk-elements-callouts-success-codeBackgroundColor: var(--tk-background-secondary);
 }

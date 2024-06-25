@@ -25,7 +25,6 @@ export function BootScreen({ className, tutorialStore }: Props) {
               ) : step.status === 'failed' ? (
                 <div className="inline-block mr-2 i-ph-x-circle-duotone scale-120 text-tk-elements-status-negative-iconColor" />
               ) : (
-                // skipped step
                 <div className="inline-block mr-2 i-ph-minus-circle-duotone scale-120 text-tk-elements-status-skipped-iconColor" />
               )}
               <span className={toTextColor(step.status)}>{step.title}</span>

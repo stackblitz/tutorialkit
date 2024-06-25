@@ -58,6 +58,8 @@ async function _initGitRepo(cwd: string) {
         stdio: 'ignore',
       },
     );
+
+    return undefined;
   } catch {
     throw new Error('Failed to initialize local git repository');
   }

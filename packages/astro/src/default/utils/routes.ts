@@ -24,7 +24,7 @@ export async function generateStaticRoutes() {
           },
           props: {
             logoLink: tutorial.logoLink,
-            navList: generateNavigationList(tutorial),
+            navList: generateNavigationList(tutorial, import.meta.env.BASE_URL),
             title: `${part.data.title} / ${chapter.data.title} / ${lesson.data.title}`,
             lesson: lesson as Lesson<AstroComponentFactory>,
           },

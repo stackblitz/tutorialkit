@@ -118,8 +118,8 @@ export class EditorStore {
        */
       if (document && !document.loading) {
         /**
-         * call this in a `queueMicrotask` because the subscribe callback is called synchronoulsy, which causes
-         * the `unsubscribeFromDocuments` to not exist yet.
+         * Call this in a `queueMicrotask` because the subscribe callback is called synchronoulsy,
+         * which causes the `unsubscribeFromDocuments` to not exist yet.
          */
         queueMicrotask(() => {
           callback(document);
