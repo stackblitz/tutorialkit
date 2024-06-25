@@ -21,8 +21,8 @@
       super();
 
       const [tutorialBtn, toggleButton, editorButton] = this.querySelectorAll(
-        ':scope > button',
-      ) as NodeListOf<HTMLButtonElement>;
+        ':scope > button' as 'button',
+      );
 
       const toggle = toggleButton.querySelector('span')!;
 
