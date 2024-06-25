@@ -42,7 +42,8 @@
     }
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=18.18.0",
+    "pnpm": "8.10.5"
   },
   "resolutions": {
     "@typescript-eslint/utils": "^8.0.0-alpha.30"
