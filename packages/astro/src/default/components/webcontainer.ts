@@ -1,6 +1,8 @@
+// must be imported first
+import { useAuth } from './setup.js';
+
 import { TutorialStore } from '@tutorialkit/runtime';
 import { auth, WebContainer } from '@webcontainer/api';
-import { useAuth } from './setup.js';
 
 interface WebContainerContext {
   useAuth: boolean;

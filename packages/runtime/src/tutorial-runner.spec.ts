@@ -1,6 +1,8 @@
+// must be imported first
+import { resetProcessFactory, setProcessFactory } from 'test-utils';
+
 import { WebContainer } from '@webcontainer/api';
 import type { MockedWebContainer } from 'test-utils';
-import { resetProcessFactory, setProcessFactory } from 'test-utils';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { TerminalStore } from './store/terminal.js';
 import { TutorialRunner } from './tutorial-runner.js';
