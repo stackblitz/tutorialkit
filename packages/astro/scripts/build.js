@@ -36,5 +36,5 @@ if (existsSync('./dist/default')) {
 // copy default folder unmodified
 await cp('./src/default', './dist/default', { recursive: true });
 
-// remove tests files
+// remove test files
 await glob('./dist/default/**/*.spec.ts').then((testFiles) => Promise.all(testFiles.map((testFile) => rm(testFile))));
