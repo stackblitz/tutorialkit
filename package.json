@@ -11,7 +11,7 @@
     "docs:build": "pnpm run --filter=tutorialkit.dev build",
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
     "demo:build": "pnpm run --filter=demo.tutorialkit.dev build",
-    "lint": "eslint '{packages,docs}/**/*'",
+    "lint": "eslint \"{packages,docs}/**/*\"",
     "test": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit test"
   },
   "license": "MIT",
