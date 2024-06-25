@@ -3,7 +3,14 @@ import { getNamingConventionRule, tsFileExtensions } from '@blitz/eslint-plugin/
 
 export default [
   {
-    ignores: ['**/dist', '**/node_modules', '**/.astro'],
+    ignores: [
+      '**/dist',
+      '**/node_modules',
+      '**/.astro',
+
+      // we ignore our demo templates because they may contain code that is formatted specifically for the demo
+      'docs/demo/src/templates',
+    ],
   },
   ...blitzPlugin.configs.recommended({
     ts: {

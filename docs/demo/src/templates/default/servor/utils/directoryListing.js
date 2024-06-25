@@ -2,23 +2,23 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = (uri) => {
-  const dir = (name) => fs.statSync(path.join(uri, name)).isDirectory();
-  const size = (name) => fs.statSync(path.join(uri, name)).size;
+  const dir = (x) => fs.statSync(path.join(uri, x)).isDirectory();
+  const size = (x) => fs.statSync(path.join(uri, x)).size;
 
-  const link = (name) =>
-    dir(name)
+  const link = (x) =>
+    dir(x)
       ? `
         <div>
           <span>🗂</span>
-          <a href=${`${name}/`}>${name}</a>
-          <small>${size(name)}B</small>
+          <a href=${`${x}/`}>${x}</a>
+          <small>${size(x)}B</small>
         </div>
       `
       : `
         <div>
           <span>📄</span>
-          <a href=${name}>${name}</a>
-          <small>${size(name)}B</small>
+          <a href=${x}>${x}</a>
+          <small>${size(x)}B</small>
         </div>
       `;
 
