@@ -15,7 +15,7 @@ export interface Options {
    *
    * Set this to false to customize the pages.
    *
-   * @default 'all'
+   * @default true
    */
   defaultRoutes?: boolean | 'tutorial-only';
 
