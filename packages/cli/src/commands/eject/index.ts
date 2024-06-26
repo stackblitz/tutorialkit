@@ -92,13 +92,13 @@ async function _eject(flags: EjectOptions) {
     fs.readFileSync(path.join(astroIntegrationPath, 'package.json'), 'utf-8'),
   );
 
-  let hasChanged = false;
+  let newDependencies = [];
 
   for (const dep of REQUIRED_DEPENDENCIES) {
     if (!(dep in pkgJson.dependencies) && !(dep in pkgJson.devDependencies)) {
       pkgJson.dependencies[dep] = astroIntegrationPkgJson.dependencies[dep];
 
-      hasChanged = true;
+      newDependencies.push(dep);
     }
   }
 
@@ -106,10 +106,13 @@ async function _eject(flags: EjectOptions) {
     REQUIRED_DEPENDENCIES.includes(dependency),
   );
 
-  if (hasChanged) {
+  if (newDependencies.length > 0) {
     fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2), { encoding: 'utf-8' });
 
-    console.log(primaryLabel('INFO'), 'New dependencies added, install the new dependencies before proceeding');
+    console.log(
+      primaryLabel('INFO'),
+      `New dependencies added: ${newDependencies.join(', ')}. Install the new dependencies before proceeding`,
+    );
   }
 }
 
@@ -131,7 +134,7 @@ function validateDestination(folder: string, force: boolean) {
 
       if (fs.existsSync(destination)) {
         throw new Error(
-          `Eject aborted because '${destination}' would be overwritten by this command. Use --force to ignore this error.`,
+          `Eject aborted because '${destination}' would be overwritten by this command. Use ${chalk.yellow('--force')} to ignore this error.`,
         );
       }
     });
