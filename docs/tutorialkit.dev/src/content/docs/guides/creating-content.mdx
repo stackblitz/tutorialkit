@@ -1,6 +1,6 @@
 ---
-title: Creating a Lesson
-description: 'Creating lessons in TutorialKit.'
+title: Content creation
+description: 'Creating content in TutorialKit.'
 ---
 import { FileTree } from '@astrojs/starlight/components';
 
@@ -109,3 +109,11 @@ template: my-advanced-template
 ```
 
 This declaration will make TutorialKit use the `src/templates/my-advanced-template` directory as the base for the lesson.
+
+If you start having a lot of templates and they all share some code, you can create a shared template that they all extend. This way, you can keep the shared code in one place and avoid duplication. To do that, you need to specify the `extends` property in the template's `.tk-config.json` file:
+
+```json
+{
+  "extends": "../shared-template"
+}
+```
