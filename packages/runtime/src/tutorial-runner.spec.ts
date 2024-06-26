@@ -1,11 +1,13 @@
+// must be imported first
 import { resetProcessFactory, setProcessFactory } from 'test-utils';
+
 import { WebContainer } from '@webcontainer/api';
-import { describe, test, expect, beforeEach, vi } from 'vitest';
 import type { MockedWebContainer } from 'test-utils';
-import { TutorialRunner } from './tutorial-runner.js';
-import { StepsController } from './webcontainer/steps.js';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { TerminalStore } from './store/terminal.js';
+import { TutorialRunner } from './tutorial-runner.js';
 import { withResolvers } from './utils/promises.js';
+import { StepsController } from './webcontainer/steps.js';
 
 beforeEach(() => {
   resetProcessFactory();
@@ -62,7 +64,9 @@ describe('TutorialRunner', () => {
       resolve(JSON.stringify(mock._fakeFs, undefined, 2));
 
       return {
-        exit: new Promise<number>(() => {}),
+        exit: new Promise<number>(() => {
+          // noop
+        }),
       };
     });
 

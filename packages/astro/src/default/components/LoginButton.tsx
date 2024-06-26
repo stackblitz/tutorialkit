@@ -18,7 +18,7 @@ export function LoginButton() {
       setDisabled(true);
       clearTimeout(timeoutId.current);
 
-      /*
+      /**
        * Re-enable the button in case the login failed because the popup got stuck in an error or
        * was closed before the authorization step was completed.
        */

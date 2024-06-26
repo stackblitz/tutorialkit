@@ -9,9 +9,10 @@ import type {
 } from '@tutorialkit/types';
 import { folderPathToFilesRef } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
-import { logger } from './logger';
 import glob from 'fast-glob';
 import path from 'node:path';
+import { logger } from './logger';
+import { joinPaths } from './url';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
 
@@ -226,6 +227,8 @@ export async function getTutorial(): Promise<Tutorial> {
     return 0;
   });
 
+  const baseURL = import.meta.env.BASE_URL;
+
   // now we link all lessons together
   for (const [i, lesson] of lessons.entries()) {
     const prevLesson = i > 0 ? lessons.at(i - 1) : undefined;
@@ -248,7 +251,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lesson.prev = {
         title: prevLesson.data.title,
-        href: `/${partSlug}/${chapterSlug}/${prevLesson.slug}`,
+        href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${prevLesson.slug}`),
       };
     }
 
@@ -258,7 +261,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       lesson.next = {
         title: nextLesson.data.title,
-        href: `/${partSlug}/${chapterSlug}/${nextLesson.slug}`,
+        href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${nextLesson.slug}`),
       };
     }
   }
@@ -288,7 +291,7 @@ function getOrder(order: string[] | undefined, fallbackSourceForOrder: Record<st
     return order;
   }
 
-  // default to an order based on having each folder prefixed by their order: `1-foo`, `2-bar`, ...
+  // default to an order based on having each folder prefixed by their order: `1-foo`, `2-bar`, etc.
   return Object.keys(fallbackSourceForOrder).sort((a, b) => {
     const numA = parseInt(a, 10);
     const numB = parseInt(b, 10);
@@ -346,7 +349,7 @@ interface CollectionEntryTutorial {
   collection: 'tutorial';
   data: TutorialSchema | PartSchema | ChapterSchema | LessonSchema;
   render(): Promise<{
-    Content: import('astro').MarkdownInstance<{}>['Content'];
+    Content: import('astro').MarkdownInstance<Record<any, any>>['Content'];
     headings: import('astro').MarkdownHeading[];
     remarkPluginFrontmatter: Record<string, any>;
   }>;

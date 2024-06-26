@@ -30,7 +30,7 @@ async function cli() {
   }
 }
 
-async function runCommand(cmd: CLICommand, flags: yargs.Arguments): Promise<number | void | undefined> {
+async function runCommand(cmd: CLICommand, flags: yargs.Arguments): Promise<number | undefined> {
   switch (cmd) {
     case 'version': {
       console.log(`${primaryLabel(pkg.name)} ${chalk.green(`v${pkg.version}`)}`);
@@ -48,6 +48,7 @@ async function runCommand(cmd: CLICommand, flags: yargs.Arguments): Promise<numb
           ],
         },
       });
+
       return;
     }
     case 'create': {

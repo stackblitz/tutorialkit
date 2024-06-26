@@ -1,10 +1,10 @@
-import { BootScreen } from '../BootScreen.js';
-import type { PreviewInfo, TutorialStore } from '@tutorialkit/runtime';
 import { useStore } from '@nanostores/react';
-import resizePanelStyles from '../styles/resize-panel.module.css';
-import { classNames } from '../utils/classnames.js';
+import type { PreviewInfo, TutorialStore } from '@tutorialkit/runtime';
 import { createElement, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import { BootScreen } from '../BootScreen.js';
+import resizePanelStyles from '../styles/resize-panel.module.css';
+import { classNames } from '../utils/classnames.js';
 
 interface Props {
   showToggleTerminal?: boolean;

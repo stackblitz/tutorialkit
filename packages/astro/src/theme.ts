@@ -275,12 +275,15 @@ export const theme: ConfigBase['theme'] = {
             textColor: 'var(--tk-elements-breadcrumbs-dropdown-textColor)',
             textColorHover: 'var(--tk-elements-breadcrumbs-dropdown-textColorHover)',
             accordionTextColor: 'var(--tk-elements-breadcrumbs-dropdown-accordionTextColor)',
+            accordionTextColorSelected: 'var(--tk-elements-breadcrumbs-dropdown-accordionTextColorSelected)',
             accordionTextColorHover: 'var(--tk-elements-breadcrumbs-dropdown-accordionTextColorHover)',
             accordionIconColor: 'var(--tk-elements-breadcrumbs-dropdown-accordionIconColor)',
+            accordionIconColorSelected: 'var(--tk-elements-breadcrumbs-dropdown-accordionIconColorSelected)',
             accordionIconColorHover: 'var(--tk-elements-breadcrumbs-dropdown-accordionIconColorHover)',
             lessonBackgroundColor: 'var(--tk-elements-breadcrumbs-dropdown-lessonBackgroundColor)',
             lessonBackgroundColorSelected: 'var(--tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected)',
             lessonTextColor: 'var(--tk-elements-breadcrumbs-dropdown-lessonTextColor)',
+            lessonTextColorSelected: 'var(--tk-elements-breadcrumbs-dropdown-lessonTextColorSelected)',
             lessonTextColorHover: 'var(--tk-elements-breadcrumbs-dropdown-lessonTextColorHover)',
           },
         },
@@ -309,6 +312,7 @@ export const theme: ConfigBase['theme'] = {
         markdown: {
           callouts: {
             backgroundColor: 'var(--tk-elements-markdown-callouts-backgroundColor)',
+            textColor: 'var(--tk-elements-markdown-callouts-textColor)',
             borderColor: 'var(--tk-elements-markdown-callouts-borderColor)',
             titleTextColor: 'var(--tk-elements-markdown-callouts-titleTextColor)',
             iconColor: 'var(--tk-elements-markdown-callouts-iconColor)',

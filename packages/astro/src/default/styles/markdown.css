@@ -136,38 +136,53 @@
 }
 
 .markdown-content .callout-tip {
-  --tk-elements-markdown-callouts-backgroundColor: var(--tk-background-tip);
-  --tk-elements-markdown-callouts-borderColor: var(--tk-border-tip);
-  --tk-elements-markdown-callouts-titleTextColor: var(--tk-text-tip);
-  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-markdown-callouts-titleTextColor);
+  --tk-elements-markdown-callouts-backgroundColor: var(--tk-elements-callouts-tip-backgroundColor);
+  --tk-elements-markdown-callouts-textColor: var(--tk-elements-callouts-tip-textColor);
+  --tk-elements-markdown-callouts-borderColor: var(--tk-elements-callouts-tip-borderColor);
+  --tk-elements-markdown-callouts-titleTextColor: var(--tk-elements-callouts-tip-titleTextColor);
+  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-callouts-tip-iconColor);
+  --code-background-color: var(--tk-elements-callouts-tip-codeBackgroundColor);
+  --code-color: var(--tk-elements-callouts-tip-codeColor);
 }
 
 .markdown-content .callout-info {
-  --tk-elements-markdown-callouts-backgroundColor: var(--tk-background-info);
-  --tk-elements-markdown-callouts-borderColor: var(--tk-border-info);
-  --tk-elements-markdown-callouts-titleTextColor: var(--tk-text-info);
-  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-markdown-callouts-titleTextColor);
+  --tk-elements-markdown-callouts-backgroundColor: var(--tk-elements-callouts-info-backgroundColor);
+  --tk-elements-markdown-callouts-textColor: var(--tk-elements-callouts-info-textColor);
+  --tk-elements-markdown-callouts-borderColor: var(--tk-elements-callouts-info-borderColor);
+  --tk-elements-markdown-callouts-titleTextColor: var(--tk-elements-callouts-info-titleTextColor);
+  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-callouts-info-iconColor);
+  --code-background-color: var(--tk-elements-callouts-info-codeBackgroundColor);
+  --code-color: var(--tk-elements-callouts-info-codeColor);
 }
 
 .markdown-content .callout-warn {
-  --tk-elements-markdown-callouts-backgroundColor: var(--tk-background-warning);
-  --tk-elements-markdown-callouts-borderColor: var(--tk-border-warning);
-  --tk-elements-markdown-callouts-titleTextColor: var(--tk-text-warning);
-  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-markdown-callouts-titleTextColor);
+  --tk-elements-markdown-callouts-backgroundColor: var(--tk-elements-callouts-warning-backgroundColor);
+  --tk-elements-markdown-callouts-textColor: var(--tk-elements-callouts-warning-textColor);
+  --tk-elements-markdown-callouts-borderColor: var(--tk-elements-callouts-warning-borderColor);
+  --tk-elements-markdown-callouts-titleTextColor: var(--tk-elements-callouts-warning-titleTextColor);
+  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-callouts-warning-iconColor);
+  --code-background-color: var(--tk-elements-callouts-warning-codeBackgroundColor);
+  --code-color: var(--tk-elements-callouts-warning-codeColor);
 }
 
 .markdown-content .callout-danger {
-  --tk-elements-markdown-callouts-backgroundColor: var(--tk-background-negative);
-  --tk-elements-markdown-callouts-borderColor: var(--tk-border-negative);
-  --tk-elements-markdown-callouts-titleTextColor: var(--tk-text-negative);
-  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-markdown-callouts-titleTextColor);
+  --tk-elements-markdown-callouts-backgroundColor: var(--tk-elements-callouts-danger-backgroundColor);
+  --tk-elements-markdown-callouts-textColor: var(--tk-elements-callouts-danger-textColor);
+  --tk-elements-markdown-callouts-borderColor: var(--tk-elements-callouts-danger-borderColor);
+  --tk-elements-markdown-callouts-titleTextColor: var(--tk-elements-callouts-danger-titleTextColor);
+  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-callouts-danger-iconColor);
+  --code-background-color: var(--tk-elements-callouts-danger-codeBackgroundColor);
+  --code-color: var(--tk-elements-callouts-danger-codeColor);
 }
 
 .markdown-content .callout-success {
-  --tk-elements-markdown-callouts-backgroundColor: var(--tk-background-positive);
-  --tk-elements-markdown-callouts-borderColor: var(--tk-border-positive);
-  --tk-elements-markdown-callouts-titleTextColor: var(--tk-text-positive);
-  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-markdown-callouts-titleTextColor);
+  --tk-elements-markdown-callouts-backgroundColor: var(--tk-elements-callouts-success-backgroundColor);
+  --tk-elements-markdown-callouts-textColor: var(--tk-elements-callouts-success-textColor);
+  --tk-elements-markdown-callouts-borderColor: var(--tk-elements-callouts-success-borderColor);
+  --tk-elements-markdown-callouts-titleTextColor: var(--tk-elements-callouts-success-titleTextColor);
+  --tk-elements-markdown-callouts-iconColor: var(--tk-elements-callouts-success-iconColor);
+  --code-background-color: var(--tk-elements-callouts-success-codeBackgroundColor);
+  --code-color: var(--tk-elements-callouts-success-codeColor);
 }
 
 .markdown-content .callout a:has(> code):not(:hover) {

@@ -73,7 +73,7 @@ export async function createTutorial(flags: yargs.Arguments) {
   }
 }
 
-async function _createTutorial(flags: CreateOptions) {
+async function _createTutorial(flags: CreateOptions): Promise<undefined> {
   prompts.intro(primaryLabel(pkg.name));
 
   let tutorialName = flags._[1] !== undefined ? String(flags._[1]) : undefined;
@@ -91,6 +91,8 @@ async function _createTutorial(flags: CreateOptions) {
           if (!value) {
             return 'Please provide a name!';
           }
+
+          return undefined;
         },
       });
 
@@ -110,7 +112,7 @@ async function _createTutorial(flags: CreateOptions) {
   if (fs.existsSync(resolvedDest) && !flags.force) {
     if (flags.defaults) {
       console.error(`\n${errorLabel()} Failed to create tutorial. Directory already exists.`);
-      return process.exit(1);
+      process.exit(1);
     }
 
     let answer: boolean | symbol;
@@ -130,7 +132,7 @@ async function _createTutorial(flags: CreateOptions) {
     assertNotCanceled(answer);
 
     if (!answer) {
-      return exitEarly();
+      exitEarly();
     }
   } else {
     if (!flags.dryRun) {
@@ -195,7 +197,7 @@ async function startProject(cwd: string, packageManager: PackageManager, flags: 
 }
 
 async function getTutorialDirectory(tutorialName: string, flags: CreateOptions) {
-  let dir = flags.dir;
+  const dir = flags.dir;
 
   if (dir) {
     return dir;
@@ -213,6 +215,8 @@ async function getTutorialDirectory(tutorialName: string, flags: CreateOptions) 
       if (!path.isAbsolute(value) && !value.startsWith('./')) {
         return 'Please provide an absolute or relative path!';
       }
+
+      return undefined;
     },
   });
 
@@ -276,7 +280,7 @@ function updateReadme(dest: string, packageManager: PackageManager, flags: Creat
   fs.writeFileSync(readmePath, readme);
 }
 
-function exitEarly(exitCode = 0) {
+function exitEarly(exitCode = 0): never {
   prompts.outro('Until next time!');
   process.exit(exitCode);
 }

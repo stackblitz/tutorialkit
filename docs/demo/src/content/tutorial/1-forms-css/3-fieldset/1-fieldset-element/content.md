@@ -5,11 +5,11 @@ slug: fieldset-element
 focus: /index.html
 ---
 
-The `<fieldset>` HTML element groups related form controls, such as buttons, inputs, textareas, and labels, within a web form. 
+The `<fieldset>` HTML element groups related form controls, such as buttons, inputs, textareas, and labels, within a web form.
 
 This allows you to apply common styling and functional rules to the entire set of elements. Let's take a closer look at working with fieldsets!
 
-The current forms includes 6 inputs and we will want each pair to be visually and logically grouped together. 
+The current forms includes 6 inputs and we will want each pair to be visually and logically grouped together.
 
 Create **3 fieldsets** by wrapping them around the markup responsible for displaing the form fields:
 
