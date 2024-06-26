@@ -4,6 +4,7 @@ description: 'How to theme TutorialKit'
 ---
 
 TutorialKit allows you to customize its appearance to match your brand or preferences. This guide explains how to modify various elements of the interface using CSS variables and file replacements.
+
 ## Logo
 
 You can customize the logo in the top left corner of the TutorialKit UI by replacing the `logo.svg` file in the `public` directory of your TutorialKit project. Supported extensions for the logo are `.svg`, `.png`, `.jpg`, and `.jpeg`.
@@ -122,38 +123,38 @@ The statuses refer to the preview window that shows the status of the [`mainComm
 
 #### Positive
 
-| Token                                      | Description                                                       |
-| ------------------------------------------ | ----------------------------------------------------------------- |
-| `--tk-elements-status-positive-textColor`  | The text color for positive the status.                           |
-| `--tk-elements-status-positive-iconColor`  | The icon color for the positive status. Default is the text color |
+| Token                                      | Description                                                        |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| `--tk-elements-status-positive-textColor`  | The text color for the positive status.                            |
+| `--tk-elements-status-positive-iconColor`  | The icon color for the positive status. Default is the text color. |
 
 #### Negative
 
-| Token                                      | Description                                                       |
-| ------------------------------------------ | ----------------------------------------------------------------- |
-| `--tk-elements-status-negative-textColor`  | The text color for negative the status.                           |
-| `--tk-elements-status-negative-iconColor`  | The icon color for the negative status. Default is the text color |
+| Token                                      | Description                                                        |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| `--tk-elements-status-negative-textColor`  | The text color for the negative status.                            |
+| `--tk-elements-status-negative-iconColor`  | The icon color for the negative status. Default is the text color. |
 
 #### Skipped
 
-| Token                                     | Description                                                      |
-| ----------------------------------------- | ---------------------------------------------------------------- |
-| `--tk-elements-status-skipped-textColor`  | The text color for skipped the status.                           |
-| `--tk-elements-status-skipped-iconColor`  | The icon color for the skipped status. Default is the text color |
+| Token                                     | Description                                                       |
+| ----------------------------------------- | ----------------------------------------------------------------- |
+| `--tk-elements-status-skipped-textColor`  | The text color for the skipped status.                            |
+| `--tk-elements-status-skipped-iconColor`  | The icon color for the skipped status. Default is the text color. |
 
 #### Disabled
 
-| Token                                      | Description                                                       |
-| ------------------------------------------ | ----------------------------------------------------------------- |
-| `--tk-elements-status-disabled-textColor`  | The text color for disabled the status.                           |
-| `--tk-elements-status-disabled-iconColor`  | The icon color for the disabled status. Default is the text color |
+| Token                                      | Description                                                        |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| `--tk-elements-status-disabled-textColor`  | The text color for the disabled status.                            |
+| `--tk-elements-status-disabled-iconColor`  | The icon color for the disabled status. Default is the text color. |
 
 #### Active
 
-| Token                                      | Description                                                       |
-| ------------------------------------------ | ----------------------------------------------------------------- |
-| `--tk-elements-status-active-textColor`  | The text color for active the status.                           |
-| `--tk-elements-status-active-iconColor`  | The icon color for the active status. Default is the text color |
+| Token                                   | Description                                                      |
+| --------------------------------------- | ---------------------------------------------------------------- |
+| `--tk-elements-status-active-textColor` | The text color for the active status.                            |
+| `--tk-elements-status-active-iconColor` | The icon color for the active status. Default is the text color. |
 
 ### Top Bar
 
@@ -281,16 +282,16 @@ The navigation cards are the cards at the bottom of a lesson to navigate to the 
 
 ![Navigation Card](./images/theming-navcard.png)
 
-| Token                                        | Description                                                 |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| `--tk-elements-navCard-textColor`            | The text color for the navigation card.                     |
-| `--tk-elements-navCard-textColorHover`       | The text color for the navigation card when hovering.       |
-| `--tk-elements-navCard-backgroundColor`      | The background color for the navigation card.               |
-| `--tk-elements-navCard-backgroundColorHover` | The background color for the navigation card when hovering. |
-| `--tk-elements-navCard-borderColor`          | The border color for the navigation card.                   |
-| `--tk-elements-navCard-borderColorHover`     | The border color for the navigation card when hovering.     |
-| `--tk-elements-navCard-iconColor`            | The icon color for the navigation card.                     |
-| `--tk-elements-navCard-iconColorHover`       | The icon color for the navigation card when hovering.       |
+| Token                                        | Description                                                |
+| -------------------------------------------- | ---------------------------------------------------------- |
+| `--tk-elements-navCard-textColor`            | The text color of the navigation card.                     |
+| `--tk-elements-navCard-textColorHover`       | The text color of the navigation card when hovering.       |
+| `--tk-elements-navCard-backgroundColor`      | The background color of the navigation card.               |
+| `--tk-elements-navCard-backgroundColorHover` | The background color of the navigation card when hovering. |
+| `--tk-elements-navCard-borderColor`          | The border color of the navigation card.                   |
+| `--tk-elements-navCard-borderColorHover`     | The border color of the navigation card when hovering.     |
+| `--tk-elements-navCard-iconColor`            | The icon color of the navigation card.                     |
+| `--tk-elements-navCard-iconColorHover`       | The icon color of the navigation card when hovering.       |
 
 ### Breadcrumbs
 
@@ -304,8 +305,8 @@ The navigation elements are the back and forward buttons next to the dropdown at
 
 | Token                                                | Description                                      |
 | ---------------------------------------------------- | ------------------------------------------------ |
-| `--tk-elements-breadcrumbs-navButton-iconColor`      | The color for the navigation icon.               |
-| `--tk-elements-breadcrumbs-navButton-iconColorHover` | The color for the navigation icon when hovering. |
+| `--tk-elements-breadcrumbs-navButton-iconColor`      | The color of the navigation icon.               |
+| `--tk-elements-breadcrumbs-navButton-iconColorHover` | The color of the navigation icon when hovering. |
 
 ##### Toggle Button
 
@@ -313,23 +314,23 @@ The toggle button shows the current chapter and lesson and can be used to naviga
 
 ![Breadcrumb Button](./images/theming-breadcrumb-button.png)
 
-| Token                                                             | Description                                                                            |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `--tk-elements-breadcrumbs-toggleButton-backgroundColor`          | Background color for the toggle button.                                                |
-| `--tk-elements-breadcrumbs-toggleButton-backgroundColorHover`     | Background color for the toggle button when hovering.                                  |
-| `--tk-elements-breadcrumbs-toggleButton-backgroundColorSelected`  | Background color for the toggle button when the dropdown is expanded.                  |
-| `--tk-elements-breadcrumbs-toggleButton-borderColor`              | Border color for the toggle button.                                                    |
-| `--tk-elements-breadcrumbs-toggleButton-borderColorHover`         | Border color for the toggle button when hovering.                                      |
-| `--tk-elements-breadcrumbs-toggleButton-borderColorSelected`      | Border color for the toggle button when the dropdown is expanded.                      |
-| `--tk-elements-breadcrumbs-toggleButton-textColor`                | Text color for the toggle button.                                                      |
-| `--tk-elements-breadcrumbs-toggleButton-textColorHover`           | Text color for the toggle button when hovering                                         |
-| `--tk-elements-breadcrumbs-toggleButton-textColorSelected`        | Text color for the toggle button when the dropdown is expanded.                        |
-| `--tk-elements-breadcrumbs-toggleButton-textDividerColor`         | Color for the divider in between the different sections.                               |
-| `--tk-elements-breadcrumbs-toggleButton-textDividerColorHover`    | Color for the divider in between the different sections when hovering.                 |
-| `--tk-elements-breadcrumbs-toggleButton-textDividerColorSelected` | Color for the divider in between the different sections when the dropdown is expanded. |
-| `--tk-elements-breadcrumbs-toggleButton-iconColor`                | Color for the arrow icon.                                                              |
-| `--tk-elements-breadcrumbs-toggleButton-iconColorHover`           | Color for the arrow icon when hovering.                                                |
-| `--tk-elements-breadcrumbs-toggleButton-iconColorSelected`        | Color for the arrow icon when the dropdown is expanded                                 |
+| Token                                                             | Description                                                                               |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `--tk-elements-breadcrumbs-toggleButton-backgroundColor`          | The background color of the toggle button.                                                |
+| `--tk-elements-breadcrumbs-toggleButton-backgroundColorHover`     | The background color of the toggle button when hovering.                                  |
+| `--tk-elements-breadcrumbs-toggleButton-backgroundColorSelected`  | The background color of the toggle button when the dropdown is expanded.                  |
+| `--tk-elements-breadcrumbs-toggleButton-borderColor`              | The border color of the toggle button.                                                    |
+| `--tk-elements-breadcrumbs-toggleButton-borderColorHover`         | The border color of the toggle button when hovering.                                      |
+| `--tk-elements-breadcrumbs-toggleButton-borderColorSelected`      | The border color of the toggle button when the dropdown is expanded.                      |
+| `--tk-elements-breadcrumbs-toggleButton-textColor`                | The text color of the toggle button.                                                      |
+| `--tk-elements-breadcrumbs-toggleButton-textColorHover`           | The text color of the toggle button when hovering.                                        |
+| `--tk-elements-breadcrumbs-toggleButton-textColorSelected`        | The text color of the toggle button when the dropdown is expanded.                        |
+| `--tk-elements-breadcrumbs-toggleButton-textDividerColor`         | The color of the divider in between the different sections.                               |
+| `--tk-elements-breadcrumbs-toggleButton-textDividerColorHover`    | The color of the divider in between the different sections when hovering.                 |
+| `--tk-elements-breadcrumbs-toggleButton-textDividerColorSelected` | The color of the divider in between the different sections when the dropdown is expanded. |
+| `--tk-elements-breadcrumbs-toggleButton-iconColor`                | The color of the arrow icon.                                                              |
+| `--tk-elements-breadcrumbs-toggleButton-iconColorHover`           | The color of the arrow icon when hovering.                                                |
+| `--tk-elements-breadcrumbs-toggleButton-iconColorSelected`        | The color of the arrow icon when the dropdown is expanded.                                |
 
 ##### Dropdown
 
@@ -337,23 +338,23 @@ The following tokens are used to customize the appearance of the breadcrumb drop
 
 ![Breadcrumb Dropdown](./images/theming-breadcrumb-dropdown.png)
 
-| Token                                                              | Description                                                      |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------- |
-| `--tk-elements-breadcrumbs-dropdown-backgroundColor`               | Background color for the dropdown.                               |
-| `--tk-elements-breadcrumbs-dropdown-borderColor`                   | Border color between the toggle button and the dropdown.         |
-| `--tk-elements-breadcrumbs-dropdown-textColor`                     | Standard text color for dropdown.                                |
-| `--tk-elements-breadcrumbs-dropdown-textColorHover`                | Text color on hover for breadcrumb dropdown.                     |
-| `--tk-elements-breadcrumbs-dropdown-accordionTextColor`            | Text color for the collapsible or expandable title.              |
-| `--tk-elements-breadcrumbs-dropdown-accordionTextColorSelected`    | Text color for the selected collapsable or expandable title.     |
-| `--tk-elements-breadcrumbs-dropdown-accordionTextColorHover`       | Text color when hovering over a collapsable or expandable title. |
-| `--tk-elements-breadcrumbs-dropdown-accordionIconColor`            | Icon color for the collapsable or expandable title.              |
-| `--tk-elements-breadcrumbs-dropdown-accordionIconColorSelected`    | Icon colorfor the selected collapsable or expandable title.      |
-| `--tk-elements-breadcrumbs-dropdown-accordionIconColorHover`       | Icon color when hovering over a collapsable or expandable title. |
-| `--tk-elements-breadcrumbs-dropdown-lessonBackgroundColor`         | Background color for the lesson.                                 |
-| `--tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected` | Background color for the selected lesson.                        |
-| `--tk-elements-breadcrumbs-dropdown-lessonTextColor`               | Text color for the lesson.                                       |
-| `--tk-elements-breadcrumbs-dropdown-lessonTextColorSelected`       | Text color for the selected lesson.                              |
-| `--tk-elements-breadcrumbs-dropdown-lessonTextColorHover`          | Text color when hovering over a lesson.                          |
+| Token                                                              | Description                                                          |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| `--tk-elements-breadcrumbs-dropdown-backgroundColor`               | The background color of the dropdown.                                |
+| `--tk-elements-breadcrumbs-dropdown-borderColor`                   | The border color of the toggle button and the dropdown.              |
+| `--tk-elements-breadcrumbs-dropdown-textColor`                     | The standard text color of the dropdown.                             |
+| `--tk-elements-breadcrumbs-dropdown-textColorHover`                | The standard text color of the dropdown when hovering.               |
+| `--tk-elements-breadcrumbs-dropdown-accordionTextColor`            | The text color of the collapsible or expandable title.               |
+| `--tk-elements-breadcrumbs-dropdown-accordionTextColorSelected`    | The text color of the selected collapsible or expandable title.      |
+| `--tk-elements-breadcrumbs-dropdown-accordionTextColorHover`       | The text color of the collapsible or expandable title when hovering. |
+| `--tk-elements-breadcrumbs-dropdown-accordionIconColor`            | The icon color of the collapsible or expandable title.               |
+| `--tk-elements-breadcrumbs-dropdown-accordionIconColorSelected`    | The icon color of the selected collapsible or expandable title.      |
+| `--tk-elements-breadcrumbs-dropdown-accordionIconColorHover`       | The icon color of the collapsible or expandable title when hovering. |
+| `--tk-elements-breadcrumbs-dropdown-lessonBackgroundColor`         | The background color of the lesson.                                  |
+| `--tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected` | The background color of the selected lesson.                         |
+| `--tk-elements-breadcrumbs-dropdown-lessonTextColor`               | The text color of the lesson.                                        |
+| `--tk-elements-breadcrumbs-dropdown-lessonTextColorSelected`       | The text color of the selected lesson.                               |
+| `--tk-elements-breadcrumbs-dropdown-lessonTextColorHover`          | The text color of the lesson when hoevering.                         |
 
 ### Previews
 
@@ -373,23 +374,23 @@ The terminal refers to both a [read-only and an interactive terminal](../../guid
 
 | Token                                              | Description                                           |
 | -------------------------------------------------- | ----------------------------------------------------- |
-| `--tk-elements-terminal-backgroundColor`           | Background color of the terminal.                     |
-| `--tk-elements-terminal-textColor`                 | Text color of the terminal.                           |
-| `--tk-elements-terminal-cursorColor`               | Color of the terminal cursor.                         |
-| `--tk-elements-terminal-selection-backgroundColor` | Background color of selected text in the terminal.    |
-| `--tk-elements-terminal-color-black`               | Color for black text in the terminal.                 |
-| `--tk-elements-terminal-color-red`                 | Color for red text in the terminal.                   |
-| `--tk-elements-terminal-color-green`               | Color for green text in the terminal.                 |
-| `--tk-elements-terminal-color-yellow`              | Color for yellow text in the terminal.                |
-| `--tk-elements-terminal-color-blue`                | Color for blue text in the terminal.                  |
-| `--tk-elements-terminal-color-magenta`             | Color for magenta text in the terminal.               |
-| `--tk-elements-terminal-color-cyan`                | Color for cyan text in the terminal.                  |
-| `--tk-elements-terminal-color-white`               | Color for white text in the terminal.                 |
-| `--tk-elements-terminal-color-brightBlack`         | Color for bright black text in the terminal.          |
-| `--tk-elements-terminal-color-brightRed`           | Color for bright red text in the terminal.            |
-| `--tk-elements-terminal-color-brightGreen`         | Color for bright green text in the terminal.          |
-| `--tk-elements-terminal-color-brightYellow`        | Color for bright yellow text in the terminal.         |
-| `--tk-elements-terminal-color-brightBlue`          | Color for bright blue text in the terminal.           |
-| `--tk-elements-terminal-color-brightMagenta`       | Color for bright magenta text in the terminal.        |
-| `--tk-elements-terminal-color-brightCyan`          | Color for bright cyan text in the terminal.           |
-| `--tk-elements-terminal-color-brightWhite`         | Color for bright white text in the terminal.          |
+| `--tk-elements-terminal-backgroundColor`           | The background color of the terminal.                 |
+| `--tk-elements-terminal-textColor`                 | The text color of the terminal.                       |
+| `--tk-elements-terminal-cursorColor`               | The color of the terminal cursor.                     |
+| `--tk-elements-terminal-selection-backgroundColor` | The background color of selected text in the terminal.|
+| `--tk-elements-terminal-color-black`               | The color of black text in the terminal.              |
+| `--tk-elements-terminal-color-red`                 | The color of red text in the terminal.                |
+| `--tk-elements-terminal-color-green`               | The color of green text in the terminal.              |
+| `--tk-elements-terminal-color-yellow`              | The color of yellow text in the terminal.             |
+| `--tk-elements-terminal-color-blue`                | The color of blue text in the terminal.               |
+| `--tk-elements-terminal-color-magenta`             | The color of magenta text in the terminal.            |
+| `--tk-elements-terminal-color-cyan`                | The color of cyan text in the terminal.               |
+| `--tk-elements-terminal-color-white`               | The color of white text in the terminal.              |
+| `--tk-elements-terminal-color-brightBlack`         | The color of bright black text in the terminal.       |
+| `--tk-elements-terminal-color-brightRed`           | The color of bright red text in the terminal.         |
+| `--tk-elements-terminal-color-brightGreen`         | The color of bright green text in the terminal.       |
+| `--tk-elements-terminal-color-brightYellow`        | The color of bright yellow text in the terminal.      |
+| `--tk-elements-terminal-color-brightBlue`          | The color of bright blue text in the terminal.        |
+| `--tk-elements-terminal-color-brightMagenta`       | The color of bright magenta text in the terminal.     |
+| `--tk-elements-terminal-color-brightCyan`          | The color of bright cyan text in the terminal.        |
+| `--tk-elements-terminal-color-brightWhite`         | The color of bright white text in the terminal.       |
