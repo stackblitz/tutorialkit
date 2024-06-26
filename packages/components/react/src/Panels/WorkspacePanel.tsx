@@ -146,6 +146,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         maxSize={hasEditor ? 100 : 0}
         collapsible={!hasEditor}
         ref={editorPanelRef}
+        className="bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor"
       >
         <EditorPanel
           id={tutorialStore.ref}
@@ -209,7 +210,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         onExpand={() => {
           terminalExpanded.current = true;
         }}
-        className={classNames({
+        className={classNames('bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor', {
           'border-t border-tk-elements-app-borderColor': hasPreviews,
         })}
       >
