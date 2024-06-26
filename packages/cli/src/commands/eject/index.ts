@@ -79,7 +79,7 @@ async function _eject(flags: EjectOptions) {
 
   fs.writeFileSync(astroConfigPath, generateAstroConfig(astroConfig));
 
-// we copy all assets from the `default` folder into the `src` folder
+  // we copy all assets from the `default` folder into the `src` folder
   fs.cpSync(srcPath, srcDestPath, { recursive: true });
 
   /**
