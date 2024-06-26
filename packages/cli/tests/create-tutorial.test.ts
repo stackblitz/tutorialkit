@@ -69,7 +69,7 @@ test('create and build a project', async (context) => {
   expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
-test.only('create and eject a project', async (context) => {
+test('create and eject a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
