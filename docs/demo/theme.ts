@@ -179,6 +179,7 @@ export const theme: ConfigBase['theme'] = {
         },
         panel: {
           backgroundColor: 'var(--tk-elements-panel-backgroundColor)',
+          textColor: 'var(--tk-elements-panel-textColor)',
           header: {
             backgroundColor: 'var(--tk-elements-panel-header-backgroundColor)',
             textColor: 'var(--tk-elements-panel-header-textColor)',

@@ -62,7 +62,7 @@ export function EditorPanel({
   }, [id]);
 
   return (
-    <PanelGroup className="bg-tk-elements-app-backgroundColor" direction="horizontal">
+    <PanelGroup className="bg-tk-elements-panel-backgroundColor" direction="horizontal">
       <Panel className="flex flex-col" collapsible defaultSize={0} minSize={10} ref={fileTreePanelRef}>
         <div className="panel-header border-r border-b border-tk-elements-app-borderColor">
           <div className="panel-title">
