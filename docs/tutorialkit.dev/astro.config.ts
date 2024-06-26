@@ -59,7 +59,7 @@ export default defineConfig({
           label: 'Reference',
           items: [
             {
-              label: 'Theming Reference',
+              label: 'Theming',
               link: '/reference/theming/',
             },
           ],
