@@ -235,10 +235,25 @@ exports[`create and eject a project 1`] = `
   "src/utils/logger.ts",
   "src/utils/nav.ts",
   "src/utils/routes.ts",
+  "src/utils/url.ts",
   "src/utils/workspace.ts",
   "tsconfig.json",
   "uno.config.ts",
 ]
+`;
+
+exports[`create and eject a project 2`] = `
+"import tutorialkit from '@tutorialkit/astro';
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({
+  devToolbar: {
+    enabled: false
+  },
+  integrations: [tutorialkit({
+    defaultRoutes: false
+  })]
+});"
 `;
 
 exports[`create, eject and build a project 1`] = `

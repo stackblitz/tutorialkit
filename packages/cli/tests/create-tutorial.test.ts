@@ -69,7 +69,7 @@ test('create and build a project', async (context) => {
   expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
-test('create and eject a project', async (context) => {
+test.only('create and eject a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
@@ -93,6 +93,7 @@ test('create and eject a project', async (context) => {
   const projectFiles = await fs.readdir(dest, { recursive: true });
 
   expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
+  expect(await fs.readFile(path.join(dest, 'astro.config.ts'), 'utf-8')).toMatchSnapshot();
 });
 
 test('create, eject and build a project', async (context) => {
