@@ -92,7 +92,7 @@ async function _eject(flags: EjectOptions) {
     fs.readFileSync(path.join(astroIntegrationPath, 'package.json'), 'utf-8'),
   );
 
-  let newDependencies = [];
+  const newDependencies = [];
 
   for (const dep of REQUIRED_DEPENDENCIES) {
     if (!(dep in pkgJson.dependencies) && !(dep in pkgJson.devDependencies)) {
