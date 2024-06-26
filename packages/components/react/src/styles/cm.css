@@ -3,7 +3,7 @@
   --cm-textColor: var(--tk-elements-editor-textColor, var(--tk-text-primary));
 
   /* Gutter */
-  --cm-gutter-backgroundColor: var(--ts-elements-editor-gutter-backgroundColor, var(--cm-backgroundColor));
+  --cm-gutter-backgroundColor: var(--tk-elements-editor-gutter-backgroundColor, var(--cm-backgroundColor));
   --cm-gutter-textColor: var(--tk-elements-editor-gutter-textColor, var(--tk-text-secondary));
   --cm-gutter-activeLineTextColor: var(--tk-elements-editor-gutter-activeLineTextColor, var(--cm-gutter-textColor));
 
