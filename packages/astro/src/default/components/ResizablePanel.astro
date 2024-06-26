@@ -63,13 +63,13 @@ const panelClass = `overflow-hidden ${type === 'horizontal' ? 'h-full' : ''}`;
         $container.style.setProperty('--pos', pos);
       }
     </script>
-    <div class={panelClass}>
+    <div class={panelClass} data-id="main-panel">
       <slot name="a" />
     </div>
     {
       hasSidePanel && (
         <>
-          <div class={`${panelClass} ${sidePanelClass}`}>
+          <div class={`${panelClass} ${sidePanelClass}`} data-id="side-panel">
             <slot name="b" />
           </div>
           <div
@@ -97,12 +97,16 @@ const panelClass = `overflow-hidden ${type === 'horizontal' ? 'h-full' : ''}`;
     #dragging = false;
 
     #container: HTMLElement;
+    #mainPanel: HTMLElement;
+    #sidePanel: HTMLElement | undefined;
     #divider: HTMLElement | undefined;
 
     constructor() {
       super();
 
       this.#container = this.querySelector(':scope > [data-id="container"]') as HTMLElement;
+      this.#mainPanel = this.#container.querySelector(':scope > [data-id="main-panel"]') as HTMLElement;
+      this.#sidePanel = this.#container.querySelector(':scope > [data-id="side-panel"]') as HTMLElement | undefined;
       this.#divider = this.#container.querySelector(':scope > [data-id="divider"]') as HTMLElement | undefined;
 
       this.#width = this.#container.clientWidth;
@@ -126,11 +130,11 @@ const panelClass = `overflow-hidden ${type === 'horizontal' ? 'h-full' : ''}`;
     }
 
     mainPanel(): HTMLElement {
-      return this.#container.children[1] as HTMLElement;
+      return this.#mainPanel;
     }
 
     sidePanel(): HTMLElement | undefined {
-      return this.#container.children[2] as HTMLElement | undefined;
+      return this.#sidePanel;
     }
 
     divider(): HTMLElement | undefined {
