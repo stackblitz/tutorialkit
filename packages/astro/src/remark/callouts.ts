@@ -65,6 +65,7 @@ function transformUnhandledDirective(node: TextDirective | LeafDirective, index:
     type: 'text',
     value: toMarkdown(node, { extensions: [directiveToMarkdown()] }),
   } as const;
+
   if (node.type === 'textDirective') {
     parent.children[index] = textNode;
   } else {
@@ -105,7 +106,7 @@ export function remarkCalloutsPlugin() {
           const hideIcon = attributes.hideIcon === 'true';
 
           const classes = [
-            `callout callout-${variant} my-4 flex flex-col p-3 bg-tk-elements-markdown-callouts-backgroundColor`,
+            `callout callout-${variant} my-4 flex flex-col p-3 bg-tk-elements-markdown-callouts-backgroundColor text-tk-elements-markdown-callouts-textColor`,
             attributes.class ?? '',
             ...(noBorder ? [] : ['border-l-3', 'border-tk-elements-markdown-callouts-borderColor']),
           ];
@@ -164,7 +165,7 @@ function generate(title: string, children: any[], callout: Callout, hideIcon: bo
         hName: 'section',
         hProperties: { className: ['callout-content mt-1'] },
       },
-      children: children,
+      children,
     },
   ] satisfies Children;
 }

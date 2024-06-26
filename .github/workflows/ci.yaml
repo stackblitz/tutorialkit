@@ -25,13 +25,13 @@ jobs:
       - name: Setup
         uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 8.15.6
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies
         run: pnpm install
       - name: Lint
-        run: pnpm prettier --check .
+        run: pnpm lint
       - name: Build
         run: pnpm build
       - name: Test
@@ -44,7 +44,7 @@ jobs:
       - name: Setup
         uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 8.15.6
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies

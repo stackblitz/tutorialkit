@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { CreateOptions } from './options.js';
 import { parseAstroConfig, replaceArgs } from './astro-config.js';
 import { generate } from './babel.js';
+import type { CreateOptions } from './options.js';
 
 export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) {
   if (!flags.defaults && flags.enterprise === undefined) {
@@ -59,7 +59,7 @@ function validateEditorOrigin(value: string): string | undefined {
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       return 'Please provide an origin starting with http:// or https://';
     }
-  } catch (error) {
+  } catch {
     return 'Please provide a valid origin URL!';
   }
 }

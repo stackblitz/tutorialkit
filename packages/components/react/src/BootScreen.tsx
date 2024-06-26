@@ -11,12 +11,7 @@ export function BootScreen({ className, tutorialStore }: Props) {
   const steps = useStore(tutorialStore.steps);
 
   return (
-    <div
-      className={classNames(
-        'flex-grow w-full flex justify-center items-center text-sm bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor',
-        className,
-      )}
-    >
+    <div className={classNames('flex-grow w-full flex justify-center items-center text-sm', className)}>
       {steps ? (
         <ul className="space-y-1">
           {steps.map((step, index) => (
@@ -30,7 +25,6 @@ export function BootScreen({ className, tutorialStore }: Props) {
               ) : step.status === 'failed' ? (
                 <div className="inline-block mr-2 i-ph-x-circle-duotone scale-120 text-tk-elements-status-negative-iconColor" />
               ) : (
-                // skipped step
                 <div className="inline-block mr-2 i-ph-minus-circle-duotone scale-120 text-tk-elements-status-skipped-iconColor" />
               )}
               <span className={toTextColor(step.status)}>{step.title}</span>

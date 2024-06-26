@@ -27,6 +27,8 @@ export const tutorialkitStore: VitePlugin = {
     if (id === virtualModuleId) {
       return resolvedVirtualModuleId;
     }
+
+    return undefined;
   },
   async load(id) {
     if (id === resolvedVirtualModuleId) {
@@ -37,5 +39,7 @@ export const tutorialkitStore: VitePlugin = {
         export default tutorialStore;
       `;
     }
+
+    return undefined;
   },
 };

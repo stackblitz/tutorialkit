@@ -179,6 +179,7 @@ export const theme: ConfigBase['theme'] = {
         },
         panel: {
           backgroundColor: 'var(--tk-elements-panel-backgroundColor)',
+          textColor: 'var(--tk-elements-panel-textColor)',
           header: {
             backgroundColor: 'var(--tk-elements-panel-header-backgroundColor)',
             textColor: 'var(--tk-elements-panel-header-textColor)',
@@ -312,6 +313,7 @@ export const theme: ConfigBase['theme'] = {
         markdown: {
           callouts: {
             backgroundColor: 'var(--tk-elements-markdown-callouts-backgroundColor)',
+            textColor: 'var(--tk-elements-markdown-callouts-textColor)',
             borderColor: 'var(--tk-elements-markdown-callouts-borderColor)',
             titleTextColor: 'var(--tk-elements-markdown-callouts-titleTextColor)',
             iconColor: 'var(--tk-elements-markdown-callouts-iconColor)',

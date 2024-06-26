@@ -9,6 +9,7 @@ export { t };
 export function generate(ast: t.File) {
   const astToText = generator.default;
   const { code } = astToText(ast);
+
   return code;
 }
 

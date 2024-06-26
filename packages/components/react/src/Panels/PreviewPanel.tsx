@@ -1,10 +1,10 @@
-import { BootScreen } from '../BootScreen.js';
-import type { PreviewInfo, TutorialStore } from '@tutorialkit/runtime';
 import { useStore } from '@nanostores/react';
-import resizePanelStyles from '../styles/resize-panel.module.css';
-import { classNames } from '../utils/classnames.js';
+import type { PreviewInfo, TutorialStore } from '@tutorialkit/runtime';
 import { createElement, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import { BootScreen } from '../BootScreen.js';
+import resizePanelStyles from '../styles/resize-panel.module.css';
+import { classNames } from '../utils/classnames.js';
 
 interface Props {
   showToggleTerminal?: boolean;
@@ -73,7 +73,7 @@ export const PreviewPanel = memo(
 
     if (!hasPreviews) {
       return (
-        <div className="flex flex-col h-full w-full">
+        <div className="panel-container bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor">
           <div className="panel-header border-b border-tk-elements-app-borderColor justify-between">
             <div className="panel-title">
               <div className="panel-icon i-ph-lightning-duotone"></div>

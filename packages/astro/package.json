@@ -17,7 +17,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "node ./scripts/build.js"
+    "build": "node ./scripts/build.js",
+    "test": "vitest"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.1",
@@ -55,7 +56,8 @@
     "esbuild-node-externals": "^1.13.1",
     "execa": "^9.2.0",
     "typescript": "^5.4.5",
-    "vite-plugin-inspect": "0.8.4"
+    "vite-plugin-inspect": "0.8.4",
+    "vitest": "^1.6.0"
   },
   "peerDependencies": {
     "astro": "^4.10.2"

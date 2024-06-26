@@ -66,6 +66,8 @@ function tryRead(filePath: string, warn = true) {
       printWarning(`Could not read '${filePath}'. Are you sure this file exists?`);
     }
   }
+
+  return undefined;
 }
 
 function getTemplateName(file: string) {

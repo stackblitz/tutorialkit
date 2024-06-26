@@ -16,7 +16,7 @@ export function assertNotCanceled<T>(value: T | symbol, exitCode = 0): asserts v
 
     console.log('Until next time!');
 
-    return process.exit(exitCode);
+    process.exit(exitCode);
   }
 }
 

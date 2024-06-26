@@ -1,10 +1,10 @@
 import * as prompts from '@clack/prompts';
-import { DEFAULT_VALUES, readFlag, type CreateOptions } from './options.js';
 import { assertNotCanceled } from '../../utils/tasks.js';
+import { DEFAULT_VALUES, readFlag, type CreateOptions } from './options.js';
 
 export async function installAndStart(flags: CreateOptions) {
-  let installDeps = readFlag(flags, 'install');
-  let startProject = readFlag(flags, 'start');
+  const installDeps = readFlag(flags, 'install');
+  const startProject = readFlag(flags, 'start');
 
   if (installDeps === false) {
     // the user doesn't want to install the dependencies, which means we can't start the project either

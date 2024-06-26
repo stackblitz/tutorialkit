@@ -1,9 +1,9 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import type { TutorialStore } from '@tutorialkit/runtime';
 import type { TerminalPanelType } from '@tutorialkit/types';
-import { classNames } from '../utils/classnames.js';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { TerminalRef } from '../Terminal/index.js';
+import { classNames } from '../utils/classnames.js';
 
 const Terminal = lazy(() => import('../Terminal/index.js'));
 
@@ -44,7 +44,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
   }, []);
 
   return (
-    <div className="panel-container bg-tk-elements-app-backgroundColor">
+    <div className="panel-container bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor">
       <div className="panel-tabs-header overflow-x-hidden">
         <div className="panel-title w-full">
           <ul
