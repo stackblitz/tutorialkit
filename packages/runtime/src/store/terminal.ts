@@ -82,7 +82,7 @@ export class TerminalStore {
     const panel = this.terminalConfig.get().panels.find((panel) => panel.id === id);
 
     if (!panel) {
-      // if we don't have a panel with the provided id, just exit.
+      // if we don't have a panel with the provided id, just exit
       return;
     }
 

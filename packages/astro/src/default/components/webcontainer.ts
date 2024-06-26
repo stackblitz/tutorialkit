@@ -1,6 +1,9 @@
+// must be imported first
 import { useAuth } from './setup.js';
+
+import { safeBoot, TutorialStore, webContainerBootStatus } from '@tutorialkit/runtime';
 import { auth, WebContainer } from '@webcontainer/api';
-import { TutorialStore, safeBoot, webContainerBootStatus } from '@tutorialkit/runtime';
+import { joinPaths } from '../utils/url.js';
 
 interface WebContainerContext {
   readonly useAuth: boolean;
@@ -8,7 +11,9 @@ interface WebContainerContext {
   loaded: boolean;
 }
 
-export let webcontainer: Promise<WebContainer> = new Promise(() => {});
+export let webcontainer: Promise<WebContainer> = new Promise(() => {
+  // noop for ssr
+});
 
 if (!import.meta.env.SSR) {
   webcontainer = Promise.resolve(useAuth ? auth.loggedIn() : null).then(() => safeBoot({ workdirName: 'tutorial' }));
@@ -18,7 +23,11 @@ if (!import.meta.env.SSR) {
   });
 }
 
-export const tutorialStore = new TutorialStore({ webcontainer, useAuth });
+export const tutorialStore = new TutorialStore({
+  webcontainer,
+  useAuth,
+  basePathname: joinPaths(import.meta.env.BASE_URL, '/'),
+});
 
 export async function login() {
   auth.startAuthFlow({ popup: true });

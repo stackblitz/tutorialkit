@@ -1,6 +1,6 @@
 import type { DirectoryNode, FileNode, FileSystemTree, SpawnOptions, WebContainer } from '@webcontainer/api';
-import { vi, type Mocked } from 'vitest';
 import path from 'node:path';
+import { vi, type Mocked } from 'vitest';
 
 interface FakeProcess {
   pid: number;
@@ -83,7 +83,9 @@ vi.mock('@webcontainer/api', () => {
 
         delete folderNode.directory[fileName];
       }),
-      rename: vi.fn(async () => {}),
+      rename: vi.fn(async () => {
+        // noop
+      }),
       watch: vi.fn(() => ({
         close: vi.fn(),
       })),
@@ -113,9 +115,12 @@ vi.mock('@webcontainer/api', () => {
         },
       }),
       input = new WritableStream<string>({
-        write() {},
+        write() {
+          // noop
+        },
       }),
     } = fakeProcessFactory(command, args, options);
+
     const fakeProcess: FakeProcess = {
       pid: this._fakeProcesses.length,
       command,
@@ -129,7 +134,9 @@ vi.mock('@webcontainer/api', () => {
         input.close();
         this._fakeProcesses = this._fakeProcesses.filter((p) => p !== fakeProcess);
       },
-      resize() {},
+      resize() {
+        // noop
+      },
     };
 
     Object.defineProperties(fakeProcess, {
@@ -182,6 +189,8 @@ function getFileNode(tree: FileSystemTree, filePath: string): FileNode | undefin
   if (node && 'file' in node) {
     return node;
   }
+
+  return undefined;
 }
 
 function getDirNode(tree: FileSystemTree, filePath: string): DirectoryNode | undefined {
@@ -190,6 +199,8 @@ function getDirNode(tree: FileSystemTree, filePath: string): DirectoryNode | und
   if (node && 'directory' in node) {
     return node;
   }
+
+  return undefined;
 }
 
 function getNode(tree: FileSystemTree, filePath: string): FileNode | DirectoryNode | undefined {
@@ -222,4 +233,6 @@ function getNode(tree: FileSystemTree, filePath: string): FileNode | DirectoryNo
     // if the path think the current segment is not a file then we need to return undefined
     return undefined;
   }
+
+  return undefined;
 }

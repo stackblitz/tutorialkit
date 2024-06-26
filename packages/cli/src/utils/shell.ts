@@ -57,8 +57,8 @@ export async function runShellCommand(
     });
 
     await done;
-  } catch (exitCode) {
-    throw { stdout, stderr, exitCode };
+  } catch (error) {
+    throw { stdout, stderr, exitCode: error };
   }
 
   return { stdout, stderr, exitCode: child.exitCode };

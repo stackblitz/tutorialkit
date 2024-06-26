@@ -31,6 +31,7 @@ function getEventPrefix(level: 'info' | 'error' | 'warn', label: string) {
   if (level === 'error') {
     return red(prefix.join(' '));
   }
+
   if (level === 'warn') {
     return yellow(prefix.join(' '));
   }
@@ -38,6 +39,7 @@ function getEventPrefix(level: 'info' | 'error' | 'warn', label: string) {
   if (prefix.length === 1) {
     return dim(prefix[0]);
   }
+
   return dim(prefix[0]) + ' ' + blue(prefix.splice(1).join(' '));
 }
 
