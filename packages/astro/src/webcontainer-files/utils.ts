@@ -1,4 +1,6 @@
 import { folderPathToFilesRef } from '@tutorialkit/types';
+import glob from 'fast-glob';
+import { FILES_FOLDER_NAME, IGNORED_FILES, SOLUTION_FOLDER_NAME } from './constants.js';
 
 export interface ContentDirs {
   templatesDir: string;
@@ -13,4 +15,15 @@ export function getFilesRef(pathToFolder: string, { contentDir, templatesDir }: 
   }
 
   return folderPathToFilesRef(pathToFolder);
+}
+
+export function getAllFilesMap({ contentDir, templatesDir }: ContentDirs) {
+  return glob(
+    [
+      `${glob.convertPathToPattern(contentDir)}/**/${FILES_FOLDER_NAME}`,
+      `${glob.convertPathToPattern(contentDir)}/**/${SOLUTION_FOLDER_NAME}`,
+      `${glob.convertPathToPattern(templatesDir)}/*`,
+    ],
+    { onlyDirectories: true, ignore: IGNORED_FILES },
+  );
 }

@@ -5,7 +5,7 @@ import type { ViteDevServer } from '../types.js';
 import { withResolvers } from '../utils.js';
 import { FILES_FOLDER_NAME, SOLUTION_FOLDER_NAME } from './constants.js';
 import { FilesMapGraph } from './filesmap.js';
-import { getFilesRef, type ContentDirs } from './files-ref.js';
+import { getFilesRef, type ContentDirs } from './utils.js';
 
 export class FilesMapCache {
   // map of filesRef to file content
@@ -15,7 +15,8 @@ export class FilesMapCache {
   private _requestsQueue = new Set<string>();
 
   // a promise to wait on before serving a request for the end user
-  private _readiness = Promise.resolve();
+  private _readiness: Promise<void>;
+  private _resolve: () => void;
 
   // this is to know which FileMaps are in use to decide whether or not the page should be reloaded
   private _hotPaths = new Set<string>();
@@ -26,7 +27,19 @@ export class FilesMapCache {
     private _logger: AstroIntegrationLogger,
     private _server: ViteDevServer,
     private _dirs: ContentDirs,
-  ) {}
+  ) {
+    const { promise, resolve } = withResolvers<void>();
+
+    this._readiness = promise;
+    this._resolve = resolve;
+
+    for (const filesMap of _filesMapGraph.allFilesMap()) {
+      this._requestsQueue.add(filesMap.path);
+      this._cache.set(getFilesRef(filesMap.path, this._dirs), undefined);
+    }
+
+    this._generateFileMaps();
+  }
 
   generateFileMapForPath(filePath: string) {
     const filesMapFolderPath = resolveFilesFolderPath(filePath, this._logger, this._dirs);
@@ -51,6 +64,10 @@ export class FilesMapCache {
       return;
     }
 
+    const { promise, resolve } = withResolvers<void>();
+
+    this._readiness = promise;
+    this._resolve = resolve;
     this._timeoutId = setTimeout(this._generateFileMaps, 100);
   }
 
@@ -89,16 +106,12 @@ export class FilesMapCache {
       return;
     }
 
-    for (const dependency of filesMap.allDependencies()) {
+    for (const dependency of filesMap.allDependents()) {
       this._cache.set(getFilesRef(dependency.path, this._dirs), undefined);
     }
   }
 
   private _generateFileMaps = async () => {
-    const { promise, resolve } = withResolvers<void>();
-
-    this._readiness = promise;
-
     const hotFilesRefs: string[] = [];
 
     while (this._requestsQueue.size > 0) {
@@ -109,7 +122,7 @@ export class FilesMapCache {
 
       // then we make sure all their dependencies are added as well
       for (const folderPath of this._requestsQueue) {
-        for (const dependency of this._filesMapGraph.getFilesMapByFolder(folderPath)!.allDependencies()) {
+        for (const dependency of this._filesMapGraph.getFilesMapByFolder(folderPath)!.allDependents()) {
           this._requestsQueue.add(dependency.path);
         }
       }
@@ -138,7 +151,7 @@ export class FilesMapCache {
     }
 
     // the cache is now ready to be used
-    resolve();
+    this._resolve();
 
     if (hotFilesRefs.length > 0) {
       this._hotPaths.clear();

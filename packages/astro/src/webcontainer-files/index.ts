@@ -1,5 +1,4 @@
 import { FSWatcher, watch } from 'chokidar';
-import glob from 'fast-glob';
 import { dim } from 'kleur/colors';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -7,15 +6,15 @@ import { fileURLToPath } from 'node:url';
 import type { AstroBuildDoneOptions, AstroServerSetupOptions } from '../types.js';
 import { FilesMapCache } from './cache.js';
 import { FILES_FOLDER_NAME, IGNORED_FILES, SOLUTION_FOLDER_NAME } from './constants.js';
-import { getFilesRef, type ContentDirs } from './files-ref.js';
 import { FilesMap } from './filesmap.js';
+import { getAllFilesMap, getFilesRef, type ContentDirs } from './utils.js';
 
 export class WebContainerFiles {
   private _watcher: FSWatcher | undefined;
 
   async serverSetup(projectRoot: string, { server, logger }: AstroServerSetupOptions) {
     const { contentDir, templatesDir } = this._folders(projectRoot);
-    const graph = await FilesMap.initGraph(await this._allFilesMap({ contentDir, templatesDir }), logger);
+    const graph = await FilesMap.initGraph(await getAllFilesMap({ contentDir, templatesDir }), logger);
     const cache = new FilesMapCache(graph, logger, server, { contentDir, templatesDir });
 
     this._watcher = watch(
@@ -63,7 +62,7 @@ export class WebContainerFiles {
   async buildAssets(projectRoot: string, { dir, logger }: AstroBuildDoneOptions) {
     const { contentDir, templatesDir } = this._folders(projectRoot);
 
-    const filesMapFolders = await this._allFilesMap({ contentDir, templatesDir });
+    const filesMapFolders = await getAllFilesMap({ contentDir, templatesDir });
 
     const graph = await FilesMap.initGraph(filesMapFolders, logger);
 
@@ -80,17 +79,6 @@ export class WebContainerFiles {
 
         logger.info(`${dim(filesRef)}`);
       }),
-    );
-  }
-
-  private _allFilesMap({ contentDir, templatesDir }: ContentDirs) {
-    return glob(
-      [
-        `${glob.convertPathToPattern(contentDir)}/**/${FILES_FOLDER_NAME}`,
-        `${glob.convertPathToPattern(contentDir)}/**/${SOLUTION_FOLDER_NAME}`,
-        `${glob.convertPathToPattern(templatesDir)}/*`,
-      ],
-      { onlyDirectories: true, ignore: IGNORED_FILES },
     );
   }
 

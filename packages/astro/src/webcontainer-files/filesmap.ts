@@ -25,6 +25,10 @@ export class FilesMapGraph {
     }
   }
 
+  allFilesMap() {
+    return this._nodes.values();
+  }
+
   updateFilesMapByFolder(folder: string, logger: AstroIntegrationLogger) {
     const resolvedPath = fs.realpathSync(folder);
 
@@ -67,7 +71,7 @@ export class FilesMap {
   }
 
   private _extend: FilesMap | null = null;
-  private _dependencies: Set<FilesMap> = new Set<FilesMap>();
+  private _dependents: Set<FilesMap> = new Set<FilesMap>();
 
   /**
    * Construct a new FileMap. To connect it to its graph, call
@@ -110,20 +114,20 @@ export class FilesMap {
 
   extend(other: FilesMap) {
     this.unlink();
-    other._dependencies.add(this);
+    other._dependents.add(this);
     this._extend = other;
   }
 
   unlink() {
-    this._extend?._dependencies.delete(this);
+    this._extend?._dependents.delete(this);
     this._extend = null;
   }
 
-  *allDependencies(): Generator<FilesMap> {
-    for (const dependency of this._dependencies) {
+  *allDependents(): Generator<FilesMap> {
+    for (const dependency of this._dependents) {
       yield dependency;
 
-      yield* dependency.allDependencies();
+      yield* dependency.allDependents();
     }
   }
 

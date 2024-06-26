@@ -115,7 +115,7 @@ describe('FilesMap', () => {
     `);
   });
 
-  test('allDependencies should return all the file map that must be regenerated when that one changes', async () => {
+  test('allDependents should return all the file map that must be regenerated when that one changes', async () => {
     await scaffoldTestFolders([
       ['folder1', { file1: '', '.tk-config.json': JSON.stringify({ extends: '../folder2' }) }],
       ['folder2', { file2: '', '.tk-config.json': JSON.stringify({ extends: '../folder3' }) }],
@@ -132,11 +132,11 @@ describe('FilesMap', () => {
     const node2 = graph.getFilesMapByFolder(folders[1]);
     const node3 = graph.getFilesMapByFolder(folders[2]);
 
-    const dependencies = [...(node3?.allDependencies() ?? [])];
+    const dependents = [...(node3?.allDependents() ?? [])];
 
-    expect(dependencies).toHaveLength(2);
-    expect(dependencies).toContain(node1);
-    expect(dependencies).toContain(node2);
+    expect(dependents).toHaveLength(2);
+    expect(dependents).toContain(node1);
+    expect(dependents).toContain(node2);
   });
 
   test('unlink should remove the dependency between two nodes', async () => {
@@ -158,14 +158,14 @@ describe('FilesMap', () => {
 
     node1?.unlink();
 
-    const dependencies3 = [...(node3?.allDependencies() ?? [])];
-    const dependencies2 = [...(node2?.allDependencies() ?? [])];
+    const dependents3 = [...(node3?.allDependents() ?? [])];
+    const dependents2 = [...(node2?.allDependents() ?? [])];
 
-    expect(dependencies2).toHaveLength(0);
+    expect(dependents2).toHaveLength(0);
 
-    expect(dependencies3).toHaveLength(1);
-    expect(dependencies3).not.toContain(node1);
-    expect(dependencies3).toContain(node2);
+    expect(dependents3).toHaveLength(1);
+    expect(dependents3).not.toContain(node1);
+    expect(dependents3).toContain(node2);
   });
 
   test('update should remove the node from the graph if the config file is missing', async () => {
@@ -183,18 +183,18 @@ describe('FilesMap', () => {
     const node1 = graph.getFilesMapByFolder(folders[0]);
     const node2 = graph.getFilesMapByFolder(folders[1]);
 
-    const dependencies = [...(node2?.allDependencies() ?? [])];
+    const dependents = [...(node2?.allDependents() ?? [])];
 
-    expect(dependencies).toHaveLength(1);
+    expect(dependents).toHaveLength(1);
 
     // now we remove the config
     await fs.unlink(path.join(node1!.path, '.tk-config.json'));
 
     graph.updateFilesMapByFolder(node1!.path, logger as any);
 
-    const newDependencies = [...(node2?.allDependencies() ?? [])];
+    const newDependents = [...(node2?.allDependents() ?? [])];
 
-    expect(newDependencies).toHaveLength(0);
+    expect(newDependents).toHaveLength(0);
   });
 
   test('update should connect two node in the graph if the config file is added', async () => {
@@ -212,19 +212,19 @@ describe('FilesMap', () => {
     const node1 = graph.getFilesMapByFolder(folders[0]);
     const node2 = graph.getFilesMapByFolder(folders[1]);
 
-    const dependencies = [...(node2?.allDependencies() ?? [])];
+    const dependents = [...(node2?.allDependents() ?? [])];
 
-    expect(dependencies).toHaveLength(0);
+    expect(dependents).toHaveLength(0);
 
     // now we add the config
     await fs.writeFile(path.join(node1!.path, '.tk-config.json'), JSON.stringify({ extends: '../folder2' }));
 
     graph.updateFilesMapByFolder(node1!.path, logger as any);
 
-    const newDependencies = [...(node2?.allDependencies() ?? [])];
+    const newDependents = [...(node2?.allDependents() ?? [])];
 
-    expect(newDependencies).toHaveLength(1);
-    expect(newDependencies).toContain(node1);
+    expect(newDependents).toHaveLength(1);
+    expect(newDependents).toContain(node1);
   });
 
   test('update should add a new node in the graph if the config file points to a folder that was not in the graph initially', async () => {
@@ -251,10 +251,10 @@ describe('FilesMap', () => {
     graph.updateFilesMapByFolder(node1!.path, logger as any);
 
     const node3 = graph.getFilesMapByFolder(folder3);
-    const newDependencies = [...(node3?.allDependencies() ?? [])];
+    const newDependents = [...(node3?.allDependents() ?? [])];
 
-    expect(newDependencies).toHaveLength(1);
-    expect(newDependencies).toContain(node1);
+    expect(newDependents).toHaveLength(1);
+    expect(newDependents).toContain(node1);
   });
 });
 
