@@ -79,16 +79,15 @@ async function _eject(flags: EjectOptions) {
 
   fs.writeFileSync(astroConfigPath, generateAstroConfig(astroConfig));
 
-  /**
-   * We copy all assets from the `default` folder into the `src` folder.
-   */
+// we copy all assets from the `default` folder into the `src` folder
   fs.cpSync(srcPath, srcDestPath, { recursive: true });
 
   /**
-   * Last, we ensure that the package.json contains the extra dependencies.
+   * Last, we ensure that the `package.json` contains the extra dependencies.
    * If any are missing we suggest to install the new dependencies.
    */
   const pkgJson: PackageJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
+
   const astroIntegrationPkgJson: PackageJson = JSON.parse(
     fs.readFileSync(path.join(astroIntegrationPath, 'package.json'), 'utf-8'),
   );

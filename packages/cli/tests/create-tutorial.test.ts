@@ -174,6 +174,7 @@ test('cannot eject on an astro project that is not using TutorialKit', async (co
     path.join(dest, 'package.json'),
     JSON.stringify({ name: 'astro', dependencies: { astro: '4.11.0' } }),
   );
+
   await fs.writeFile(
     path.join(dest, 'astro.config.ts'),
     `
@@ -204,6 +205,7 @@ test('cannot eject on an astro project that is not using TutorialKit 2', async (
     path.join(dest, 'package.json'),
     JSON.stringify({ name: 'astro', dependencies: { astro: '4.11.0', '@tutorialkit/astro': '*' } }),
   );
+
   await fs.writeFile(
     path.join(dest, 'astro.config.ts'),
     `
