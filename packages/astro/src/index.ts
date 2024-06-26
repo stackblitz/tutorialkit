@@ -15,6 +15,9 @@ export interface Options {
    *
    * Set this to false to customize the pages.
    *
+   * Use 'tutorial-only' to only inject the tutorial routes. This is useful
+   * if you want to have a different landing page.
+   *
    * @default true
    */
   defaultRoutes?: boolean | 'tutorial-only';
