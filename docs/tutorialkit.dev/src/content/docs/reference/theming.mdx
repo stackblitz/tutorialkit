@@ -2,6 +2,23 @@
 title: Theming
 description: 'How to theme TutorialKit'
 ---
+import { Image } from 'astro:assets';
+import themingContent from './images/theming-content.png';
+import themingCallout from './images/theming-callout.png';
+import themingStatuses from './images/theming-statuses.png';
+import themingTopBar from './images/theming-top-bar.png';
+import themingPanelHeader from './images/theming-panel-header.png';
+import themingPanelHeaderButton from './images/theming-panel-header-button.png';
+import themingPanelHeaderTab from './images/theming-panel-header-tab.png';
+import themingFiletree from './images/theming-filetree.png';
+import themingFiletreeFile from './images/theming-filetree-file.png';
+import themingFileTreeFolder from './images/theming-filetree-folder.png';
+import themingNavcard from './images/theming-navcard.png';
+import themingBreadcrumb from './images/theming-breadcrumb.png';
+import themingBreadcrumbButton from './images/theming-breadcrumb-button.png';
+import themingBreadcrumbDropdown from './images/theming-breadcrumb-dropdown.png';
+import themingPreviews from './images/theming-previews.png';
+import themingTerminal from './images/theming-terminal.png';
 
 TutorialKit allows you to customize its appearance to match your brand or preferences. This guide explains how to modify various elements of the interface using CSS variables and file replacements.
 
@@ -40,7 +57,7 @@ These tokens can be used to style the colors of the tutorial on a high level. Fo
 
 The content refers to the main part of the lesson that contains the text and images.
 
-![Content](./images/theming-content.png)
+<Image src={themingContent} alt="Content" />
 
 | Token                                    | Description                               |
 | ---------------------------------------- | ----------------------------------------- |
@@ -53,7 +70,7 @@ Callouts are visual elements used to draw attention to specific information or p
 
 For instanceof, here's an example of an info callout.
 
-![Info Callout](./images/theming-callout.png)
+<Image src={themingCallout} alt="Callout" />
 
 #### Tip
 
