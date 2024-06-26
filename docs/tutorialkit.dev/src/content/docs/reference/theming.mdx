@@ -4,21 +4,10 @@ description: 'How to theme TutorialKit'
 ---
 import { Image } from 'astro:assets';
 import themingContent from './images/theming-content.png';
-import themingCallout from './images/theming-callout.png';
-import themingStatuses from './images/theming-statuses.png';
-import themingTopBar from './images/theming-top-bar.png';
 import themingPanelHeader from './images/theming-panel-header.png';
-import themingPanelHeaderButton from './images/theming-panel-header-button.png';
-import themingPanelHeaderTab from './images/theming-panel-header-tab.png';
 import themingFiletree from './images/theming-filetree.png';
 import themingFiletreeFile from './images/theming-filetree-file.png';
 import themingFileTreeFolder from './images/theming-filetree-folder.png';
-import themingNavcard from './images/theming-navcard.png';
-import themingBreadcrumb from './images/theming-breadcrumb.png';
-import themingBreadcrumbButton from './images/theming-breadcrumb-button.png';
-import themingBreadcrumbDropdown from './images/theming-breadcrumb-dropdown.png';
-import themingPreviews from './images/theming-previews.png';
-import themingTerminal from './images/theming-terminal.png';
 
 TutorialKit allows you to customize its appearance to match your brand or preferences. This guide explains how to modify various elements of the interface using CSS variables and file replacements.
 
@@ -207,7 +196,7 @@ Panels are containers which can be resized and can hold different kind of compon
 
 The panel header is the top part of the panel that contains the title, an icon, and optionally an action button.
 
-![Panel Header](./images/theming-panel-header.png)
+<Image src={themingPanelHeader} alt="Panel Header" width="513" />
 
 | Token                                        | Description                          |
 | -------------------------------------------- | ------------------------------------ |
@@ -253,7 +242,7 @@ The button in the header is shown at the right side of the header of the panel.
 
 The file tree shows the relevant files of the lesson next to the text editor.
 
-![File Tree](./images/theming-filetree.png)
+<Image src={themingFiletree} alt="File Tree" width="425" />
 
 | Token                                         | Description                                                            |
 | --------------------------------------------- | ---------------------------------------------------------------------- |
@@ -268,7 +257,8 @@ The file tree shows the relevant files of the lesson next to the text editor.
 
 You can customize the appearance of the files in the file tree using the following tokens.
 
-![File Tree File](./images/theming-filetree-file.png)
+<Image src={themingFiletreeFile} alt="File Tree File" width="425" />
+
 
 | Token                                                 | Description                                          |
 | ----------------------------------------------------- | ---------------------------------------------------- |
@@ -286,7 +276,7 @@ You can customize the appearance of the files in the file tree using the followi
 
 You can customize the appearance of the folders in the file tree using the following tokens.
 
-![File Tree Folder](./images/theming-filetree-folder.png)
+<Image src={themingFileTreeFolder} alt="File Tree Folder" width="425" />
 
 | Token                                                | Description                                            |
 | ---------------------------------------------------- | ------------------------------------------------------ |
