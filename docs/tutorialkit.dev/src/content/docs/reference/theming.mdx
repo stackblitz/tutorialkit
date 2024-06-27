@@ -378,31 +378,109 @@ The previews can show one or multiple websites.
 | ------------------------------------ | --------------------------------------------------- |
 | `--tk-elements-previews-borderColor` | The color of the borders between multiple previews. |
 
+### Editor
+
+The editor is an important part of TutorialKit as it allows you to write and edit code.
+
+| Token                                                 | Description                                                  |
+| ----------------------------------------------------- | ------------------------------------------------------------ |
+| `--tk-elements-editor-textColor`                      | The text color of the editor.                                |
+| `--tk-elements-editor-backgroundColor`                | The background color of the editor.                          |
+| `--tk-elements-editor-activeLineBackgroundColor`      | The background color of the active line in the editor.       |
+| `--tk-elements-editor-cursorColor`                    | The color of the cursor.                                     |
+| `--tk-elements-editor-matchingBracketBackgroundColor` | The background color of the matching bracket.                |
+| `--tk-elements-editor-panels-borderColor`             | The border color between different panels inside the editor. |
+
+#### Selection
+
+Text selections inside the editor can be styled with the following tokens:
+
+| Token                                                      | Description                                                     |
+| ---------------------------------------------------------- | --------------------------------------------------------------- |
+| `--tk-elements-editor-selection-backgroundColor`           | The background color of selected text in the editor.            |
+| `--tk-elements-editor-selection-backgroundOpacity`         | The background opacity of selected text in the editor.          |
+| `--tk-elements-editor-selection-inactiveBackgroundColor`   | The background color of inactive selected text in the editor.   |
+| `--tk-elements-editor-selection-inactiveBackgroundOpacity` | The background opacity of inactive selected text in the editor. |
+
+#### Gutter
+
+The gutter refers to the area on the left side of the editor that shows line numbers and other information.
+
+| Token                                             | Description                                      |
+| ------------------------------------------------- | ------------------------------------------------ |
+| `--tk-elements-editor-gutter-textColor`           | The text color of the gutter.                    |
+| `--tk-elements-editor-gutter-backgroundColor`     | The background color of the gutter.              |
+| `--tk-elements-editor-gutter-activeLineTextColor` | The text color of the gutter on the active line. |
+
+#### Fold Gutter
+
+The fold gutter is part of the gutter, and is the area next to it that shows the folding icons.
+
+| Token                                            | Description                                                                  |
+| ------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `--tk-elements-editor-foldGutter-textColor`      | The text color of the fold gutter.                                           |
+| `--tk-elements-editor-foldGutter-textColorHover` | The text color of the fold gutter when hovering over an item in that gutter. |
+
+#### Search
+
+The search panel is the panel that shows up when you search text in the editor.
+
+| Token                                                          | Description                                                                 |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `--tk-elements-editor-search-textColor`                        | The text color of the search panel.                                         |
+| `--tk-elements-editor-search-backgroundColor`                  | The background color of the search panel.                                   |
+| `--tk-elements-editor-search-closeButton-textColor`            | The text color of the close button in the search panel.                     |
+| `--tk-elements-editor-search-closeButton-textColorHover`       | The text color of the close button in the search panel when hovering.       |
+| `--tk-elements-editor-search-closeButton-backgroundColor`      | The background color of the close button in the search panel.               |
+| `--tk-elements-editor-search-closeButton-backgroundColorHover` | The background color of the close button in the search panel when hovering. |
+| `--tk-elements-editor-search-button-textColor`                 | The text color of the buttons in the search panel.                          |
+| `--tk-elements-editor-search-button-textColorHover`            | The text color of the buttons in the search panel when hovering.            |
+| `--tk-elements-editor-search-button-backgroundColor`           | The background color of the buttons in the search panel.                    |
+| `--tk-elements-editor-search-button-backgroundColorHover`      | The background color of the buttons in the search panel when hovering.      |
+| `--tk-elements-editor-search-button-borderColor`               | The border color of the buttons in the search panel.                        |
+| `--tk-elements-editor-search-button-borderColorHover`          | The border color of the buttons in the search panel when hovering.          |
+| `--tk-elements-editor-search-button-borderColorFocused`        | The border color of the buttons in the search panel when focused.           |
+| `--tk-elements-editor-search-input-backgroundColor`            | The background color of the search input field.                             |
+| `--tk-elements-editor-search-input-borderColor`                | The border color of the search input field.                                 |
+| `--tk-elements-editor-search-input-borderColorFocused`         | The border color of the search input field when focused.                    |
+
+#### Tooltip
+
+The tooltip is the small popup that shows up when you hover over an item or when the editor shows suggestions when autocompleting code.
+
+| Token                                                  | Description                                               |
+| ------------------------------------------------------ | --------------------------------------------------------- |
+| `--tk-elements-editor-tooltip-textColor`               | The text color of the tooltip.                            |
+| `--tk-elements-editor-tooltip-textColorSelected`       | The text color of the selected item in the tooltip.       |
+| `--tk-elements-editor-tooltip-backgroundColor`         | The background color of the tooltip.                      |
+| `--tk-elements-editor-tooltip-backgroundColorSelected` | The background color of the selected item in the tooltip. |
+| `--tk-elements-editor-tooltip-borderColor`             | The border color of the tooltip.                          |
+
 ### Terminal
 
 The terminal refers to both a [read-only and an interactive terminal](../../guides/configuration#terminal).
 
 ![Terminal](./images/theming-terminal.png)
 
-| Token                                              | Description                                           |
-| -------------------------------------------------- | ----------------------------------------------------- |
-| `--tk-elements-terminal-backgroundColor`           | The background color of the terminal.                 |
-| `--tk-elements-terminal-textColor`                 | The text color of the terminal.                       |
-| `--tk-elements-terminal-cursorColor`               | The color of the terminal cursor.                     |
-| `--tk-elements-terminal-selection-backgroundColor` | The background color of selected text in the terminal.|
-| `--tk-elements-terminal-color-black`               | The color of black text in the terminal.              |
-| `--tk-elements-terminal-color-red`                 | The color of red text in the terminal.                |
-| `--tk-elements-terminal-color-green`               | The color of green text in the terminal.              |
-| `--tk-elements-terminal-color-yellow`              | The color of yellow text in the terminal.             |
-| `--tk-elements-terminal-color-blue`                | The color of blue text in the terminal.               |
-| `--tk-elements-terminal-color-magenta`             | The color of magenta text in the terminal.            |
-| `--tk-elements-terminal-color-cyan`                | The color of cyan text in the terminal.               |
-| `--tk-elements-terminal-color-white`               | The color of white text in the terminal.              |
-| `--tk-elements-terminal-color-brightBlack`         | The color of bright black text in the terminal.       |
-| `--tk-elements-terminal-color-brightRed`           | The color of bright red text in the terminal.         |
-| `--tk-elements-terminal-color-brightGreen`         | The color of bright green text in the terminal.       |
-| `--tk-elements-terminal-color-brightYellow`        | The color of bright yellow text in the terminal.      |
-| `--tk-elements-terminal-color-brightBlue`          | The color of bright blue text in the terminal.        |
-| `--tk-elements-terminal-color-brightMagenta`       | The color of bright magenta text in the terminal.     |
-| `--tk-elements-terminal-color-brightCyan`          | The color of bright cyan text in the terminal.        |
-| `--tk-elements-terminal-color-brightWhite`         | The color of bright white text in the terminal.       |
+| Token                                              | Description                                            |
+| -------------------------------------------------- | ------------------------------------------------------ |
+| `--tk-elements-terminal-backgroundColor`           | The background color of the terminal.                  |
+| `--tk-elements-terminal-textColor`                 | The text color of the terminal.                        |
+| `--tk-elements-terminal-cursorColor`               | The color of the terminal cursor.                      |
+| `--tk-elements-terminal-selection-backgroundColor` | The background color of selected text in the terminal. |
+| `--tk-elements-terminal-color-black`               | The color of black text in the terminal.               |
+| `--tk-elements-terminal-color-red`                 | The color of red text in the terminal.                 |
+| `--tk-elements-terminal-color-green`               | The color of green text in the terminal.               |
+| `--tk-elements-terminal-color-yellow`              | The color of yellow text in the terminal.              |
+| `--tk-elements-terminal-color-blue`                | The color of blue text in the terminal.                |
+| `--tk-elements-terminal-color-magenta`             | The color of magenta text in the terminal.             |
+| `--tk-elements-terminal-color-cyan`                | The color of cyan text in the terminal.                |
+| `--tk-elements-terminal-color-white`               | The color of white text in the terminal.               |
+| `--tk-elements-terminal-color-brightBlack`         | The color of bright black text in the terminal.        |
+| `--tk-elements-terminal-color-brightRed`           | The color of bright red text in the terminal.          |
+| `--tk-elements-terminal-color-brightGreen`         | The color of bright green text in the terminal.        |
+| `--tk-elements-terminal-color-brightYellow`        | The color of bright yellow text in the terminal.       |
+| `--tk-elements-terminal-color-brightBlue`          | The color of bright blue text in the terminal.         |
+| `--tk-elements-terminal-color-brightMagenta`       | The color of bright magenta text in the terminal.      |
+| `--tk-elements-terminal-color-brightCyan`          | The color of bright cyan text in the terminal.         |
+| `--tk-elements-terminal-color-brightWhite`         | The color of bright white text in the terminal.        |
