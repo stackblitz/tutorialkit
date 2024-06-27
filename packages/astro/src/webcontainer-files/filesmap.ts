@@ -209,9 +209,9 @@ async function getAllFiles(dir: string, result: FilePaths): Promise<void> {
 function webcontainerPath(dir: string, filePath: string) {
   const result = `/${path.relative(dir, filePath)}`;
 
-  // mostly for Windows
+  // normalize path separators
   if (path.sep !== '/') {
-    return result.replaceAll('\\', '/');
+    return result.replaceAll(path.sep, '/');
   }
 
   return result;
