@@ -128,9 +128,11 @@ export const editorTheme = EditorView.theme({
   '.cm-tooltip': {
     background: 'var(--cm-tooltip-backgroundColor)',
     borderColor: 'var(--cm-tooltip-borderColor)',
+    color: 'var(--cm-tooltip-textColor)',
   },
   '.cm-tooltip.cm-tooltip-autocomplete ul li[aria-selected]': {
     background: 'var(--cm-tooltip-backgroundColorSelected)',
+    color: 'var(--cm-tooltip-textColorSelected)',
   },
 });
 
