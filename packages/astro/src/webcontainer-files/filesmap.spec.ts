@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { afterEach, beforeEach, describe, expect, it, test, vi } from 'vitest';
-import { FilesMap } from './filesmap.js';
+import { afterEach, beforeEach, describe, expect, assert, it, test, vi } from 'vitest';
+import { FilesMap, FilesMapGraph } from './filesmap.js';
 
 const tmpDir = path.join(__dirname, `.tmp-${path.basename(__filename)}`);
 
@@ -27,19 +27,17 @@ describe('FilesMap', () => {
     };
     const graph = await FilesMap.initGraph(folders, logger as any);
 
-    const node1 = graph.getFilesMapByFolder(folders[0]);
-    const node2 = graph.getFilesMapByFolder(folders[1]);
+    const node1 = getFilesMapByFolder(graph, folders[0]);
+    const node2 = getFilesMapByFolder(graph, folders[1]);
 
-    expect(node1).toBeDefined();
-    expect(node2).toBeDefined();
     expect(logger.warn).not.toHaveBeenCalled();
 
-    expect(await node1?.toFiles(logger as any)).toMatchInlineSnapshot(`
+    expect(await node1.toFiles(logger as any)).toMatchInlineSnapshot(`
       {
         "/file1": "",
       }
     `);
-    expect(await node2?.toFiles(logger as any)).toMatchInlineSnapshot(`
+    expect(await node2.toFiles(logger as any)).toMatchInlineSnapshot(`
       {
         "/file2": "",
       }
@@ -58,16 +56,16 @@ describe('FilesMap', () => {
     };
     const graph = await FilesMap.initGraph(folders, logger as any);
 
-    const node1 = graph.getFilesMapByFolder(folders[0]);
-    const node2 = graph.getFilesMapByFolder(folders[1]);
+    const node1 = getFilesMapByFolder(graph, folders[0]);
+    const node2 = getFilesMapByFolder(graph, folders[1]);
 
-    expect(await node1?.toFiles(logger as any)).toMatchInlineSnapshot(`
+    expect(await node1.toFiles(logger as any)).toMatchInlineSnapshot(`
       {
         "/file1": "",
         "/file2": "",
       }
     `);
-    expect(await node2?.toFiles(logger as any)).toMatchInlineSnapshot(`
+    expect(await node2.toFiles(logger as any)).toMatchInlineSnapshot(`
       {
         "/file1": "",
         "/file2": "",
@@ -91,24 +89,24 @@ describe('FilesMap', () => {
     };
     const graph = await FilesMap.initGraph(folders, logger as any);
 
-    const node1 = graph.getFilesMapByFolder(folders[0]);
-    const node2 = graph.getFilesMapByFolder(folders[1]);
-    const node3 = graph.getFilesMapByFolder(folders[2]);
+    const node1 = getFilesMapByFolder(graph, folders[0]);
+    const node2 = getFilesMapByFolder(graph, folders[1]);
+    const node3 = getFilesMapByFolder(graph, folders[2]);
 
-    expect(await node1?.toFiles(logger as any)).toMatchInlineSnapshot(`
+    expect(await node1.toFiles(logger as any)).toMatchInlineSnapshot(`
       {
         "/file1": "",
         "/file2": "",
         "/file3": "",
       }
     `);
-    expect(await node2?.toFiles(logger as any)).toMatchInlineSnapshot(`
+    expect(await node2.toFiles(logger as any)).toMatchInlineSnapshot(`
       {
         "/file2": "",
         "/file3": "",
       }
     `);
-    expect(await node3?.toFiles(logger as any)).toMatchInlineSnapshot(`
+    expect(await node3.toFiles(logger as any)).toMatchInlineSnapshot(`
       {
         "/file3": "",
       }
@@ -128,11 +126,11 @@ describe('FilesMap', () => {
     };
     const graph = await FilesMap.initGraph(folders, logger as any);
 
-    const node1 = graph.getFilesMapByFolder(folders[0]);
-    const node2 = graph.getFilesMapByFolder(folders[1]);
-    const node3 = graph.getFilesMapByFolder(folders[2]);
+    const node1 = getFilesMapByFolder(graph, folders[0]);
+    const node2 = getFilesMapByFolder(graph, folders[1]);
+    const node3 = getFilesMapByFolder(graph, folders[2]);
 
-    const dependents = [...(node3?.allDependents() ?? [])];
+    const dependents = [...node3.allDependents()];
 
     expect(dependents).toHaveLength(2);
     expect(dependents).toContain(node1);
@@ -152,14 +150,14 @@ describe('FilesMap', () => {
     };
     const graph = await FilesMap.initGraph(folders, logger as any);
 
-    const node1 = graph.getFilesMapByFolder(folders[0]);
-    const node2 = graph.getFilesMapByFolder(folders[1]);
-    const node3 = graph.getFilesMapByFolder(folders[2]);
+    const node1 = getFilesMapByFolder(graph, folders[0]);
+    const node2 = getFilesMapByFolder(graph, folders[1]);
+    const node3 = getFilesMapByFolder(graph, folders[2]);
 
-    node1?.unlink();
+    node1.unlink();
 
-    const dependents3 = [...(node3?.allDependents() ?? [])];
-    const dependents2 = [...(node2?.allDependents() ?? [])];
+    const dependents3 = [...node3.allDependents()];
+    const dependents2 = [...node2.allDependents()];
 
     expect(dependents2).toHaveLength(0);
 
@@ -180,19 +178,19 @@ describe('FilesMap', () => {
     };
     const graph = await FilesMap.initGraph(folders, logger as any);
 
-    const node1 = graph.getFilesMapByFolder(folders[0]);
-    const node2 = graph.getFilesMapByFolder(folders[1]);
+    const node1 = getFilesMapByFolder(graph, folders[0]);
+    const node2 = getFilesMapByFolder(graph, folders[1]);
 
-    const dependents = [...(node2?.allDependents() ?? [])];
+    const dependents = [...node2.allDependents()];
 
     expect(dependents).toHaveLength(1);
 
     // now we remove the config
-    await fs.unlink(path.join(node1!.path, '.tk-config.json'));
+    await fs.unlink(path.join(node1.path, '.tk-config.json'));
 
-    graph.updateFilesMapByFolder(node1!.path, logger as any);
+    graph.updateFilesMapByFolder(node1.path, logger as any);
 
-    const newDependents = [...(node2?.allDependents() ?? [])];
+    const newDependents = [...node2.allDependents()];
 
     expect(newDependents).toHaveLength(0);
   });
@@ -209,19 +207,19 @@ describe('FilesMap', () => {
     };
     const graph = await FilesMap.initGraph(folders, logger as any);
 
-    const node1 = graph.getFilesMapByFolder(folders[0]);
-    const node2 = graph.getFilesMapByFolder(folders[1]);
+    const node1 = getFilesMapByFolder(graph, folders[0]);
+    const node2 = getFilesMapByFolder(graph, folders[1]);
 
-    const dependents = [...(node2?.allDependents() ?? [])];
+    const dependents = [...node2.allDependents()];
 
     expect(dependents).toHaveLength(0);
 
     // now we add the config
-    await fs.writeFile(path.join(node1!.path, '.tk-config.json'), JSON.stringify({ extends: '../folder2' }));
+    await fs.writeFile(path.join(node1.path, '.tk-config.json'), JSON.stringify({ extends: '../folder2' }));
 
-    graph.updateFilesMapByFolder(node1!.path, logger as any);
+    graph.updateFilesMapByFolder(node1.path, logger as any);
 
-    const newDependents = [...(node2?.allDependents() ?? [])];
+    const newDependents = [...node2.allDependents()];
 
     expect(newDependents).toHaveLength(1);
     expect(newDependents).toContain(node1);
@@ -240,18 +238,19 @@ describe('FilesMap', () => {
     };
     const graph = await FilesMap.initGraph(folders, logger as any);
 
-    const node1 = graph.getFilesMapByFolder(folders[0]);
+    const node1 = getFilesMapByFolder(graph, folders[0]);
 
     expect(graph.getFilesMapByFolder(folder3)).toBeUndefined();
 
     // now we add the config and the new folder
-    await fs.writeFile(path.join(node1!.path, '.tk-config.json'), JSON.stringify({ extends: '../folder3' }));
+    await fs.writeFile(path.join(node1.path, '.tk-config.json'), JSON.stringify({ extends: '../folder3' }));
     await fs.mkdir(folder3);
 
-    graph.updateFilesMapByFolder(node1!.path, logger as any);
+    graph.updateFilesMapByFolder(node1.path, logger as any);
 
-    const node3 = graph.getFilesMapByFolder(folder3);
-    const newDependents = [...(node3?.allDependents() ?? [])];
+    const node3 = getFilesMapByFolder(graph, folder3);
+
+    const newDependents = [...node3.allDependents()];
 
     expect(newDependents).toHaveLength(1);
     expect(newDependents).toContain(node1);
@@ -268,4 +267,12 @@ async function scaffoldTestFolders(folders: [name: string, files: Record<string,
       await fs.writeFile(path.join(folder, file), fileContent);
     }
   }
+}
+
+function getFilesMapByFolder(graph: FilesMapGraph, folder: string) {
+  const node = graph.getFilesMapByFolder(folder);
+
+  assert(node !== undefined);
+
+  return node;
 }
