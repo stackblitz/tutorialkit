@@ -16,8 +16,7 @@
   "scripts": {
     "build": "node scripts/build.js",
     "prepack": "node scripts/pre-pack.js",
-    "postpack": "node scripts/cleanup.js",
-    "test": "vitest --testTimeout=300000"
+    "postpack": "node scripts/cleanup.js"
   },
   "files": [
     "dist",
@@ -45,7 +44,7 @@
     "esbuild": "^0.20.2",
     "esbuild-node-externals": "^1.13.1",
     "fs-extra": "^11.2.0",
-    "vitest": "^1.6.0"
+    "tempy": "^3.1.0"
   },
   "engines": {
     "node": ">=18.18.0"
