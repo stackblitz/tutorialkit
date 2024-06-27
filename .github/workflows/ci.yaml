@@ -19,15 +19,13 @@ jobs:
           - os: windows-latest
             node_version: 20.13.1 # 20.14.0 keeps causing a native `node::SetCppgcReference+18123` error in Vitest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: Setup
         uses: pnpm/action-setup@v4
-        with:
-          version: 8.15.6
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Install dependencies
         run: pnpm install
       - name: Lint
@@ -41,12 +39,10 @@ jobs:
     name: Docs
     runs-on: ubuntu-latest
     steps:
-      - name: Setup
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8.15.6
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup
+        uses: pnpm/action-setup@v4
       - name: Install dependencies
         run: pnpm install
       - name: Build
