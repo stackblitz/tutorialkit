@@ -19,7 +19,11 @@ export default defineConfig({
         light: './src/assets/brand/tutorialkit-logo-light.svg',
         replacesTitle: true,
       },
-      plugins: [starlightLinksValidator()],
+      plugins: [
+        starlightLinksValidator({
+          exclude: ['../../guides/**/*'],
+        }),
+      ],
       sidebar: [
         {
           label: 'Guides',
@@ -34,7 +38,7 @@ export default defineConfig({
               link: '/guides/installation/',
             },
             {
-              label: 'Creating a Lesson',
+              label: 'Content creation',
               link: '/guides/creating-content/',
             },
             {
@@ -48,6 +52,15 @@ export default defineConfig({
             {
               label: 'User Interface Reference',
               link: '/guides/ui/',
+            },
+          ],
+        },
+        {
+          label: 'Reference',
+          items: [
+            {
+              label: 'Theming',
+              link: '/reference/theming/',
             },
           ],
         },
