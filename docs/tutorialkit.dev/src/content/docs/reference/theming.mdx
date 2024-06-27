@@ -9,6 +9,9 @@ import themingPanelHeader from './images/theming-panel-header.png';
 import themingFiletree from './images/theming-filetree.png';
 import themingFiletreeFile from './images/theming-filetree-file.png';
 import themingFileTreeFolder from './images/theming-filetree-folder.png';
+import themingEditorGutter from './images/theming-editor-gutter.png';
+import themingEditorFoldGutter from './images/theming-editor-gutter-fold.png';
+import themingEditorTooltip from './images/theming-editor-tooltip.png';
 
 TutorialKit allows you to customize its appearance to match your brand or preferences. This guide explains how to modify various elements of the interface using CSS variables and file replacements.
 
@@ -382,21 +385,16 @@ The previews can show one or multiple websites.
 
 The editor is an important part of TutorialKit as it allows you to write and edit code.
 
-| Token                                                 | Description                                                  |
-| ----------------------------------------------------- | ------------------------------------------------------------ |
-| `--tk-elements-editor-textColor`                      | The text color of the editor.                                |
-| `--tk-elements-editor-backgroundColor`                | The background color of the editor.                          |
-| `--tk-elements-editor-activeLineBackgroundColor`      | The background color of the active line in the editor.       |
-| `--tk-elements-editor-cursorColor`                    | The color of the cursor.                                     |
-| `--tk-elements-editor-matchingBracketBackgroundColor` | The background color of the matching bracket.                |
-| `--tk-elements-editor-panels-borderColor`             | The border color between different panels inside the editor. |
-
-#### Selection
-
-Text selections inside the editor can be styled with the following tokens:
+![Editor](./images/theming-editor.png)
 
 | Token                                                      | Description                                                     |
 | ---------------------------------------------------------- | --------------------------------------------------------------- |
+| `--tk-elements-editor-textColor`                           | The text color of the editor.                                   |
+| `--tk-elements-editor-backgroundColor`                     | The background color of the editor.                             |
+| `--tk-elements-editor-activeLineBackgroundColor`           | The background color of the active line in the editor.          |
+| `--tk-elements-editor-cursorColor`                         | The color of the cursor.                                        |
+| `--tk-elements-editor-matchingBracketBackgroundColor`      | The background color of the matching bracket.                   |
+| `--tk-elements-editor-panels-borderColor`                  | The border color between different panels inside the editor.    |
 | `--tk-elements-editor-selection-backgroundColor`           | The background color of selected text in the editor.            |
 | `--tk-elements-editor-selection-backgroundOpacity`         | The background opacity of selected text in the editor.          |
 | `--tk-elements-editor-selection-inactiveBackgroundColor`   | The background color of inactive selected text in the editor.   |
@@ -405,6 +403,8 @@ Text selections inside the editor can be styled with the following tokens:
 #### Gutter
 
 The gutter refers to the area on the left side of the editor that shows line numbers and other information.
+
+<Image src={themingEditorGutter} alt="Editor Gutter" width="65" densities={[2]} />
 
 | Token                                             | Description                                      |
 | ------------------------------------------------- | ------------------------------------------------ |
@@ -416,6 +416,8 @@ The gutter refers to the area on the left side of the editor that shows line num
 
 The fold gutter is part of the gutter, and is the area next to it that shows the folding icons.
 
+<Image src={themingEditorFoldGutter} alt="Editor Fold Gutter" width="28" densities={[2]} />
+
 | Token                                            | Description                                                                  |
 | ------------------------------------------------ | ---------------------------------------------------------------------------- |
 | `--tk-elements-editor-foldGutter-textColor`      | The text color of the fold gutter.                                           |
@@ -424,6 +426,8 @@ The fold gutter is part of the gutter, and is the area next to it that shows the
 #### Search
 
 The search panel is the panel that shows up when you search text in the editor.
+
+![Editor Search](./images/theming-editor-search.png)
 
 | Token                                                          | Description                                                                 |
 | -------------------------------------------------------------- | --------------------------------------------------------------------------- |
@@ -447,6 +451,8 @@ The search panel is the panel that shows up when you search text in the editor.
 #### Tooltip
 
 The tooltip is the small popup that shows up when you hover over an item or when the editor shows suggestions when autocompleting code.
+
+<Image src={themingEditorTooltip} alt="Editor Tooltip" width="336" densities={[2]} />
 
 | Token                                                  | Description                                               |
 | ------------------------------------------------------ | --------------------------------------------------------- |
