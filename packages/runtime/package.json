@@ -2,6 +2,7 @@
   "name": "@tutorialkit/runtime",
   "version": "0.0.1-alpha.23",
   "description": "TutorialKit runtime",
+  "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
