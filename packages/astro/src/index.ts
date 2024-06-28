@@ -15,9 +15,12 @@ export interface Options {
    *
    * Set this to false to customize the pages.
    *
+   * Use 'tutorial-only' to only inject the tutorial routes. This is useful
+   * if you want to have a different landing page.
+   *
    * @default true
    */
-  defaultRoutes?: boolean;
+  defaultRoutes?: boolean | 'tutorial-only';
 
   /**
    * The value of the Cross-Origin-Embedder-Policy header for the dev server.
@@ -96,11 +99,13 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
         updateMarkdownConfig(options);
 
         if (defaultRoutes) {
-          injectRoute({
-            pattern: '/',
-            entrypoint: '@tutorialkit/astro/default/pages/index.astro',
-            prerender: true,
-          });
+          if (defaultRoutes !== 'tutorial-only') {
+            injectRoute({
+              pattern: '/',
+              entrypoint: '@tutorialkit/astro/default/pages/index.astro',
+              prerender: true,
+            });
+          }
 
           injectRoute({
             pattern: '[...slug]',
