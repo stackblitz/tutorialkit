@@ -5,9 +5,9 @@ import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from
 import type {
   OnChangeCallback as OnEditorChange,
   OnScrollCallback as OnEditorScroll,
-} from '../CodeMirrorEditor/index.js';
+} from '../core/CodeMirrorEditor/index.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
-import type { Theme } from '../types.js';
+import type { Theme } from '../core/types.js';
 import { EditorPanel } from './EditorPanel.js';
 import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';

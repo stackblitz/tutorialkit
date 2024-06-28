@@ -1,7 +1,7 @@
 import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { Compartment, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import '../styles/cm.css';
+import '../../styles/cm.css';
 import type { Theme } from '../types.js';
 import { vscodeDarkTheme } from './themes/vscode-dark.js';
 
