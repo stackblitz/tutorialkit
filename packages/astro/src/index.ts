@@ -8,8 +8,6 @@ import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
 import { tutorialkitStore } from './vite-plugins/store.js';
 import { WebContainerFiles } from './webcontainer-files/index.js';
 
-// kept for backwards compatibility
-export { theme } from '@tutorialkit/theme';
 
 export const unoCSSConfig = {
   theme,
