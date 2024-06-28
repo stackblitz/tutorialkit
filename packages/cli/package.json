@@ -16,8 +16,7 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "prepack": "node scripts/pre-pack.js",
-    "postpack": "node scripts/cleanup.js"
+    "update-template": "node scripts/update-template.js"
   },
   "files": [
     "dist",

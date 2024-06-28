@@ -1,0 +1,24 @@
+name: Resolve version
+description: Read "version" of "@tutorialkit/astro" to "steps.resolve-release-version.outputs.version"
+
+outputs:
+  version:
+    description: 'Version of @tutorialkit/astro'
+    value: ${{ steps.resolve-release-version.outputs.version }}
+
+runs:
+  using: composite
+
+  steps:
+    - name: Resolve release version
+      id: resolve-release-version
+      shell: bash
+      run: >
+        echo "$(
+          node -e "
+            const fs = require('fs');
+            const pkg = fs.readFileSync('./packages/astro/package.json', 'utf8');
+            const version = JSON.parse(pkg).version
+            console.log('version=' + version);
+          "
+        )" >> $GITHUB_OUTPUT

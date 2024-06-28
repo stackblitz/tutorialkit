@@ -1,0 +1,26 @@
+name: Integration Tests CLI
+
+on:
+  pull_request:
+
+jobs:
+  cli-integration-test:
+    name: CLI Integration Tests
+    # Note: `prepare-release.yaml` sets this commit message
+    if: ${{ contains(github.event.pull_request.title, 'release tutorialkit CLI') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
+      - name: Update template's versions
+        working-directory: ./packages/cli
+        run: pnpm update-template
+
+      - name: Integration Tests
+        working-directory: ./integration
+        run: pnpm test

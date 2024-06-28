@@ -9,17 +9,18 @@ import { distFolder, overwritesFolder, templateDest, templatePath } from './_con
 import { success } from './logger.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const version = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8')).version;
+const env = { ...process.env, COREPACK_ENABLE_STRICT: '0' };
 
 await execa('node', [path.join(__dirname, './build.js')], {
   stdio: 'inherit',
   env: {
+    ...env,
     TUTORIALKIT_TEMPLATE_PATH: path.relative(distFolder, templateDest),
   },
 });
 
-const gitignore = ignore().add(await fs.readFileSync(path.join(templatePath, '.gitignore'), 'utf8'));
+const gitignore = ignore().add(fs.readFileSync(path.join(templatePath, '.gitignore'), 'utf8'));
 
 /**
  * Do not copy over the content and the templates because they will be different
@@ -50,33 +51,31 @@ fs.cpSync(path.join(overwritesFolder), path.join(templateDest), {
 });
 
 // remove project references from tsconfig.json
-const tsconfigPath = path.join(templateDest, 'tsconfig.json');
-const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
-
-delete tsconfig.references;
-
-fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, undefined, 2));
+updateJSON('tsconfig.json', (tsconfig) => {
+  delete tsconfig.references;
+});
 
 // update dependencies
-const packageJsonPath = path.join(templateDest, 'package.json');
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-
-updateWorkspaceVersions(packageJson.dependencies, version);
-updateWorkspaceVersions(packageJson.devDependencies, version);
-
-fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
+updateJSON('package.json', (packageJson) => {
+  updateWorkspaceVersions(packageJson.dependencies, version);
+  updateWorkspaceVersions(packageJson.devDependencies, version);
+});
 
 // generate lockfiles
 await temporaryDirectoryTask(async (tmp) => {
   fs.cpSync(path.join(templateDest, 'package.json'), path.join(tmp, 'package.json'));
 
-  await execa('npm', ['install', '--package-lock-only'], { cwd: tmp });
-  await execa('pnpm', ['install', '--lockfile-only'], { cwd: tmp });
-  await execa('yarn', ['install'], { cwd: tmp });
+  await execa('npm', ['install', '--package-lock-only'], { cwd: tmp, env });
+  await execa('pnpm', ['install', '--lockfile-only'], { cwd: tmp, env });
+  await execa('yarn', ['install'], { cwd: tmp, env });
 
   fs.cpSync(path.join(tmp, 'package-lock.json'), path.join(templateDest, 'package-lock.json'));
   fs.cpSync(path.join(tmp, 'pnpm-lock.yaml'), path.join(templateDest, 'pnpm-lock.yaml'));
   fs.cpSync(path.join(tmp, 'yarn.lock'), path.join(templateDest, 'yarn.lock'));
+
+  console.log('Created', path.join(templateDest, 'package-lock.json'));
+  console.log('Created', path.join(templateDest, 'pnpm-lock.yaml'));
+  console.log('Created', path.join(templateDest, 'yarn.lock'));
 });
 
 success('Lockfiles generated');
@@ -89,4 +88,13 @@ function updateWorkspaceVersions(dependencies, version) {
       dependencies[dependency] = version;
     }
   }
+}
+
+function updateJSON(filename, callback) {
+  const filepath = path.join(templateDest, filename);
+  const json = JSON.parse(fs.readFileSync(filepath, 'utf8'));
+
+  callback(json);
+
+  fs.writeFileSync(filepath, JSON.stringify(json, undefined, 2));
 }

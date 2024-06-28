@@ -106,22 +106,21 @@ describe('yarn', () => {
 });
 
 async function createProject(name: string, packageManager: string, options: { cwd: string; install?: boolean }) {
-  await execa(
-    'node',
-    [
-      cli,
-      'create',
-      name,
-      `--${options.install ? '' : 'no-'}install`,
-      '--no-git',
-      '--package-manager',
-      packageManager,
-      '--defaults',
-    ],
-    {
-      cwd: options.cwd,
-    },
-  );
+  const args = [
+    cli,
+    'create',
+    name,
+    `--${options.install ? '' : 'no-'}install`,
+    '--no-git',
+    '--no-start',
+    '--package-manager',
+    packageManager,
+    '--defaults',
+  ];
+
+  console.log(`> node ${args.join(' ')}`);
+
+  await execa('node', args, { cwd: options.cwd });
 }
 
 function normaliseSlash(filePath: string) {

@@ -118,7 +118,7 @@ async function getInstalledPackageManagers(): Promise<PackageManager[]> {
       if (await lookpath(pkgManager)) {
         packageManagers.push(pkgManager as PackageManager);
       }
-    } catch (error) {
+    } catch {
       // package manager not found, do nothing
     }
   }
