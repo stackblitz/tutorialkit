@@ -9,7 +9,7 @@ export interface TerminalRef {
   reloadStyles: () => void;
 }
 
-export interface Props {
+export interface TerminalProps {
   theme: 'dark' | 'light';
   className?: string;
   readonly?: boolean;
@@ -17,7 +17,7 @@ export interface Props {
   onTerminalResize?: (cols: number, rows: number) => void;
 }
 
-export const Terminal = forwardRef<TerminalRef, Props>(
+export const Terminal = forwardRef<TerminalRef, TerminalProps>(
   ({ theme, className = '', readonly = true, onTerminalReady, onTerminalResize }, ref) => {
     const divRef = useRef<HTMLDivElement>(null);
     const terminalRef = useRef<XTerm>();
