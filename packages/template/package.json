@@ -25,7 +25,6 @@
     "@types/node": "^20.14.6",
     "@types/react": "^18.3.3",
     "@unocss/reset": "^0.59.4",
-    "@unocss/transformer-directives": "^0.59.4",
     "astro": "4.10.3",
     "fast-glob": "^3.3.2",
     "prettier-plugin-astro": "^0.13.0",

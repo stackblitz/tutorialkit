@@ -2,6 +2,7 @@
   "name": "create-tutorial",
   "version": "0.0.1-alpha.23",
   "description": "Interactive tutorials powered by WebContainer API",
+  "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",

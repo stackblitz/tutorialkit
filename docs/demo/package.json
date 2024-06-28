@@ -23,12 +23,11 @@
     "@iconify-json/svg-spinners": "^1.1.2",
     "@tutorialkit/astro": "workspace:*",
     "@tutorialkit/types": "workspace:*",
-    "@unocss/reset": "^0.60.4",
-    "@unocss/transformer-directives": "^0.60.4",
+    "@unocss/reset": "^0.59.4",
     "astro": "^4.10.3",
     "fast-glob": "^3.3.2",
     "prettier-plugin-astro": "^0.14.0",
     "typescript": "^5.4.5",
-    "unocss": "^0.60.4"
+    "unocss": "^0.59.4"
   }
 }
