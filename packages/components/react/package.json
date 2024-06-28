@@ -8,11 +8,31 @@
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./core": "./dist/core.js",
+    "./core/CodeMirrorEditor": "./dist/core/CodeMirrorEditor/index.js",
+    "./core/FileTree": "./dist/core/FileTree.js",
+    "./core/Terminal": "./dist/core/Terminal/index.js"
   },
   "files": [
     "dist"
   ],
+  "typesVersions": {
+    "*": {
+      "core": [
+        "dist/core.d.ts"
+      ],
+      "./core/CodeMirrorEditor": [
+        "dist/core/CodeMirrorEditor/index.d.ts"
+      ],
+      "./core/FileTree": [
+        "dist/core/FileTree.d.ts"
+      ],
+      "./core/Terminal": [
+        "dist/core/Terminal/index.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build": "node ./scripts/build.js"
   },

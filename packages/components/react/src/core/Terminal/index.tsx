@@ -17,8 +17,8 @@ export interface Props {
   onTerminalResize?: (cols: number, rows: number) => void;
 }
 
-const Terminal = forwardRef<TerminalRef, Props>(
-  ({ theme, className, readonly = true, onTerminalReady, onTerminalResize }, ref) => {
+export const Terminal = forwardRef<TerminalRef, Props>(
+  ({ theme, className = '', readonly = true, onTerminalReady, onTerminalResize }, ref) => {
     const divRef = useRef<HTMLDivElement>(null);
     const terminalRef = useRef<XTerm>();
 
@@ -78,7 +78,7 @@ const Terminal = forwardRef<TerminalRef, Props>(
       };
     }, []);
 
-    return <div className={`h-full ${className}`} ref={divRef} />;
+    return <div className={className} ref={divRef} />;
   },
 );
 
