@@ -2,7 +2,7 @@ import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
-import { WebContainerFiles } from './webcontainer-files.js';
+import { WebContainerFiles } from './webcontainer-files/index.js';
 import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
 import { tutorialkitStore } from './vite-plugins/store.js';
 import { tutorialkitCore } from './vite-plugins/core.js';
@@ -121,7 +121,7 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
       'astro:config:done'({ config }) {
         _config = config;
       },
-      'astro:server:setup'(options) {
+      async 'astro:server:setup'(options) {
         if (!_config) {
           return;
         }
@@ -129,7 +129,7 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
         const { server, logger } = options;
         const projectRoot = fileURLToPath(_config.root);
 
-        webcontainerFiles.serverSetup(projectRoot, options);
+        await webcontainerFiles.serverSetup(projectRoot, options);
 
         watchUserlandCSS(server, logger);
       },

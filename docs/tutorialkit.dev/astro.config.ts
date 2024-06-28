@@ -34,12 +34,8 @@ export default defineConfig({
               link: '/guides/installation/',
             },
             {
-              label: 'Creating a Lesson',
+              label: 'Content creation',
               link: '/guides/creating-content/',
-            },
-            {
-              label: 'Configuration',
-              link: '/guides/configuration/',
             },
             {
               label: 'Deployment',
@@ -48,6 +44,19 @@ export default defineConfig({
             {
               label: 'User Interface Reference',
               link: '/guides/ui/',
+            },
+          ],
+        },
+        {
+          label: 'Reference',
+          items: [
+            {
+              label: 'Configuration',
+              link: '/reference/configuration/',
+            },
+            {
+              label: 'Theming',
+              link: '/reference/theming/',
             },
           ],
         },
