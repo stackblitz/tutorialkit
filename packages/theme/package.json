@@ -1,7 +1,7 @@
 {
   "name": "@tutorialkit/theme",
   "version": "0.0.1-alpha.23",
-  "description": "TutorialKit Theme configuration",
+  "description": "TutorialKit theme configuration",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
