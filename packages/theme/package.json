@@ -1,0 +1,25 @@
+{
+  "name": "@tutorialkit/theme",
+  "version": "0.0.1-alpha.23",
+  "description": "TutorialKit Theme configuration",
+  "type": "module",
+  "bugs": "https://github.com/stackblitz/tutorialkit/issues",
+  "homepage": "https://github.com/stackblitz/tutorialkit",
+  "license": "MIT",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "unocss": "^0.59.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

@@ -28,6 +28,7 @@
     "@nanostores/react": "0.7.2",
     "@tutorialkit/components-react": "workspace:*",
     "@tutorialkit/runtime": "workspace:*",
+    "@tutorialkit/theme": "workspace:*",
     "@tutorialkit/types": "workspace:*",
     "@types/react": "^18.3.3",
     "@webcontainer/api": "1.2.0",

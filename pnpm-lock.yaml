@@ -166,6 +166,9 @@ importers:
       '@tutorialkit/runtime':
         specifier: workspace:*
         version: link:../runtime
+      '@tutorialkit/theme':
+        specifier: workspace:*
+        version: link:../theme
       '@tutorialkit/types':
         specifier: workspace:*
         version: link:../types
@@ -484,9 +487,6 @@ importers:
       '@unocss/reset':
         specifier: ^0.59.4
         version: 0.59.4
-      '@unocss/transformer-directives':
-        specifier: ^0.59.4
-        version: 0.59.4
       astro:
         specifier: 4.10.3
         version: 4.10.3(@types/node@20.14.6)(sass@1.77.6)(typescript@5.4.5)
@@ -514,6 +514,16 @@ importers:
       vitest:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.14.6)
+
+  packages/theme:
+    dependencies:
+      unocss:
+        specifier: ^0.59.4
+        version: 0.59.4(postcss@8.4.38)(vite@5.3.1)
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
 
   packages/types:
     dependencies:
