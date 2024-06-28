@@ -14,8 +14,9 @@ import {
   scrollPastEnd,
 } from '@codemirror/view';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
+import { classNames } from '../../utils/classnames.js';
+import { debounce } from '../../utils/debounce.js';
 import type { Theme } from '../types.js';
-import { debounce } from '../utils/debounce.js';
 import { BinaryContent } from './BinaryContent.js';
 import { getTheme, reconfigureTheme } from './cm-theme.js';
 import { indentKeyBinding } from './indent.js';
@@ -46,6 +47,7 @@ export type OnChangeCallback = (update: EditorUpdate) => void;
 export type OnScrollCallback = (position: ScrollPosition) => void;
 
 interface Props {
+  theme: Theme;
   id?: unknown;
   doc?: EditorDocument;
   debounceChange?: number;
@@ -53,7 +55,7 @@ interface Props {
   autoFocusOnDocumentChange?: boolean;
   onChange?: OnChangeCallback;
   onScroll?: OnScrollCallback;
-  theme: Theme;
+  className?: string;
 }
 
 type EditorStates = Map<string, EditorState>;
@@ -67,6 +69,7 @@ export function CodeMirrorEditor({
   onScroll,
   onChange,
   theme,
+  className = '',
 }: Props) {
   const [language] = useState(new Compartment());
   const [readOnly] = useState(new Compartment());
@@ -176,12 +179,14 @@ export function CodeMirrorEditor({
   }, [doc?.value, doc?.filePath, doc?.loading]);
 
   return (
-    <div className="h-full relative">
+    <div className={classNames('relative', className)}>
       {isBinaryFile && <BinaryContent />}
       <div className="h-full overflow-hidden" ref={containerRef} />
     </div>
   );
 }
+
+export default CodeMirrorEditor;
 
 CodeMirrorEditor.displayName = 'CodeMirrorEditor';
 
