@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { parseAstroConfig, replaceArgs } from './astro-config.js';
-import { generate } from './babel.js';
+import { generateAstroConfig, parseAstroConfig, replaceArgs } from '../../utils/astro-config.js';
 import type { CreateOptions } from './options.js';
 
 export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) {
@@ -38,13 +37,7 @@ export async function setupEnterpriseConfig(dest: string, flags: CreateOptions) 
       astroConfig,
     );
 
-    const defaultExport = 'export default defineConfig';
-    let output = generate(astroConfig);
-
-    // add a new line
-    output = output.replace(defaultExport, `\n${defaultExport}`);
-
-    fs.writeFileSync(configPath, output);
+    fs.writeFileSync(configPath, generateAstroConfig(astroConfig));
   }
 }
 

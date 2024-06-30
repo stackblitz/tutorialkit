@@ -22,7 +22,7 @@ export default [
     },
   }),
   {
-    files: ['**/env.d.ts'],
+    files: ['**/env.d.ts', '**/env-default.d.ts'],
     rules: {
       '@typescript-eslint/triple-slash-reference': 'off',
 
