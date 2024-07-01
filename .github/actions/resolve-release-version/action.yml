@@ -13,12 +13,4 @@ runs:
     - name: Resolve release version
       id: resolve-release-version
       shell: bash
-      run: >
-        echo "$(
-          node -e "
-            const fs = require('fs');
-            const pkg = fs.readFileSync('./packages/astro/package.json', 'utf8');
-            const version = JSON.parse(pkg).version
-            console.log('version=' + version);
-          "
-        )" >> $GITHUB_OUTPUT
+      run: echo "version=$(jq -r .version ./packages/astro/package.json)" >> $GITHUB_OUTPUT

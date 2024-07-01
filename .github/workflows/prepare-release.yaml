@@ -25,20 +25,17 @@ jobs:
         run: >
           pnpm --recursive
           --filter "@tutorialkit/*"
-          --filter create-tutorial
           exec pnpm version --no-git-tag-version --allow-same-version ${{ inputs.version }}
 
       - name: Generage changelog
-        run: |
-          pnpm run changelog
-          git checkout ./packages/cli
+        run: pnpm run changelog
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           # Note: `publish-release.yaml` checks explicitly for this commit message
-          commit-message: 'chore: release @tutorialkit packages and create-tutorial, version: ${{ inputs.version }}'
-          title: 'chore: release @tutorialkit packages and create-tutorial, version: ${{ inputs.version }}'
+          commit-message: 'chore: release @tutorialkit packages, version: ${{ inputs.version }}'
+          title: 'chore: release @tutorialkit packages, version: ${{ inputs.version }}'
           body: 'Bump packages to version ${{ inputs.version }} and generate changelogs'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-${{ inputs.version }}

@@ -30,7 +30,6 @@ jobs:
         run: >
           pnpm --recursive
           --filter "@tutorialkit/*"
-          --filter create-tutorial
           exec pnpm publish --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -62,14 +61,8 @@ jobs:
         run: >
           pnpm --recursive
           --filter tutorialkit
+          --filter create-tutorial
           exec npm version --no-git-tag-version --allow-same-version ${{ steps.resolve-release-version.outputs.version }}
-
-      - name: Generage changelog
-        run: |
-          pnpm run changelog
-          git add ./packages/cli ./packages/template
-          git checkout ./packages
-          git checkout CHANGELOG.md
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
@@ -77,7 +70,7 @@ jobs:
           # Note: `publish-release.yaml` checks explicitly for this commit message
           commit-message: 'chore: release tutorialkit CLI, version: ${{ steps.resolve-release-version.outputs.version }}'
           title: 'chore: release tutorialkit CLI, version: ${{ steps.resolve-release-version.outputs.version }}'
-          body: 'Bump tutorialkit CLI to version ${{ steps.resolve-release-version.outputs.version }} and generate changelog'
+          body: 'Bump tutorialkit CLI to version ${{ steps.resolve-release-version.outputs.version }}'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-cli-${{ steps.resolve-release-version.outputs.version }}
 
@@ -106,6 +99,10 @@ jobs:
         run: pnpm test
 
       - name: Publish to npm
-        run: pnpm --recursive --filter tutorialkit exec pnpm publish --provenance
+        run: >
+          pnpm --recursive
+          --filter tutorialkit
+          --filter create-tutorial
+          exec pnpm publish --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -2,6 +2,7 @@ name: Integration Tests CLI
 
 on:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   cli-integration-test:
