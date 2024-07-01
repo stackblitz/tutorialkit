@@ -1,0 +1,16 @@
+name: Resolve version
+description: Read "version" of "@tutorialkit/astro" to "steps.resolve-release-version.outputs.version"
+
+outputs:
+  version:
+    description: 'Version of @tutorialkit/astro'
+    value: ${{ steps.resolve-release-version.outputs.version }}
+
+runs:
+  using: composite
+
+  steps:
+    - name: Resolve release version
+      id: resolve-release-version
+      shell: bash
+      run: echo "version=$(jq -r .version ./packages/astro/package.json)" >> $GITHUB_OUTPUT

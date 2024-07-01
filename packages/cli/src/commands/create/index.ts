@@ -15,8 +15,6 @@ import { DEFAULT_VALUES, type CreateOptions } from './options.js';
 import { selectPackageManager, type PackageManager } from './package-manager.js';
 import { copyTemplate } from './template.js';
 
-const TUTORIALKIT_VERSION = pkg.version;
-
 export async function createTutorial(flags: yargs.Arguments) {
   if (flags._[1] === 'help' || flags.help || flags.h) {
     printHelp({
@@ -253,30 +251,26 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
   }
 
   const pkgPath = path.resolve(dest, 'package.json');
-
   const pkgJson = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
   pkgJson.name = projectName;
 
-  updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION);
-  updateWorkspaceVersions(pkgJson.devDependencies, TUTORIALKIT_VERSION);
-
   fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, undefined, 2));
-}
 
-function updateWorkspaceVersions(dependencies: Record<string, string>, version: string) {
-  for (const dependency in dependencies) {
-    const depVersion = dependencies[dependency];
+  try {
+    const pkgLockPath = path.resolve(dest, 'package-lock.json');
+    const pkgLockJson = JSON.parse(fs.readFileSync(pkgLockPath, 'utf8'));
+    const defaultPackage = pkgLockJson.packages[''];
 
-    if (depVersion === 'workspace:*') {
-      if (process.env.TK_DIRECTORY) {
-        const name = dependency.split('/')[1];
+    pkgLockJson.name = projectName;
 
-        dependencies[dependency] = `file:${process.env.TK_DIRECTORY}/packages/${name.replace('-', '/')}`;
-      } else {
-        dependencies[dependency] = version;
-      }
+    if (defaultPackage) {
+      defaultPackage.name = projectName;
     }
+
+    fs.writeFileSync(pkgLockPath, JSON.stringify(pkgLockJson, undefined, 2));
+  } catch {
+    // ignore any errors
   }
 }
 

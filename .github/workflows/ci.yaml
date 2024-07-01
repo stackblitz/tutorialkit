@@ -1,9 +1,11 @@
 name: CI
+
 on:
   push:
     branches:
       - main
   pull_request:
+
 jobs:
   test:
     name: Test
@@ -21,17 +23,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - uses: ./.github/actions/setup-and-build
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Setup
-        uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: pnpm install
+
       - name: Lint
         run: pnpm lint
-      - name: Build
-        run: pnpm build
+
       - name: Test
         run: pnpm test
 
@@ -41,12 +40,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup
-        uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: pnpm install
-      - name: Build
-        run: pnpm build
+
+      - uses: ./.github/actions/setup-and-build
+
       - name: Build docs
         run: |
           pnpm run docs:build
