@@ -1,0 +1,137 @@
+{
+  "name": "tutorialkit",
+  "displayName": "TutorialKit",
+  "description": "TutorialKit support in VS Code",
+  "icon": "resources/tutorialkit-icon.png",
+  "publisher": "StackBlitz",
+  "version": "0.0.11",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "repository": {
+    "url": "https://github.com/stackblitz/tutorialkit"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "tutorialkit.select-tutorial",
+        "title": "Select Tutorial",
+        "icon": "$(book)"
+      },
+      {
+        "command": "tutorialkit.add-lesson",
+        "title": "Add Lesson"
+      },
+      {
+        "command": "tutorialkit.add-chapter",
+        "title": "Add Chapter"
+      },
+      {
+        "command": "tutorialkit.add-part",
+        "title": "Add Part"
+      },
+      {
+        "command": "tutorialkit.refresh",
+        "title": "Refresh Lessons",
+        "icon": "$(refresh)"
+      }
+    ],
+    "viewsWelcome": [
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-splashscreen",
+        "contents": "",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "!tutorialkit:initialized"
+      },
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-splashscreen",
+        "contents": "Looks like there is no TutorialKit project in this workspace.\n[Rescan workspace](command:tutorialkit.initialize?true)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "tutorialkit:initialized && !tutorialkit:multiple-tutorials"
+      },
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-multiple-tutorials",
+        "contents": "Welcome to TutorialKit!\nLooks like there is more than one tutorial in your workspace.\n[Select a tutorial](command:tutorialkit.select-tutorial)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "tutorialkit:multiple-tutorials"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "tutorialkit-lessons-tree",
+          "name": "Tutorial",
+          "visibility": "visible",
+          "initialSize": 3
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "tutorialkit.select-tutorial",
+          "when": "view == tutorialkit-lessons-tree && tutorialkit:multiple-tutorials",
+          "group": "navigation"
+        },
+        {
+          "command": "tutorialkit.refresh",
+          "when": "view == tutorialkit-lessons-tree && tutorialkit:tree",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "tutorialkit.add-lesson",
+          "when": "view == tutorialkit-lessons-tree && viewItem == chapter"
+        },
+        {
+          "command": "tutorialkit.add-chapter",
+          "when": "view == tutorialkit-lessons-tree && viewItem == part"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "__esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "__dev": "npm run esbuild-base -- --sourcemap --watch",
+    "__vscode:prepublish": "npm run esbuild-base -- --minify",
+    "__build": "vsce package",
+    "compile": "npm run check-types && node esbuild.js",
+    "check-types": "tsc --noEmit",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "vscode:prepublish": "npm run package",
+    "package": "npm run check-types && node esbuild.js --production"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0",
+    "esbuild": "^0.21.5",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "case-anything": "^3.1.0",
+    "gray-matter": "^4.0.3",
+    "npm-run-all": "^4.1.5"
+  }
+}
