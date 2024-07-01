@@ -1,13 +1,18 @@
+import { rules, shortcuts, theme } from '@tutorialkit/theme';
 import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
-import { WebContainerFiles } from './webcontainer-files/index.js';
+import { tutorialkitCore } from './vite-plugins/core.js';
 import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
 import { tutorialkitStore } from './vite-plugins/store.js';
-import { tutorialkitCore } from './vite-plugins/core.js';
+import { WebContainerFiles } from './webcontainer-files/index.js';
 
-export { theme } from './theme.js';
+export const unoCSSConfig = {
+  theme,
+  rules,
+  shortcuts,
+};
 
 export interface Options {
   /**

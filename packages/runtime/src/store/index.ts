@@ -260,7 +260,7 @@ export class TutorialStore {
   }
 
   hasSolution(): boolean {
-    return !!this._lesson && Object.keys(this._lesson.solution).length >= 1;
+    return !!this._lesson && Object.keys(this._lesson.solution[1]).length >= 1;
   }
 
   reset() {

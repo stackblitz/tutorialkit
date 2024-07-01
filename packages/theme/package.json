@@ -1,7 +1,7 @@
 {
-  "name": "@tutorialkit/types",
+  "name": "@tutorialkit/theme",
   "version": "0.0.1-alpha.23",
-  "description": "Types for TutorialKit",
+  "description": "TutorialKit theme configuration",
   "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
@@ -15,14 +15,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
-    "test": "vitest"
+    "build": "tsc -b"
   },
   "dependencies": {
-    "zod": "3.23.8"
+    "unocss": "^0.59.4"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "typescript": "^5.4.5"
   }
 }

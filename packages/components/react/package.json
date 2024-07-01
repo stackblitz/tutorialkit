@@ -2,13 +2,43 @@
   "name": "@tutorialkit/components-react",
   "version": "0.0.1-alpha.23",
   "description": "TutorialKit's React components",
+  "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./core": {
+      "import": {
+        "types": "./dist/core.d.ts",
+        "default": "./dist/core.js"
+      }
+    },
+    "./core/CodeMirrorEditor": {
+      "import": {
+        "types": "./dist/core/CodeMirrorEditor/index.d.ts",
+        "default": "./dist/core/CodeMirrorEditor/index.js"
+      }
+    },
+    "./core/FileTree": {
+      "import": {
+        "types": "./dist/core/FileTree.d.ts",
+        "default": "./dist/core/FileTree.js"
+      }
+    },
+    "./core/Terminal": {
+      "import": {
+        "types": "./dist/core/Terminal/index.d.ts",
+        "default": "./dist/core/Terminal/index.js"
+      }
+    }
   },
   "files": [
     "dist"

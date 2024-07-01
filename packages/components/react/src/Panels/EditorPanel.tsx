@@ -5,10 +5,10 @@ import {
   type EditorDocument,
   type OnChangeCallback as OnEditorChange,
   type OnScrollCallback as OnEditorScroll,
-} from '../CodeMirrorEditor/index.js';
-import { FileTree } from '../FileTree.js';
+} from '../core/CodeMirrorEditor/index.js';
+import { FileTree } from '../core/FileTree.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
-import type { Theme } from '../types.js';
+import type { Theme } from '../core/types.js';
 
 const DEFAULT_FILE_TREE_SIZE = 25;
 
@@ -88,6 +88,7 @@ export function EditorPanel({
         <FileTab editorDocument={editorDocument} onHelpClick={onHelpClick} helpAction={helpAction} />
         <div className="h-full flex-1 overflow-hidden">
           <CodeMirrorEditor
+            className="h-full"
             theme={theme}
             id={id}
             doc={editorDocument}

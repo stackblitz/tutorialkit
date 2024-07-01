@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { classNames } from './utils/classnames.js';
+import { classNames } from '../utils/classnames.js';
 
 const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
@@ -101,6 +101,8 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
     </div>
   );
 }
+
+export default FileTree;
 
 interface FolderProps {
   folder: FolderNode;

@@ -96,7 +96,7 @@ const PRIMITIVES = {
   },
 };
 
-export const theme: ConfigBase['theme'] = {
+export const theme = {
   colors: {
     ...PRIMITIVES,
     tk: {
@@ -322,4 +322,4 @@ export const theme: ConfigBase['theme'] = {
       },
     },
   },
-};
+} satisfies ConfigBase['theme'];
