@@ -1,12 +1,16 @@
+import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
+import detectIndent from 'detect-indent';
+import { execa } from 'execa';
 import fs from 'node:fs';
 import path from 'node:path';
+import preferredPM from 'preferred-pm';
 import type { Arguments } from 'yargs-parser';
 import { pkg } from '../../pkg.js';
-import { DEFAULT_VALUES, type EjectOptions } from './options.js';
-import { errorLabel, printHelp, primaryLabel } from '../../utils/messages.js';
-import { parseAstroConfig, replaceArgs, generateAstroConfig } from '../../utils/astro-config.js';
+import { generateAstroConfig, parseAstroConfig, replaceArgs } from '../../utils/astro-config.js';
+import { errorLabel, primaryLabel, printHelp } from '../../utils/messages.js';
 import { updateWorkspaceVersions } from '../../utils/workspace-version.js';
+import { DEFAULT_VALUES, type EjectOptions } from './options.js';
 
 interface PackageJson {
   dependencies: Record<string, string>;
@@ -27,6 +31,7 @@ export function ejectRoutes(flags: Arguments) {
             '--force',
             `Overwrite existing files in the target directory without prompting (default ${chalk.yellow(DEFAULT_VALUES.force)})`,
           ],
+          ['--defaults', 'Skip all the prompts and eject the routes using the defaults'],
         ],
       },
     });
@@ -86,7 +91,9 @@ async function _eject(flags: EjectOptions) {
    * Last, we ensure that the `package.json` contains the extra dependencies.
    * If any are missing we suggest to install the new dependencies.
    */
-  const pkgJson: PackageJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
+  const pkgJsonContent = fs.readFileSync(pkgJsonPath, 'utf-8');
+  const indent = detectIndent(pkgJsonContent).indent || '  ';
+  const pkgJson: PackageJson = JSON.parse(pkgJsonContent);
 
   const astroIntegrationPkgJson: PackageJson = JSON.parse(
     fs.readFileSync(path.join(astroIntegrationPath, 'package.json'), 'utf-8'),
@@ -107,12 +114,24 @@ async function _eject(flags: EjectOptions) {
   );
 
   if (newDependencies.length > 0) {
-    fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2), { encoding: 'utf-8' });
+    fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, undefined, indent), { encoding: 'utf-8' });
 
     console.log(
       primaryLabel('INFO'),
       `New dependencies added: ${newDependencies.join(', ')}. Install the new dependencies before proceeding`,
     );
+
+    if (!flags.defaults) {
+      const packageManager = (await preferredPM(pkgJsonPath)).name;
+
+      const answer = await prompts.confirm({
+        message: `Do you want to install those dependencies now using ${packageManager}?`,
+      });
+
+      if (answer === true) {
+        await execa(packageManager, ['install'], { cwd: folderPath, stdio: 'inherit' });
+      }
+    }
   }
 }
 

@@ -80,7 +80,7 @@ test('create and eject a project', async (context) => {
     },
   });
 
-  await execa('node', [cli, 'eject', name, '--force'], {
+  await execa('node', [cli, 'eject', name, '--force', '--defaults'], {
     cwd: tmpDir,
     env: {
       TK_DIRECTORY: baseDir,
@@ -107,7 +107,7 @@ test('create, eject and build a project', async (context) => {
     },
   });
 
-  await execa('node', [cli, 'eject', name, '--force'], {
+  await execa('node', [cli, 'eject', name, '--force', '--defaults'], {
     cwd: tmpDir,
     env: {
       TK_DIRECTORY: baseDir,
@@ -137,7 +137,7 @@ test('cannot eject on an empty folder', async (context) => {
   await fs.mkdir(dest);
 
   await expect(
-    execa('node', [cli, 'eject', name, '--force'], {
+    execa('node', [cli, 'eject', name, '--force', '--defaults'], {
       cwd: tmpDir,
       env: {
         TK_DIRECTORY: baseDir,
@@ -155,7 +155,7 @@ test('cannot eject on a node project that is not an Astro project', async (conte
   await fs.writeFile(path.join(dest, 'package.json'), JSON.stringify({ name: 'not-tutorialkit' }));
 
   await expect(
-    execa('node', [cli, 'eject', name, '--force'], {
+    execa('node', [cli, 'eject', name, '--force', '--defaults'], {
       cwd: tmpDir,
       env: {
         TK_DIRECTORY: baseDir,
@@ -186,7 +186,7 @@ test('cannot eject on an astro project that is not using TutorialKit', async (co
   );
 
   await expect(
-    execa('node', [cli, 'eject', name, '--force'], {
+    execa('node', [cli, 'eject', name, '--force', '--defaults'], {
       cwd: tmpDir,
       env: {
         TK_DIRECTORY: baseDir,
@@ -221,7 +221,7 @@ test('cannot eject on an astro project that is not using TutorialKit 2', async (
   });
 
   await expect(
-    execa('node', [cli, 'eject', name, '--force'], {
+    execa('node', [cli, 'eject', name, '--force', '--defaults'], {
       cwd: tmpDir,
       env: {
         TK_DIRECTORY: baseDir,

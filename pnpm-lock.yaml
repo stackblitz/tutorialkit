@@ -269,6 +269,9 @@ importers:
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
+      detect-indent:
+        specifier: 7.0.1
+        version: 7.0.1
       execa:
         specifier: ^9.2.0
         version: 9.2.0
@@ -278,6 +281,9 @@ importers:
       lookpath:
         specifier: ^1.2.2
         version: 1.2.2
+      preferred-pm:
+        specifier: 3.1.3
+        version: 3.1.3
       yargs-parser:
         specifier: ^21.1.1
         version: 21.1.1
@@ -4373,6 +4379,11 @@ packages:
 
   /destr@2.0.3:
     resolution: {integrity: sha512-2N3BOUU4gYMpTP24s5rF5iP7BDr7uNTCs4ozw3kf/eKfvWSIu93GEBi5m427YoyJoeOzQ5smuu4nNAPGb8idSQ==}
+
+  /detect-indent@7.0.1:
+    resolution: {integrity: sha512-Mc7QhQ8s+cLrnUfU/Ji94vG/r8M26m8f++vyres4ZoojaRDpZ1eSIh/EpzLNwlWuvzSZ3UbDFspjFvTDXe6e/g==}
+    engines: {node: '>=12.20'}
+    dev: false
 
   /detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
