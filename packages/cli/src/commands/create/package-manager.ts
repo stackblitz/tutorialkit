@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
 import { lookpath } from 'lookpath';
@@ -6,7 +8,27 @@ import { DEFAULT_VALUES, type CreateOptions } from './options.js';
 
 export type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
 
-export async function selectPackageManager(flags: CreateOptions) {
+const LOCK_FILES = new Map<PackageManager, string>([
+  ['npm', 'package-lock.json'],
+  ['pnpm', 'pnpm-lock.yaml'],
+  ['yarn', 'yarn.lock'],
+]);
+
+export async function selectPackageManager(cwd: string, flags: CreateOptions) {
+  const packageManager = await resolvePackageManager(flags);
+
+  // remove lock files for other package managers
+  for (const [pkgManager, lockFile] of LOCK_FILES) {
+    if (pkgManager !== packageManager) {
+      console.log('Removing', path.join(cwd, lockFile));
+      fs.rmSync(path.join(cwd, lockFile), { force: true });
+    }
+  }
+
+  return packageManager;
+}
+
+async function resolvePackageManager(flags: CreateOptions) {
   if (flags.packageManager) {
     if (await lookpath(String(flags.packageManager))) {
       return flags.packageManager as PackageManager;

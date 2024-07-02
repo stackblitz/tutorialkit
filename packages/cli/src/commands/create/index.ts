@@ -144,7 +144,7 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
 
   updatePackageJson(resolvedDest, tutorialName, flags);
 
-  const selectedPackageManager = await selectPackageManager(flags);
+  const selectedPackageManager = await selectPackageManager(resolvedDest, flags);
 
   updateReadme(resolvedDest, selectedPackageManager, flags);
 

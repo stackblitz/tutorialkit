@@ -17,7 +17,6 @@
   "icons/languages/ts.svg",
   "package-lock.json",
   "package.json",
-  "pnpm-lock.yaml",
   "public",
   "public/favicon.svg",
   "public/logo-dark.svg",
@@ -51,6 +50,5 @@
   "src/templates/default/public/vite.svg",
   "src/templates/default/style.css",
   "tsconfig.json",
-  "uno.config.ts",
-  "yarn.lock"
+  "uno.config.ts"
 ]

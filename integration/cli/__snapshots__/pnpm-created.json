@@ -15,7 +15,6 @@
   "icons/languages/markdown.svg",
   "icons/languages/sass.svg",
   "icons/languages/ts.svg",
-  "package-lock.json",
   "package.json",
   "pnpm-lock.yaml",
   "public",
@@ -51,6 +50,5 @@
   "src/templates/default/public/vite.svg",
   "src/templates/default/style.css",
   "tsconfig.json",
-  "uno.config.ts",
-  "yarn.lock"
+  "uno.config.ts"
 ]
