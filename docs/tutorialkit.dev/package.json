@@ -11,21 +11,27 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@tutorialkit/components-react": "workspace:*",
+    "@webcontainer/api": "1.2.0",
+    "classnames": "^2.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
     "@astrojs/check": "^0.7.0",
     "@astrojs/react": "^3.6.0",
     "@astrojs/starlight": "^0.23.4",
+    "@iconify-json/ph": "^1.1.13",
+    "@tutorialkit/theme": "workspace:*",
+    "@types/gtag.js": "^0.0.20",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "astro": "^4.10.3",
-    "classnames": "^2.5.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "fast-glob": "^3.3.2",
     "sass": "^1.77.6",
     "sharp": "^0.32.6",
     "starlight-links-validator": "^0.9.0",
-    "typescript": "^5.4.5"
-  },
-  "devDependencies": {
-    "@types/gtag.js": "^0.0.20"
+    "typescript": "^5.4.5",
+    "unocss": "^0.59.4"
   }
 }

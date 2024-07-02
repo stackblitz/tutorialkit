@@ -186,3 +186,51 @@ site-search button[data-open-modal] {
   padding: 2px 0;
   font-size: var(--sl-text-base);
 }
+
+// ----------------------------------------
+// React components page
+
+.limit-code-height > figure > pre {
+  --at-apply: max-h-120;
+  overflow-y: scroll;
+}
+
+.react-example .expressive-code .frame {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.react-example .cm-scroller {
+  &::-webkit-scrollbar, &::-webkit-scrollbar-track {
+    background-color: inherit;
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--ec-sbThumbCol);
+    border: 4px solid transparent;
+    background-clip: content-box;
+    border-radius: 10px
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ec-sbThumbHoverCol)
+  }
+}
+
+
+.limit-code-height > figure {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 16px;
+    height: 16px;
+    background: var(--code-background);
+  }
+}

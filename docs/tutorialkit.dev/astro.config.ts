@@ -2,12 +2,20 @@ import react from '@astrojs/react';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 import starlightLinksValidator from 'starlight-links-validator';
+import UnoCSS from 'unocss/astro';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://tutorialkit.dev',
+  server: {
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+    },
+  },
   integrations: [
     react(),
+    UnoCSS(),
     starlight({
       title: 'Create interactive coding tutorials',
       social: {
@@ -62,6 +70,10 @@ export default defineConfig({
             {
               label: 'Theming',
               link: '/reference/theming/',
+            },
+            {
+              label: 'React components',
+              link: '/reference/react-components',
             },
           ],
         },

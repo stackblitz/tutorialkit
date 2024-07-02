@@ -1,0 +1,177 @@
+---
+title: React components
+description: Use TutorialKit's React components for fun and profit.
+---
+import PackageManagerTabs from '@components/Tabs/PackageManagerTabs.astro'
+import { Code } from '@astrojs/starlight/components';
+import themeCSS from '@components/react-examples/theme.css?raw';
+
+import Example from '@components/react-examples/Example.astro';
+
+import ExampleSimpleEditor from '@components/react-examples/ExampleSimpleEditor';
+import ExampleFileTree from '@components/react-examples/ExampleFileTree';
+import ExampleCodeMirrorEditor from '@components/react-examples/ExampleCodeMirrorEditor';
+import ExampleTerminal from '@components/react-examples/ExampleTerminal';
+
+import sourceExampleSimpleEditor from '@components/react-examples/ExampleSimpleEditor?raw';
+import sourceExampleFileTree from '@components/react-examples/ExampleFileTree?raw';
+import sourceExampleCodeMirrorEditor from '@components/react-examples/ExampleCodeMirrorEditor?raw';
+import sourceExampleTerminal from '@components/react-examples/ExampleTerminal?raw';
+
+You can reuse TutorialKit's React components in your own applications. They are designed to work well with the [WebContainer API][webcontainers].
+
+Here's a simple editor that can be made with those components:
+
+<ExampleSimpleEditor client:load />
+
+## Installation
+
+Those components use TutorialKit's design system which is based on an atomic CSS engine, UnoCSS. You will need a few dependencies in order to use them:
+
+
+<PackageManagerTabs>
+  <Fragment slot="npm">
+  ```shell
+  npm install @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  ```
+  </Fragment>
+  <Fragment slot="pnpm">
+  ```shell
+  pnpm install @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  ```
+  </Fragment>
+  <Fragment slot="yarn">
+  ```shell
+  yarn add @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  ```
+  </Fragment>
+</PackageManagerTabs>
+
+To setup UnoCSS with TutorialKit's components, you need to create a `uno.config.ts`:
+
+```ts title=uno.config.ts
+import { theme, rules, shortcuts } from '@tutorialkit/theme';
+import { convertPathToPattern, globSync } from 'fast-glob';
+import fs from 'node:fs/promises';
+import { join } from 'path';
+import { defineConfig, presetIcons, presetUno, transformerDirectives } from 'unocss';
+
+export default defineConfig({
+  theme,
+  rules,
+  shortcuts,
+  content: {
+    inline: globSync(
+      `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`,
+    ).map((filePath) => {
+      return () => fs.readFile(filePath, { encoding: 'utf8' });
+    }),
+  },
+  transformers: [transformerDirectives()],
+  presets: [presetUno(), presetIcons()],
+});
+```
+
+Then you need all the CSS variables used by TutorialKit design system:
+
+<Code code={themeCSS} lang="css" title="src/theme.css" class="limit-code-height" />
+
+Next, you will need an integration. This depend on which build tool you have configured. See https://unocss.dev/integrations/ to configure yours.
+
+Once this is done, make sure to import the CSS from your code so that it gets included:
+
+```ts title="src/main.ts"
+import 'uno.css';
+import './theme.css';
+```
+
+See a full example on [StackBlitz][stackblitz-example].
+
+## Components
+
+
+### `FileTree`
+
+A component to list files in a tree view.
+
+#### Example
+
+<Example previewClassName="h-60 bg-tk-elements-fileTree-file-backgroundColor">
+  <ExampleFileTree slot="preview" client:load />
+  <Code slot="code" code={sourceExampleFileTree} lang="tsx" class="limit-code-height" />
+</Example>
+
+#### Props
+
+* `files: string[]` - The list of file paths to display. Each path should start with a `/` and be separated by `/` for directories. The array should be sorted in the order you want the files to be displayed while making sure that the files that share the same parent directory are grouped together.
+
+* `selectedFile?: string` - The path of the file that should be selected. This will be highlighted in the tree.
+
+* `onFileSelect: (file: string) => void` - A callback that will be called when a file is clicked. The path of the file that was clicked will be passed as an argument.
+
+* `hideRoot: boolean` - Whether or not to hide the root directory in the tree. Defaults to `false`.
+
+* `hiddenFiles: (string | RegExp)[]` - A list of file paths that should be hidden from the tree.
+
+* `scope?: string` - Every file paths that does not starts with this scope will be hidden.
+
+* `className?: string` - A class name to apply to the root element of the component.
+
+
+### `CodeMirrorEditor`
+
+A component to edit code with syntax highlighting using CodeMirror 6. This component support multi-file edits by caching its state when moving between files.
+
+#### Example
+
+<Example previewClassName='h-60'>
+  <ExampleCodeMirrorEditor slot="preview" client:load />
+  <Code slot="code" code={sourceExampleCodeMirrorEditor} lang="tsx" class="limit-code-height" />
+</Example>
+
+#### Props
+
+* `doc?: EditorDocument` - The document to edit.
+
+* `onChange?: (update: EditorUpdate) => void` - A callback that will be called when the document is changed.
+
+* `onScroll?: OnScrollCallback` - A callback that will be called when the editor is scrolled.
+
+* `id?: unknown` - When this value changes, the editor clear its cache of known files.
+
+* `debounceChange?: number` - The time in milliseconds to wait before calling the `onChange` callback after the document is changed.
+
+* `debounceScroll?: number` - The time in milliseconds to wait before calling the `onScroll` callback after the editor is scrolled.
+
+* `autoFocusOnDocumentChange?: boolean` - Whether or not to focus the editor when the document is changed. Defaults to `false`.
+
+* `theme: 'dark' | 'light'` - The theme to use for the editor. Two values are available: `light` and `dark`.
+
+* `className?: string` - A class name to apply to the root element of the component.
+
+
+### `Terminal`
+
+#### Example
+
+<Example>
+  <ExampleTerminal slot="preview" client:load />
+  <Code slot="code" code={sourceExampleTerminal} lang="tsx" class="limit-code-height" />
+</Example>
+
+
+#### Props
+
+* `readonly?: boolean` - Whether or not the terminal is readonly. Defaults to `true`.
+
+* `onTerminalReady?: (terminal: Terminal) => void` - A callback that will be called when the terminal is ready. The `Terminal` instance from `xterm` will be provided as an argument.
+
+* `onTerminalResize?: (cols: number, rows: number) => void` - A callback that will be called when the terminal is resized. The number of columns and rows will be provided as arguments. This is typically used to send a `SIGWINCH` signal to the running webcontainer process that is connected to the terminal.
+
+* `theme: 'dark' | 'light'` - The theme to use for the editor. Two values are available: `light` and `dark`.
+
+* `className?: string` - A class name to apply to the root element of the component.
+
+
+[webcontainers]: https://webcontainers.io
+[stackblitz-example]: https://stackblitz.com
