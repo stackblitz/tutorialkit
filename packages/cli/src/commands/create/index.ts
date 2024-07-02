@@ -15,6 +15,8 @@ import { DEFAULT_VALUES, type CreateOptions } from './options.js';
 import { selectPackageManager, type PackageManager } from './package-manager.js';
 import { copyTemplate } from './template.js';
 
+const TUTORIALKIT_VERSION = pkg.version;
+
 export async function createTutorial(flags: yargs.Arguments) {
   if (flags._[1] === 'help' || flags.help || flags.h) {
     printHelp({
@@ -255,6 +257,9 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
 
   pkgJson.name = projectName;
 
+  updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION);
+  updateWorkspaceVersions(pkgJson.devDependencies, TUTORIALKIT_VERSION);
+
   fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, undefined, 2));
 
   try {
@@ -311,5 +316,21 @@ function applyAliases(flags: CreateOptions & Record<string, any>) {
 function verifyFlags(flags: CreateOptions) {
   if (flags.install === false && flags.start) {
     throw new Error('Cannot start project without installing dependencies.');
+  }
+}
+
+function updateWorkspaceVersions(dependencies: Record<string, string>, version: string) {
+  for (const dependency in dependencies) {
+    const depVersion = dependencies[dependency];
+
+    if (depVersion === 'workspace:*') {
+      if (process.env.TK_DIRECTORY) {
+        const name = dependency.split('/')[1];
+
+        dependencies[dependency] = `file:${process.env.TK_DIRECTORY}/packages/${name.replace('-', '/')}`;
+      } else {
+        dependencies[dependency] = version;
+      }
+    }
   }
 }
