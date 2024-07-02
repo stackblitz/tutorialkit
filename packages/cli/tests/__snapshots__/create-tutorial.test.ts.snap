@@ -286,6 +286,7 @@ exports[`create, eject and build a project 1`] = `
   "logo-dark.svg",
   "logo.svg",
   "template-default.json",
+  "template-vite-app-2.json",
   "template-vite-app.json",
 ]
 `;
