@@ -1,7 +1,7 @@
 import { defaultHighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { Compartment, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import '../styles/cm.css';
+import '../../styles/cm.css';
 import type { Theme } from '../types.js';
 import { vscodeDarkTheme } from './themes/vscode-dark.js';
 
@@ -128,9 +128,11 @@ export const editorTheme = EditorView.theme({
   '.cm-tooltip': {
     background: 'var(--cm-tooltip-backgroundColor)',
     borderColor: 'var(--cm-tooltip-borderColor)',
+    color: 'var(--cm-tooltip-textColor)',
   },
   '.cm-tooltip.cm-tooltip-autocomplete ul li[aria-selected]': {
     background: 'var(--cm-tooltip-backgroundColorSelected)',
+    color: 'var(--cm-tooltip-textColorSelected)',
   },
 });
 

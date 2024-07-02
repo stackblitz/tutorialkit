@@ -96,7 +96,7 @@ const PRIMITIVES = {
   },
 };
 
-export const theme: ConfigBase['theme'] = {
+export const theme = {
   colors: {
     ...PRIMITIVES,
     tk: {
@@ -179,6 +179,7 @@ export const theme: ConfigBase['theme'] = {
         },
         panel: {
           backgroundColor: 'var(--tk-elements-panel-backgroundColor)',
+          textColor: 'var(--tk-elements-panel-textColor)',
           header: {
             backgroundColor: 'var(--tk-elements-panel-header-backgroundColor)',
             textColor: 'var(--tk-elements-panel-header-textColor)',
@@ -321,4 +322,4 @@ export const theme: ConfigBase['theme'] = {
       },
     },
   },
-};
+} satisfies ConfigBase['theme'];

@@ -12,6 +12,7 @@ body {
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
   overscroll-behavior: none;
+
   &::before {
     position: absolute;
     bottom: 0;
@@ -21,18 +22,22 @@ body {
     pointer-events: none;
     z-index: 1;
   }
+
   &:not(:has(#starlight__sidebar)) {
     &::before {
       content: '';
     }
+
     [data-theme='dark'] & {
       background-image: radial-gradient(100% 100% at 50% 0%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
       &::before {
         background-image: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.8) 100%);
       }
     }
+
     [data-theme='light'] & {
       background-image: radial-gradient(100% 100% at 50% 0%, #fff 60%, #eff0f3 100%);
+
       &::before {
         background-image: linear-gradient(transparent 60%, rgba(255, 255, 255, 0.8) 100%);
       }
@@ -50,7 +55,7 @@ header.header {
   border: none;
 }
 
-// Don't override <a> text color for home page buttons
+// don't override <a> text color for home page buttons
 .sl-markdown-content .simple-page-hero__links a:not(:where(.not-content *)) {
   color: unset;
 }
@@ -166,9 +171,11 @@ site-search button[data-open-modal] {
   box-shadow: 0 4px 6px -2px hsl(0, 0%, 0%, 0.1);
   transition: var(--transition-fast);
   transition-property: color, border-color;
+
   & > span {
     font-size: 0.84rem;
   }
+
   span:not(.link-title) {
     font-size: 0;
   }

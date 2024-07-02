@@ -1,13 +1,18 @@
+import { rules, shortcuts, theme } from '@tutorialkit/theme';
 import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
-import { WebContainerFiles } from './webcontainer-files.js';
+import { tutorialkitCore } from './vite-plugins/core.js';
 import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
 import { tutorialkitStore } from './vite-plugins/store.js';
-import { tutorialkitCore } from './vite-plugins/core.js';
+import { WebContainerFiles } from './webcontainer-files/index.js';
 
-export { theme } from './theme.js';
+export const unoCSSConfig = {
+  theme,
+  rules,
+  shortcuts,
+};
 
 export interface Options {
   /**
@@ -15,9 +20,12 @@ export interface Options {
    *
    * Set this to false to customize the pages.
    *
+   * Use 'tutorial-only' to only inject the tutorial routes. This is useful
+   * if you want to have a different landing page.
+   *
    * @default true
    */
-  defaultRoutes?: boolean;
+  defaultRoutes?: boolean | 'tutorial-only';
 
   /**
    * The value of the Cross-Origin-Embedder-Policy header for the dev server.
@@ -96,11 +104,13 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
         updateMarkdownConfig(options);
 
         if (defaultRoutes) {
-          injectRoute({
-            pattern: '/',
-            entrypoint: '@tutorialkit/astro/default/pages/index.astro',
-            prerender: true,
-          });
+          if (defaultRoutes !== 'tutorial-only') {
+            injectRoute({
+              pattern: '/',
+              entrypoint: '@tutorialkit/astro/default/pages/index.astro',
+              prerender: true,
+            });
+          }
 
           injectRoute({
             pattern: '[...slug]',
@@ -116,7 +126,7 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
       'astro:config:done'({ config }) {
         _config = config;
       },
-      'astro:server:setup'(options) {
+      async 'astro:server:setup'(options) {
         if (!_config) {
           return;
         }
@@ -124,7 +134,7 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
         const { server, logger } = options;
         const projectRoot = fileURLToPath(_config.root);
 
-        webcontainerFiles.serverSetup(projectRoot, options);
+        await webcontainerFiles.serverSetup(projectRoot, options);
 
         watchUserlandCSS(server, logger);
       },

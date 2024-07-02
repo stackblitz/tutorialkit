@@ -175,6 +175,7 @@
 
   /* Panel */
   --tk-elements-panel-backgroundColor: var(--tk-elements-app-backgroundColor);
+  --tk-elements-panel-textColor: var(--tk-elements-app-textColor);
 
   /* Panel > Header */
   --tk-elements-panel-header-backgroundColor: var(--tk-background-secondary);

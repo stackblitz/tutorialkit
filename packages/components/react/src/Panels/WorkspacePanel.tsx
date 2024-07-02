@@ -5,9 +5,9 @@ import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from
 import type {
   OnChangeCallback as OnEditorChange,
   OnScrollCallback as OnEditorScroll,
-} from '../CodeMirrorEditor/index.js';
+} from '../core/CodeMirrorEditor/index.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
-import type { Theme } from '../types.js';
+import type { Theme } from '../core/types.js';
 import { EditorPanel } from './EditorPanel.js';
 import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';
@@ -146,6 +146,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         maxSize={hasEditor ? 100 : 0}
         collapsible={!hasEditor}
         ref={editorPanelRef}
+        className="bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor"
       >
         <EditorPanel
           id={tutorialStore.ref}
@@ -209,7 +210,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         onExpand={() => {
           terminalExpanded.current = true;
         }}
-        className={classNames({
+        className={classNames('bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor', {
           'border-t border-tk-elements-app-borderColor': hasPreviews,
         })}
       >

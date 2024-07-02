@@ -3,7 +3,7 @@
   --cm-textColor: var(--tk-elements-editor-textColor, var(--tk-text-primary));
 
   /* Gutter */
-  --cm-gutter-backgroundColor: var(--ts-elements-editor-gutter-backgroundColor, var(--cm-backgroundColor));
+  --cm-gutter-backgroundColor: var(--tk-elements-editor-gutter-backgroundColor, var(--cm-backgroundColor));
   --cm-gutter-textColor: var(--tk-elements-editor-gutter-textColor, var(--tk-text-secondary));
   --cm-gutter-activeLineTextColor: var(--tk-elements-editor-gutter-activeLineTextColor, var(--cm-gutter-textColor));
 
@@ -16,16 +16,16 @@
 
   /* Cursor */
   --cm-cursor-width: 2px;
-  --cm-cursor-backgroundColor: var(--tk-elements-editor-cursor-textColor, var(--tk-text-primary));
+  --cm-cursor-backgroundColor: var(--tk-elements-editor-cursorColor, var(--tk-text-primary));
 
   /* Matching Brackets */
   --cm-matching-bracket: var(--tk-elements-editor-matchingBracketBackgroundColor, rgb(50 140 130 / 0.3));
 
   /* Selection */
-  --cm-selection-backgroundColorFocused: var(--tk-elements-editor-selection-backgroundColorFocused, #42b4ff);
-  --cm-selection-backgroundOpacityFocused: var(--tk-elements-editor-selection-backgroundOpacityFocused, 0.3);
-  --cm-selection-backgroundColorBlured: var(--tk-elements-editor-selection-backgroundColorBlured, #c9e9ff);
-  --cm-selection-backgroundOpacityBlured: var(--tk-elements-editor-selection-backgroundOpacityBlured, 0.3);
+  --cm-selection-backgroundColorFocused: var(--tk-elements-editor-selection-backgroundColor, #42b4ff);
+  --cm-selection-backgroundOpacityFocused: var(--tk-elements-editor-selection-backgroundOpacity, 0.3);
+  --cm-selection-backgroundColorBlured: var(--tk-elements-editor-selection-inactiveBackgroundColor, #c9e9ff);
+  --cm-selection-backgroundOpacityBlured: var(--tk-elements-editor-selection-inactiveBackgroundOpacity, 0.3);
 
   /* Panels */
   --cm-panels-borderColor: var(--tk-elements-editor-panels-borderColor, var(--tk-elements-app-borderColor));
@@ -77,10 +77,12 @@
     --tk-elements-editor-tooltip-backgroundColor,
     var(--tk-elements-app-backgroundColor)
   );
+  --cm-tooltip-textColor: var(--tk-elements-editor-tooltip-textColor, var(--tk-text-primary));
   --cm-tooltip-backgroundColorSelected: var(
     --tk-elements-editor-tooltip-backgroundColorSelected,
     var(--tk-background-accent)
   );
+  --cm-tooltip-textColorSelected: var(--tk-elements-editor-tooltip-textColorSelected, var(--tk-text-primary));
   --cm-tooltip-borderColor: var(--tk-elements-editor-tooltip-borderColor, var(--tk-elements-app-borderColor));
 }
 

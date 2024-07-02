@@ -2,10 +2,10 @@ import { useStore } from '@nanostores/react';
 import type { TutorialStore } from '@tutorialkit/runtime';
 import type { TerminalPanelType } from '@tutorialkit/types';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import type { TerminalRef } from '../Terminal/index.js';
+import type { TerminalRef } from '../core/Terminal/index.js';
 import { classNames } from '../utils/classnames.js';
 
-const Terminal = lazy(() => import('../Terminal/index.js'));
+const Terminal = lazy(() => import('../core/Terminal/index.js'));
 
 interface TerminalPanelProps {
   theme: 'dark' | 'light';
@@ -44,7 +44,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
   }, []);
 
   return (
-    <div className="panel-container bg-tk-elements-app-backgroundColor">
+    <div className="panel-container bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor">
       <div className="panel-tabs-header overflow-x-hidden">
         <div className="panel-title w-full">
           <ul
@@ -93,7 +93,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
             {terminalConfig.panels.map(({ id, type }, index) => (
               <Terminal
                 key={id}
-                className={tabIndex !== index ? 'hidden' : ''}
+                className={tabIndex !== index ? 'hidden h-full' : 'h-full'}
                 theme={theme}
                 readonly={type === 'output'}
                 ref={(ref) => (terminalRefs.current[index] = ref!)}
