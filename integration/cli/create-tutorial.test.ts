@@ -24,18 +24,19 @@ afterAll(async () => {
   await fs.rm(tmp, { force: true, recursive: true });
 });
 
-describe('npm', () => {
-  const packageManager = 'npm';
+describe.each(['npm', 'pnpm', 'yarn'])('%s', (packageManager) => {
+  const snapshotPrefix = `./__snapshots__/${packageManager}`;
 
   it<TestContext>('should create a project', async ({ projectName, dest }) => {
     await createProject(projectName, packageManager, { cwd: tmp });
 
     const projectFiles = await fs.readdir(dest, { recursive: true });
 
-    expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
+    expect(filesToJSON(projectFiles)).toMatchFileSnapshot(`${snapshotPrefix}-created.json`);
   });
 
-  it<TestContext>('should create and build a project', async ({ projectName, dest }) => {
+  // TODO: Enable once `@tutorialkit/theme` has been published
+  it.todo<TestContext>('should create and build a project', async ({ projectName, dest }) => {
     await createProject(projectName, packageManager, { cwd: tmp, install: true });
 
     await execa(packageManager, ['run', 'build'], {
@@ -47,61 +48,7 @@ describe('npm', () => {
 
     const distFiles = await fs.readdir(path.join(dest, 'dist'), { recursive: true });
 
-    expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
-  });
-});
-
-describe('pnpm', () => {
-  const packageManager = 'pnpm';
-
-  it<TestContext>('should create a project', async ({ projectName, dest }) => {
-    await createProject(projectName, packageManager, { cwd: tmp });
-
-    const projectFiles = await fs.readdir(dest, { recursive: true });
-
-    expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
-  });
-
-  it<TestContext>('should create and build a project', async ({ projectName, dest }) => {
-    await createProject(projectName, packageManager, { cwd: tmp, install: true });
-
-    await execa(packageManager, ['run', 'build'], {
-      cwd: dest,
-    });
-
-    // remove `_astro` before taking the snapshot
-    await fs.rm(path.join(dest, 'dist/_astro'), { force: true, recursive: true });
-
-    const distFiles = await fs.readdir(path.join(dest, 'dist'), { recursive: true });
-
-    expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
-  });
-});
-
-describe('yarn', () => {
-  const packageManager = 'yarn';
-
-  it<TestContext>('should create a project', async ({ projectName, dest }) => {
-    await createProject(projectName, packageManager, { cwd: tmp });
-
-    const projectFiles = await fs.readdir(dest, { recursive: true });
-
-    expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
-  });
-
-  it<TestContext>('should create and build a project', async ({ projectName, dest }) => {
-    await createProject(projectName, packageManager, { cwd: tmp, install: true });
-
-    await execa(packageManager, ['run', 'build'], {
-      cwd: dest,
-    });
-
-    // remove `_astro` before taking the snapshot
-    await fs.rm(path.join(dest, 'dist/_astro'), { force: true, recursive: true });
-
-    const distFiles = await fs.readdir(path.join(dest, 'dist'), { recursive: true });
-
-    expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
+    expect(filesToJSON(distFiles)).toMatchFileSnapshot(`${snapshotPrefix}-built.json`);
   });
 });
 
@@ -123,6 +70,6 @@ async function createProject(name: string, packageManager: string, options: { cw
   await execa('node', args, { cwd: options.cwd });
 }
 
-function normaliseSlash(filePath: string) {
-  return filePath.replace(/\\/g, '/');
+function filesToJSON(files: string[]) {
+  return JSON.stringify(files.map((file) => file.replaceAll(path.sep, '/')).sort(), null, 2);
 }

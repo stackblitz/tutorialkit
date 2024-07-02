@@ -2,3 +2,4 @@ pnpm-lock.yaml
 .astro
 **/*.md
 **/*.mdx
+__snapshots__
