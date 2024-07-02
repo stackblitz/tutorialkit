@@ -20,7 +20,6 @@ export async function selectPackageManager(cwd: string, flags: CreateOptions) {
   // remove lock files for other package managers
   for (const [pkgManager, lockFile] of LOCK_FILES) {
     if (pkgManager !== packageManager) {
-      console.log('Removing', path.join(cwd, lockFile));
       fs.rmSync(path.join(cwd, lockFile), { force: true });
     }
   }
