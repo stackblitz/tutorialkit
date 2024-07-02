@@ -73,9 +73,9 @@ await temporaryDirectoryTask(async (tmp) => {
   fs.cpSync(path.join(tmp, 'pnpm-lock.yaml'), path.join(templateDest, 'pnpm-lock.yaml'));
   fs.cpSync(path.join(tmp, 'yarn.lock'), path.join(templateDest, 'yarn.lock'));
 
-  console.log('Created', path.join(templateDest, 'package-lock.json'));
-  console.log('Created', path.join(templateDest, 'pnpm-lock.yaml'));
-  console.log('Created', path.join(templateDest, 'yarn.lock'));
+  success(`Created ${path.join(templateDest, 'package-lock.json')}`);
+  success(`Created ${path.join(templateDest, 'pnpm-lock.yaml')}`);
+  success(`Created ${path.join(templateDest, 'yarn.lock')}`);
 });
 
 success('Lockfiles generated');

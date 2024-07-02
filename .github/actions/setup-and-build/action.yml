@@ -1,5 +1,5 @@
 name: Setup and build
-description: Generic setup action for actions
+description: Generic setup action
 inputs:
   node-version:
     required: false

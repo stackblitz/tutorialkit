@@ -1,4 +1,4 @@
-name: Publish release
+name: Publish Release
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
 
       - uses: ./.github/actions/setup-and-build
 
-      # Sets steps.resolve-release-version.outputs.version
+      # sets steps.resolve-release-version.outputs.version
       - uses: ./.github/actions/resolve-release-version
         id: resolve-release-version
 
@@ -53,7 +53,7 @@ jobs:
 
       - uses: ./.github/actions/setup-and-build
 
-      # Sets steps.resolve-release-version.outputs.version
+      # sets steps.resolve-release-version.outputs.version
       - uses: ./.github/actions/resolve-release-version
         id: resolve-release-version
 
