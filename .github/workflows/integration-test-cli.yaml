@@ -20,7 +20,7 @@ jobs:
 
       - name: Update template's versions
         working-directory: ./packages/cli
-        run: pnpm update-template
+        run: pnpm build-release
 
       - name: Integration Tests
         working-directory: ./integration

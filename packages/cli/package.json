@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "update-template": "node scripts/update-template.js",
+    "build-release": "node scripts/build-release.js",
     "test": "vitest --testTimeout=300000"
   },
   "files": [
