@@ -1,26 +1,13 @@
----
-import Logo from './Logo.astro';
-import { LoginButton } from './LoginButton';
-import { ThemeSwitch } from './ThemeSwitch';
-import { useAuth } from './setup';
-
-interface Props {
-  logoLink: string;
-}
-
-const { logoLink } = Astro.props;
----
-
 <nav
   class="bg-tk-elements-topBar-backgroundColor border-b border-tk-elements-app-borderColor flex max-w-full items-center p-3 px-4 min-h-[56px]"
 >
   <div class="flex flex-1">
-    <Logo logoLink={logoLink} />
+    <slot name="logo" />
   </div>
   <div>
-    <ThemeSwitch client:load transition:persist />
+    <slot name="theme-switch" />
   </div>
   <div>
-    {useAuth && <LoginButton client:load transition:persist />}
+    <slot name="login-button" />
   </div>
 </nav>

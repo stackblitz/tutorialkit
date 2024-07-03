@@ -1,6 +1,6 @@
 ---
 import type { InferGetStaticPropsType } from 'astro';
-import TopBar from '../components/TopBar.astro';
+import TopBarWrapper from '../components/TopBarWrapper.astro';
 import MainContainer from '../components/MainContainer.astro';
 import Layout from '../layouts/Layout.astro';
 import '../styles/base.css';
@@ -19,7 +19,7 @@ const { lesson, logoLink, navList, title } = Astro.props as Props;
 <Layout title={title}>
   <div id="previews-container"></div>
   <main class="max-w-full flex flex-col h-screen overflow-hidden" data-swap-root>
-    <TopBar logoLink={logoLink ?? '/'} />
+    <TopBarWrapper logoLink={logoLink ?? '/'} />
     <MainContainer lesson={lesson} navList={navList} />
   </main>
 </Layout>

@@ -1,0 +1,21 @@
+---
+import { TopBar } from 'tutorialkit:override-components';
+import { ThemeSwitch } from './ThemeSwitch';
+import { LoginButton } from './LoginButton';
+import Logo from './Logo.astro';
+import { useAuth } from './setup';
+
+interface Props {
+  logoLink: string;
+}
+
+const { logoLink } = Astro.props;
+---
+
+<TopBar>
+  <Logo slot="logo" logoLink={logoLink ?? '/'} />
+
+  <ThemeSwitch client:load transition:persist slot="theme-switch" />
+
+  {useAuth && <LoginButton client:load transition:persist slot="login-button" />}
+</TopBar>
