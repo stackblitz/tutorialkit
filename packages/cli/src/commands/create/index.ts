@@ -145,7 +145,7 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
 
   updatePackageJson(resolvedDest, tutorialName, flags);
 
-  const selectedPackageManager = await selectPackageManager(flags);
+  const selectedPackageManager = await selectPackageManager(resolvedDest, flags);
 
   updateReadme(resolvedDest, selectedPackageManager, flags);
 
@@ -254,7 +254,6 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
   }
 
   const pkgPath = path.resolve(dest, 'package.json');
-
   const pkgJson = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
   pkgJson.name = projectName;
@@ -263,6 +262,22 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
   updateWorkspaceVersions(pkgJson.devDependencies, TUTORIALKIT_VERSION);
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, undefined, 2));
+
+  try {
+    const pkgLockPath = path.resolve(dest, 'package-lock.json');
+    const pkgLockJson = JSON.parse(fs.readFileSync(pkgLockPath, 'utf8'));
+    const defaultPackage = pkgLockJson.packages[''];
+
+    pkgLockJson.name = projectName;
+
+    if (defaultPackage) {
+      defaultPackage.name = projectName;
+    }
+
+    fs.writeFileSync(pkgLockPath, JSON.stringify(pkgLockJson, undefined, 2));
+  } catch {
+    // ignore any errors
+  }
 }
 
 function updateReadme(dest: string, packageManager: PackageManager, flags: CreateOptions) {

@@ -10,6 +10,11 @@ export default defineConfig({
     react(),
     starlight({
       title: 'Create interactive coding tutorials',
+      social: {
+        github: 'https://github.com/stackblitz/tutorialkit',
+        'x.com': 'https://x.com/stackblitz',
+        discord: 'https://discord.com/invite/stackblitz',
+      },
       components: {
         Head: './src/components/Layout/Head.astro',
       },
