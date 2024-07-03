@@ -1,12 +1,17 @@
 /**
  * Lightweight wrapper around WebContainer.boot
- * to only boot if requested on iOS as typically
- * boot might risk the page to run out of memory.
+ * to only boot if there's no risk on crashing the browser.
+ *
+ * This typicall might happen on iOS.
+ *
+ * When iOS is detected, a call to `unblock()` is required
+ * to move forward with the boot.
  */
 import { WebContainer, type BootOptions } from '@webcontainer/api';
 import { withResolvers } from '../utils/promises.js';
 
 let blocked: undefined | boolean;
+
 const blockingStatus = withResolvers<void>();
 
 export async function safeBoot(options: BootOptions) {

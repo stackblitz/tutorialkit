@@ -1,4 +1,6 @@
 ---
+import { classNames } from '@tutorialkit/components-react';
+
 export type Type = 'horizontal' | 'vertical';
 export type Priority = 'min' | 'max';
 
@@ -38,13 +40,16 @@ if (!hasSidePanel) {
   max = '100%';
 }
 
-const panelClass = `overflow-hidden ${type === 'horizontal' ? 'h-full' : ''}`;
+const panelClass = classNames('overflow-hidden', { 'h-full': type === 'horizontal' });
 ---
 
 <resizable-panel class={className} data-id={id} data-type={type} data-pos={pos} data-min={min} data-max={max}>
   <div
     data-id="container"
-    class=`sm:grid relative w-full h-full max-w-full ${type === 'horizontal' ? 'sm:grid-cols-[var(--pos)_1fr]' : 'sm:grid-rows-[var(--pos)_1fr]'}`
+    class={classNames('sm:grid relative w-full h-full max-w-full', {
+      'sm:grid-cols-[var(--pos)_1fr]': type === 'horizontal',
+      'sm:grid-rows-[var(--pos)_1fr]': type !== 'horizontal',
+    })}
     style=`--pos: ${pos}`
   >
     <!-- It's important to keep the inline script here because it restores the position and blocks rendering to avoid flickering -->
@@ -74,7 +79,10 @@ const panelClass = `overflow-hidden ${type === 'horizontal' ? 'h-full' : ''}`;
           </div>
           <div
             data-id="divider"
-            class={`absolute z-90 transition-colors hover:bg-gray-500/13 ${type === 'horizontal' ? 'w-0 h-full left-[var(--pos)] cursor-ew-resize p-0 px-1.5 -translate-x-1/2' : 'w-full h-0 top-[var(--pos)] cursor-ns-resize p-0 py-2 -translate-y-1/2'}`}
+            class={classNames('absolute z-90 transition-colors hover:bg-gray-500/13', {
+              'w-0 h-full left-[var(--pos)] cursor-ew-resize p-0 px-1.5 -translate-x-1/2': type === 'horizontal',
+              'h-0 w-full top-[var(--pos)] cursor-ns-resize p-0 py-2 -translate-y-1/2': type !== 'horizontal',
+            })}
           />
         </>
       )
