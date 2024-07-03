@@ -31,7 +31,7 @@ const showWorkspacePanel = hasWorkspace(lesson);
     <Nav client:load lesson={lesson} navList={navList} />
     <TutorialContent lesson={lesson} />
   </div>
-  <div class="h-full border-l border-tk-elements-app-borderColor" slot={showWorkspacePanel ? 'b' : 'hide'}>
+  <div class="h-full sm:border-l border-tk-elements-app-borderColor" slot={showWorkspacePanel ? 'b' : 'hide'}>
     <WorkspacePanel lesson={lesson} client:load transition:persist />
   </div>
 </ResizablePanel>
