@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish_release:
-    name: Publish release
+    name: Publish Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -42,7 +42,7 @@ jobs:
           git push origin v${{ steps.resolve-release-version.outputs.version }}
 
   prepare_cli_release:
-    name: Prepare release for CLI
+    name: Prepare Release for CLI
     needs: [publish_release]
     runs-on: ubuntu-latest
     steps:
@@ -75,7 +75,7 @@ jobs:
           branch: chore/release-cli-${{ steps.resolve-release-version.outputs.version }}
 
   publish_release_CLI:
-    name: Publish release CLI
+    name: Publish Release CLI
     runs-on: ubuntu-latest
     permissions:
       contents: write

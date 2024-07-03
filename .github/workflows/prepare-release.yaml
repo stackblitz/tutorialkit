@@ -11,7 +11,7 @@ on:
 
 jobs:
   prepare_release:
-    name: Prepare release PR
+    name: Prepare Release PR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
