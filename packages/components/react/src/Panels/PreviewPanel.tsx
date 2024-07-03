@@ -61,6 +61,15 @@ export const PreviewPanel = memo(
       [],
     );
 
+    useEffect(() => {
+      // we update the iframes position at max fps if we have any
+      if (hasPreviews) {
+        return requestAnimationFrameLoop(onResize);
+      }
+
+      return undefined;
+    }, [hasPreviews]);
+
     adjustLength(iframeRefs.current, activePreviewsCount, newIframeRef);
     preparePreviewsContainer(activePreviewsCount);
 
@@ -106,7 +115,6 @@ export const PreviewPanel = memo(
         <Panel defaultSize={defaultSize} minSize={minSize}>
           <Preview
             iframe={iframeRefs.current[index]}
-            onResize={onResize}
             preview={preview}
             previewCount={previews.length}
             first={index === 0}
@@ -127,7 +135,6 @@ export const PreviewPanel = memo(
 
 interface PreviewProps {
   iframe: IFrameRef;
-  onResize: () => void;
   preview: PreviewInfo;
   previewCount: number;
   first?: boolean;
@@ -135,7 +142,7 @@ interface PreviewProps {
   toggleTerminal?: () => void;
 }
 
-function Preview({ preview, iframe, onResize, previewCount, first, last, toggleTerminal }: PreviewProps) {
+function Preview({ preview, iframe, previewCount, first, last, toggleTerminal }: PreviewProps) {
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -149,15 +156,6 @@ function Preview({ preview, iframe, onResize, previewCount, first, last, toggleT
       iframe.ref.src = preview.url;
     }
   }, [preview.url, iframe.ref]);
-
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(onResize);
-    resizeObserver.observe(previewContainerRef.current!);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
 
   return (
     <div className="panel-container">
@@ -189,6 +187,21 @@ function Preview({ preview, iframe, onResize, previewCount, first, last, toggleT
       />
     </div>
   );
+}
+
+function requestAnimationFrameLoop(loop: () => void): () => void {
+  let handle: number;
+
+  const callback = () => {
+    loop();
+    handle = requestAnimationFrame(callback);
+  };
+
+  handle = requestAnimationFrame(callback);
+
+  return () => {
+    cancelAnimationFrame(handle);
+  };
 }
 
 function previewTitle(preview: PreviewInfo, previewCount: number) {

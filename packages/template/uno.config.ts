@@ -22,9 +22,10 @@ const customIconCollection = iconPaths.reduce(
 export default defineConfig({
   ...unoCSSConfig,
   content: {
-    inline: globSync(
+    inline: globSync([
       `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`,
-    ).map((filePath) => {
+      `${convertPathToPattern(join(require.resolve('@tutorialkit/astro'), '..'))}/default/**/*.astro`,
+    ]).map((filePath) => {
       return () => fs.readFile(filePath, { encoding: 'utf8' });
     }),
   },

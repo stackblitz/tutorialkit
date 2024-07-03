@@ -52,10 +52,10 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <div className="flex items-center gap-1 font-light truncate">
-              <span>{currentLesson.part.title}</span>
-              <span className={navStyles.Divider}>/</span>
-              <span>{currentLesson.chapter.title}</span>
-              <span className={navStyles.Divider}>/</span>
+              <span className="hidden sm:inline">{currentLesson.part.title}</span>
+              <span className={classNames('hidden sm:inline', navStyles.Divider)}>/</span>
+              <span className="hidden sm:inline">{currentLesson.chapter.title}</span>
+              <span className={classNames('hidden sm:inline', navStyles.Divider)}>/</span>
               <strong className="font-semibold">{currentLesson.data.title}</strong>
             </div>
             <div
