@@ -1,10 +1,7 @@
 #!/usr/bin/env node
-import addStream from 'add-stream';
-import chalk from 'chalk';
-import conventionalChangelog from 'conventional-changelog';
 import fs from 'node:fs';
-import path from 'node:path';
-import tempfile from 'tempfile';
+import { Package } from './changelog/Package.mjs';
+import { generateChangelog } from './changelog/generate.mjs';
 
 const PRESET = 'angular';
 
@@ -13,19 +10,17 @@ const PRESET = 'angular';
  *  path: string;
  *  excluded?: true;
  *  sameAs?: string;
- *  name?: string;
- *  changelogPath?: string;
- *  version?: string;
- *  gitPath?: string;
- * }} Package
+ * }} PackageConfiguration A package in the monorepo to generate changelog for.
  *
- * @type {Package[]}
+ * @type {PackageConfiguration[]}
  */
 const PACKAGES = [
   { path: './packages/astro' },
   { path: './packages/cli' },
   { path: './packages/components/react' },
   { path: './packages/runtime' },
+  { path: './packages/theme' },
+  { path: './packages/types' },
 
   // we do not include this one because it is not published
   { path: './packages/template', excluded: true },
@@ -37,98 +32,56 @@ const PACKAGES = [
 processPackages();
 
 async function processPackages() {
+  /** @type {Map<string, Package>} */
+  const packages = new Map();
+
   // infer extra properties
-  for (const pkg of PACKAGES) {
-    pkg.path = path.normalize(pkg.path);
-
-    const pkgJSON = JSON.parse(fs.readFileSync(path.join(pkg.path, 'package.json')));
-
-    pkg.name = pkgJSON.name;
-    pkg.version = pkgJSON.version;
-    pkg.changelogPath = path.join(pkg.path, 'CHANGELOG.md');
+  for (const pkgDef of PACKAGES) {
+    const pkg = new Package(pkgDef);
+    packages.set(pkg.name, pkg);
   }
+
+  // overwrites temporarily the version on the `tutorialkit` package as it's released separately later
+  const tutorialkit = packages.get('tutorialkit');
+  const tutorialkitAstro = packages.get('@tutorialkit/astro');
+
+  const originalVersion = tutorialkit.version;
+  tutorialkit.version = tutorialkitAstro.version;
+
+  tutorialkit.write();
 
   // generate change logs
   await Promise.all(
-    PACKAGES.map((pkg) => {
+    [...packages.values()].map((pkg) => {
       if (pkg.excluded) {
-        return;
+        return Promise.resolve();
       }
 
-      return generateChangelog(pkg);
+      return generateChangelog(pkg, PRESET);
     }),
   );
 
   // copy changelogs that are identical
-  for (const pkg of PACKAGES) {
+  for (const pkg of packages.values()) {
     if (pkg.sameAs) {
-      const otherPkg = PACKAGES.find((otherPkg) => otherPkg.name === pkg.sameAs);
+      const otherPkg = packages.get(pkg.sameAs);
 
       fs.copyFileSync(otherPkg.changelogPath, pkg.changelogPath);
     }
   }
 
   // generate root changelog
-  const tutorialkit = PACKAGES.find((pkg) => pkg.name === 'tutorialkit');
-
-  await generateChangelog({
-    version: tutorialkit.version,
-    path: tutorialkit.path,
-    gitPath: '.',
-    changelogPath: 'CHANGELOG.md',
-  });
-}
-
-/**
- * Generate a changelog for the provided package and aggregate the data
- * for the root changelog.
- *
- * @param {Package} pkg the package
- */
-function generateChangelog(pkg) {
-  const options = {
-    preset: PRESET,
-    pkg: {
-      path: pkg.path,
+  await generateChangelog(
+    {
+      version: tutorialkit.version,
+      path: tutorialkit.path,
+      gitPath: '.',
+      changelogPath: 'CHANGELOG.md',
     },
-    append: undefined,
-    releaseCount: undefined,
-    skipUnstable: undefined,
-    outputUnreleased: undefined,
-    tagPrefix: undefined,
-  };
+    PRESET,
+  );
 
-  const context = {
-    version: pkg.version,
-    title: pkg.name,
-  };
-
-  const gitRawCommitsOpts = {
-    path: pkg.gitPath ?? pkg.path,
-  };
-
-  const changelogStream = conventionalChangelog(options, context, gitRawCommitsOpts).on('error', (error) => {
-    console.error(error.stack);
-    process.exit(1);
-  });
-
-  const CHANGELOG_FILE = pkg.changelogPath;
-
-  return new Promise((resolve) => {
-    const readStream = fs.createReadStream(CHANGELOG_FILE).on('error', () => {
-      // if there was no changelog we create it here
-      changelogStream.pipe(fs.createWriteStream(CHANGELOG_FILE)).on('finish', resolve);
-    });
-
-    const tmp = tempfile();
-
-    changelogStream
-      .pipe(addStream(readStream))
-      .pipe(fs.createWriteStream(tmp))
-      .on('finish', () => {
-        fs.createReadStream(tmp).pipe(fs.createWriteStream(CHANGELOG_FILE)).on('finish', resolve);
-      });
-  }).then(() => {
-    console.log(`${chalk.green('UPDATED')} ${CHANGELOG_FILE} ${chalk.gray(pkg.version)}`);
-  });
+  // reset the version of the CLI:
+  tutorialkit.version = originalVersion;
+  tutorialkit.write();
 }
