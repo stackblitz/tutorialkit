@@ -16,7 +16,7 @@ runs:
         node-version: ${{ inputs.node-version }}
 
     - name: Install pnpm
-      uses: pnpm/action-setup@v2
+      uses: pnpm/action-setup@v4
 
     - name: Install & Build
       shell: bash
