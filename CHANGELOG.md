@@ -1,5 +1,6 @@
 ## [0.0.1-alpha.24](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.23...0.0.1-alpha.24) (2024-07-04)
 
+Special thanks to [@leonyoung1](https://github.com/leonyoung1) for their first contribution!! 🥳
 
 ### Bug Fixes
 
