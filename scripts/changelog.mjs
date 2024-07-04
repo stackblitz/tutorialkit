@@ -6,13 +6,7 @@ import { generateChangelog } from './changelog/generate.mjs';
 const PRESET = 'angular';
 
 /**
- * @typedef {{
- *  path: string;
- *  excluded?: true;
- *  sameAs?: string;
- * }} PackageConfiguration A package in the monorepo to generate changelog for.
- *
- * @type {PackageConfiguration[]}
+ * @type {import('./changelog/Package.mjs').PackageConfiguration[]}
  */
 const PACKAGES = [
   { path: './packages/astro' },

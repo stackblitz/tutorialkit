@@ -1,9 +1,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+/**
+ * @typedef {{
+ *  path: string;
+ *  excluded?: true;
+ *  sameAs?: string;
+ * }} PackageConfiguration A package in the monorepo to generate changelog for.
+ */
+
 export class Package {
   /**
-   * @param {PackageDefinition} pkg
+   * @param {PackageConfiguration} pkg
    */
   constructor(pkg) {
     const pkgPath = path.normalize(pkg.path);
