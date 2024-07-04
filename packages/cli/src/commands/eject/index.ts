@@ -118,7 +118,7 @@ async function _eject(flags: EjectOptions) {
 
     console.log(
       primaryLabel('INFO'),
-      `New dependencies added: ${newDependencies.join(', ')}. Install the new dependencies before proceeding`,
+      `New dependencies added: ${newDependencies.join(', ')}. Install the new dependencies before proceeding.`,
     );
 
     if (!flags.defaults) {
