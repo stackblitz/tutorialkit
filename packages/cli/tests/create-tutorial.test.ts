@@ -69,6 +69,167 @@ test('create and build a project', async (context) => {
   expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
+test('create and eject a project', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [cli, 'create', name, '--no-git', '--no-start', '--defaults'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: baseDir,
+    },
+  });
+
+  await execa('node', [cli, 'eject', name, '--force', '--defaults'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: baseDir,
+    },
+  });
+
+  // remove `node_modules` before taking the snapshot
+  await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true });
+
+  const projectFiles = await fs.readdir(dest, { recursive: true });
+
+  expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
+  expect(await fs.readFile(path.join(dest, 'astro.config.ts'), 'utf-8')).toMatchSnapshot();
+});
+
+test('create, eject and build a project', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [cli, 'create', name, '--no-git', '--no-start', '--defaults'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: baseDir,
+    },
+  });
+
+  await execa('node', [cli, 'eject', name, '--force', '--defaults'], {
+    cwd: tmpDir,
+    env: {
+      TK_DIRECTORY: baseDir,
+    },
+  });
+
+  await execa('npm', ['install'], {
+    cwd: dest,
+  });
+
+  await execa('npm', ['run', 'build'], {
+    cwd: dest,
+  });
+
+  // remove `_astro` before taking the snapshot
+  await fs.rm(path.join(dest, 'dist/_astro'), { force: true, recursive: true });
+
+  const distFiles = await fs.readdir(path.join(dest, 'dist'), { recursive: true });
+
+  expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
+});
+
+test('cannot eject on an empty folder', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await fs.mkdir(dest);
+
+  await expect(
+    execa('node', [cli, 'eject', name, '--force', '--defaults'], {
+      cwd: tmpDir,
+      env: {
+        TK_DIRECTORY: baseDir,
+      },
+    }),
+  ).rejects.toThrow('package.json does not exists!');
+});
+
+test('cannot eject on a node project that is not an Astro project', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await fs.mkdir(dest);
+
+  await fs.writeFile(path.join(dest, 'package.json'), JSON.stringify({ name: 'not-tutorialkit' }));
+
+  await expect(
+    execa('node', [cli, 'eject', name, '--force', '--defaults'], {
+      cwd: tmpDir,
+      env: {
+        TK_DIRECTORY: baseDir,
+      },
+    }),
+  ).rejects.toThrow('astro.config.ts does not exists!');
+});
+
+test('cannot eject on an astro project that is not using TutorialKit', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await fs.mkdir(dest);
+  await fs.mkdir(path.join(dest, 'src'));
+
+  await fs.writeFile(
+    path.join(dest, 'package.json'),
+    JSON.stringify({ name: 'astro', dependencies: { astro: '4.11.0' } }),
+  );
+
+  await fs.writeFile(
+    path.join(dest, 'astro.config.ts'),
+    `
+    import { defineConfig } from 'astro';
+
+    export default defineConfig({});
+  `,
+  );
+
+  await expect(
+    execa('node', [cli, 'eject', name, '--force', '--defaults'], {
+      cwd: tmpDir,
+      env: {
+        TK_DIRECTORY: baseDir,
+      },
+    }),
+  ).rejects.toThrow(`@tutorialkit${path.sep}astro does not exists!`);
+});
+
+test('cannot eject on an astro project that is not using TutorialKit 2', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await fs.mkdir(dest);
+  await fs.mkdir(path.join(dest, 'src'));
+
+  await fs.writeFile(
+    path.join(dest, 'package.json'),
+    JSON.stringify({ name: 'astro', dependencies: { astro: '4.11.0', '@tutorialkit/astro': '*' } }),
+  );
+
+  await fs.writeFile(
+    path.join(dest, 'astro.config.ts'),
+    `
+    import { defineConfig } from 'astro';
+
+    export default defineConfig({});
+  `,
+  );
+
+  await execa('npm', ['install'], {
+    cwd: dest,
+  });
+
+  await expect(
+    execa('node', [cli, 'eject', name, '--force', '--defaults'], {
+      cwd: tmpDir,
+      env: {
+        TK_DIRECTORY: baseDir,
+      },
+    }),
+  ).rejects.toThrow(`Could not find import to '@tutorialkit/astro'`);
+});
+
 function normaliseSlash(filePath: string) {
   return filePath.replace(/\\/g, '/');
 }

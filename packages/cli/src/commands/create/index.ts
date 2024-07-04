@@ -8,6 +8,7 @@ import { pkg } from '../../pkg.js';
 import { errorLabel, primaryLabel, printHelp, warnLabel } from '../../utils/messages.js';
 import { generateProjectName } from '../../utils/project.js';
 import { assertNotCanceled } from '../../utils/tasks.js';
+import { updateWorkspaceVersions } from '../../utils/workspace-version.js';
 import { setupEnterpriseConfig } from './enterprise.js';
 import { initGitRepo } from './git.js';
 import { installAndStart } from './install-start.js';
@@ -316,21 +317,5 @@ function applyAliases(flags: CreateOptions & Record<string, any>) {
 function verifyFlags(flags: CreateOptions) {
   if (flags.install === false && flags.start) {
     throw new Error('Cannot start project without installing dependencies.');
-  }
-}
-
-function updateWorkspaceVersions(dependencies: Record<string, string>, version: string) {
-  for (const dependency in dependencies) {
-    const depVersion = dependencies[dependency];
-
-    if (depVersion === 'workspace:*') {
-      if (process.env.TK_DIRECTORY) {
-        const name = dependency.split('/')[1];
-
-        dependencies[dependency] = `file:${process.env.TK_DIRECTORY}/packages/${name.replace('-', '/')}`;
-      } else {
-        dependencies[dependency] = version;
-      }
-    }
   }
 }
