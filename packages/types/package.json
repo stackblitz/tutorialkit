@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/types",
-  "version": "0.0.1-alpha.23",
+  "version": "0.0.1-alpha.24",
   "description": "Types for TutorialKit",
   "author": "StackBlitz Inc.",
   "type": "module",
