@@ -34,8 +34,8 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           # Note: `publish-release.yaml` checks explicitly for this commit message
-          commit-message: 'chore: release @tutorialkit packages, version: ${{ inputs.version }}'
-          title: 'chore: release @tutorialkit packages, version: ${{ inputs.version }}'
+          commit-message: 'chore: release @tutorialkit packages v${{ inputs.version }}'
+          title: 'chore: release @tutorialkit packages v${{ inputs.version }}'
           body: 'Bump packages to version ${{ inputs.version }} and generate changelogs.'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-${{ inputs.version }}
