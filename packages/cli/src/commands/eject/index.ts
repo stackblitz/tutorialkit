@@ -4,7 +4,7 @@ import detectIndent from 'detect-indent';
 import { execa } from 'execa';
 import fs from 'node:fs';
 import path from 'node:path';
-import preferredPM from 'preferred-pm';
+import whichpm from 'which-pm';
 import type { Arguments } from 'yargs-parser';
 import { pkg } from '../../pkg.js';
 import { generateAstroConfig, parseAstroConfig, replaceArgs } from '../../utils/astro-config.js';
@@ -122,10 +122,10 @@ async function _eject(flags: EjectOptions) {
     );
 
     if (!flags.defaults) {
-      const packageManager = (await preferredPM(pkgJsonPath)).name;
+      const packageManager = (await whichpm(path.dirname(pkgJsonPath))).name;
 
       const answer = await prompts.confirm({
-        message: `Do you want to install those dependencies now using ${packageManager}?`,
+        message: `Do you want to install those dependencies now using ${chalk.blue(packageManager)}?`,
       });
 
       if (answer === true) {
