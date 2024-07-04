@@ -36,6 +36,6 @@ jobs:
           # Note: `publish-release.yaml` checks explicitly for this commit message
           commit-message: 'chore: release @tutorialkit packages, version: ${{ inputs.version }}'
           title: 'chore: release @tutorialkit packages, version: ${{ inputs.version }}'
-          body: 'Bump packages to version ${{ inputs.version }} and generate changelogs'
+          body: 'Bump packages to version ${{ inputs.version }} and generate changelogs.'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-${{ inputs.version }}
