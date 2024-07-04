@@ -1,3 +1,37 @@
+## [0.0.1-alpha.24](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.23...0.0.1-alpha.24) (2024-07-04)
+
+Special thanks to [@leonyoung1](https://github.com/leonyoung1) for their first contribution!! 🥳
+
+### Bug Fixes
+
+* **cli:** remove title from tutorial meta file ([#86](https://github.com/stackblitz/tutorialkit/issues/86)) ([c2f7688](https://github.com/stackblitz/tutorialkit/commit/c2f7688b27074c6261f025525437bccea9431fd3))
+* editor ignoring changes ([#102](https://github.com/stackblitz/tutorialkit/issues/102)) ([0f01e31](https://github.com/stackblitz/tutorialkit/commit/0f01e317d449761fb7da8291119e57bd1d934e79))
+* generate correct changelogs when doing a PR ([#113](https://github.com/stackblitz/tutorialkit/issues/113)) ([8b8b1ca](https://github.com/stackblitz/tutorialkit/commit/8b8b1caea8793748d9946e163a184a3ecb958358))
+* problem with creating lessons without solution files ([#108](https://github.com/stackblitz/tutorialkit/issues/108)) ([2d51ff7](https://github.com/stackblitz/tutorialkit/commit/2d51ff713688e34cf3e6140ff4ac4df2a574f6a4))
+* support a base different from / in astro config ([#92](https://github.com/stackblitz/tutorialkit/issues/92)) ([3e7830b](https://github.com/stackblitz/tutorialkit/commit/3e7830be7ed1fda9598c569eaad9878aa9d10156))
+* **theme:** fix some styling for the editor ([#100](https://github.com/stackblitz/tutorialkit/issues/100)) ([0f5dd45](https://github.com/stackblitz/tutorialkit/commit/0f5dd4540cf65535ce3b834846f7dd2029551987))
+* **theme:** invalid CSS variable on cm-gutter ([#98](https://github.com/stackblitz/tutorialkit/issues/98)) ([039f871](https://github.com/stackblitz/tutorialkit/commit/039f8714df8401a81472d134786029212c7d0d44))
+* **theme:** set correct background and text color for panels ([#94](https://github.com/stackblitz/tutorialkit/issues/94)) ([3ad01a0](https://github.com/stackblitz/tutorialkit/commit/3ad01a0cc1055c1f1ffd7b220785f4be1d8d0669))
+* **theme:** use correct tokens for the breadcrumbs ([#88](https://github.com/stackblitz/tutorialkit/issues/88)) ([1669299](https://github.com/stackblitz/tutorialkit/commit/1669299c988b8680dda4360e8f02d64c601ad48d))
+* update `pnpm/action-setup` to v4 to fix CI issue ([#114](https://github.com/stackblitz/tutorialkit/issues/114)) ([e36c455](https://github.com/stackblitz/tutorialkit/commit/e36c455a783b5f79c9f321b865eedcd215bcf107))
+
+
+### Features
+
+* add `@tutorialkit/theme` package to use the theme without astro ([#105](https://github.com/stackblitz/tutorialkit/issues/105)) ([9805996](https://github.com/stackblitz/tutorialkit/commit/9805996a4211a1c8a3e1bfbbd958a27f1957d4d7))
+* add eslint ([#90](https://github.com/stackblitz/tutorialkit/issues/90)) ([fcfb3e8](https://github.com/stackblitz/tutorialkit/commit/fcfb3e8109b5be1ef59ac2bfd8efd4db8e635e34))
+* allow custom `src/pages/index.astro` ([#93](https://github.com/stackblitz/tutorialkit/issues/93)) ([d431d4d](https://github.com/stackblitz/tutorialkit/commit/d431d4d4908f28184cd7d2f75faffe2c77a3ef4c))
+* allow ordering to be config based in addition to folder based ([#79](https://github.com/stackblitz/tutorialkit/issues/79)) ([2b131e5](https://github.com/stackblitz/tutorialkit/commit/2b131e597b94671678c2f2e4625e194eb382dab0))
+* make core react components easily accessible ([#104](https://github.com/stackblitz/tutorialkit/issues/104)) ([d8a5a34](https://github.com/stackblitz/tutorialkit/commit/d8a5a341df6c2d23d1d59ede61b4d3ef689af081))
+* make the logo link configurable ([#68](https://github.com/stackblitz/tutorialkit/issues/68)) ([2da64ae](https://github.com/stackblitz/tutorialkit/commit/2da64ae811cbb12aeab8fd1fb36bed4845542aa4))
+* mobile support ([#91](https://github.com/stackblitz/tutorialkit/issues/91)) ([030ca1e](https://github.com/stackblitz/tutorialkit/commit/030ca1ee688f75f6e59ae25a1b2433823ade384f))
+* template inheritance ([#99](https://github.com/stackblitz/tutorialkit/issues/99)) ([c4350a8](https://github.com/stackblitz/tutorialkit/commit/c4350a8032d0d24ac9250be8b81869ddae88a538))
+* **terminal:** add support for redirects and allow specific commands ([#76](https://github.com/stackblitz/tutorialkit/issues/76)) ([eca5f22](https://github.com/stackblitz/tutorialkit/commit/eca5f22e3120c4d59349f416322b990d37cb0c15))
+* **theme:** add support for setting text and code colors in callouts ([#96](https://github.com/stackblitz/tutorialkit/issues/96)) ([623b04d](https://github.com/stackblitz/tutorialkit/commit/623b04da18e5545a6d29b03a60571b1fb5bc2db1))
+* **theme:** create proper tokens for callouts ([#87](https://github.com/stackblitz/tutorialkit/issues/87)) ([6d01620](https://github.com/stackblitz/tutorialkit/commit/6d01620f65c2386d98864246f8fe87e53c76c78f))
+
+
+
 ## [0.0.1-alpha.23](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.22...0.0.1-alpha.23) (2024-06-14)
 
 Special thanks to @EmNudge and @morinokami for their first contributions!! 🥳
