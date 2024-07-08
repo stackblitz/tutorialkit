@@ -32,7 +32,7 @@ export interface OverrideComponentsOptions {
    * This component has 3 slots that are used to pass TutorialKit's default components:
    * - `logo`: Logo of the application
    * - `theme-switch`:  Switch for changing the theme
-   * - `login-button`: TODO, add description here
+   * - `login-button`: For StackBlitz Enterprise user, the login button
    *
    * Usage:
    * ```jsx

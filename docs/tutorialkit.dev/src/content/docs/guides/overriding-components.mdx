@@ -6,7 +6,7 @@ import { Image } from 'astro:assets';
 import uiTopBar from './images/ui-top-bar.png';
 
 TutorialKit's default components are customizable with [theming](/reference/theming/) options.
-In cases where theming is not enough you can override built-in components with your own ones.
+In cases where theming is not enough you can override some built-in components with your own ones.
 
 ## Configuration
 
@@ -27,7 +27,7 @@ export default defineConfig({
 });
 ```
 
-For example to override `TopBar`, provide a path to the new component:
+For example to override `TopBar`, provide a path to the new Astro component:
 
 ```ts
 tutorialkit({
@@ -37,8 +37,6 @@ tutorialkit({
 }),
 ```
 
-See [User Interface Reference](/guides/ui/) for component reference.
-
 ### Top Bar
 
 <Image src={uiTopBar} alt="TutorialKit's Top bar" />
@@ -47,7 +45,7 @@ When overriding `TopBar` you can place TutorialKit's default components using fo
 
 - `logo`: Logo of the application
 - `theme-switch`:  Switch for changing the theme
-- `login-button`: TODO, add description here
+- `login-button`: For StackBlitz Enterprise user, the login button
 
 ```jsx title="src/components/CustomTopBar.astro"
 <nav>

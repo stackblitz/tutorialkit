@@ -7,7 +7,7 @@
     "moduleResolution": "Bundler",
     "outDir": "dist"
   },
-  "include": ["src", "types.d.ts"],
+  "include": ["src"],
   "references": [
     { "path": "../runtime" },
     { "path": "../types" },
