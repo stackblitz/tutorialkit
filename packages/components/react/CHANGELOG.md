@@ -1,3 +1,25 @@
+## [0.0.1-alpha.25](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.23...0.0.1-alpha.25) "@tutorialkit/components-react" (2024-07-09)
+
+
+### Bug Fixes
+
+* editor ignoring changes ([#102](https://github.com/stackblitz/tutorialkit/issues/102)) ([0f01e31](https://github.com/stackblitz/tutorialkit/commit/0f01e317d449761fb7da8291119e57bd1d934e79))
+* **theme:** fix some styling for the editor ([#100](https://github.com/stackblitz/tutorialkit/issues/100)) ([0f5dd45](https://github.com/stackblitz/tutorialkit/commit/0f5dd4540cf65535ce3b834846f7dd2029551987))
+* **theme:** invalid CSS variable on cm-gutter ([#98](https://github.com/stackblitz/tutorialkit/issues/98)) ([039f871](https://github.com/stackblitz/tutorialkit/commit/039f8714df8401a81472d134786029212c7d0d44))
+* **theme:** set correct background and text color for panels ([#94](https://github.com/stackblitz/tutorialkit/issues/94)) ([3ad01a0](https://github.com/stackblitz/tutorialkit/commit/3ad01a0cc1055c1f1ffd7b220785f4be1d8d0669))
+* **theme:** use correct tokens for the breadcrumbs ([#88](https://github.com/stackblitz/tutorialkit/issues/88)) ([1669299](https://github.com/stackblitz/tutorialkit/commit/1669299c988b8680dda4360e8f02d64c601ad48d))
+
+
+### Features
+
+* add `@tutorialkit/theme` package to use the theme without astro ([#105](https://github.com/stackblitz/tutorialkit/issues/105)) ([9805996](https://github.com/stackblitz/tutorialkit/commit/9805996a4211a1c8a3e1bfbbd958a27f1957d4d7))
+* add eslint ([#90](https://github.com/stackblitz/tutorialkit/issues/90)) ([fcfb3e8](https://github.com/stackblitz/tutorialkit/commit/fcfb3e8109b5be1ef59ac2bfd8efd4db8e635e34))
+* make core react components easily accessible ([#104](https://github.com/stackblitz/tutorialkit/issues/104)) ([d8a5a34](https://github.com/stackblitz/tutorialkit/commit/d8a5a341df6c2d23d1d59ede61b4d3ef689af081))
+* mobile support ([#91](https://github.com/stackblitz/tutorialkit/issues/91)) ([030ca1e](https://github.com/stackblitz/tutorialkit/commit/030ca1ee688f75f6e59ae25a1b2433823ade384f))
+* **terminal:** add support for redirects and allow specific commands ([#76](https://github.com/stackblitz/tutorialkit/issues/76)) ([eca5f22](https://github.com/stackblitz/tutorialkit/commit/eca5f22e3120c4d59349f416322b990d37cb0c15))
+
+
+
 ## [0.0.1-alpha.24](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.23...0.0.1-alpha.24) "@tutorialkit/components-react" (2024-07-04)
 
 
