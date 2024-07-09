@@ -152,6 +152,8 @@ A component to edit code with syntax highlighting using [CodeMirror 6](https://c
 
 ### `Terminal`
 
+A component to interact with a terminal using [xterm.js](https://xtermjs.org/). In the example below we lazy load and wrap the terminal in a `Suspense` boundary because xterm cannot be used in an SSR context. This is not required if you are not server-side rendering your application.
+
 #### Example
 
 <Example>
