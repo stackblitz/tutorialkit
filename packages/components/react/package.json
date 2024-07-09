@@ -7,6 +7,11 @@
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackblitz/tutorialkit.git",
+    "directory": "packages/components/react"
+  },
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
