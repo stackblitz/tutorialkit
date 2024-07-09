@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && cp _headers ./dist/",
     "preview": "astro preview",
     "astro": "astro"
   },
