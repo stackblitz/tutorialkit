@@ -1,5 +1,6 @@
 ---
 import { classNames } from '@tutorialkit/components-react';
+import './theme.css';
 
 interface Props {
   className?: string;
@@ -21,7 +22,3 @@ const { className, previewClassName } = Astro.props;
 
   <slot name="code" />
 </div>
-<script>
-  import 'uno.css';
-  import './theme.css';
-</script>
