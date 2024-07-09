@@ -111,16 +111,34 @@ function useSimpleEditor() {
 
     async function run(terminal: XTerm) {
       const webcontainer = await webcontainerPromise;
-      const process = await webcontainer.spawn('jsh', {
+      const process = await webcontainer.spawn('jsh', ['--osc'], {
         terminal: {
           cols: terminal.cols,
           rows: terminal.rows,
         },
       });
 
+      let isInteractive = false;
+      let resolveReady!: () => void;
+
+      const jshReady = new Promise<void>((resolve) => {
+        resolveReady = resolve;
+      });
+
       process.output.pipeTo(
         new WritableStream({
           write(data) {
+            if (!isInteractive) {
+              const [, osc] = data.match(/\x1b\]654;([^\x07]+)\x07/) || [];
+
+              if (osc === 'interactive') {
+                // wait until we see the interactive OSC
+                isInteractive = true;
+
+                resolveReady();
+              }
+            }
+
             terminal.write(data);
           },
         }),
@@ -129,8 +147,14 @@ function useSimpleEditor() {
       const shellWriter = process.input.getWriter();
 
       terminal.onData((data) => {
-        shellWriter.write(data);
+        if (isInteractive) {
+          shellWriter.write(data);
+        }
       });
+
+      await jshReady;
+
+      shellWriter.write('npm install && npm start\n');
     }
   }, [terminal]);
 
@@ -190,7 +214,7 @@ const FILES: Record<string, EditorDocument> = {
         "description": "Hello, world!",
         "main": "index.js",
         "scripts": {
-          "start": "servor --reload"
+          "start": "servor src/ --reload"
         },
         "dependencies": {
           "servor": "4.0.2"
