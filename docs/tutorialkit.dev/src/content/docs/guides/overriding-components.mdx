@@ -1,0 +1,64 @@
+---
+title: 'Overriding Components'
+description: "Override TutorialKit's default components to fit your needs."
+---
+import { Image } from 'astro:assets';
+import uiTopBar from './images/ui-top-bar.png';
+
+TutorialKit's default components are customizable with [theming](/reference/theming/) options.
+In cases where theming is not enough you can override some built-in components with your own ones.
+
+## Configuration
+
+Define `components` option in your `astro.config.ts`:
+
+```ts
+import tutorialkit from '@tutorialkit/astro';
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({
+  integrations: [
+    tutorialkit({
+      components: {
+        // Component overrides go here
+      },
+    }),
+  ],
+});
+```
+
+For example to override `TopBar`, provide a path to the new Astro component:
+
+```ts
+tutorialkit({
+  components: {
+    TopBar: './src/components/CustomTopBar.astro',
+  },
+}),
+```
+
+### Top Bar
+
+<Image src={uiTopBar} alt="TutorialKit's Top bar" />
+
+When overriding `TopBar` you can place TutorialKit's default components using following [Astro slots](https://docs.astro.build/en/basics/astro-components/#named-slots):
+
+- `logo`: Logo of the application
+- `theme-switch`:  Switch for changing the theme
+- `login-button`: For StackBlitz Enterprise user, the login button
+
+```jsx title="src/components/CustomTopBar.astro"
+<nav>
+  <slot name="logo" />
+
+  <a href="https://tutorialkit.dev/">
+    Home page
+  </a>
+
+  <slot name="theme-switch" />
+
+  <LanguageSelect />
+
+  <slot name="login-button" />
+</nav>
+```

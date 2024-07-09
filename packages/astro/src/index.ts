@@ -6,6 +6,7 @@ import { updateMarkdownConfig } from './remark/index.js';
 import { tutorialkitCore } from './vite-plugins/core.js';
 import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
 import { tutorialkitStore } from './vite-plugins/store.js';
+import { overrideComponents, type OverrideComponentsOptions } from './vite-plugins/override-components.js';
 import { WebContainerFiles } from './webcontainer-files/index.js';
 
 export const unoCSSConfig = {
@@ -26,6 +27,11 @@ export interface Options {
    * @default true
    */
   defaultRoutes?: boolean | 'tutorial-only';
+
+  /**
+   * Override components of TutorialKit.
+   */
+  components?: OverrideComponentsOptions;
 
   /**
    * The value of the Cross-Origin-Embedder-Policy header for the dev server.
@@ -62,7 +68,12 @@ export interface Options {
   };
 }
 
-export default function createPlugin({ defaultRoutes = true, isolation, enterprise }: Options = {}): AstroIntegration {
+export default function createPlugin({
+  defaultRoutes = true,
+  components,
+  isolation,
+  enterprise,
+}: Options = {}): AstroIntegration {
   const webcontainerFiles = new WebContainerFiles();
 
   let _config: AstroConfig;
@@ -96,6 +107,7 @@ export default function createPlugin({ defaultRoutes = true, isolation, enterpri
               userlandCSS,
               tutorialkitStore,
               tutorialkitCore,
+              overrideComponents({ components, defaultRoutes: !!defaultRoutes }),
               process.env.TUTORIALKIT_DEV ? (await import('vite-plugin-inspect')).default() : null,
             ],
           },

@@ -1,18 +1,24 @@
 {
   "name": "@tutorialkit/astro",
-  "version": "0.0.1-alpha.24",
+  "version": "0.0.1-alpha.25",
   "description": "TutorialKit integration for Astro (https://astro.build)",
   "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackblitz/tutorialkit.git",
+    "directory": "packages/astro"
+  },
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
     "./types": "./types.d.ts",
     "./default/pages/index.astro": "./dist/default/pages/index.astro",
-    "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro"
+    "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro",
+    "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro"
   },
   "files": [
     "dist"

@@ -13,7 +13,7 @@
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
     "demo:build": "pnpm run --filter=demo.tutorialkit.dev build",
     "lint": "eslint \"{packages,docs}/**/*\"",
-    "test": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit test"
+    "test": "pnpm run --stream --filter=@tutorialkit/* --filter=tutorialkit test --run"
   },
   "license": "MIT",
   "packageManager": "pnpm@8.15.6",

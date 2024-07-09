@@ -30,7 +30,7 @@ jobs:
         run: >
           pnpm --recursive
           --filter "@tutorialkit/*"
-          exec pnpm publish --provenance
+          exec pnpm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -38,8 +38,8 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
-          git tag v${{ steps.resolve-release-version.outputs.version }}
-          git push origin v${{ steps.resolve-release-version.outputs.version }}
+          git tag ${{ steps.resolve-release-version.outputs.version }}
+          git push origin ${{ steps.resolve-release-version.outputs.version }}
 
   prepare_cli_release:
     name: Prepare Release for CLI
@@ -103,6 +103,6 @@ jobs:
           pnpm --recursive
           --filter tutorialkit
           --filter create-tutorial
-          exec pnpm publish --provenance
+          exec pnpm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
