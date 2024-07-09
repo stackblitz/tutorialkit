@@ -8,7 +8,7 @@ export default function ExampleFileTree() {
     <FileTree
       files={FILES}
       hideRoot
-      className=""
+      className="my-file-tree"
       hiddenFiles={['package-lock.json']}
       selectedFile={selectedFile}
       onFileSelect={setSelectedFile}

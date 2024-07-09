@@ -26,7 +26,7 @@ Here's a simple editor that can be made with those components:
 
 ## Installation
 
-Those components use TutorialKit's design system which is based on an atomic CSS engine, UnoCSS. You will need a few dependencies in order to use them:
+Those components use TutorialKit's design system which is based on an atomic CSS engine, [UnoCSS](https://unocss.dev/). You will need a few dependencies in order to use them:
 
 
 <PackageManagerTabs>
@@ -113,14 +113,14 @@ A component to list files in a tree view.
 
 * `hiddenFiles: (string | RegExp)[]` - A list of file paths that should be hidden from the tree.
 
-* `scope?: string` - Every file paths that does not starts with this scope will be hidden.
+* `scope?: string` - Every file path that does not start with this scope will be hidden.
 
 * `className?: string` - A class name to apply to the root element of the component.
 
 
 ### `CodeMirrorEditor`
 
-A component to edit code with syntax highlighting using CodeMirror 6. This component support multi-file edits by caching its state when moving between files.
+A component to edit code with syntax highlighting using [CodeMirror 6](https://codemirror.net/). This component supports multi-file edits by caching its state when moving between files.
 
 #### Example
 
