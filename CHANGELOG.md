@@ -1,3 +1,18 @@
+## [0.0.1-alpha.25](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.24...0.0.1-alpha.25) (2024-07-09)
+
+
+### Bug Fixes
+
+* tag should be the version without the 'v' ([#121](https://github.com/stackblitz/tutorialkit/issues/121)) ([d292d0b](https://github.com/stackblitz/tutorialkit/commit/d292d0b01b0f668a098c20d63bf819077574d31e))
+
+
+### Features
+
+* `tutorialkit eject` command ([#81](https://github.com/stackblitz/tutorialkit/issues/81)) ([c802668](https://github.com/stackblitz/tutorialkit/commit/c802668aa39875052ac917952bee8d491dde1557))
+* support overriding `TopBar` ([#112](https://github.com/stackblitz/tutorialkit/issues/112)) ([3792aa9](https://github.com/stackblitz/tutorialkit/commit/3792aa99103ed2461c9b4922838fec7fbcb5dec7))
+
+
+
 ## [0.0.1-alpha.24](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.23...0.0.1-alpha.24) (2024-07-04)
 
 Special thanks to [@leonyoung1](https://github.com/leonyoung1) for their first contribution!! 🥳
