@@ -1,5 +1,5 @@
 /**
- * A plugin that lets users to override TutorialKit's components.
+ * A plugin that lets users override TutorialKit's components.
  *
  * The virtual module can be imported as:
  *
@@ -31,11 +31,12 @@ export interface OverrideComponentsOptions {
    * Component for overriding the top bar.
    *
    * This component has 3 slots that are used to pass TutorialKit's default components:
-   * - `logo`: Logo of the application
-   * - `theme-switch`:  Switch for changing the theme
-   * - `login-button`: For StackBlitz Enterprise user, the login button
+   *   - `logo`: Logo of the application
+   *   - `theme-switch`:  Switch for changing the theme
+   *   - `login-button`: For StackBlitz Enterprise user, the login button
    *
    * Usage:
+   *
    * ```jsx
    *   <slot name="logo" />
    *   <slot name="theme-switch" />
