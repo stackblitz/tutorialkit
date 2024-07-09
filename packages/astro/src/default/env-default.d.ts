@@ -7,5 +7,11 @@ interface WebContainerConfig {
   scope: string;
 }
 
+declare module 'tutorialkit:override-components' {
+  const topBar: typeof import('./src/default/components/TopBar.astro').default;
+
+  export { topBar as TopBar };
+}
+
 declare const __ENTERPRISE__: boolean;
 declare const __WC_CONFIG__: WebContainerConfig | undefined;

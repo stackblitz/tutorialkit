@@ -50,6 +50,10 @@ export default defineConfig({
               label: 'User Interface Reference',
               link: '/guides/ui/',
             },
+            {
+              label: 'Overriding Components',
+              link: '/guides/overriding-components/',
+            },
           ],
         },
         {
