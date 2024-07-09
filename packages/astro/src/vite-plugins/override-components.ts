@@ -23,6 +23,7 @@
  * });
  * ```
  */
+import path from 'node:path';
 import type { VitePlugin } from '../types.js';
 
 export interface OverrideComponentsOptions {
@@ -44,14 +45,22 @@ export interface OverrideComponentsOptions {
   TopBar?: string;
 }
 
+interface Options {
+  components?: OverrideComponentsOptions;
+  defaultRoutes: boolean;
+}
+
 const virtualModuleId = 'tutorialkit:override-components';
 const resolvedId = `\0${virtualModuleId}`;
 
-export function overrideComponents(options?: OverrideComponentsOptions): VitePlugin {
-  const topBar = options?.TopBar || '@tutorialkit/astro/default/components/TopBar.astro';
+export function overrideComponents({ components, defaultRoutes }: Options): VitePlugin {
+  let root = '';
 
   return {
     name: 'tutorialkit-override-components-plugin',
+    configResolved(resolvedConfig) {
+      root = resolvedConfig.root;
+    },
     resolveId(id) {
       if (id === virtualModuleId) {
         return resolvedId;
@@ -61,6 +70,8 @@ export function overrideComponents(options?: OverrideComponentsOptions): VitePlu
     },
     async load(id) {
       if (id === resolvedId) {
+        const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes, root);
+
         return `
           export { default as TopBar } from '${topBar}';
         `;
@@ -69,4 +80,13 @@ export function overrideComponents(options?: OverrideComponentsOptions): VitePlu
       return undefined;
     },
   };
+}
+
+function resolveDefaultTopBar(defaultRoutes: boolean, root: string) {
+  if (defaultRoutes) {
+    return '@tutorialkit/astro/default/components/TopBar.astro';
+  }
+
+  // default `TopBar` is used from local file when `defaultRoutes` is disabled
+  return path.resolve(root, 'src/components/TopBar.astro');
 }
