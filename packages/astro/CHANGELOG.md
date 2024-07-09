@@ -1,3 +1,13 @@
+## [0.0.1-alpha.25](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.24...0.0.1-alpha.25) "@tutorialkit/astro" (2024-07-09)
+
+
+### Features
+
+* `tutorialkit eject` command ([#81](https://github.com/stackblitz/tutorialkit/issues/81)) ([c802668](https://github.com/stackblitz/tutorialkit/commit/c802668aa39875052ac917952bee8d491dde1557))
+* support overriding `TopBar` ([#112](https://github.com/stackblitz/tutorialkit/issues/112)) ([3792aa9](https://github.com/stackblitz/tutorialkit/commit/3792aa99103ed2461c9b4922838fec7fbcb5dec7))
+
+
+
 ## [0.0.1-alpha.24](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.23...0.0.1-alpha.24) "@tutorialkit/astro" (2024-07-04)
 
 
