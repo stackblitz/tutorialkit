@@ -23,7 +23,6 @@
  * });
  * ```
  */
-import path from 'node:path';
 import type { VitePlugin } from '../types.js';
 
 export interface OverrideComponentsOptions {
@@ -55,13 +54,8 @@ const virtualModuleId = 'tutorialkit:override-components';
 const resolvedId = `\0${virtualModuleId}`;
 
 export function overrideComponents({ components, defaultRoutes }: Options): VitePlugin {
-  let root = '';
-
   return {
     name: 'tutorialkit-override-components-plugin',
-    configResolved(resolvedConfig) {
-      root = resolvedConfig.root;
-    },
     resolveId(id) {
       if (id === virtualModuleId) {
         return resolvedId;
@@ -71,7 +65,7 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
     },
     async load(id) {
       if (id === resolvedId) {
-        const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes, root);
+        const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes);
 
         return `
           export { default as TopBar } from '${topBar}';
@@ -83,11 +77,11 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
   };
 }
 
-function resolveDefaultTopBar(defaultRoutes: boolean, root: string) {
+function resolveDefaultTopBar(defaultRoutes: boolean) {
   if (defaultRoutes) {
     return '@tutorialkit/astro/default/components/TopBar.astro';
   }
 
   // default `TopBar` is used from local file when `defaultRoutes` is disabled
-  return path.resolve(root, 'src/components/TopBar.astro');
+  return './src/components/TopBar.astro';
 }
