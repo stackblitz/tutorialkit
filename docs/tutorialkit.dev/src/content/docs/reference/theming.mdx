@@ -3,6 +3,8 @@ title: Theming
 description: 'How to theme TutorialKit'
 ---
 import { Image } from 'astro:assets';
+import { Code } from '@astrojs/starlight/components';
+
 import themingContent from './images/theming-content.png';
 import themingCallout from './images/theming-callout.png';
 import themingPanelHeader from './images/theming-panel-header.png';
@@ -12,6 +14,8 @@ import themingFileTreeFolder from './images/theming-filetree-folder.png';
 import themingEditorGutter from './images/theming-editor-gutter.png';
 import themingEditorFoldGutter from './images/theming-editor-gutter-fold.png';
 import themingEditorTooltip from './images/theming-editor-tooltip.png';
+
+import themeCSS from '@components/react-examples/theme.css?raw';
 
 TutorialKit allows you to customize its appearance to match your brand or preferences. This guide explains how to modify various elements of the interface using CSS variables and file replacements.
 
@@ -45,6 +49,10 @@ These tokens can be used to style the colors of the tutorial on a high level. Fo
 | `--tk-elements-app-backgroundColor`     | The background color of the TutorialKit app. |
 | `--tk-elements-app-borderColor`         | The border color of the TutorialKit app.     |
 | `--tk-elements-app-linkColor`           | The link color of the TutorialKit app.       |
+
+If you want to start with a `theme.css` file that includes all the available CSS variables you can use the following snippet:
+
+<Code code={themeCSS} lang="css" title="theme.css" class="limit-code-height" />
 
 ### Content
 

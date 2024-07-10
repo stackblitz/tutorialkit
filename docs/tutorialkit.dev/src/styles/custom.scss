@@ -232,5 +232,10 @@ site-search button[data-open-modal] {
     width: 16px;
     height: 16px;
     background: var(--code-background);
+    border-bottom-left-radius: var(--header-border-radius);
+    border-bottom-right-radius: var(--header-border-radius);
+    border: var(--ec-brdWd) solid var(--ec-brdCol);
+    border-top: 0;
+    border-left: 0;
   }
 }
