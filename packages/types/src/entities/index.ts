@@ -33,10 +33,16 @@ export interface Chapter {
   lessons: Record<string, Lesson>;
 }
 
+export interface I18nWords {
+  nextLessonPrefix: string;
+  partTemplate: string;
+}
+
 export interface Lesson<T = unknown> {
   id: string;
   order: number;
   data: LessonSchema;
+  i18n: I18nWords;
   part: { id: string; title: string };
   chapter: { id: string; title: string };
   slug: string;

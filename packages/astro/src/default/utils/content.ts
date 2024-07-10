@@ -86,6 +86,10 @@ export async function getTutorial(): Promise<Tutorial> {
           id: partId,
           title: _tutorial.parts[partId].data.title,
         },
+        i18n: {
+          nextLessonPrefix: 'Next:',
+          partTemplate: 'Part ${index}: ${title}',
+        },
         chapter: {
           id: chapterId,
           title: _tutorial.parts[partId].chapters[chapterId].data.title,

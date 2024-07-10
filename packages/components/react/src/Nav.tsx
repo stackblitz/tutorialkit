@@ -3,7 +3,9 @@ import * as Accordion from '@radix-ui/react-accordion';
 import navStyles from './styles/nav.module.css';
 import { classNames } from './utils/classnames.js';
 import { AnimatePresence, cubicBezier, motion } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { useOutsideClick } from './hooks/useOutsideClick.js';
+import { interpolateString } from './utils/interpolation.js';
 
 const dropdownEasing = cubicBezier(0.4, 0, 0.2, 1);
 
@@ -114,7 +116,12 @@ function renderParts(navList: NavList, currentLesson: Lesson) {
                   )}
                 >
                   <span className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80`}></span>
-                  <span>{`Part ${partIndex + 1}: ${part.title}`}</span>
+                  <span>
+                    {interpolateString(currentLesson.i18n.partTemplate, {
+                      index: partIndex + 1,
+                      title: part.title,
+                    })}
+                  </span>
                 </Accordion.Trigger>
                 <Accordion.Content className={navStyles.AccordionContent}>
                   {renderChapters(currentLesson, part, isPartActive)}
@@ -201,20 +208,4 @@ function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: bo
       })}
     </ul>
   );
-}
-
-function useOutsideClick(ref: React.RefObject<HTMLDivElement>, onOutsideClick?: () => void) {
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        onOutsideClick?.();
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref]);
 }
