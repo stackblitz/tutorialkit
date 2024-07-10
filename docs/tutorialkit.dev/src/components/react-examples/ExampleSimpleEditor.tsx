@@ -31,13 +31,16 @@ export default function ExampleSimpleEditor() {
           onFileSelect={setSelectedFile}
         />
         <div className="w-px flex-shrink-0 h-full bg-[var(--ec-brdCol)]" />
-        <CodeMirrorEditor
-          theme={theme}
-          doc={document}
-          onChange={onChange}
-          onScroll={onScroll}
-          className="h-full flex-grow max-w-[calc(75%-1px)] text-[13px]"
-        />
+        <div className="flex-grow h-full max-w-[calc(75%-1px)] relative bg-[var(--cm-backgroundColor)]">
+          <CodeMirrorEditor
+            theme={theme}
+            doc={document}
+            onChange={onChange}
+            onScroll={onScroll}
+            className="h-full text-[13px]"
+          />
+          <div className="absolute bottom-0 right-0 w-4 h-4 bg-[var(--cm-backgroundColor)]" />
+        </div>
       </div>
       <div className="h-px bg-[var(--ec-brdCol)]" />
       <div className="flex p-0 m-0 h-1/2">
@@ -50,7 +53,7 @@ export default function ExampleSimpleEditor() {
         </div>
         <div className="w-px flex-shrink-0 h-full bg-[var(--ec-brdCol)]" />
         <div className="w-1/2 h-full">
-          <iframe className="border-none w-full h-full" src={previewSrc} />
+          <iframe className="bg-white border-none w-full h-full" src={previewSrc} />
         </div>
       </div>
     </div>
