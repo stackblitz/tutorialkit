@@ -65,7 +65,7 @@ jobs:
           exec npm version --no-git-tag-version --allow-same-version ${{ steps.resolve-release-version.outputs.version }}
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c
         with:
           # Note: `publish-release.yaml` checks explicitly for this commit message
           commit-message: 'chore: release TutorialKit CLI v${{ steps.resolve-release-version.outputs.version }}'
@@ -73,6 +73,7 @@ jobs:
           body: 'Bump TutorialKit CLI to version ${{ steps.resolve-release-version.outputs.version }}.'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-cli-${{ steps.resolve-release-version.outputs.version }}
+          token: ${{ secrets.GITOPS_REPO_PAT }}
 
   publish_release_CLI:
     name: Publish Release CLI
