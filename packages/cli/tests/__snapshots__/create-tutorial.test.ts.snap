@@ -218,7 +218,6 @@ exports[`create and eject a project 1`] = `
   "src/styles/base.css",
   "src/styles/markdown.css",
   "src/styles/panel.css",
-  "src/styles/terminal.css",
   "src/styles/variables.css",
   "src/templates",
   "src/templates/default",
