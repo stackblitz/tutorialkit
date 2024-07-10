@@ -26,10 +26,10 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
   useOutsideClick(menuRef, onOutsideClick);
 
   return (
-    <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1 text-sm">
+    <header className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1 text-sm">
       <a
         className={classNames(
-          'flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
+          'hidden sm:flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
           !prev ? 'opacity-32 pointer-events-none' : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
         )}
         aria-disabled={!prev}
@@ -42,7 +42,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
           data-state={`${showDropdown ? 'open' : 'closed'}`}
           className={classNames(
             navStyles.NavContainer,
-            'absolute z-1 left-0 transition-[background,box-shadow] duration-0 right-0 rounded-[8px] border overflow-hidden z-50',
+            'absolute mx-4 sm:mx-0 z-1 left-0 transition-[background,box-shadow] duration-0 right-0 rounded-[8px] border overflow-hidden z-50',
           )}
           ref={menuRef}
         >
@@ -84,7 +84,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
       </div>
       <a
         className={classNames(
-          'flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
+          'hidden sm:flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
           !next ? 'opacity-32 pointer-events-none' : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
         )}
         aria-disabled={!next}
