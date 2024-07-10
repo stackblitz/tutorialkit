@@ -69,6 +69,7 @@
     "@nanostores/react": "0.7.2",
     "@radix-ui/react-accordion": "^1.2.0",
     "@tutorialkit/runtime": "workspace:*",
+    "@tutorialkit/theme": "workspace:*",
     "@webcontainer/api": "1.2.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/addon-web-links": "^0.11.0",

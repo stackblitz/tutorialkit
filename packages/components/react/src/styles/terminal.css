@@ -1,0 +1,8 @@
+.xterm {
+  --at-apply: h-full;
+  --at-apply: p-3;
+}
+
+.xterm .xterm-viewport {
+  --at-apply: transition-theme;
+}

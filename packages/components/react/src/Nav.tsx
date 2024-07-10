@@ -74,7 +74,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                 animate={{ height: 'auto', y: 0 }}
                 exit={{ height: 0, y: 0 }}
                 transition={{ duration: 0.2, ease: dropdownEasing }}
-                className=" overflow-hidden bg-tk-elements-breadcrumbs-dropdown-backgroundColor"
+                className=" overflow-hidden transition-theme bg-tk-elements-breadcrumbs-dropdown-backgroundColor"
               >
                 {renderParts(navList, currentLesson)}
               </motion.nav>
@@ -192,7 +192,7 @@ function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: bo
           <li key={lessonIndex} className="mr-3">
             <a
               className={classNames(
-                'w-full inline-block border border-transparent pr-3 text-tk-elements-breadcrumbs-dropdown-lessonTextColor hover:text-tk-elements-breadcrumbs-dropdown-lessonTextColorHover px-3 py-1 rounded-1',
+                'w-full inline-block border border-transparent pr-3 transition-theme text-tk-elements-breadcrumbs-dropdown-lessonTextColor hover:text-tk-elements-breadcrumbs-dropdown-lessonTextColorHover px-3 py-1 rounded-1',
                 {
                   'bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColor': !isActiveLesson,
                   'font-semibold text-tk-elements-breadcrumbs-dropdown-lessonTextColorSelected bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected':

@@ -39,29 +39,29 @@
 }
 
 .NavContainer:hover {
-  --at-apply: border-tk-elements-breadcrumbs-toggleButton-borderColorHover;
+  --at-apply: transition-theme border-tk-elements-breadcrumbs-toggleButton-borderColorHover;
 }
 
 .NavContainer[data-state='closed']:not(:hover) {
-  --at-apply: border-tk-elements-breadcrumbs-toggleButton-borderColor;
+  --at-apply: transition-theme border-tk-elements-breadcrumbs-toggleButton-borderColor;
 }
 
 .NavContainer[data-state='open']:not(:hover) {
-  --at-apply: border-tk-elements-breadcrumbs-toggleButton-borderColorSelected;
+  --at-apply: transition-theme border-tk-elements-breadcrumbs-toggleButton-borderColorSelected;
 }
 
 .NavContainer .ToggleButton:hover {
-  --at-apply: bg-tk-elements-breadcrumbs-toggleButton-backgroundColorHover
+  --at-apply: transition-theme bg-tk-elements-breadcrumbs-toggleButton-backgroundColorHover
     text-tk-elements-breadcrumbs-toggleButton-textColorHover;
 }
 
 .NavContainer[data-state='closed'] .ToggleButton:not(:hover) {
-  --at-apply: bg-tk-elements-breadcrumbs-toggleButton-backgroundColor
+  --at-apply: transition-theme bg-tk-elements-breadcrumbs-toggleButton-backgroundColor
     text-tk-elements-breadcrumbs-toggleButton-textColor;
 }
 
 .NavContainer[data-state='open'] .ToggleButton:not(:hover) {
-  --at-apply: bg-tk-elements-breadcrumbs-toggleButton-backgroundColorSelected
+  --at-apply: transition-theme bg-tk-elements-breadcrumbs-toggleButton-backgroundColorSelected
     text-tk-elements-breadcrumbs-toggleButton-textColorSelected;
 }
 

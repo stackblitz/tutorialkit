@@ -11,7 +11,7 @@
     "docs": "pnpm run --filter=tutorialkit.dev dev",
     "docs:build": "pnpm run --filter=tutorialkit.dev build",
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
-    "demo:build": "pnpm run --filter=demo.tutorialkit.dev build",
+    "demo:build": "pnpm run build && pnpm run --filter=demo.tutorialkit.dev build",
     "lint": "eslint \"{packages,docs}/**/*\"",
     "test": "pnpm run --stream --filter=@tutorialkit/* --filter=tutorialkit test --run"
   },

@@ -381,6 +381,9 @@ importers:
       '@tutorialkit/runtime':
         specifier: workspace:*
         version: link:../../runtime
+      '@tutorialkit/theme':
+        specifier: workspace:*
+        version: link:../../theme
       '@webcontainer/api':
         specifier: 1.2.0
         version: 1.2.0
