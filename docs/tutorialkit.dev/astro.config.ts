@@ -76,7 +76,7 @@ export default defineConfig({
               link: '/reference/theming/',
             },
             {
-              label: 'React components',
+              label: 'React Components',
               link: '/reference/react-components',
             },
           ],
