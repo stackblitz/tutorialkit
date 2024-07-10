@@ -42,7 +42,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
           data-state={`${showDropdown ? 'open' : 'closed'}`}
           className={classNames(
             navStyles.NavContainer,
-            'absolute mx-4 sm:mx-0 z-1 left-0 transition-[background,box-shadow] duration-0 right-0 rounded-[8px] border overflow-hidden z-50',
+            'absolute mx-4 sm:mx-0 z-1 left-0 right-0 rounded-[8px] border overflow-hidden z-50',
           )}
           ref={menuRef}
         >
