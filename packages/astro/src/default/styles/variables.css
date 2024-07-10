@@ -312,23 +312,32 @@
   --tk-elements-terminal-color-brightCyan: var(--tk-terminal-brightCyan);
   --tk-elements-terminal-color-brightWhite: var(--tk-terminal-brightWhite);
 
-  /* Status > Positive */
+  /* Boot Screen > Primary Button */
+  --tk-elements-bootScreen-primaryButton-backgroundColor: var(--tk-background-accent-secondary);
+  --tk-elements-bootScreen-primaryButton-backgroundColorHover: var(--tk-background-accent-active);
+  --tk-elements-bootScreen-primaryButton-textColor: var(--tk-text-primary-inverted);
+  --tk-elements-bootScreen-primaryButton-textColorHover: var(--tk-text-primary-inverted);
+  --tk-elements-bootScreen-primaryButton-iconColor: var(--tk-text-primary-inverted);
+  --tk-elements-bootScreen-primaryButton-iconColorHover: var(--tk-text-primary-inverted);
+
+
+  /* BootScreen > Status > Positive */
   --tk-elements-status-positive-textColor: var(--tk-text-positive);
   --tk-elements-status-positive-iconColor: var(--tk-elements-status-positive-textColor);
 
-  /* Status > Negative */
+  /* BootScreen > Status > Negative */
   --tk-elements-status-negative-textColor: var(--tk-text-negative);
   --tk-elements-status-negative-iconColor: var(--tk-elements-status-negative-textColor);
 
-  /* Status > Skipped */
+  /* BootScreen > Status > Skipped */
   --tk-elements-status-skipped-textColor: var(--tk-text-secondary);
   --tk-elements-status-skipped-iconColor: var(--tk-elements-status-neutral-textColor);
 
-  /* Status > Disabled */
+  /* BootScreen > Status > Disabled */
   --tk-elements-status-disabled-textColor: var(--tk-text-disabled);
   --tk-elements-status-disabled-iconColor: var(--tk-elements-status-disabled-textColor);
 
-  /* Status > Active */
+  /* BootScreen > Status > Active */
   --tk-elements-status-active-textColor: var(--tk-text-primary);
   --tk-elements-status-active-iconColor: var(--tk-elements-status-active-textColor);
 

@@ -288,6 +288,16 @@ export const theme = {
             lessonTextColorHover: 'var(--tk-elements-breadcrumbs-dropdown-lessonTextColorHover)',
           },
         },
+        bootScreen: {
+          primaryButton: {
+            backgroundColor: 'var(--tk-elements-bootScreen-primaryButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-bootScreen-primaryButton-backgroundColorHover)',
+            textColor: 'var(--tk-elements-bootScreen-primaryButton-textColor)',
+            textColorHover: 'var(--tk-elements-bootScreen-primaryButton-textColorHover)',
+            iconColor: 'var(--tk-elements-bootScreen-primaryButton-iconColor)',
+            iconColorHover: 'var(--tk-elements-bootScreen-primaryButton-iconColorHover)',
+          },
+        },
         status: {
           positive: {
             textColor: 'var(--tk-elements-status-positive-textColor)',
