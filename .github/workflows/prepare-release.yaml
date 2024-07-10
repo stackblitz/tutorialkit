@@ -31,7 +31,7 @@ jobs:
         run: pnpm run changelog
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c
         with:
           # Note: `publish-release.yaml` checks explicitly for this commit message
           commit-message: 'chore: release `@tutorialkit` packages v${{ inputs.version }}'
