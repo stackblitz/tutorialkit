@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { useTheme } from './hooks/useTheme';
 
 export default function ExampleCodeMirrorEditor() {
-  const { document, theme, onChange, onScroll } = useEditorDocument();
+  const { editorDocument, theme, onChange, onScroll } = useEditorDocument();
 
   return (
     <CodeMirrorEditor
       theme={theme}
-      doc={document}
+      doc={editorDocument}
       onChange={onChange}
       onScroll={onScroll}
       debounceChange={500}
@@ -21,17 +21,17 @@ export default function ExampleCodeMirrorEditor() {
 
 function useEditorDocument() {
   const theme = useTheme();
-  const [document, setDocument] = useState<EditorDocument>(DEFAULT_DOCUMENT);
+  const [editorDocument, setEditorDocument] = useState<EditorDocument>(DEFAULT_DOCUMENT);
 
   function onChange({ content }: EditorUpdate) {
-    setDocument((prev) => ({
+    setEditorDocument((prev) => ({
       ...prev,
       value: content,
     }));
   }
 
   function onScroll(scroll: ScrollPosition) {
-    setDocument((prev) => ({
+    setEditorDocument((prev) => ({
       ...prev,
       scroll,
     }));
@@ -39,7 +39,7 @@ function useEditorDocument() {
 
   return {
     theme,
-    document,
+    editorDocument,
     onChange,
     onScroll,
   };
