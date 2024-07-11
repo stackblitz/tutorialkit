@@ -7,4 +7,6 @@ autoReload: true
 mainCommand: ['npm start', 'Starting HTTP server']
 prepareCommands:
   - ['npm install', 'Installing dependencies']
+i18n:
+  partTemplate: ${title}
 ---

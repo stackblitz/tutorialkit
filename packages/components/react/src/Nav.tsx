@@ -117,7 +117,7 @@ function renderParts(navList: NavList, currentLesson: Lesson) {
                 >
                   <span className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80`}></span>
                   <span>
-                    {interpolateString(currentLesson.i18n.partTemplate, {
+                    {interpolateString(currentLesson.data.i18n!.partTemplate!, {
                       index: partIndex + 1,
                       title: part.title,
                     })}

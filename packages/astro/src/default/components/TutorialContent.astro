@@ -18,7 +18,7 @@ const { Markdown, prev, next } = lesson;
   {
     next && (
       <a href={next?.href} class="sm:hidden underline mt-8 font-bold block text-tk-elements-navCard-textColor">
-        {lesson.i18n.nextLessonPrefix} {next.title}
+        {lesson.data.i18n!.nextLessonPrefix} {next.title}
       </a>
     )
   }
