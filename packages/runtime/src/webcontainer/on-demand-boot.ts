@@ -29,10 +29,9 @@ export async function safeBoot(options: BootOptions) {
     localBootStatus.set('booting');
   }
 
-  return WebContainer.boot(options).then((webcontainer) => {
-    localBootStatus.set('booted');
-    return webcontainer;
-  });
+  const webconntainer = await WebContainer.boot(options)
+  localBootStatus.set('booted');
+  return webcontainer;
 }
 
 export function unblockBoot() {
