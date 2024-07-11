@@ -1,16 +1,33 @@
 import { z } from 'zod';
 
 export const i18nSchema = z.object({
-  /** Prefix preceding the link to navigate to the next lesson */
+  /**
+   * Prefix in the link to navigate to the next lesson on mobile.
+   *
+   * @default 'Next: '
+   */
   nextLessonPrefix: z.string().optional(),
 
-  /** Template on how to format a part. Variables: ${index} and ${title} */
+  /**
+   * Template on how to format a part. Variables: ${index} and ${title}.
+   *
+   * @default 'Part ${index}: ${title}'
+   */
   partTemplate: z.string().optional(),
 
-  /** Text shown when there are no previews or steps to show */
+  /**
+   * Text shown when there are no previews or steps to show in the prepare environment section.
+   *
+   * @default 'Start WebContainer'
+   */
   startWebContainerText: z.string().optional(),
 
-  /** Text shown on the call to action button to start webcontainer when boot was blocked due to memory restrictions  */
+  /**
+   * Text shown on the call to action button to start webcontainer when boot was blocked
+   * due to memory restrictions.
+   *
+   * @default 'No preview to run nor steps to show'
+   */
   noPreviewNorStepsText: z.string().optional(),
 });
 
