@@ -1,0 +1,58 @@
+<div
+  data-id="page-loading-progress"
+  class="fixed transition-all top-0 z-90 h-[2px] opacity-100 pointer-events-none bg-tk-elements-pageLoadingIndicator-backgroundColor"
+>
+  <div
+    class="absolute right-0 w-24 h-full shadow-[0px_0px_10px_0px] shadow-tk-elements-pageLoadingIndicator-shadowColor"
+  >
+  </div>
+</div>
+<script>
+  const progressEl = document.querySelector('[data-id="page-loading-progress"]') as HTMLDivElement;
+  const storageKey = 'tk_plid';
+
+  let expectedDuration = parseFloat(localStorage.getItem(storageKey) || '1000');
+
+  let intervalId: ReturnType<typeof setInterval> | undefined;
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  let startTime = Date.now();
+
+  function start() {
+    clearTimeout(timeoutId);
+
+    startTime = Date.now();
+
+    progressEl.style.width = '0%';
+    progressEl.style.opacity = '1';
+
+    intervalId = setInterval(() => {
+      const elapsedTime = Date.now() - startTime;
+
+      progressEl.style.width = `${Math.min(elapsedTime / expectedDuration, 1) * 100}%`;
+
+      if (elapsedTime > expectedDuration) {
+        clearInterval(intervalId);
+        return;
+      }
+    }, 100);
+  }
+
+  function done() {
+    clearInterval(intervalId);
+    progressEl.style.width = '100%';
+
+    expectedDuration = Date.now() - startTime;
+    localStorage.setItem(storageKey, expectedDuration.toString());
+
+    timeoutId = setTimeout(() => {
+      progressEl.style.opacity = '0';
+
+      timeoutId = setTimeout(() => {
+        progressEl.style.width = '0%';
+      }, 100);
+    }, 200);
+  }
+
+  document.addEventListener('astro:before-preparation', start);
+  document.addEventListener('astro:after-swap', done);
+</script>

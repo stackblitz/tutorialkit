@@ -141,6 +141,10 @@
   --tk-elements-content-textColor: var(--tk-text-body);
   --tk-elements-content-headingTextColor: var(--tk-text-primary);
 
+  /* Page loading indicator */
+  --tk-elements-pageLoadingIndicator-backgroundColor: var(--tk-background-accent);
+  --tk-elements-pageLoadingIndicator-shadowColor: var(--tk-background-accent);
+
   /* Top Bar */
   --tk-elements-topBar-backgroundColor: var(--tk-elements-app-backgroundColor);
 

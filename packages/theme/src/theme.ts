@@ -148,6 +148,10 @@ export const theme = {
           textColor: 'var(--tk-elements-content-textColor)',
           headingTextColor: 'var(--tk-elements-content-headingTextColor)',
         },
+        pageLoadingIndicator: {
+          backgroundColor: 'var(--tk-elements-pageLoadingIndicator-backgroundColor)',
+          shadowColor: 'var(--tk-elements-pageLoadingIndicator-shadowColor)',
+        },
         topBar: {
           backgroundColor: 'var(--tk-elements-topBar-backgroundColor)',
           iconButton: {

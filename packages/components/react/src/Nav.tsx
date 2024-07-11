@@ -76,7 +76,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                 transition={{ duration: 0.2, ease: dropdownEasing }}
                 className=" overflow-hidden transition-theme bg-tk-elements-breadcrumbs-dropdown-backgroundColor"
               >
-                {renderParts(navList, currentLesson)}
+                {renderParts(navList, currentLesson, onOutsideClick)}
               </motion.nav>
             )}
           </AnimatePresence>
@@ -96,7 +96,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
   );
 }
 
-function renderParts(navList: NavList, currentLesson: Lesson) {
+function renderParts(navList: NavList, currentLesson: Lesson, onLinkClick: () => void) {
   return (
     <ul className="py-5 pl-5 border-t border-tk-elements-breadcrumbs-dropdown-borderColor overflow-auto max-h-[60dvh]">
       <Accordion.Root className="space-y-1.5" type="single" collapsible defaultValue={`part-${currentLesson.part.id}`}>
@@ -124,7 +124,7 @@ function renderParts(navList: NavList, currentLesson: Lesson) {
                   </span>
                 </Accordion.Trigger>
                 <Accordion.Content className={navStyles.AccordionContent}>
-                  {renderChapters(currentLesson, part, isPartActive)}
+                  {renderChapters(currentLesson, part, isPartActive, onLinkClick)}
                 </Accordion.Content>
               </Accordion.Item>
             </li>
@@ -135,7 +135,7 @@ function renderParts(navList: NavList, currentLesson: Lesson) {
   );
 }
 
-function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: boolean) {
+function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: boolean, onLinkClick: () => void) {
   return (
     <ul className="pl-4.5 mt-1.5">
       <Accordion.Root
@@ -171,7 +171,7 @@ function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: bool
                   <span>{chapter.title}</span>
                 </Accordion.Trigger>
                 <Accordion.Content className={navStyles.AccordionContent}>
-                  {renderLessons(currentLesson, chapter, isPartActive, isChapterActive)}
+                  {renderLessons(currentLesson, chapter, isPartActive, isChapterActive, onLinkClick)}
                 </Accordion.Content>
               </Accordion.Item>
             </li>
@@ -182,7 +182,13 @@ function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: bool
   );
 }
 
-function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: boolean, isChapterActive: boolean) {
+function renderLessons(
+  currentLesson: Lesson,
+  chapter: NavItem,
+  isPartActive: boolean,
+  isChapterActive: boolean,
+  onLinkClick: () => void,
+) {
   return (
     <ul className="pl-9 mt-1.5">
       {chapter.sections?.map((lesson, lessonIndex) => {
@@ -191,6 +197,7 @@ function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: bo
         return (
           <li key={lessonIndex} className="mr-3">
             <a
+              onClick={onLinkClick}
               className={classNames(
                 'w-full inline-block border border-transparent pr-3 transition-theme text-tk-elements-breadcrumbs-dropdown-lessonTextColor hover:text-tk-elements-breadcrumbs-dropdown-lessonTextColorHover px-3 py-1 rounded-1',
                 {

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import type { Step, TutorialStore } from '@tutorialkit/runtime';
 import { classNames } from './utils/classnames.js';
@@ -12,9 +13,16 @@ export function BootScreen({ className, tutorialStore }: Props) {
   const { startWebContainerText, noPreviewNorStepsText } = tutorialStore.lesson?.data.i18n ?? {};
   const bootStatus = useStore(tutorialStore.bootStatus);
 
+  // workaround to prevent the hydration error caused by bootStatus always being 'unknown' server-side
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className={classNames('flex-grow w-full flex justify-center items-center text-sm', className)}>
-      {bootStatus === 'blocked' ? (
+      {isClient && bootStatus === 'blocked' ? (
         <Button onClick={() => tutorialStore.unblockBoot()}>{startWebContainerText}</Button>
       ) : steps ? (
         <ul className="space-y-1">
