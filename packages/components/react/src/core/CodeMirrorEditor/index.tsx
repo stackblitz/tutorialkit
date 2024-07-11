@@ -29,6 +29,11 @@ export interface EditorDocument {
   scroll?: ScrollPosition;
 }
 
+export interface EditorSettings {
+  fontSize?: string;
+  tabSize?: number;
+}
+
 type TextEditorDocument = EditorDocument & {
   value: string;
 };
@@ -56,6 +61,7 @@ interface Props {
   onChange?: OnChangeCallback;
   onScroll?: OnScrollCallback;
   className?: string;
+  settings?: EditorSettings;
 }
 
 type EditorStates = Map<string, EditorState>;
@@ -69,6 +75,7 @@ export function CodeMirrorEditor({
   onScroll,
   onChange,
   theme,
+  settings,
   className = '',
 }: Props) {
   const [language] = useState(new Compartment());
@@ -165,7 +172,7 @@ export function CodeMirrorEditor({
     let state = editorStates.get(doc.filePath);
 
     if (!state) {
-      state = newEditorState(doc.value, theme, onScrollRef, debounceScroll, [
+      state = newEditorState(doc.value, theme, settings, onScrollRef, debounceScroll, [
         language.of([]),
         readOnly.of([EditorState.readOnly.of(doc.loading)]),
       ]);
@@ -193,6 +200,7 @@ CodeMirrorEditor.displayName = 'CodeMirrorEditor';
 function newEditorState(
   content: string,
   theme: Theme,
+  settings: EditorSettings | undefined,
   onScrollRef: MutableRefObject<OnScrollCallback | undefined>,
   debounceScroll: number,
   extensions: Extension[],
@@ -210,7 +218,7 @@ function newEditorState(
           }
         },
       }),
-      getTheme(theme),
+      getTheme(theme, settings),
       history(),
       keymap.of([
         ...defaultKeymap,
@@ -229,7 +237,7 @@ function newEditorState(
       dropCursor(),
       drawSelection(),
       bracketMatching(),
-      EditorState.tabSize.of(2),
+      EditorState.tabSize.of(settings?.tabSize ?? 2),
       indentOnInput(),
       highlightActiveLineGutter(),
       highlightActiveLine(),

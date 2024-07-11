@@ -9,7 +9,7 @@
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
     "cli:build-release": "pnpm run --filter=tutorialkit build-release",
     "docs": "pnpm run --filter=tutorialkit.dev dev",
-    "docs:build": "pnpm run --filter=tutorialkit.dev build",
+    "docs:build": "pnpm run build && pnpm run --filter=tutorialkit.dev build",
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
     "demo:build": "pnpm run build && pnpm run --filter=demo.tutorialkit.dev build",
     "lint": "eslint \"{packages,docs}/**/*\"",

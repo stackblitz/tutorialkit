@@ -186,3 +186,83 @@ site-search button[data-open-modal] {
   padding: 2px 0;
   font-size: var(--sl-text-base);
 }
+
+// ----------------------------------------
+// React components page
+
+.limit-code-height > figure > pre {
+  --at-apply: max-h-120;
+  overflow-y: scroll;
+}
+
+.react-example .expressive-code .frame {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.react-example .cm-scroller {
+  &::-webkit-scrollbar, &::-webkit-scrollbar-track {
+    background-color: inherit;
+    border-radius: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--ec-sbThumbCol);
+    border: 4px solid transparent;
+    background-clip: content-box;
+    border-radius: 10px
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ec-sbThumbHoverCol)
+  }
+}
+
+:root[data-theme='light'] .react-example {
+  --ec-codeBg: #fbfbfb;
+  --ec-codeFg: #403f53;
+  --ec-codeSelBg: #e0e0e0;
+  --ec-gtrFg: #7a8d96;
+  --ec-gtrBrdCol: #7a8d9633;
+  --ec-gtrHlFg: #403f53c3;
+  --ec-uiSelBg: #d3e8f8;
+  --ec-uiSelFg: #403f53;
+  --ec-focusBrd: #93a1a1;
+  --ec-sbThumbCol: #0000001a;
+  --ec-sbThumbHoverCol: #0000005c;
+  --ec-tm-markBg: #0000001a;
+  --ec-tm-markBrdCol: #00000055;
+  --ec-tm-insBg: #8ec77d99;
+  --ec-tm-insDiffIndCol: #336a28d0;
+  --ec-tm-delBg: #ff9c8e99;
+  --ec-tm-delDiffIndCol: #9d4138d0;
+  --ec-frm-shdCol: #d9d9d9;
+  --ec-frm-edActTabBg: var(--sl-color-gray-7);
+  --ec-frm-edActTabIndTopCol: var(--sl-color-accent);
+  --ec-frm-edTabBarBg: var(--sl-color-gray-6);
+  --ec-frm-edBg: var(--sl-color-gray-7);
+  --ec-frm-trmTtbBg: var(--sl-color-gray-6);
+  --ec-frm-trmBg: var(--sl-color-gray-7);
+  --ec-frm-tooltipSuccessBg: #078662
+}
+
+.limit-code-height > figure {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 16px;
+    height: 16px;
+    background: var(--code-background);
+    border-bottom-left-radius: var(--header-border-radius);
+    border-bottom-right-radius: var(--header-border-radius);
+    border: var(--ec-brdWd) solid var(--ec-brdCol);
+    border-top: 0;
+    border-left: 0;
+  }
+}

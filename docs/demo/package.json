@@ -4,12 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "astro": "astro",
-    "build_with_check": "astro check && pnpm run build",
-    "build": "astro build && cp _headers ./dist/",
     "dev": "astro dev",
-    "preview": "astro preview",
-    "start": "astro dev"
+    "start": "astro dev",
+    "build": "astro build && cp _headers ./dist/",
+    "build_with_check": "astro check && pnpm run build",
+    "preview": "astro preview"
   },
   "dependencies": {
     "@tutorialkit/components-react": "workspace:*",
