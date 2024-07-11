@@ -90,6 +90,7 @@ export async function getTutorial(): Promise<Tutorial> {
       const lesson: Lesson = {
         data,
         id: lessonId,
+        filepath: id,
         order: -1,
         part: {
           id: partId,
@@ -251,7 +252,18 @@ export async function getTutorial(): Promise<Tutorial> {
       ...lesson.data,
       ...squash(
         [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
-        ['mainCommand', 'prepareCommands', 'previews', 'autoReload', 'template', 'terminal', 'editor', 'focus', 'i18n'],
+        [
+          'mainCommand',
+          'prepareCommands',
+          'previews',
+          'autoReload',
+          'template',
+          'terminal',
+          'editor',
+          'focus',
+          'i18n',
+          'editPageLink',
+        ],
       ),
     };
 
@@ -274,9 +286,11 @@ export async function getTutorial(): Promise<Tutorial> {
         href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${nextLesson.slug}`),
       };
     }
-  }
 
-  // console.log(inspect(_tutorial, undefined, Infinity, true));
+    if (lesson.data.editPageLink && typeof lesson.data.editPageLink === 'string') {
+      lesson.editPageLink = lesson.data.editPageLink.replace(':path', lesson.filepath);
+    }
+  }
 
   return _tutorial;
 }

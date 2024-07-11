@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import { webcontainerSchema } from './common.js';
+import { webcontainerSchema, editPageLinkSchema } from './common.js';
 
 export const tutorialSchema = webcontainerSchema.extend({
   type: z.literal('tutorial'),
   logoLink: z.string().optional(),
+  editPageLink: editPageLinkSchema.optional(),
   parts: z.array(z.string()).optional(),
 });
 

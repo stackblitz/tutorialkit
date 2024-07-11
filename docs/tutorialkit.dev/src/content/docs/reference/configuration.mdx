@@ -170,3 +170,30 @@ Navigating to a lesson that specifies `autoReload` will always reload the previe
 Specified which folder from the `src/templates/` directory should be used as the basis for the code. See the "[Code templates](/guides/creating-content/#code-templates)" guide for a detailed explainer.
 <PropertyTable inherited type="string" />
 
+#### `editPageLink`
+Display a link in lesson for editing the page content.
+The value is a URL pattern where `:path` is replaced with the lesson's location relative to the `src/content/tutorial`.
+
+<PropertyTable inherited type="string|false" />
+
+```yaml
+editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/packages/template/src/content/tutorial/:path
+```
+
+The inherited value can be disabled in specific parts using `false`.
+
+```yaml
+editPageLink: false
+```
+
+:::tip
+Note that Github will try to automatically render the `.md` files when linked to.
+You can instruct Github to show the source code instead by adding `plain=1` query parameter.
+
+```diff
+-editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/packages/template/src/content/tutorial/:path
++editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/packages/template/src/content/tutorial/:path?plain=1
+```
+
+:::
+
