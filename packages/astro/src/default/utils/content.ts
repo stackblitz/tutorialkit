@@ -41,7 +41,6 @@ export async function getTutorial(): Promise<Tutorial> {
       tutorialMetaData.template ??= 'default';
       tutorialMetaData.i18n = Object.assign(
         {
-          nextLessonPrefix: 'Next: ',
           partTemplate: 'Part ${index}: ${title}',
           noPreviewNorStepsText: 'No preview to run nor steps to show',
           startWebContainerText: 'Start WebContainer',

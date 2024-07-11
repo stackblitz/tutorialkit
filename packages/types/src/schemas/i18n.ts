@@ -2,13 +2,6 @@ import { z } from 'zod';
 
 export const i18nSchema = z.object({
   /**
-   * Prefix in the link to navigate to the next lesson on mobile.
-   *
-   * @default 'Next: '
-   */
-  nextLessonPrefix: z.string().optional(),
-
-  /**
    * Template on how to format a part. Variables: ${index} and ${title}.
    *
    * @default 'Part ${index}: ${title}'

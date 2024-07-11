@@ -15,14 +15,7 @@ const { Markdown, prev, next } = lesson;
   <div class="markdown-content text-tk-elements-content-textColor">
     <Markdown />
   </div>
-  {
-    next && (
-      <a href={next?.href} class="sm:hidden underline mt-8 font-bold block text-tk-elements-navCard-textColor">
-        {lesson.data.i18n!.nextLessonPrefix} {next.title}
-      </a>
-    )
-  }
-  <div class="hidden sm:grid grid-cols-[1fr_1fr] gap-4 mt-8">
+  <div class="grid grid-cols-[1fr_1fr] gap-4 mt-8">
     <div class="flex">
       {prev && <NavCard lesson={prev} type="prev" />}
     </div>
