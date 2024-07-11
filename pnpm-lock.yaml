@@ -124,6 +124,9 @@ importers:
       '@iconify-json/ph':
         specifier: ^1.1.13
         version: 1.1.13
+      '@tutorialkit/astro':
+        specifier: workspace:*
+        version: link:../../packages/astro
       '@tutorialkit/theme':
         specifier: workspace:*
         version: link:../../packages/theme
