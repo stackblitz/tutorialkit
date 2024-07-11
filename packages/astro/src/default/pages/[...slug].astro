@@ -2,6 +2,7 @@
 import type { InferGetStaticPropsType } from 'astro';
 import TopBarWrapper from '../components/TopBarWrapper.astro';
 import MainContainer from '../components/MainContainer.astro';
+import PageLoadingIndicator from '../components/PageLoadingIndicator.astro';
 import Layout from '../layouts/Layout.astro';
 import '../styles/base.css';
 import '@tutorialkit/custom.css';
@@ -17,8 +18,9 @@ const { lesson, logoLink, navList, title } = Astro.props as Props;
 ---
 
 <Layout title={title}>
+  <PageLoadingIndicator />
   <div id="previews-container"></div>
-  <main class="max-w-full flex flex-col h-screen overflow-hidden" data-swap-root>
+  <main class="max-w-full flex flex-col h-full overflow-hidden" data-swap-root>
     <TopBarWrapper logoLink={logoLink ?? '/'} />
     <MainContainer lesson={lesson} navList={navList} />
   </main>

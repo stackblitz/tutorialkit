@@ -1,7 +1,7 @@
 // must be imported first
 import { useAuth } from './setup.js';
 
-import { safeBoot, TutorialStore, webContainerBootStatus } from '@tutorialkit/runtime';
+import { safeBoot, TutorialStore } from '@tutorialkit/runtime';
 import { auth, WebContainer } from '@webcontainer/api';
 import { joinPaths } from '../utils/url.js';
 
@@ -37,10 +37,6 @@ export async function login() {
 
 export function logout() {
   auth.logout({ ignoreRevokeError: true });
-}
-
-export function forceBoot() {
-  webContainerBootStatus().unblock();
 }
 
 export const webcontainerContext: WebContainerContext = {

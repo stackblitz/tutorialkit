@@ -8,41 +8,40 @@
  * to move forward with the boot.
  */
 import { WebContainer, type BootOptions } from '@webcontainer/api';
+import { atom, type ReadableAtom } from 'nanostores';
 import { withResolvers } from '../utils/promises.js';
 
-let blocked: undefined | boolean;
+export type BootStatus = 'unknown' | 'blocked' | 'booting' | 'booted';
 
+const localBootStatus = atom<BootStatus>('unknown');
 const blockingStatus = withResolvers<void>();
 
+export const bootStatus: ReadableAtom<BootStatus> = localBootStatus;
+
 export async function safeBoot(options: BootOptions) {
-  if (typeof blocked === 'undefined') {
-    blocked = isRestricted();
+  if (localBootStatus.get() === 'unknown') {
+    localBootStatus.set(isRestricted() ? 'blocked' : 'booting');
   }
 
-  if (blocked) {
+  if (localBootStatus.get() === 'blocked') {
     await blockingStatus.promise;
+
+    localBootStatus.set('booting');
   }
 
-  return WebContainer.boot(options);
+  const webcontainer = await WebContainer.boot(options);
+
+  localBootStatus.set('booted');
+
+  return webcontainer;
 }
 
-interface BootStatus {
-  readonly blocked: boolean | undefined;
-  unblock(): void;
-}
+export function unblockBoot() {
+  if (localBootStatus.get() !== 'blocked') {
+    return;
+  }
 
-export function webContainerBootStatus(): BootStatus {
-  return {
-    blocked,
-    unblock() {
-      if (blocked === false) {
-        return;
-      }
-
-      blocked = false;
-      blockingStatus.resolve();
-    },
-  };
+  blockingStatus.resolve();
 }
 
 function isRestricted() {

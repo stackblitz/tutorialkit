@@ -1,13 +1,11 @@
 {
-  "extends": "../../../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "baseUrl": "./",
-    "jsxImportSource": "react",
-    "composite": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "composite": true
   },
   "include": ["src"],
+  "exclude": ["src/**/*.spec.ts"],
   "references": [{ "path": "../../runtime" }, { "path": "../../theme" }, { "path": "../../types" }]
 }

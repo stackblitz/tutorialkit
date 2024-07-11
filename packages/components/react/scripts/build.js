@@ -4,7 +4,7 @@ import { cp } from 'fs/promises';
 import { join } from 'path';
 
 // build everything with typescript
-await execa('tsc', ['-b'], { stdio: 'inherit', preferLocal: true });
+await execa('tsc', ['-b', 'tsconfig.build.json'], { stdio: 'inherit', preferLocal: true });
 
 // copy css files unmodified
 const filePaths = fastGlob.globSync(`./src/**/*.css`, {

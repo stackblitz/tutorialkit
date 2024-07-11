@@ -12,6 +12,7 @@ import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
 import { IGNORED_FILES } from './constants';
+import { squash } from './content/squash.js';
 import { logger } from './logger';
 import { joinPaths } from './url';
 
@@ -38,6 +39,14 @@ export async function getTutorial(): Promise<Tutorial> {
 
       // default template if not specified
       tutorialMetaData.template ??= 'default';
+      tutorialMetaData.i18n = Object.assign(
+        {
+          partTemplate: 'Part ${index}: ${title}',
+          noPreviewNorStepsText: 'No preview to run nor steps to show',
+          startWebContainerText: 'Run this tutorial',
+        } satisfies Lesson['data']['i18n'],
+        tutorialMetaData.i18n,
+      );
 
       _tutorial.logoLink = data.logoLink;
     } else if (type === 'part') {
@@ -239,11 +248,11 @@ export async function getTutorial(): Promise<Tutorial> {
     const chapterMetadata = _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].data;
 
     lesson.data = {
-      ...pick(
-        [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
-        ['mainCommand', 'prepareCommands', 'previews', 'autoReload', 'template', 'terminal', 'editor', 'focus'],
-      ),
       ...lesson.data,
+      ...squash(
+        [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
+        ['mainCommand', 'prepareCommands', 'previews', 'autoReload', 'template', 'terminal', 'editor', 'focus', 'i18n'],
+      ),
     };
 
     if (prevLesson) {
@@ -270,21 +279,6 @@ export async function getTutorial(): Promise<Tutorial> {
   // console.log(inspect(_tutorial, undefined, Infinity, true));
 
   return _tutorial;
-}
-
-function pick<T extends Record<any, any>>(objects: (T | undefined)[], properties: (keyof T)[]) {
-  const newObject = {} as any;
-
-  for (const property of properties) {
-    for (const object of objects) {
-      if (object?.hasOwnProperty(property)) {
-        newObject[property] = object[property];
-        break;
-      }
-    }
-  }
-
-  return newObject;
 }
 
 function getOrder(order: string[] | undefined, fallbackSourceForOrder: Record<string, any>): string[] {

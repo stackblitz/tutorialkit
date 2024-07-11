@@ -9,6 +9,7 @@ import {
 import { FileTree } from '../core/FileTree.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
 import type { Theme } from '../core/types.js';
+import { isMobile } from '../utils/mobile.js';
 
 const DEFAULT_FILE_TREE_SIZE = 25;
 
@@ -92,7 +93,7 @@ export function EditorPanel({
             theme={theme}
             id={id}
             doc={editorDocument}
-            autoFocusOnDocumentChange={true}
+            autoFocusOnDocumentChange={!isMobile()}
             onScroll={onEditorScroll}
             onChange={onEditorChange}
           />

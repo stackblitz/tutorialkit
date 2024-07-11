@@ -16,6 +16,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./types": "./types.d.ts",
+    "./default-theme.css": "./dist/default/styles/variables.css",
     "./default/pages/index.astro": "./dist/default/pages/index.astro",
     "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro",
     "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro"

@@ -1,4 +1,4 @@
 export { Command, Commands } from './command.js';
+export { safeBoot } from './on-demand-boot.js';
 export { PreviewInfo } from './preview-info.js';
-export { type Step, type Steps, StepsController } from './steps.js';
-export { safeBoot, webContainerBootStatus } from './on-demand-boot.js';
+export { StepsController, type Step, type Steps } from './steps.js';

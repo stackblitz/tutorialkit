@@ -183,7 +183,7 @@ export function CodeMirrorEditor({
     view.setState(state);
 
     setEditorDocument(view, theme, language, readOnly, autoFocusOnDocumentChange, doc as TextEditorDocument);
-  }, [doc?.value, doc?.filePath, doc?.loading]);
+  }, [doc?.value, doc?.filePath, doc?.loading, autoFocusOnDocumentChange]);
 
   return (
     <div className={classNames('relative', className)}>
