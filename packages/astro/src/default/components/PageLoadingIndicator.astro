@@ -10,8 +10,9 @@
 <script>
   const progressEl = document.querySelector('[data-id="page-loading-progress"]') as HTMLDivElement;
   const storageKey = 'tk_plid';
+  const maxDurationWithoutProgressBar = 500;
 
-  let expectedDuration = parseFloat(localStorage.getItem(storageKey) || '1000');
+  let expectedDuration = parseFloat(localStorage.getItem(storageKey) || `${maxDurationWithoutProgressBar}`);
 
   let intervalId: ReturnType<typeof setInterval> | undefined;
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -23,17 +24,24 @@
     startTime = Date.now();
 
     progressEl.style.width = '0%';
-    progressEl.style.opacity = '1';
+    progressEl.style.opacity = '0';
 
     intervalId = setInterval(() => {
       const elapsedTime = Date.now() - startTime;
 
-      progressEl.style.width = `${Math.min(elapsedTime / expectedDuration, 1) * 100}%`;
+      // we're past the 500ms mark and we're about to make the bar visible, extend the expectedDuration a bit
+      if (elapsedTime > maxDurationWithoutProgressBar && expectedDuration <= maxDurationWithoutProgressBar) {
+        // this a bit arbitrary to make it look "good"
+        expectedDuration += 2 * maxDurationWithoutProgressBar;
+      }
 
-      if (elapsedTime > expectedDuration) {
-        clearInterval(intervalId);
+      // if expected duration is less we don't show anything
+      if (expectedDuration < maxDurationWithoutProgressBar) {
         return;
       }
+
+      progressEl.style.opacity = '1';
+      progressEl.style.width = `${Math.min(elapsedTime / expectedDuration, 1) * 100}%`;
     }, 100);
   }
 
