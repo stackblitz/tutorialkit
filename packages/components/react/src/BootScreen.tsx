@@ -1,5 +1,4 @@
 import { useStore } from '@nanostores/react';
-import { webContainerBootStatus } from '@tutorialkit/runtime';
 import type { Step, TutorialStore } from '@tutorialkit/runtime';
 import { classNames } from './utils/classnames.js';
 
@@ -11,12 +10,12 @@ interface Props {
 export function BootScreen({ className, tutorialStore }: Props) {
   const steps = useStore(tutorialStore.steps);
   const { startWebContainerText, noPreviewNorStepsText } = tutorialStore.lesson?.data.i18n ?? {};
-  const bootStatus = webContainerBootStatus();
+  const bootStatus = useStore(tutorialStore.bootStatus);
 
   return (
     <div className={classNames('flex-grow w-full flex justify-center items-center text-sm', className)}>
-      {bootStatus.blocked ? (
-        <Button onClick={bootStatus.unblock}>{startWebContainerText}</Button>
+      {bootStatus === 'blocked' ? (
+        <Button onClick={() => tutorialStore.unblockBoot()}>{startWebContainerText}</Button>
       ) : steps ? (
         <ul className="space-y-1">
           {steps.map((step, index) => (

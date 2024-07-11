@@ -43,7 +43,7 @@ export async function getTutorial(): Promise<Tutorial> {
         {
           partTemplate: 'Part ${index}: ${title}',
           noPreviewNorStepsText: 'No preview to run nor steps to show',
-          startWebContainerText: 'Start WebContainer',
+          startWebContainerText: 'Run this tutorial',
         } satisfies Lesson['data']['i18n'],
         tutorialMetaData.i18n,
       );
