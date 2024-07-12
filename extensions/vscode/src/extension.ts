@@ -11,4 +11,6 @@ export function activate(context: vscode.ExtensionContext) {
   useLessonTree();
 }
 
-export function deactivate() {}
+export function deactivate() {
+  // do nothing
+}

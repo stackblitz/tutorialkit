@@ -1,8 +1,8 @@
 export class Lesson {
   constructor(
     public name: string,
-    public readonly path: string,
-    public readonly children: Lesson[] = [],
+    readonly path: string,
+    readonly children: Lesson[] = [],
     public metadata?: {
       _path: string;
       title: string;
