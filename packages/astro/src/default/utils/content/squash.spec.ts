@@ -91,7 +91,7 @@ describe('squash', () => {
       data: {
         template: 'default',
         i18n: {
-          nextLessonPrefix: 'Next lesson: ',
+          startWebContainerText: 'Run this tutorial',
           partTemplate: 'Part ${index}: ${title}',
         },
       } satisfies Metadata,
@@ -107,7 +107,7 @@ describe('squash', () => {
 
     expect(squash<Metadata>([lesson1.data, tutorial.data], ['i18n'])).toEqual({
       i18n: {
-        nextLessonPrefix: 'Next lesson: ',
+        startWebContainerText: 'Run this tutorial',
         partTemplate: 'Foobar: ${title}',
       },
     });
