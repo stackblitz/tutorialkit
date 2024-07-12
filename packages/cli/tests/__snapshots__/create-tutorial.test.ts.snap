@@ -244,6 +244,7 @@ exports[`create and eject a project 1`] = `
   "src/utils/constants.ts",
   "src/utils/content",
   "src/utils/content.ts",
+  "src/utils/content/default-localization.ts",
   "src/utils/content/squash.ts",
   "src/utils/logger.ts",
   "src/utils/nav.ts",
