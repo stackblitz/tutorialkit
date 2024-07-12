@@ -8,7 +8,7 @@ fs.rmSync(distFolder, { recursive: true, force: true });
 
 esbuild.build({
   entryPoints: ['src/index.ts'],
-  minify: true,
+  minify: false,
   bundle: true,
   platform: 'node',
   target: 'node18',
