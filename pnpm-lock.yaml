@@ -442,12 +442,12 @@ importers:
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
+      chokidar:
+        specifier: 3.6.0
+        version: 3.6.0
       execa:
         specifier: ^9.2.0
         version: 9.2.0
-      fast-glob:
-        specifier: ^3.3.2
-        version: 3.3.2
       typescript:
         specifier: ^5.4.5
         version: 5.4.5

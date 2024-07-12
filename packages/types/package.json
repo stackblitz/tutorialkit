@@ -21,6 +21,7 @@
   ],
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
+    "dev": "pnpm run build --preserveWatchOutput",
     "test": "vitest"
   },
   "dependencies": {

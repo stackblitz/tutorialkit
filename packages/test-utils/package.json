@@ -11,7 +11,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "dev": "pnpm run build --watch --preserveWatchOutput"
   },
   "devDependencies": {
     "@webcontainer/api": "1.2.0",

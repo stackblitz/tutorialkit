@@ -1,40 +1,85 @@
 import assert from 'node:assert';
-import { existsSync } from 'node:fs';
+import path from 'node:path';
+import { existsSync, rmSync, copyFileSync } from 'node:fs';
 import { cp, rm } from 'node:fs/promises';
 import { execa } from 'execa';
+import chokidar from 'chokidar';
 import esbuild from 'esbuild';
-import glob from 'fast-glob';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
 
-// clean dist
-await rm('dist', { recursive: true, force: true });
+const isWatch = process.argv.includes('--watch');
 
-// only do typechecking and emit the type declarations with tsc
-execa('tsc', ['--emitDeclarationOnly', '--project', './tsconfig.build.json'], {
-  stdio: 'inherit',
-  preferLocal: true,
-});
+await generateTypes();
+await buildJS();
+await copyDefaultFolder();
 
-// build with esbuild
-await esbuild.build({
-  entryPoints: ['src/index.ts'],
-  bundle: true,
-  tsconfig: './tsconfig.build.json',
-  platform: 'node',
-  format: 'esm',
-  outdir: 'dist',
-  define: {
-    'process.env.TUTORIALKIT_DEV': JSON.stringify(process.env.TUTORIALKIT_DEV ?? null),
-  },
-  plugins: [nodeExternalsPlugin()],
-});
+async function generateTypes() {
+  if (!isWatch) {
+    // clean dist
+    await rm('dist', { recursive: true, force: true });
+  }
 
-if (existsSync('./dist/default')) {
-  assert.fail('TypeScript transpiled the default folder, it means that the tsconfig has an issue');
+  // only do typechecking and emit the type declarations with tsc
+  const args = [
+    '--emitDeclarationOnly',
+    '--project',
+    './tsconfig.build.json',
+    isWatch && '--watch',
+    '--preserveWatchOutput',
+  ].filter((s) => !!s);
+
+  const promise = execa('tsc', args, { stdio: 'inherit', preferLocal: true });
+
+  if (!isWatch && existsSync('./dist/default')) {
+    await promise;
+    assert.fail('TypeScript transpiled the default folder, it means that the tsconfig has an issue');
+  }
 }
 
-// copy default folder unmodified
-await cp('./src/default', './dist/default', { recursive: true });
+async function buildJS() {
+  const context = await esbuild.context({
+    entryPoints: ['src/index.ts'],
+    bundle: true,
+    tsconfig: './tsconfig.build.json',
+    platform: 'node',
+    format: 'esm',
+    outdir: 'dist',
+    define: {
+      'process.env.TUTORIALKIT_DEV': JSON.stringify(process.env.TUTORIALKIT_DEV ?? null),
+    },
+    plugins: [nodeExternalsPlugin()],
+  });
 
-// remove test files
-await glob('./dist/default/**/*.spec.ts').then((testFiles) => Promise.all(testFiles.map((testFile) => rm(testFile))));
+  if (isWatch) {
+    context.watch();
+  } else {
+    await context.rebuild();
+    await context.dispose();
+  }
+}
+
+async function copyDefaultFolder() {
+  const src = './src/default';
+  const dist = './dist/default';
+  await rm(dist, { recursive: true, force: true });
+
+  // copy default folder unmodified, without test files
+  await cp(src, dist, {
+    recursive: true,
+    filter: (filename) => !filename.endsWith('.spec.ts'),
+  });
+
+  if (isWatch) {
+    chokidar.watch(src).on('all', (event, filePath, stats) => {
+      if (stats?.isDirectory() !== true) {
+        const target = path.join(dist, path.relative(src, filePath));
+
+        if (event === 'unlink') {
+          rmSync(target);
+        } else {
+          copyFileSync(filePath, target);
+        }
+      }
+    });
+  }
+}
