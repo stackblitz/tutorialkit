@@ -12,6 +12,7 @@ import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
 import { IGNORED_FILES } from './constants';
+import { DEFAULT_LOCALIZATION } from './content/default-localization';
 import { squash } from './content/squash.js';
 import { logger } from './logger';
 import { joinPaths } from './url';
@@ -39,20 +40,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       // default template if not specified
       tutorialMetaData.template ??= 'default';
-      tutorialMetaData.i18n = Object.assign(
-        {
-          partTemplate: 'Part ${index}: ${title}',
-          noPreviewNorStepsText: 'No preview to run nor steps to show',
-          startWebContainerText: 'Run this tutorial',
-          editPageText: 'Edit this page',
-          filesTitleText: 'Files',
-          prepareEnvironmentTitleText: 'Preparing Environment',
-          toggleTerminalButtonText: 'Toggle Terminal',
-          solveButtonText: 'Solve',
-          resetButtonText: 'Reset',
-        } satisfies Lesson['data']['i18n'],
-        tutorialMetaData.i18n,
-      );
+      tutorialMetaData.i18n = Object.assign({ ...DEFAULT_LOCALIZATION }, tutorialMetaData.i18n);
 
       _tutorial.logoLink = data.logoLink;
     } else if (type === 'part') {
