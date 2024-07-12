@@ -1,9 +1,10 @@
-import type { Lesson, NavItem, NavList } from '@tutorialkit/types';
+import { interpolateString, type Lesson, type NavItem, type NavList } from '@tutorialkit/types';
 import * as Accordion from '@radix-ui/react-accordion';
 import navStyles from './styles/nav.module.css';
 import { classNames } from './utils/classnames.js';
 import { AnimatePresence, cubicBezier, motion } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { useOutsideClick } from './hooks/useOutsideClick.js';
 
 const dropdownEasing = cubicBezier(0.4, 0, 0.2, 1);
 
@@ -24,10 +25,10 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
   useOutsideClick(menuRef, onOutsideClick);
 
   return (
-    <header className="grid grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1 text-sm">
+    <header className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1 text-sm">
       <a
         className={classNames(
-          'flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
+          'hidden sm:flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
           !prev ? 'opacity-32 pointer-events-none' : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
         )}
         aria-disabled={!prev}
@@ -40,7 +41,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
           data-state={`${showDropdown ? 'open' : 'closed'}`}
           className={classNames(
             navStyles.NavContainer,
-            'absolute z-1 left-0 transition-[background,box-shadow] duration-0 right-0 rounded-[8px] border overflow-hidden z-50',
+            'absolute mx-4 sm:mx-0 z-1 left-0 right-0 rounded-[8px] border overflow-hidden z-50',
           )}
           ref={menuRef}
         >
@@ -52,10 +53,10 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <div className="flex items-center gap-1 font-light truncate">
-              <span>{currentLesson.part.title}</span>
-              <span className={navStyles.Divider}>/</span>
-              <span>{currentLesson.chapter.title}</span>
-              <span className={navStyles.Divider}>/</span>
+              <span className="hidden sm:inline">{currentLesson.part.title}</span>
+              <span className={classNames('hidden sm:inline', navStyles.Divider)}>/</span>
+              <span className="hidden sm:inline">{currentLesson.chapter.title}</span>
+              <span className={classNames('hidden sm:inline', navStyles.Divider)}>/</span>
               <strong className="font-semibold">{currentLesson.data.title}</strong>
             </div>
             <div
@@ -72,9 +73,9 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                 animate={{ height: 'auto', y: 0 }}
                 exit={{ height: 0, y: 0 }}
                 transition={{ duration: 0.2, ease: dropdownEasing }}
-                className=" overflow-hidden bg-tk-elements-breadcrumbs-dropdown-backgroundColor"
+                className=" overflow-hidden transition-theme bg-tk-elements-breadcrumbs-dropdown-backgroundColor"
               >
-                {renderParts(navList, currentLesson)}
+                {renderParts(navList, currentLesson, onOutsideClick)}
               </motion.nav>
             )}
           </AnimatePresence>
@@ -82,7 +83,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
       </div>
       <a
         className={classNames(
-          'flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
+          'hidden sm:flex cursor-pointer h-full items-center justify-center w-[40px] text-tk-elements-breadcrumbs-navButton-iconColor',
           !next ? 'opacity-32 pointer-events-none' : 'hover:text-tk-elements-breadcrumbs-navButton-iconColorHover',
         )}
         aria-disabled={!next}
@@ -94,7 +95,7 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
   );
 }
 
-function renderParts(navList: NavList, currentLesson: Lesson) {
+function renderParts(navList: NavList, currentLesson: Lesson, onLinkClick: () => void) {
   return (
     <ul className="py-5 pl-5 border-t border-tk-elements-breadcrumbs-dropdown-borderColor overflow-auto max-h-[60dvh]">
       <Accordion.Root className="space-y-1.5" type="single" collapsible defaultValue={`part-${currentLesson.part.id}`}>
@@ -114,10 +115,15 @@ function renderParts(navList: NavList, currentLesson: Lesson) {
                   )}
                 >
                   <span className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80`}></span>
-                  <span>{`Part ${partIndex + 1}: ${part.title}`}</span>
+                  <span>
+                    {interpolateString(currentLesson.data.i18n!.partTemplate!, {
+                      index: partIndex + 1,
+                      title: part.title,
+                    })}
+                  </span>
                 </Accordion.Trigger>
                 <Accordion.Content className={navStyles.AccordionContent}>
-                  {renderChapters(currentLesson, part, isPartActive)}
+                  {renderChapters(currentLesson, part, isPartActive, onLinkClick)}
                 </Accordion.Content>
               </Accordion.Item>
             </li>
@@ -128,7 +134,7 @@ function renderParts(navList: NavList, currentLesson: Lesson) {
   );
 }
 
-function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: boolean) {
+function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: boolean, onLinkClick: () => void) {
   return (
     <ul className="pl-4.5 mt-1.5">
       <Accordion.Root
@@ -164,7 +170,7 @@ function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: bool
                   <span>{chapter.title}</span>
                 </Accordion.Trigger>
                 <Accordion.Content className={navStyles.AccordionContent}>
-                  {renderLessons(currentLesson, chapter, isPartActive, isChapterActive)}
+                  {renderLessons(currentLesson, chapter, isPartActive, isChapterActive, onLinkClick)}
                 </Accordion.Content>
               </Accordion.Item>
             </li>
@@ -175,7 +181,13 @@ function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: bool
   );
 }
 
-function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: boolean, isChapterActive: boolean) {
+function renderLessons(
+  currentLesson: Lesson,
+  chapter: NavItem,
+  isPartActive: boolean,
+  isChapterActive: boolean,
+  onLinkClick: () => void,
+) {
   return (
     <ul className="pl-9 mt-1.5">
       {chapter.sections?.map((lesson, lessonIndex) => {
@@ -184,8 +196,9 @@ function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: bo
         return (
           <li key={lessonIndex} className="mr-3">
             <a
+              onClick={onLinkClick}
               className={classNames(
-                'w-full inline-block border border-transparent pr-3 text-tk-elements-breadcrumbs-dropdown-lessonTextColor hover:text-tk-elements-breadcrumbs-dropdown-lessonTextColorHover px-3 py-1 rounded-1',
+                'w-full inline-block border border-transparent pr-3 transition-theme text-tk-elements-breadcrumbs-dropdown-lessonTextColor hover:text-tk-elements-breadcrumbs-dropdown-lessonTextColorHover px-3 py-1 rounded-1',
                 {
                   'bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColor': !isActiveLesson,
                   'font-semibold text-tk-elements-breadcrumbs-dropdown-lessonTextColorSelected bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected':
@@ -201,20 +214,4 @@ function renderLessons(currentLesson: Lesson, chapter: NavItem, isPartActive: bo
       })}
     </ul>
   );
-}
-
-function useOutsideClick(ref: React.RefObject<HTMLDivElement>, onOutsideClick?: () => void) {
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        onOutsideClick?.();
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref]);
 }

@@ -1,0 +1,83 @@
+---
+import { NavWrapper as Nav } from './NavWrapper';
+import { WorkspacePanelWrapper as WorkspacePanel } from './WorkspacePanelWrapper';
+import TutorialContent from './TutorialContent.astro';
+import ResizablePanel from './ResizablePanel.astro';
+import MobileContentToggle from './MobileContentToggle.astro';
+import { RESIZABLE_PANELS } from '../utils/constants';
+import type { Lesson, NavList } from '@tutorialkit/types';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import { hasWorkspace } from '../utils/workspace';
+
+interface Props {
+  lesson: Lesson<AstroComponentFactory>;
+  navList: NavList;
+}
+
+const { lesson, navList } = Astro.props;
+
+const showWorkspacePanel = hasWorkspace(lesson);
+---
+
+<ResizablePanel
+  class="h-full overflow-hidden"
+  id={RESIZABLE_PANELS.Main}
+  type="horizontal"
+  min="30%"
+  pos="40%"
+  max="60%"
+>
+  <div
+    class="h-full flex flex-col transition-theme bg-tk-elements-app-backgroundColor text-tk-elements-app-textColor"
+    slot="a"
+  >
+    <Nav client:load lesson={lesson} navList={navList} />
+    <TutorialContent lesson={lesson} />
+  </div>
+  <div class="h-full sm:border-l border-tk-elements-app-borderColor" slot={showWorkspacePanel ? 'b' : 'hide'}>
+    <WorkspacePanel lesson={lesson} client:load transition:persist />
+  </div>
+</ResizablePanel>
+<MobileContentToggle />
+<script>
+  import { viewStore } from '../stores/view-store';
+  import { RESIZABLE_PANELS } from '../utils/constants';
+  import type { IResizablePanel } from './ResizablePanel.astro';
+
+  const DEFAULT_PANEL_CLASS_LIST = ['sm:transition-none', 'sm:translate-x-0', 'absolute', 'inset-0', 'sm:static'];
+
+  let subscriber: (() => void) | undefined;
+
+  document.addEventListener('astro:page-load', () => {
+    subscriber?.();
+
+    const resizablePanel = document.querySelector(`[data-id=${RESIZABLE_PANELS.Main}]`) as unknown as IResizablePanel;
+    const contentPanel = resizablePanel.mainPanel();
+    const editorPanel = resizablePanel.sidePanel();
+    const divider = resizablePanel.divider();
+
+    if (!editorPanel) {
+      subscriber = undefined;
+      return;
+    }
+
+    contentPanel.classList.add(...DEFAULT_PANEL_CLASS_LIST);
+    editorPanel.classList.add(...DEFAULT_PANEL_CLASS_LIST);
+    divider?.classList.add('hidden', 'sm:block');
+
+    subscriber = viewStore.subscribe((value) => {
+      if (value === 'content') {
+        contentPanel.classList.remove('-translate-x-full');
+        editorPanel.classList.add('translate-x-full');
+      } else {
+        contentPanel.classList.add('-translate-x-full');
+        editorPanel.classList.remove('translate-x-full');
+      }
+    });
+
+    requestAnimationFrame(() => {
+      contentPanel.classList.add('transition-transform');
+      editorPanel.classList.add('transition-transform');
+    });
+  });
+</script>

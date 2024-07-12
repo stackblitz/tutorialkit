@@ -5,6 +5,7 @@ import { LessonFilesFetcher } from '../lesson-files.js';
 import { newTask, type Task } from '../tasks.js';
 import { TutorialRunner } from '../tutorial-runner.js';
 import type { ITerminal } from '../utils/terminal.js';
+import { bootStatus, unblockBoot, type BootStatus } from '../webcontainer/on-demand-boot.js';
 import type { PreviewInfo } from '../webcontainer/preview-info.js';
 import { StepsController } from '../webcontainer/steps.js';
 import type { TerminalConfig } from '../webcontainer/terminal-config.js';
@@ -198,6 +199,10 @@ export class TutorialStore {
     return this._editorStore.currentDocument;
   }
 
+  get bootStatus(): ReadableAtom<BootStatus> {
+    return bootStatus;
+  }
+
   get documents(): ReadableAtom<EditorDocuments> {
     return this._editorStore.documents;
   }
@@ -261,6 +266,10 @@ export class TutorialStore {
 
   hasSolution(): boolean {
     return !!this._lesson && Object.keys(this._lesson.solution[1]).length >= 1;
+  }
+
+  unblockBoot() {
+    unblockBoot();
   }
 
   reset() {

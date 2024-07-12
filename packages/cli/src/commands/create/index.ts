@@ -8,6 +8,7 @@ import { pkg } from '../../pkg.js';
 import { errorLabel, primaryLabel, printHelp, warnLabel } from '../../utils/messages.js';
 import { generateProjectName } from '../../utils/project.js';
 import { assertNotCanceled } from '../../utils/tasks.js';
+import { updateWorkspaceVersions } from '../../utils/workspace-version.js';
 import { setupEnterpriseConfig } from './enterprise.js';
 import { initGitRepo } from './git.js';
 import { installAndStart } from './install-start.js';
@@ -144,7 +145,7 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
 
   updatePackageJson(resolvedDest, tutorialName, flags);
 
-  const selectedPackageManager = await selectPackageManager(flags);
+  const selectedPackageManager = await selectPackageManager(resolvedDest, flags);
 
   updateReadme(resolvedDest, selectedPackageManager, flags);
 
@@ -253,7 +254,6 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
   }
 
   const pkgPath = path.resolve(dest, 'package.json');
-
   const pkgJson = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
   pkgJson.name = projectName;
@@ -262,21 +262,21 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
   updateWorkspaceVersions(pkgJson.devDependencies, TUTORIALKIT_VERSION);
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, undefined, 2));
-}
 
-function updateWorkspaceVersions(dependencies: Record<string, string>, version: string) {
-  for (const dependency in dependencies) {
-    const depVersion = dependencies[dependency];
+  try {
+    const pkgLockPath = path.resolve(dest, 'package-lock.json');
+    const pkgLockJson = JSON.parse(fs.readFileSync(pkgLockPath, 'utf8'));
+    const defaultPackage = pkgLockJson.packages[''];
 
-    if (depVersion === 'workspace:*') {
-      if (process.env.TK_DIRECTORY) {
-        const name = dependency.split('/')[1];
+    pkgLockJson.name = projectName;
 
-        dependencies[dependency] = `file:${process.env.TK_DIRECTORY}/packages/${name.replace('-', '/')}`;
-      } else {
-        dependencies[dependency] = version;
-      }
+    if (defaultPackage) {
+      defaultPackage.name = projectName;
     }
+
+    fs.writeFileSync(pkgLockPath, JSON.stringify(pkgLockJson, undefined, 2));
+  } catch {
+    // ignore any errors
   }
 }
 

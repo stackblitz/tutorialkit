@@ -44,11 +44,11 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
   }, []);
 
   return (
-    <div className="panel-container bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor">
+    <div className="panel-container transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor">
       <div className="panel-tabs-header overflow-x-hidden">
         <div className="panel-title w-full">
           <ul
-            className="flex h-full border-b border-tk-elements-app-borderColor w-full"
+            className="flex h-full transition-theme border-b border-tk-elements-app-borderColor w-full"
             role="tablist"
             aria-orientation="horizontal"
           >
@@ -59,7 +59,7 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
                 <li key={index}>
                   <button
                     className={classNames(
-                      'group h-full px-4 flex items-center gap-1.5 whitespace-nowrap text-sm position-relative border-r border-tk-elements-panel-headerTab-borderColor',
+                      'group h-full px-4 flex items-center gap-1.5 whitespace-nowrap text-sm position-relative transition-theme border-r border-tk-elements-panel-headerTab-borderColor',
                       {
                         'bg-tk-elements-panel-headerTab-backgroundColor text-tk-elements-panel-headerTab-textColor hover:bg-tk-elements-panel-headerTab-backgroundColorHover hover:text-tk-elements-panel-headerTab-textColorHover hover:border-tk-elements-panel-headerTab-borderColorHover':
                           !selected,

@@ -73,7 +73,7 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
   }
 
   return (
-    <div className={classNames(className, 'bg-tk-elements-fileTree-backgroundColor')}>
+    <div className={classNames(className, 'transition-theme bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
           case 'file': {
@@ -113,7 +113,7 @@ interface FolderProps {
 function Folder({ folder: { depth, name }, collapsed, onClick }: FolderProps) {
   return (
     <NodeButton
-      className="group bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
+      className="group transition-theme bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
       depth={depth}
       iconClasses={classNames(
         'text-tk-elements-fileTree-folder-iconColor group-hover:text-tk-elements-fileTree-folder-iconColorHover',
@@ -138,7 +138,7 @@ interface FileProps {
 function File({ file: { depth, name }, onClick, selected }: FileProps) {
   return (
     <NodeButton
-      className={classNames('group', {
+      className={classNames('group transition-theme', {
         'bg-tk-elements-fileTree-file-backgroundColor hover:bg-tk-elements-fileTree-file-backgroundColorHover text-tk-elements-fileTree-file-textColor hover:text-tk-elements-fileTree-file-textColorHover':
           !selected,
         'bg-tk-elements-fileTree-file-backgroundColorSelected text-tk-elements-fileTree-file-textColorSelected':

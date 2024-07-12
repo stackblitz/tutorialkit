@@ -1,12 +1,17 @@
 {
   "name": "@tutorialkit/components-react",
-  "version": "0.0.1-alpha.23",
+  "version": "0.0.1-alpha.25",
   "description": "TutorialKit's React components",
   "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackblitz/tutorialkit.git",
+    "directory": "packages/components/react"
+  },
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -44,7 +49,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "node ./scripts/build.js"
+    "build": "node ./scripts/build.js",
+    "test": "vitest --passWithNoTests"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.16.3",
@@ -63,6 +69,7 @@
     "@nanostores/react": "0.7.2",
     "@radix-ui/react-accordion": "^1.2.0",
     "@tutorialkit/runtime": "workspace:*",
+    "@tutorialkit/theme": "workspace:*",
     "@webcontainer/api": "1.2.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/addon-web-links": "^0.11.0",
@@ -79,6 +86,7 @@
     "@types/react": "^18.3.3",
     "execa": "^9.2.0",
     "fast-glob": "^3.3.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   }
 }

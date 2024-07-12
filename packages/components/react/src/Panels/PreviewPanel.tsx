@@ -1,5 +1,6 @@
 import { useStore } from '@nanostores/react';
 import type { PreviewInfo, TutorialStore } from '@tutorialkit/runtime';
+import type { I18n } from '@tutorialkit/types';
 import { createElement, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { BootScreen } from '../BootScreen.js';
@@ -10,6 +11,7 @@ interface Props {
   showToggleTerminal?: boolean;
   toggleTerminal?: () => void;
   tutorialStore: TutorialStore;
+  i18n: I18n;
 }
 
 const previewsContainer = globalThis.document ? document.getElementById('previews-container')! : ({} as HTMLElement);
@@ -21,7 +23,7 @@ export type ImperativePreviewHandle = {
 };
 
 export const PreviewPanel = memo(
-  forwardRef<ImperativePreviewHandle, Props>(({ showToggleTerminal, toggleTerminal, tutorialStore }, ref) => {
+  forwardRef<ImperativePreviewHandle, Props>(({ showToggleTerminal, toggleTerminal, i18n, tutorialStore }, ref) => {
     const expectedPreviews = useStore(tutorialStore.previews);
     const iframeRefs = useRef<IFrameRef[]>([]);
 
@@ -61,6 +63,15 @@ export const PreviewPanel = memo(
       [],
     );
 
+    useEffect(() => {
+      // we update the iframes position at max fps if we have any
+      if (hasPreviews) {
+        return requestAnimationFrameLoop(onResize);
+      }
+
+      return undefined;
+    }, [hasPreviews]);
+
     adjustLength(iframeRefs.current, activePreviewsCount, newIframeRef);
     preparePreviewsContainer(activePreviewsCount);
 
@@ -73,11 +84,11 @@ export const PreviewPanel = memo(
 
     if (!hasPreviews) {
       return (
-        <div className="panel-container bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor">
+        <div className="panel-container transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor">
           <div className="panel-header border-b border-tk-elements-app-borderColor justify-between">
             <div className="panel-title">
               <div className="panel-icon i-ph-lightning-duotone"></div>
-              <span className="text-sm">Preparing Environment</span>
+              <span className="text-sm">{i18n.prepareEnvironmentTitleText}</span>
             </div>
             {showToggleTerminal && (
               <button
@@ -86,7 +97,7 @@ export const PreviewPanel = memo(
                 onClick={() => toggleTerminal?.()}
               >
                 <span className="panel-button-icon i-ph-terminal-window-duotone"></span>
-                <span className="text-sm">Toggle Terminal</span>
+                <span className="text-sm">{i18n.toggleTerminalButtonText}</span>
               </button>
             )}
           </div>
@@ -106,7 +117,6 @@ export const PreviewPanel = memo(
         <Panel defaultSize={defaultSize} minSize={minSize}>
           <Preview
             iframe={iframeRefs.current[index]}
-            onResize={onResize}
             preview={preview}
             previewCount={previews.length}
             first={index === 0}
@@ -127,7 +137,6 @@ export const PreviewPanel = memo(
 
 interface PreviewProps {
   iframe: IFrameRef;
-  onResize: () => void;
   preview: PreviewInfo;
   previewCount: number;
   first?: boolean;
@@ -135,7 +144,7 @@ interface PreviewProps {
   toggleTerminal?: () => void;
 }
 
-function Preview({ preview, iframe, onResize, previewCount, first, last, toggleTerminal }: PreviewProps) {
+function Preview({ preview, iframe, previewCount, first, last, toggleTerminal }: PreviewProps) {
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -149,15 +158,6 @@ function Preview({ preview, iframe, onResize, previewCount, first, last, toggleT
       iframe.ref.src = preview.url;
     }
   }, [preview.url, iframe.ref]);
-
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(onResize);
-    resizeObserver.observe(previewContainerRef.current!);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
 
   return (
     <div className="panel-container">
@@ -189,6 +189,21 @@ function Preview({ preview, iframe, onResize, previewCount, first, last, toggleT
       />
     </div>
   );
+}
+
+function requestAnimationFrameLoop(loop: () => void): () => void {
+  let handle: number;
+
+  const callback = () => {
+    loop();
+    handle = requestAnimationFrame(callback);
+  };
+
+  handle = requestAnimationFrame(callback);
+
+  return () => {
+    cancelAnimationFrame(handle);
+  };
 }
 
 function previewTitle(preview: PreviewInfo, previewCount: number) {

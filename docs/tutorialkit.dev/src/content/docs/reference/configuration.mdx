@@ -33,9 +33,53 @@ The title of the part, chapter, or lesson.
 Lets you customize the URL segment which is `/:partSlug/:chapterSlug/:lessonSlug`
 <PropertyTable type="string" />
 
+##### `i18n`
+Lets you define alternative texts used in the UI. This is useful for localization.
+<PropertyTable inherited type="I18nText" />
+
+The `I18nText` type has the following shape:
+
+```ts
+type I18nText = {
+  /**
+   * Template for formatting a part. Variables: ${index} and ${title}.
+   *
+   * @default 'Part ${index}: ${title}'
+   */
+  partTemplate?: string,
+
+  /**
+   * Text of the edit page link.
+   *
+   * @default 'Edit this page'
+   */
+  editPageText?: string
+
+  /**
+   * Text shown when there are no previews or steps to show in the prepare environment section.
+   *
+   * @default 'Start WebContainer'
+   */
+  startWebContainerText?: string,
+
+  /**
+   * Text shown on the call to action button to start webcontainer when boot was blocked
+   * due to memory restrictions.
+   *
+   * @default 'No preview to run nor steps to show'
+   */
+  noPreviewNorStepsText?: string,
+}
+
+```
+
 ##### `focus`
 Defines which file should be opened in the [code editor](/guides/ui/#code-editor) by default when lesson loads.
 <PropertyTable inherited type="string" />
+
+##### `editor`
+Configure whether or not the editor should be rendered. If an object is provided with `fileTree: false`, only the file tree is hidden.
+<PropertyTable inherited type="boolean | { fileTree: false }" />
 
 ##### `previews`
 Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used.
@@ -132,4 +176,31 @@ Navigating to a lesson that specifies `autoReload` will always reload the previe
 ##### `template`
 Specified which folder from the `src/templates/` directory should be used as the basis for the code. See the "[Code templates](/guides/creating-content/#code-templates)" guide for a detailed explainer.
 <PropertyTable inherited type="string" />
+
+#### `editPageLink`
+Display a link in lesson for editing the page content.
+The value is a URL pattern where `${path}` is replaced with the lesson's location relative to the `src/content/tutorial`.
+
+<PropertyTable inherited type="string|false" />
+
+```yaml
+editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/packages/template/src/content/tutorial/${path}
+```
+
+The inherited value can be disabled in specific parts using `false`.
+
+```yaml
+editPageLink: false
+```
+
+:::tip
+Note that Github will try to automatically render the `.md` files when linked to.
+You can instruct Github to show the source code instead by adding `plain=1` query parameter.
+
+```diff
+-editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/packages/template/src/content/tutorial/${path}
++editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/packages/template/src/content/tutorial/${path}?plain=1
+```
+
+:::
 

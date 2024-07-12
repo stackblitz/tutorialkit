@@ -1,0 +1,26 @@
+name: Setup and build
+description: Generic setup action
+inputs:
+  node-version:
+    required: false
+    description: Node version for setup-node
+    default: 20.x
+
+runs:
+  using: composite
+
+  steps:
+    - name: Set node version to ${{ inputs.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Install & Build
+      shell: bash
+      run: |
+        pnpm install
+        pnpm build

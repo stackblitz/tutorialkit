@@ -1,17 +1,18 @@
-import { TutorialStore } from '@tutorialkit/runtime';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
+import { TutorialStore } from '@tutorialkit/runtime';
+import type { I18n } from '@tutorialkit/types';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import type {
   OnChangeCallback as OnEditorChange,
   OnScrollCallback as OnEditorScroll,
 } from '../core/CodeMirrorEditor/index.js';
-import resizePanelStyles from '../styles/resize-panel.module.css';
 import type { Theme } from '../core/types.js';
+import resizePanelStyles from '../styles/resize-panel.module.css';
+import { classNames } from '../utils/classnames.js';
 import { EditorPanel } from './EditorPanel.js';
 import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';
-import { classNames } from '../utils/classnames.js';
 
 const DEFAULT_TERMINAL_SIZE = 25;
 
@@ -146,7 +147,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         maxSize={hasEditor ? 100 : 0}
         collapsible={!hasEditor}
         ref={editorPanelRef}
-        className="bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor"
+        className="transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor"
       >
         <EditorPanel
           id={tutorialStore.ref}
@@ -154,6 +155,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
           showFileTree={fileTree}
           editorDocument={currentDocument}
           files={lesson.files[1]}
+          i18n={lesson.data.i18n as I18n}
           hideRoot={lesson.data.hideRoot}
           helpAction={helpAction}
           onHelpClick={onHelpClick}
@@ -176,11 +178,12 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         collapsible={!hasPreviews}
         ref={previewPanelRef}
         className={classNames({
-          'border-t border-tk-elements-app-borderColor': hasEditor,
+          'transition-theme border-t border-tk-elements-app-borderColor': hasEditor,
         })}
       >
         <PreviewPanel
           tutorialStore={tutorialStore}
+          i18n={lesson.data.i18n as I18n}
           ref={previewRef}
           showToggleTerminal={!hideTerminalPanel}
           toggleTerminal={toggleTerminal}
@@ -210,9 +213,12 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         onExpand={() => {
           terminalExpanded.current = true;
         }}
-        className={classNames('bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor', {
-          'border-t border-tk-elements-app-borderColor': hasPreviews,
-        })}
+        className={classNames(
+          'transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor',
+          {
+            'border-t border-tk-elements-app-borderColor': hasPreviews,
+          },
+        )}
       >
         <TerminalPanel tutorialStore={tutorialStore} theme={theme} />
       </Panel>

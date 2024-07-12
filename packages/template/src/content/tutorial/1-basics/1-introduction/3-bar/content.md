@@ -4,6 +4,8 @@ title: Bar
 slug: bar
 focus: /src/index.html
 previews: [1]
+i18n:
+  startWebContainerText: 'Foobar'
 ---
 
 # Bar

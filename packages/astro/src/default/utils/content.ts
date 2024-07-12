@@ -7,11 +7,13 @@ import type {
   Tutorial,
   TutorialSchema,
 } from '@tutorialkit/types';
-import { folderPathToFilesRef } from '@tutorialkit/types';
+import { folderPathToFilesRef, interpolateString } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
 import { IGNORED_FILES } from './constants';
+import { DEFAULT_LOCALIZATION } from './content/default-localization';
+import { squash } from './content/squash.js';
 import { logger } from './logger';
 import { joinPaths } from './url';
 
@@ -38,6 +40,7 @@ export async function getTutorial(): Promise<Tutorial> {
 
       // default template if not specified
       tutorialMetaData.template ??= 'default';
+      tutorialMetaData.i18n = Object.assign({ ...DEFAULT_LOCALIZATION }, tutorialMetaData.i18n);
 
       _tutorial.logoLink = data.logoLink;
     } else if (type === 'part') {
@@ -81,6 +84,7 @@ export async function getTutorial(): Promise<Tutorial> {
       const lesson: Lesson = {
         data,
         id: lessonId,
+        filepath: id,
         order: -1,
         part: {
           id: partId,
@@ -239,11 +243,22 @@ export async function getTutorial(): Promise<Tutorial> {
     const chapterMetadata = _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].data;
 
     lesson.data = {
-      ...pick(
-        [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
-        ['mainCommand', 'prepareCommands', 'previews', 'autoReload', 'template', 'terminal', 'editor', 'focus'],
-      ),
       ...lesson.data,
+      ...squash(
+        [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
+        [
+          'mainCommand',
+          'prepareCommands',
+          'previews',
+          'autoReload',
+          'template',
+          'terminal',
+          'editor',
+          'focus',
+          'i18n',
+          'editPageLink',
+        ],
+      ),
     };
 
     if (prevLesson) {
@@ -265,26 +280,13 @@ export async function getTutorial(): Promise<Tutorial> {
         href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${nextLesson.slug}`),
       };
     }
-  }
 
-  // console.log(inspect(_tutorial, undefined, Infinity, true));
-
-  return _tutorial;
-}
-
-function pick<T extends Record<any, any>>(objects: (T | undefined)[], properties: (keyof T)[]) {
-  const newObject = {} as any;
-
-  for (const property of properties) {
-    for (const object of objects) {
-      if (object?.hasOwnProperty(property)) {
-        newObject[property] = object[property];
-        break;
-      }
+    if (lesson.data.editPageLink && typeof lesson.data.editPageLink === 'string') {
+      lesson.editPageLink = interpolateString(lesson.data.editPageLink, { path: lesson.filepath });
     }
   }
 
-  return newObject;
+  return _tutorial;
 }
 
 function getOrder(order: string[] | undefined, fallbackSourceForOrder: Record<string, any>): string[] {

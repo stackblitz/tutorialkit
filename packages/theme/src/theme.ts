@@ -148,6 +148,10 @@ export const theme = {
           textColor: 'var(--tk-elements-content-textColor)',
           headingTextColor: 'var(--tk-elements-content-headingTextColor)',
         },
+        pageLoadingIndicator: {
+          backgroundColor: 'var(--tk-elements-pageLoadingIndicator-backgroundColor)',
+          shadowColor: 'var(--tk-elements-pageLoadingIndicator-shadowColor)',
+        },
         topBar: {
           backgroundColor: 'var(--tk-elements-topBar-backgroundColor)',
           iconButton: {
@@ -248,6 +252,13 @@ export const theme = {
           iconColor: 'var(--tk-elements-navCard-iconColor)',
           iconColorHover: 'var(--tk-elements-navCard-iconColorHover)',
         },
+        editPageLink: {
+          textColor: 'var(--tk-elements-editPageLink-textColor)',
+          textColorHover: 'var(--tk-elements-editPageLink-textColorHover)',
+          iconColor: 'var(--tk-elements-editPageLink-iconColor)',
+          iconColorHover: 'var(--tk-elements-editPageLink-iconColorHover)',
+          borderColor: 'var(--tk-elements-editPageLink-borderColor)',
+        },
         breadcrumbs: {
           navButton: {
             iconColor: 'var(--tk-elements-breadcrumbs-navButton-iconColor)',
@@ -286,6 +297,16 @@ export const theme = {
             lessonTextColor: 'var(--tk-elements-breadcrumbs-dropdown-lessonTextColor)',
             lessonTextColorSelected: 'var(--tk-elements-breadcrumbs-dropdown-lessonTextColorSelected)',
             lessonTextColorHover: 'var(--tk-elements-breadcrumbs-dropdown-lessonTextColorHover)',
+          },
+        },
+        bootScreen: {
+          primaryButton: {
+            backgroundColor: 'var(--tk-elements-bootScreen-primaryButton-backgroundColor)',
+            backgroundColorHover: 'var(--tk-elements-bootScreen-primaryButton-backgroundColorHover)',
+            textColor: 'var(--tk-elements-bootScreen-primaryButton-textColor)',
+            textColorHover: 'var(--tk-elements-bootScreen-primaryButton-textColorHover)',
+            iconColor: 'var(--tk-elements-bootScreen-primaryButton-iconColor)',
+            iconColorHover: 'var(--tk-elements-bootScreen-primaryButton-iconColorHover)',
           },
         },
         status: {

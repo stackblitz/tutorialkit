@@ -1,0 +1,42 @@
+name: Prepare Release PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish, e.g. 0.0.1'
+        required: true
+        default: '0.0.1'
+        type: string
+
+jobs:
+  prepare_release:
+    name: Prepare Release PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
+      - name: Bump versions
+        run: >
+          pnpm --recursive
+          --filter "@tutorialkit/*"
+          exec pnpm version --no-git-tag-version --allow-same-version ${{ inputs.version }}
+
+      - name: Generage changelog
+        run: pnpm run changelog
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c
+        with:
+          # Note: `publish-release.yaml` checks explicitly for this commit message
+          commit-message: 'chore: release `@tutorialkit` packages v${{ inputs.version }}'
+          title: 'chore: release `@tutorialkit` packages v${{ inputs.version }}'
+          body: 'Bump `@tutorialkit` packages to version ${{ inputs.version }} and generate changelogs.'
+          reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
+          branch: chore/release-${{ inputs.version }}
+          token: ${{ secrets.GITOPS_REPO_PAT }}

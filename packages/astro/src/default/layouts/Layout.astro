@@ -11,7 +11,7 @@ const baseURL = import.meta.env.BASE_URL;
 ---
 
 <!doctype html>
-<html lang="en" transition:animate="none" class="h-full">
+<html lang="en" transition:animate="none" class="h-full overflow-hidden">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="TutorialKit" />
@@ -24,8 +24,25 @@ const baseURL = import.meta.env.BASE_URL;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <ViewTransitions />
+    <script is:inline>
+      setTutorialKitTheme();
+
+      function setTutorialKitTheme() {
+        let theme = localStorage.getItem('tk_theme');
+
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        document.querySelector('html')?.setAttribute('data-theme', theme);
+      }
+    </script>
     <script>
       import * as builtInSwap from 'node_modules/astro/dist/transitions/swap-functions';
+
+      declare global {
+        function setTutorialKitTheme(): void;
+      }
 
       document.addEventListener('astro:before-swap', (event) => {
         event.swap = () => {
@@ -33,6 +50,8 @@ const baseURL = import.meta.env.BASE_URL;
 
           builtInSwap.deselectScripts(newDocument);
           builtInSwap.swapRootAttributes(newDocument);
+
+          setTutorialKitTheme();
 
           /**
            * Keep the dynamically injected style sheet from Codemirror on all transitions.
@@ -51,6 +70,9 @@ const baseURL = import.meta.env.BASE_URL;
 
           if (newMain && oldMain) {
             builtInSwap.swapBodyElement(newMain, oldMain);
+
+            // delete extraneous route announcer
+            document.querySelector('.astro-route-announcer')?.remove();
           } else {
             // fallback to built-in body swap semantics
             builtInSwap.swapBodyElement(newDocument.body, document.body);
@@ -58,25 +80,8 @@ const baseURL = import.meta.env.BASE_URL;
         };
       });
     </script>
-    <script>
-      setTheme();
-
-      document.addEventListener('astro:after-swap', () => {
-        setTheme();
-      });
-
-      function setTheme() {
-        let theme = localStorage.getItem('tk_theme');
-
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-
-        document.querySelector('html')?.setAttribute('data-theme', theme);
-      }
-    </script>
   </head>
-  <body class="h-full text-black">
+  <body class="h-full text-black relative overflow-hidden">
     <slot />
   </body>
 </html>

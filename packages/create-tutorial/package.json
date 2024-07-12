@@ -1,12 +1,17 @@
 {
   "name": "create-tutorial",
-  "version": "0.0.1-alpha.23",
+  "version": "0.0.1-alpha.25",
   "description": "Interactive tutorials powered by WebContainer API",
   "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackblitz/tutorialkit.git",
+    "directory": "packages/create-tutorial"
+  },
   "bin": {
     "create-tutorial": "./dist/index.js"
   },

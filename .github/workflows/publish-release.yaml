@@ -1,0 +1,109 @@
+name: Publish Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish_release:
+    name: Publish Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    # Note: `prepare-release.yaml` sets this commit message
+    if: ${{ contains(github.event.head_commit.message, 'release `@tutorialkit` packages') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
+      # sets steps.resolve-release-version.outputs.version
+      - uses: ./.github/actions/resolve-release-version
+        id: resolve-release-version
+
+      - name: Publish to npm
+        run: >
+          pnpm --recursive
+          --filter "@tutorialkit/*"
+          exec pnpm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create and push git tag
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git tag ${{ steps.resolve-release-version.outputs.version }}
+          git push origin ${{ steps.resolve-release-version.outputs.version }}
+
+  prepare_cli_release:
+    name: Prepare Release for CLI
+    needs: [publish_release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
+      # sets steps.resolve-release-version.outputs.version
+      - uses: ./.github/actions/resolve-release-version
+        id: resolve-release-version
+
+      - name: Bump version
+        run: >
+          pnpm --recursive
+          --filter tutorialkit
+          --filter create-tutorial
+          exec npm version --no-git-tag-version --allow-same-version ${{ steps.resolve-release-version.outputs.version }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c
+        with:
+          # Note: `publish-release.yaml` checks explicitly for this commit message
+          commit-message: 'chore: release TutorialKit CLI v${{ steps.resolve-release-version.outputs.version }}'
+          title: 'chore: release TutorialKit CLI v${{ steps.resolve-release-version.outputs.version }}'
+          body: 'Bump TutorialKit CLI to version ${{ steps.resolve-release-version.outputs.version }}.'
+          reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
+          branch: chore/release-cli-${{ steps.resolve-release-version.outputs.version }}
+          token: ${{ secrets.GITOPS_REPO_PAT }}
+
+  publish_release_CLI:
+    name: Publish Release CLI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    # Note: `prepare-release.yaml` sets this commit message
+    if: ${{ contains(github.event.head_commit.message, 'release TutorialKit CLI') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
+      - name: Update template's versions
+        working-directory: ./packages/cli
+        run: pnpm build-release
+
+      - name: Integration Tests
+        working-directory: ./integration
+        run: pnpm test
+
+      - name: Publish to npm
+        run: >
+          pnpm --recursive
+          --filter tutorialkit
+          --filter create-tutorial
+          exec pnpm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

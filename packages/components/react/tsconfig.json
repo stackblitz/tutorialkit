@@ -9,5 +9,5 @@
     "rootDir": "src"
   },
   "include": ["src"],
-  "references": [{ "path": "../../runtime" }, { "path": "../../types" }]
+  "references": [{ "path": "../../runtime" }, { "path": "../../theme" }, { "path": "../../types" }]
 }

@@ -1,12 +1,17 @@
 {
   "name": "@tutorialkit/runtime",
-  "version": "0.0.1-alpha.23",
+  "version": "0.0.1-alpha.25",
   "description": "TutorialKit runtime",
   "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackblitz/tutorialkit.git",
+    "directory": "packages/runtime"
+  },
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",

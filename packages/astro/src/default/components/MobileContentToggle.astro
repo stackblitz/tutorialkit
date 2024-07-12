@@ -1,0 +1,44 @@
+<div class="h-12 sm:hidden"></div>
+<view-toggle
+  class="fixed sm:hidden h-12 bottom-0 w-full transition-theme bg-tk-elements-app-backgroundColor border-t border-tk-elements-app-borderColor flex justify-center items-center z-60 text-tk-elements-app-textColor"
+>
+  <button>Tutorial</button>
+  <button class="rounded-full w-8 h-4 p-0.5 bg-gray-4 dark:bg-gray-6 mx-2 relative">
+    <span class="inline-block transition-all absolute top-0.5 left-0.5 rounded-full bg-white dark:bg-gray-2 w-3 h-3"
+    ></span>
+  </button>
+  <button>Editor</button>
+</view-toggle>
+<script>
+  import { viewStore, type View } from '../stores/view-store';
+
+  class ViewToggle extends HTMLElement {
+    constructor() {
+      super();
+
+      const [tutorialBtn, toggleButton, editorButton] = this.querySelectorAll(':scope > button' as 'button');
+
+      const toggle = toggleButton.querySelector('span')!;
+
+      tutorialBtn.onclick = () => setView('content');
+      editorButton.onclick = () => setView('editor');
+      toggleButton.onclick = () => setView(viewStore.get() === 'content' ? 'editor' : 'content');
+
+      setView(viewStore.get());
+
+      function setView(view: View) {
+        viewStore.set(view);
+
+        if (view === 'editor') {
+          toggle.classList.remove('left-0.5');
+          toggle.classList.add('left-[calc(100%-0.75rem-0.125rem)]');
+        } else {
+          toggle.classList.add('left-0.5');
+          toggle.classList.remove('left-[calc(100%-0.75rem-0.125rem)]');
+        }
+      }
+    }
+  }
+
+  customElements.define('view-toggle', ViewToggle);
+</script>

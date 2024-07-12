@@ -8,13 +8,28 @@ interface Props {
 }
 
 const { lesson } = Astro.props;
-const { Markdown, prev, next } = lesson;
+const { Markdown, editPageLink, prev, next } = lesson;
 ---
 
-<div class="h-full overflow-auto scrollbar-transparent p-8">
+<div class="h-full overflow-auto scrollbar-transparent p-6 sm:p-8">
   <div class="markdown-content text-tk-elements-content-textColor">
     <Markdown />
   </div>
+
+  {
+    editPageLink && (
+      <div class="pb-4 mt-8 border-b border-tk-elements-editPageLink-borderColor">
+        <a
+          href={editPageLink}
+          class="inline-flex flex-items-center text-tk-elements-editPageLink-textColor hover:text-tk-elements-editPageLink-textColorHover hover:underline"
+        >
+          <span class="icon i-ph-note-pencil pointer-events-none h-5 w-5 mr-2 text-tk-elements-editPageLink-iconColor group-hover:text-tk-elements-editPageLink-iconColorHover" />
+          <span>{lesson.data.i18n!.editPageText}</span>
+        </a>
+      </div>
+    )
+  }
+
   <div class="grid grid-cols-[1fr_1fr] gap-4 mt-8">
     <div class="flex">
       {prev && <NavCard lesson={prev} type="prev" />}

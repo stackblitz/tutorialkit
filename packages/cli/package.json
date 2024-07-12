@@ -1,12 +1,17 @@
 {
   "name": "tutorialkit",
-  "version": "0.0.1-alpha.23",
+  "version": "0.0.1-alpha.25",
   "description": "Interactive tutorials powered by WebContainer API",
   "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
   "homepage": "https://github.com/stackblitz/tutorialkit",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stackblitz/tutorialkit.git",
+    "directory": "packages/cli"
+  },
   "bin": {
     "tutorialkit": "dist/index.js"
   },
@@ -16,8 +21,7 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "prepack": "node scripts/pre-pack.js",
-    "postpack": "node scripts/cleanup.js",
+    "build-release": "node scripts/build-release.js",
     "test": "vitest --testTimeout=300000"
   },
   "files": [
@@ -32,9 +36,11 @@
     "@babel/types": "7.24.5",
     "@clack/prompts": "^0.7.0",
     "chalk": "^5.3.0",
+    "detect-indent": "7.0.1",
     "execa": "^9.2.0",
     "ignore": "^5.3.1",
     "lookpath": "^1.2.2",
+    "which-pm": "2.2.0",
     "yargs-parser": "^21.1.1"
   },
   "devDependencies": {
@@ -46,6 +52,7 @@
     "esbuild": "^0.20.2",
     "esbuild-node-externals": "^1.13.1",
     "fs-extra": "^11.2.0",
+    "tempy": "^3.1.0",
     "vitest": "^1.6.0"
   },
   "engines": {

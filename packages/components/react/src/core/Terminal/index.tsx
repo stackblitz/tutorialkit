@@ -3,6 +3,7 @@ import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import '../../styles/terminal.css';
 import { getTerminalTheme } from './theme.js';
 
 export interface TerminalRef {

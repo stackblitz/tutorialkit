@@ -1,3 +1,4 @@
+import type { I18nSchema } from '../schemas/i18n.js';
 import type { ChapterSchema, LessonSchema, PartSchema } from '../schemas/index.js';
 
 export type * from './nav.js';
@@ -40,6 +41,8 @@ export interface Lesson<T = unknown> {
   part: { id: string; title: string };
   chapter: { id: string; title: string };
   slug: string;
+  filepath: string;
+  editPageLink?: string;
   files: FilesRefList;
   solution: FilesRefList;
   next?: LessonLink;
@@ -48,6 +51,8 @@ export interface Lesson<T = unknown> {
   // property available when content is generated for an astro project
   Markdown: T;
 }
+
+export type I18n = Required<NonNullable<I18nSchema>>;
 
 export interface Tutorial {
   logoLink?: string;
