@@ -44,6 +44,11 @@ export async function getTutorial(): Promise<Tutorial> {
           partTemplate: 'Part ${index}: ${title}',
           noPreviewNorStepsText: 'No preview to run nor steps to show',
           startWebContainerText: 'Run this tutorial',
+          filesTitleText: 'Files',
+          prepareEnvironmentTitleText: 'Preparing Environment',
+          toggleTerminalButtonText: 'Toggle Terminal',
+          solveButtonText: 'Solve',
+          resetButtonText: 'Reset',
         } satisfies Lesson['data']['i18n'],
         tutorialMetaData.i18n,
       );

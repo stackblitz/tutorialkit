@@ -1,5 +1,6 @@
 import { useStore } from '@nanostores/react';
 import type { PreviewInfo, TutorialStore } from '@tutorialkit/runtime';
+import type { I18n } from '@tutorialkit/types';
 import { createElement, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { BootScreen } from '../BootScreen.js';
@@ -10,6 +11,7 @@ interface Props {
   showToggleTerminal?: boolean;
   toggleTerminal?: () => void;
   tutorialStore: TutorialStore;
+  i18n: I18n;
 }
 
 const previewsContainer = globalThis.document ? document.getElementById('previews-container')! : ({} as HTMLElement);
@@ -21,7 +23,7 @@ export type ImperativePreviewHandle = {
 };
 
 export const PreviewPanel = memo(
-  forwardRef<ImperativePreviewHandle, Props>(({ showToggleTerminal, toggleTerminal, tutorialStore }, ref) => {
+  forwardRef<ImperativePreviewHandle, Props>(({ showToggleTerminal, toggleTerminal, i18n, tutorialStore }, ref) => {
     const expectedPreviews = useStore(tutorialStore.previews);
     const iframeRefs = useRef<IFrameRef[]>([]);
 
@@ -86,7 +88,7 @@ export const PreviewPanel = memo(
           <div className="panel-header border-b border-tk-elements-app-borderColor justify-between">
             <div className="panel-title">
               <div className="panel-icon i-ph-lightning-duotone"></div>
-              <span className="text-sm">Preparing Environment</span>
+              <span className="text-sm">{i18n.prepareEnvironmentTitleText}</span>
             </div>
             {showToggleTerminal && (
               <button
@@ -95,7 +97,7 @@ export const PreviewPanel = memo(
                 onClick={() => toggleTerminal?.()}
               >
                 <span className="panel-button-icon i-ph-terminal-window-duotone"></span>
-                <span className="text-sm">Toggle Terminal</span>
+                <span className="text-sm">{i18n.toggleTerminalButtonText}</span>
               </button>
             )}
           </div>

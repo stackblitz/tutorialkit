@@ -1,3 +1,4 @@
+import type { I18n } from '@tutorialkit/types';
 import { useEffect, useRef } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import {
@@ -7,8 +8,8 @@ import {
   type OnScrollCallback as OnEditorScroll,
 } from '../core/CodeMirrorEditor/index.js';
 import { FileTree } from '../core/FileTree.js';
-import resizePanelStyles from '../styles/resize-panel.module.css';
 import type { Theme } from '../core/types.js';
+import resizePanelStyles from '../styles/resize-panel.module.css';
 import { isMobile } from '../utils/mobile.js';
 
 const DEFAULT_FILE_TREE_SIZE = 25;
@@ -17,6 +18,7 @@ interface Props {
   theme: Theme;
   id: unknown;
   files: string[];
+  i18n: I18n;
   hideRoot?: boolean;
   fileTreeScope?: string;
   showFileTree?: boolean;
@@ -33,6 +35,7 @@ export function EditorPanel({
   theme,
   id,
   files,
+  i18n,
   hideRoot,
   fileTreeScope,
   showFileTree = true,
@@ -68,7 +71,7 @@ export function EditorPanel({
         <div className="panel-header border-r border-b border-tk-elements-app-borderColor">
           <div className="panel-title">
             <div className="panel-icon i-ph-tree-structure-duotone shrink-0"></div>
-            <span className="text-sm">Files</span>
+            <span className="text-sm">{i18n.filesTitleText}</span>
           </div>
         </div>
         <FileTree
@@ -86,7 +89,7 @@ export function EditorPanel({
         hitAreaMargins={{ fine: 8, coarse: 8 }}
       />
       <Panel className="flex flex-col" defaultSize={100} minSize={10}>
-        <FileTab editorDocument={editorDocument} onHelpClick={onHelpClick} helpAction={helpAction} />
+        <FileTab i18n={i18n} editorDocument={editorDocument} onHelpClick={onHelpClick} helpAction={helpAction} />
         <div className="h-full flex-1 overflow-hidden">
           <CodeMirrorEditor
             className="h-full"
@@ -104,12 +107,13 @@ export function EditorPanel({
 }
 
 interface FileTabProps {
+  i18n: I18n;
   editorDocument: EditorDocument | undefined;
   helpAction?: 'reset' | 'solve';
   onHelpClick?: () => void;
 }
 
-function FileTab({ editorDocument, helpAction, onHelpClick }: FileTabProps) {
+function FileTab({ i18n, editorDocument, helpAction, onHelpClick }: FileTabProps) {
   const filePath = editorDocument?.filePath;
   const fileName = filePath?.split('/').at(-1) ?? '';
   const icon = fileName ? getFileIcon(fileName) : '';
@@ -123,9 +127,9 @@ function FileTab({ editorDocument, helpAction, onHelpClick }: FileTabProps) {
       {!!helpAction && (
         <button onClick={onHelpClick} className="panel-button px-2 py-0.5 -mr-1 -my-1">
           {helpAction === 'solve' && <div className="i-ph-lightbulb-duotone text-lg" />}
-          {helpAction === 'solve' && 'Solve'}
+          {helpAction === 'solve' && i18n.solveButtonText}
           {helpAction === 'reset' && <div className="i-ph-clock-counter-clockwise-duotone" />}
-          {helpAction === 'reset' && 'Reset'}
+          {helpAction === 'reset' && i18n.resetButtonText}
         </button>
       )}
     </div>
