@@ -13,7 +13,7 @@ export const i18nSchema = z.object({
    *
    * @default 'Edit this page'
    */
-  editPage: z.string().optional(),
+  editPageText: z.string().optional(),
 
   /**
    * Text shown when there are no previews or steps to show in the prepare environment section.

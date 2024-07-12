@@ -6,4 +6,3 @@ export * from './Panels/TerminalPanel.js';
 export * from './Panels/WorkspacePanel.js';
 export type * from './core/types.js';
 export * from './utils/classnames.js';
-export * from './utils/interpolation.js';

@@ -50,7 +50,7 @@
   ],
   "scripts": {
     "build": "node ./scripts/build.js",
-    "test": "vitest"
+    "test": "vitest --passWithNoTests"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.16.3",

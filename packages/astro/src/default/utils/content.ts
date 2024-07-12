@@ -7,7 +7,7 @@ import type {
   Tutorial,
   TutorialSchema,
 } from '@tutorialkit/types';
-import { folderPathToFilesRef } from '@tutorialkit/types';
+import { folderPathToFilesRef, interpolateString } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
@@ -44,7 +44,7 @@ export async function getTutorial(): Promise<Tutorial> {
           partTemplate: 'Part ${index}: ${title}',
           noPreviewNorStepsText: 'No preview to run nor steps to show',
           startWebContainerText: 'Run this tutorial',
-          editPage: 'Edit this page',
+          editPageText: 'Edit this page',
         } satisfies Lesson['data']['i18n'],
         tutorialMetaData.i18n,
       );
@@ -289,7 +289,7 @@ export async function getTutorial(): Promise<Tutorial> {
     }
 
     if (lesson.data.editPageLink && typeof lesson.data.editPageLink === 'string') {
-      lesson.editPageLink = lesson.data.editPageLink.replace(':path', lesson.filepath);
+      lesson.editPageLink = interpolateString(lesson.data.editPageLink, { path: lesson.filepath });
     }
   }
 
