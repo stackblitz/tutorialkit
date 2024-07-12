@@ -252,6 +252,13 @@ export const theme = {
           iconColor: 'var(--tk-elements-navCard-iconColor)',
           iconColorHover: 'var(--tk-elements-navCard-iconColorHover)',
         },
+        editPageLink: {
+          textColor: 'var(--tk-elements-editPageLink-textColor)',
+          textColorHover: 'var(--tk-elements-editPageLink-textColorHover)',
+          iconColor: 'var(--tk-elements-editPageLink-iconColor)',
+          iconColorHover: 'var(--tk-elements-editPageLink-iconColorHover)',
+          borderColor: 'var(--tk-elements-editPageLink-borderColor)',
+        },
         breadcrumbs: {
           navButton: {
             iconColor: 'var(--tk-elements-breadcrumbs-navButton-iconColor)',

@@ -151,6 +151,15 @@ export const webcontainerSchema = commandsSchema.extend({
     }),
   ]),
   i18n: i18nSchema.optional(),
+  editPageLink: z
+    .union([
+      // pattern for creating the URL
+      z.string(),
+
+      // `false` for disabling the edit link
+      z.boolean(),
+    ])
+    .optional(),
 });
 
 export const baseSchema = webcontainerSchema.extend({

@@ -41,6 +41,8 @@ export interface Lesson<T = unknown> {
   part: { id: string; title: string };
   chapter: { id: string; title: string };
   slug: string;
+  filepath: string;
+  editPageLink?: string;
   files: FilesRefList;
   solution: FilesRefList;
   next?: LessonLink;
