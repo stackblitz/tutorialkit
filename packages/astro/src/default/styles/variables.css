@@ -245,6 +245,13 @@
   --tk-elements-navCard-iconColor: var(--tk-elements-app-textColor);
   --tk-elements-navCard-iconColorHover: var(--tk-text-accent);
 
+  /* Edit Page Link */
+  --tk-elements-editPageLink-textColor: var(--tk-elements-app-textColor);
+  --tk-elements-editPageLink-textColorHover: var(--tk-text-active);
+  --tk-elements-editPageLink-iconColor: var(--tk-elements-app-textColor);
+  --tk-elements-editPageLink-iconColorHover: var(--tk-text-accent);
+  --tk-elements-editPageLink-borderColor: var(--tk-border-secondary);
+
   /* Breadcrumb > Nav Button */
   --tk-elements-breadcrumbs-navButton-iconColor: var(--tk-text-secondary);
   --tk-elements-breadcrumbs-navButton-iconColorHover: var(--tk-text-active);

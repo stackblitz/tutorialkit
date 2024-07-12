@@ -7,7 +7,7 @@ import type {
   Tutorial,
   TutorialSchema,
 } from '@tutorialkit/types';
-import { folderPathToFilesRef } from '@tutorialkit/types';
+import { folderPathToFilesRef, interpolateString } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
 import path from 'node:path';
@@ -44,6 +44,7 @@ export async function getTutorial(): Promise<Tutorial> {
           partTemplate: 'Part ${index}: ${title}',
           noPreviewNorStepsText: 'No preview to run nor steps to show',
           startWebContainerText: 'Run this tutorial',
+          editPageText: 'Edit this page',
         } satisfies Lesson['data']['i18n'],
         tutorialMetaData.i18n,
       );
@@ -90,6 +91,7 @@ export async function getTutorial(): Promise<Tutorial> {
       const lesson: Lesson = {
         data,
         id: lessonId,
+        filepath: id,
         order: -1,
         part: {
           id: partId,
@@ -251,7 +253,18 @@ export async function getTutorial(): Promise<Tutorial> {
       ...lesson.data,
       ...squash(
         [lesson.data, chapterMetadata, partMetadata, tutorialMetaData],
-        ['mainCommand', 'prepareCommands', 'previews', 'autoReload', 'template', 'terminal', 'editor', 'focus', 'i18n'],
+        [
+          'mainCommand',
+          'prepareCommands',
+          'previews',
+          'autoReload',
+          'template',
+          'terminal',
+          'editor',
+          'focus',
+          'i18n',
+          'editPageLink',
+        ],
       ),
     };
 
@@ -274,9 +287,11 @@ export async function getTutorial(): Promise<Tutorial> {
         href: joinPaths(baseURL, `/${partSlug}/${chapterSlug}/${nextLesson.slug}`),
       };
     }
-  }
 
-  // console.log(inspect(_tutorial, undefined, Infinity, true));
+    if (lesson.data.editPageLink && typeof lesson.data.editPageLink === 'string') {
+      lesson.editPageLink = interpolateString(lesson.data.editPageLink, { path: lesson.filepath });
+    }
+  }
 
   return _tutorial;
 }

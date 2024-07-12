@@ -9,6 +9,13 @@ export const i18nSchema = z.object({
   partTemplate: z.string().optional(),
 
   /**
+   * Text of the edit page link.
+   *
+   * @default 'Edit this page'
+   */
+  editPageText: z.string().optional(),
+
+  /**
    * Text shown when there are no previews or steps to show in the prepare environment section.
    *
    * @default 'Start WebContainer'
