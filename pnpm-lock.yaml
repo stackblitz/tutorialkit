@@ -197,9 +197,6 @@ importers:
       esbuild:
         specifier: ^0.21.5
         version: 0.21.5
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
