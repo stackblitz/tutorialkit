@@ -1,5 +1,5 @@
 {
-  "name": "tutorialkit",
+  "name": "tutorialkit-vscode",
   "displayName": "TutorialKit",
   "description": "TutorialKit support in VS Code",
   "icon": "resources/tutorialkit-icon.png",
@@ -106,16 +106,14 @@
   },
   "scripts": {
     "__esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-    "__dev": "npm run esbuild-base -- --sourcemap --watch",
-    "__vscode:prepublish": "npm run esbuild-base -- --minify",
+    "__dev": "pnpm run esbuild-base -- --sourcemap --watch",
+    "__vscode:prepublish": "pnpm run esbuild-base -- --minify",
     "__build": "vsce package",
-    "compile": "npm run check-types && node esbuild.js",
+    "compile": "pnpm run check-types && node build.mjs",
     "check-types": "tsc --noEmit",
-    "watch": "npm-run-all -p watch:*",
-    "watch:esbuild": "node esbuild.js --watch",
-    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "vscode:prepublish": "npm run package",
-    "package": "npm run check-types && node esbuild.js --production"
+    "dev": "node build.mjs --watch",
+    "vscode:prepublish": "pnpm run package",
+    "package": "pnpm run check-types && node build.mjs --production"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
@@ -126,11 +124,11 @@
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.0",
     "esbuild": "^0.21.5",
+    "execa": "^9.2.0",
     "typescript": "^5.4.5"
   },
   "dependencies": {
     "case-anything": "^3.1.0",
-    "gray-matter": "^4.0.3",
-    "npm-run-all": "^4.1.5"
+    "gray-matter": "^4.0.3"
   }
 }

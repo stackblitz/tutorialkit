@@ -1,4 +1,6 @@
-const esbuild = require('esbuild');
+import * as esbuild from 'esbuild';
+import fs from 'node:fs';
+import { execa } from 'execa';
 
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
@@ -22,10 +24,22 @@ async function main() {
   });
 
   if (watch) {
-    await ctx.watch();
+    await Promise.all([
+      ctx.watch(),
+      execa('tsc', ['--noEmit', '--watch', '--project', 'tsconfig.json'], { stdio: 'inherit', preferLocal: true }),
+    ]);
   } else {
     await ctx.rebuild();
     await ctx.dispose();
+
+    if (production) {
+      // rename name in package json to match extension name on store:
+      const pkgJSON = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf8' }));
+
+      pkgJSON.name = 'tutorialkit';
+
+      fs.writeFileSync('./package.json', JSON.stringify(pkgJSON, undefined, 2), 'utf8');
+    }
   }
 }
 
