@@ -1,3 +1,17 @@
+## [0.0.1-alpha.26](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.25...0.0.1-alpha.26) "tutorialkit" (2024-07-15)
+
+
+### Bug Fixes
+
+* mobile fixes and basic i18n support ([#127](https://github.com/stackblitz/tutorialkit/issues/127)) ([f85e8eb](https://github.com/stackblitz/tutorialkit/commit/f85e8eb6058473b0ad2e061d39e14d111f3f34fe))
+
+
+### Features
+
+* finalize basic i18n support ([#133](https://github.com/stackblitz/tutorialkit/issues/133)) ([09d8bf7](https://github.com/stackblitz/tutorialkit/commit/09d8bf7bd7673abb5b92b7de569daad1b44b07fd))
+
+
+
 ## [0.0.1-alpha.25](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.24...0.0.1-alpha.25) "tutorialkit" (2024-07-09)
 
 

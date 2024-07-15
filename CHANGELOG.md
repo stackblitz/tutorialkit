@@ -1,3 +1,19 @@
+## [0.0.1-alpha.26](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.25...0.0.1-alpha.26) (2024-07-15)
+
+
+### Bug Fixes
+
+* **ci:** use PAT to make sure release PRs trigger workflows ([#124](https://github.com/stackblitz/tutorialkit/issues/124)) ([5e1a8bc](https://github.com/stackblitz/tutorialkit/commit/5e1a8bc4a9a569b27da787cfa5459723321b45f7))
+* mobile fixes and basic i18n support ([#127](https://github.com/stackblitz/tutorialkit/issues/127)) ([f85e8eb](https://github.com/stackblitz/tutorialkit/commit/f85e8eb6058473b0ad2e061d39e14d111f3f34fe))
+
+
+### Features
+
+* add "Edit this page" link ([#130](https://github.com/stackblitz/tutorialkit/issues/130)) ([dd9c52c](https://github.com/stackblitz/tutorialkit/commit/dd9c52c6f1d3c90cc1d993d8c0fec61dadfc5815))
+* finalize basic i18n support ([#133](https://github.com/stackblitz/tutorialkit/issues/133)) ([09d8bf7](https://github.com/stackblitz/tutorialkit/commit/09d8bf7bd7673abb5b92b7de569daad1b44b07fd))
+
+
+
 ## [0.0.1-alpha.25](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.24...0.0.1-alpha.25) (2024-07-09)
 
 
