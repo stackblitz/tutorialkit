@@ -110,52 +110,5 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
 }
 
 export async function useLessonTree() {
-  /**
-   * `
-   * vscode.workspace.onDidChangeWorkspaceFolders((event) => {
-   *   event.added.forEach((folder) => {
-   *     if (isTutorialKitWorkspace(folder)) {
-   *     }
-   *   });
-   * });
-   */
-
-  // vscode.commands.executeCommand('setContext', 'tutorialkit:tree', true);
-
   cmd.initialize();
-
-  /**
-   * `
-   * const tutorialWorkpaces = (vscode.workspace.workspaceFolders || []).filter(
-   *   isTutorialKitWorkspace,
-   * );
-   * const selectedWorkspace =
-   *   tutorialWorkpaces.length === 1
-   *     ? tutorialWorkpaces[0]
-   *     : await vscode.window
-   *         .showQuickPick(
-   *           tutorialWorkpaces.map((workspace) => workspace.name),
-   *           {
-   *             placeHolder: 'Select a workspace',
-   *           },
-   *         )
-   *         .then((selected) =>
-   *           tutorialWorkpaces.find((workspace) => workspace.name === selected),
-   *         );
-   */
-
-  /**
-   * `
-   * if (selectedWorkspace) {
-   *   setLessonsTreeDataProvider(
-   *     new LessonsTreeDataProvider(selectedWorkspace.uri, context),
-   *   );
-   *   context.subscriptions.push(
-   *     vscode.window.createTreeView('tutorialkit-lessons-tree', {
-   *       treeDataProvider: getLessonsTreeDataProvider(),
-   *       canSelectMany: true,
-   *     }),
-   *   );
-   * }
-   */
 }
