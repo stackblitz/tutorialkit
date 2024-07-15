@@ -533,7 +533,7 @@ importers:
         specifier: ^0.59.4
         version: 0.59.4
       astro:
-        specifier: 4.10.3
+        specifier: ^4.10.3
         version: 4.10.3(@types/node@20.14.11)(sass@1.77.6)(typescript@5.5.3)
       fast-glob:
         specifier: ^3.3.2

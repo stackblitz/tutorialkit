@@ -35,8 +35,7 @@ describe.each(['npm', 'pnpm', 'yarn'])('%s', (packageManager) => {
     expect(filesToJSON(projectFiles)).toMatchFileSnapshot(`${snapshotPrefix}-created.json`);
   });
 
-  // TODO: Enable once `@tutorialkit/theme` has been published
-  it.todo<TestContext>('should create and build a project', async ({ projectName, dest }) => {
+  it<TestContext>('should create and build a project', async ({ projectName, dest }) => {
     await createProject(projectName, packageManager, { cwd: tmp, install: true });
 
     await execa(packageManager, ['run', 'build'], {
