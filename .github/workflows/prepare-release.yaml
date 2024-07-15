@@ -39,4 +39,3 @@ jobs:
           body: 'Bump `@tutorialkit` packages to version ${{ inputs.version }} and generate changelogs.'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-${{ inputs.version }}
-          token: ${{ secrets.GITOPS_REPO_PAT }}
