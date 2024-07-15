@@ -102,7 +102,21 @@
           "when": "view == tutorialkit-lessons-tree && viewItem == part"
         }
       ]
-    }
+    },
+    "languages": [
+      {
+        "id": "markdown",
+        "extensions": [
+          ".md"
+        ]
+      },
+      {
+        "id": "mdx",
+        "extensions": [
+          ".mdx"
+        ]
+      }
+    ]
   },
   "scripts": {
     "__esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
@@ -116,15 +130,25 @@
     "package": "pnpm run check-types && node build.mjs --production"
   },
   "dependencies": {
+    "@volar/language-core": "2.3.4",
+    "@volar/language-server": "2.3.4",
+    "@volar/language-service": "2.3.4",
+    "@volar/vscode": "2.3.4",
     "case-anything": "^3.1.0",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "volar-service-yaml": "volar-2.3",
+    "vscode-languageclient": "^9.0.1",
+    "vscode-uri": "^3.0.8",
+    "yaml-language-server": "1.15.0"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
+    "@tutorialkit/types": "workspace:*",
     "@types/node": "20.14.11",
     "@types/vscode": "^1.80.0",
+    "chokidar": "3.6.0",
     "esbuild": "^0.21.5",
     "execa": "^9.2.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "zod-to-json-schema": "3.23.1"
   }
 }

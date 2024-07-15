@@ -1,12 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
     "module": "Node16",
     "target": "ES2022",
     "outDir": "dist",
     "lib": ["ES2022"],
     "verbatimModuleSyntax": false,
     "sourceMap": true,
-    "rootDir": "src"
-  }
+    "rootDir": "."
+  },
+  "include": ["src", "./build.mjs"],
+  "references": [{ "path": "../../packages/types" }]
 }
