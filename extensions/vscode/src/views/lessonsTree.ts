@@ -6,9 +6,8 @@ import { cmd } from '../commands';
 import { Lesson } from '../models/Lesson';
 import { getIcon } from '../utils/getIcon';
 
-// import isTutorialKitWorkspace from '../utils/isTutorialKit';
-
 const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
+
 export const tutorialMimeType = 'application/tutorialkit.unit';
 
 let lessonsTreeDataProvider: LessonsTreeDataProvider;
@@ -22,7 +21,6 @@ export function setLessonsTreeDataProvider(provider: LessonsTreeDataProvider) {
 
 export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   private _lessons: Lesson[] = [];
-  private _isTutorialKitWorkspace = false;
 
   constructor(
     private readonly _workspaceRoot: vscode.Uri,
@@ -34,10 +32,9 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
   private _loadLessons(): void {
     try {
       const tutorialFolderPath = vscode.Uri.joinPath(this._workspaceRoot, 'src', 'content', 'tutorial').fsPath;
-      this._isTutorialKitWorkspace = true;
       this._lessons = this._loadLessonsFromFolder(tutorialFolderPath);
     } catch {
-      this._isTutorialKitWorkspace = false;
+      // do nothing
     }
   }
 
@@ -91,12 +88,10 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
 
     treeItem.contextValue = lesson.metadata?.type;
 
-    const shouldOpenFile = lesson.metadata?.type === 'lesson';
-
     treeItem.command = {
       command: cmd.goto.command,
       title: 'Go to the lesson',
-      arguments: [lesson.path, lesson.metadata, shouldOpenFile],
+      arguments: [lesson.metadata?._path],
     };
 
     treeItem.iconPath =
