@@ -47,3 +47,15 @@ jobs:
         run: |
           pnpm run docs:build
           pnpm run demo:build
+
+  extension:
+    name: VSCode Extension
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-and-build
+      - name: Build extension
+        run: |
+          pnpm run extension:build

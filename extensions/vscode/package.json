@@ -109,7 +109,7 @@
     "__dev": "pnpm run esbuild-base -- --sourcemap --watch",
     "__vscode:prepublish": "pnpm run esbuild-base -- --minify",
     "__build": "vsce package",
-    "compile": "pnpm run check-types && node build.mjs",
+    "build": "pnpm run check-types && node build.mjs",
     "check-types": "tsc --noEmit",
     "dev": "node build.mjs --watch",
     "vscode:prepublish": "pnpm run package",
