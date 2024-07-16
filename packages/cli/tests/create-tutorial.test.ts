@@ -86,7 +86,7 @@ test('create and eject a project', async (context) => {
   expect(await fs.readFile(path.join(dest, 'astro.config.ts'), 'utf-8')).toMatchSnapshot();
 });
 
-test.only('create, eject and build a project', async (context) => {
+test('create, eject and build a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
