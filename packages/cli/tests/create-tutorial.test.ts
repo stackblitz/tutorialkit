@@ -19,7 +19,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await fs.rm(tmpDir, { force: true, recursive: true });
+  if (process.platform !== 'win32' || !process.env.CI) {
+    await fs.rm(tmpDir, { force: true, recursive: true });
+  }
 });
 
 test('cannot create project without installing but with starting', async (context) => {
@@ -81,9 +83,15 @@ test('create and eject a project', async (context) => {
     cwd: tmpDir,
   });
 
-  await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true, maxRetries: 5 });
+  if (process.platform !== 'win32') {
+    await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true, maxRetries: 5 });
+  }
 
-  const projectFiles = await fs.readdir(dest, { recursive: true });
+  let projectFiles = await fs.readdir(dest, { recursive: true });
+
+  if (process.platform === 'win32') {
+    projectFiles = projectFiles.filter((filePath) => !filePath.startsWith('node_modules'));
+  }
 
   expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
   expect(await fs.readFile(path.join(dest, 'astro.config.ts'), 'utf-8')).toMatchSnapshot();
