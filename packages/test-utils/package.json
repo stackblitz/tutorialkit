@@ -4,15 +4,6 @@
   "description": "Test utilities for TutorialKit",
   "type": "module",
   "private": true,
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsc -b"
-  },
   "devDependencies": {
     "@webcontainer/api": "1.2.0",
     "typescript": "^5.4.5",

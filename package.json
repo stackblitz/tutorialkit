@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit --filter=create-tutorial build",
+    "dev": "TUTORIALKIT_DEV=true pnpm -r --parallel --stream --filter='./packages/**' run dev",
     "changelog": "./scripts/changelog.mjs",
     "clean": "./scripts/clean.sh",
     "prepare": "is-ci || husky install",
