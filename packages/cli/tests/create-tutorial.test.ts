@@ -81,18 +81,9 @@ test('create and eject a project', async (context) => {
     cwd: tmpDir,
   });
 
-  try {
-    // remove `node_modules` before taking the snapshot
-    await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true });
-  } catch {
-    // ignore error on windows
-  }
+  await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true, maxRetries: 5 });
 
-  let projectFiles = await fs.readdir(dest, { recursive: true });
-
-  if (process.platform === 'win32') {
-    projectFiles = projectFiles.filter((filePath) => !filePath.startsWith('node_modules'));
-  }
+  const projectFiles = await fs.readdir(dest, { recursive: true });
 
   expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
   expect(await fs.readFile(path.join(dest, 'astro.config.ts'), 'utf-8')).toMatchSnapshot();
