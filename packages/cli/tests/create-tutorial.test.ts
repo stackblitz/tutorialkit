@@ -7,7 +7,7 @@ import { afterAll, beforeAll, expect, test } from 'vitest';
 // on CI on windows we want to make sure to use the same drive, so we use a custom logic
 const tmpDir =
   process.platform === 'win32'
-    ? path.join(path.resolve(__dirname, '../../..'), '.tmp')
+    ? path.join(path.resolve(__dirname, '../../../..'), '.tmp')
     : await fs.mkdtemp(path.join(tmpdir(), 'tk-test-'));
 const baseDir = path.resolve(__dirname, '../../..');
 
@@ -81,10 +81,18 @@ test('create and eject a project', async (context) => {
     cwd: tmpDir,
   });
 
-  // remove `node_modules` before taking the snapshot
-  await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true });
+  try {
+    // remove `node_modules` before taking the snapshot
+    await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true });
+  } catch {
+    // ignore error on windows
+  }
 
-  const projectFiles = await fs.readdir(dest, { recursive: true });
+  let projectFiles = await fs.readdir(dest, { recursive: true });
+
+  if (process.platform === 'win32') {
+    projectFiles = projectFiles.filter((filePath) => !filePath.startsWith('node_modules'));
+  }
 
   expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
   expect(await fs.readFile(path.join(dest, 'astro.config.ts'), 'utf-8')).toMatchSnapshot();
