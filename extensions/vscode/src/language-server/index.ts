@@ -10,8 +10,6 @@ const server = createServer(connection);
 connection.listen();
 
 connection.onInitialize((params) => {
-  connection.console.debug('CONNECTED' + params.capabilities);
-
   const yamlService = createYamlService({
     getLanguageSettings(_context) {
       const schema = readSchema();
@@ -25,7 +23,7 @@ connection.onInitialize((params) => {
         isKubernetes: false,
         schemas: [
           {
-            uri: 'https://tutorialkit.dev/schema.json',
+            uri: 'https://tutorialkit.dev/reference/configuration/',
             schema,
             fileMatch: [
               '**/*',
