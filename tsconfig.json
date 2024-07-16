@@ -9,6 +9,9 @@
     "skipLibCheck": true,
     "declaration": true,
     "noImplicitReturns": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "@tutorialkit/test-utils": ["./packages/test-utils/src/index.ts"]
+    }
   }
 }
