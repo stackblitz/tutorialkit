@@ -31,7 +31,7 @@ Read our documentation on [tutorialkit.dev](https://tutorialkit.dev/guides/about
 
 ### Prerequisites
 
-- Install [Node.js](https://nodejs.org/en).
+- Install [Node.js](https://nodejs.org/en) v18.18 or above.
 - Install [pnpm](https://pnpm.io/).
 
 ### Contribution

@@ -17,7 +17,6 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc -b",
-    "dev": "tsc -b --watch --preserveWatchOutput",
     "prepublishOnly": "pnpm run build"
   },
   "files": [

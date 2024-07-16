@@ -6,6 +6,7 @@
     "changelog": "./scripts/changelog.mjs",
     "clean": "./scripts/clean.sh",
     "prepare": "is-ci || husky install",
+    "template:dev": "TUTORIALKIT_DEV=true pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
     "cli:build-release": "pnpm run --filter=tutorialkit build-release",
     "docs": "pnpm run --filter=tutorialkit.dev dev",

@@ -9,16 +9,16 @@ import { nodeExternalsPlugin } from 'esbuild-node-externals';
 
 const isWatch = process.argv.includes('--watch');
 
+if (!isWatch) {
+  // clean dist
+  await rm('dist', { recursive: true, force: true });
+}
+
 await generateTypes();
 await buildJS();
 await copyDefaultFolder();
 
 async function generateTypes() {
-  if (!isWatch) {
-    // clean dist
-    await rm('dist', { recursive: true, force: true });
-  }
-
   // only do typechecking and emit the type declarations with tsc
   const args = [
     '--emitDeclarationOnly',
