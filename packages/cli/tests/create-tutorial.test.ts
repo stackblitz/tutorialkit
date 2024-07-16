@@ -100,7 +100,7 @@ test('create, eject and build a project', async (context) => {
     cwd: tmpDir,
   });
 
-  await execa('pnpm', ['install'], {
+  await execa('pnpm', ['install', '--no-frozen-lockfile'], {
     cwd: dest,
   });
 
