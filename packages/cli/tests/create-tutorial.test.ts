@@ -7,7 +7,7 @@ import { afterAll, beforeAll, expect, test } from 'vitest';
 // on CI on windows we want to make sure to use the same drive, so we use a custom logic
 const tmpDir =
   process.platform === 'win32'
-    ? path.resolve(__dirname, '../../../..')
+    ? path.join(path.resolve(__dirname, '../../../..'), '.tmp')
     : await fs.mkdtemp(path.join(tmpdir(), 'tk-test-'));
 const baseDir = path.resolve(__dirname, '../../..');
 
