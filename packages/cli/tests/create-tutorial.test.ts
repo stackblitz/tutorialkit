@@ -19,7 +19,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await fs.rm(tmpDir, { force: true, recursive: true });
+  if (process.platform !== 'win32' || !process.env.CI) {
+    await fs.rm(tmpDir, { force: true, recursive: true });
+  }
 });
 
 test('cannot create project without installing but with starting', async (context) => {
