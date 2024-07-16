@@ -2,11 +2,10 @@
   "private": true,
   "scripts": {
     "build": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit --filter=create-tutorial build",
-    "dev": "pnpm -r --parallel --stream --filter='./packages/**' run dev",
+    "dev": "TUTORIALKIT_DEV=true pnpm -r --parallel --stream --filter='./packages/**' run dev",
     "changelog": "./scripts/changelog.mjs",
     "clean": "./scripts/clean.sh",
     "prepare": "is-ci || husky install",
-    "template:dev": "TUTORIALKIT_DEV=true pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
     "cli:build-release": "pnpm run --filter=tutorialkit build-release",
     "docs": "pnpm run --filter=tutorialkit.dev dev",

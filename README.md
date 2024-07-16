@@ -4,8 +4,8 @@
     <img src="media/logo.svg" alt="tutorialkit-logo" width="440px" height="120px" />
   </picture>
   <br>
-  TutorialKit by <a href="https://stackblitz.com">StackBlitz</a> enables you to create interactive coding tutorials effortlessly, boosting the adoption of 
-  your framework, UI library or design system. 
+  TutorialKit by <a href="https://stackblitz.com">StackBlitz</a> enables you to create interactive coding tutorials effortlessly, boosting the adoption of
+  your framework, UI library or design system.
 </p>
 
 <p align="center">
@@ -31,29 +31,12 @@ Read our documentation on [tutorialkit.dev](https://tutorialkit.dev/guides/about
 
 ### Prerequisites
 
-- Install [Node.js](https://nodejs.org/en) v18.18 or above.
+- Install [Node.js](https://nodejs.org/en).
 - Install [pnpm](https://pnpm.io/).
 
-### Set up
+### Contribution
 
-Clone this repository and navigate into the cloned directory.
-
-```
-git clone git@github.com:stackblitz/tutorialkit.git
-cd tutorialkit
-```
-
-TutorialKit uses [pnpm workspaces](https://pnpm.io/workspaces). Just run the install command in the root of the project.
-
-```
-pnpm install
-```
-
-You can now start the development template of TutorialKit by running:
-
-```
-pnpm template:dev
-```
+See [Contributing Guide](https://github.com/stackblitz/tutorialkit/blob/main/CONTRIBUTING.md).
 
 ## Community
 
