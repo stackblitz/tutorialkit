@@ -4,7 +4,11 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 
-const tmpDir = await fs.mkdtemp(path.join(tmpdir(), 'tk-test-'));
+// on CI on windows we want to make sure to use the same drive, so we use a custom logic
+const tmpDir =
+  process.platform === 'win32'
+    ? path.resolve(__dirname, '../../../..')
+    : await fs.mkdtemp(path.join(tmpdir(), 'tk-test-'));
 const baseDir = path.resolve(__dirname, '../../..');
 
 const cli = path.join(baseDir, 'packages/cli/dist/index.js');
