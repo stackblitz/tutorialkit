@@ -1,9 +1,14 @@
-import path from 'node:path';
-import fs from 'node:fs/promises';
-import { afterAll, beforeAll, expect, test } from 'vitest';
 import { execa } from 'execa';
+import fs from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { afterAll, beforeAll, expect, test } from 'vitest';
 
-const tmpDir = path.join(__dirname, '.tmp');
+// on CI on windows we want to make sure to use the same drive, so we use a custom logic
+const tmpDir =
+  process.platform === 'win32'
+    ? path.join(path.resolve(__dirname, '../../../..'), '.tmp')
+    : await fs.mkdtemp(path.join(tmpdir(), 'tk-test-'));
 const baseDir = path.resolve(__dirname, '../../..');
 
 const cli = path.join(baseDir, 'packages/cli/dist/index.js');
@@ -14,7 +19,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await fs.rm(tmpDir, { force: true, recursive: true });
+  if (process.platform !== 'win32' || !process.env.CI) {
+    await fs.rm(tmpDir, { force: true, recursive: true });
+  }
 });
 
 test('cannot create project without installing but with starting', async (context) => {
@@ -23,9 +30,6 @@ test('cannot create project without installing but with starting', async (contex
   await expect(
     execa('node', [cli, 'create', name, '--no-install', '--start'], {
       cwd: tmpDir,
-      env: {
-        TK_DIRECTORY: baseDir,
-      },
     }),
   ).rejects.toThrow('Cannot start project without installing dependencies.');
 });
@@ -36,9 +40,6 @@ test('create a project', async (context) => {
 
   await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--defaults'], {
     cwd: tmpDir,
-    env: {
-      TK_DIRECTORY: baseDir,
-    },
   });
 
   const projectFiles = await fs.readdir(dest, { recursive: true });
@@ -50,14 +51,13 @@ test('create and build a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
     cwd: tmpDir,
-    env: {
-      TK_DIRECTORY: baseDir,
-    },
   });
 
-  await execa('npm', ['run', 'build'], {
+  await runPnpmInstall(dest, baseDir);
+
+  await execa('pnpm', ['run', 'build'], {
     cwd: dest,
   });
 
@@ -73,24 +73,25 @@ test('create and eject a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
     cwd: tmpDir,
-    env: {
-      TK_DIRECTORY: baseDir,
-    },
   });
+
+  await runPnpmInstall(dest, baseDir);
 
   await execa('node', [cli, 'eject', name, '--force', '--defaults'], {
     cwd: tmpDir,
-    env: {
-      TK_DIRECTORY: baseDir,
-    },
   });
 
-  // remove `node_modules` before taking the snapshot
-  await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true });
+  if (process.platform !== 'win32') {
+    await fs.rm(path.join(dest, 'node_modules'), { force: true, recursive: true, maxRetries: 5 });
+  }
 
-  const projectFiles = await fs.readdir(dest, { recursive: true });
+  let projectFiles = await fs.readdir(dest, { recursive: true });
+
+  if (process.platform === 'win32') {
+    projectFiles = projectFiles.filter((filePath) => !filePath.startsWith('node_modules'));
+  }
 
   expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
   expect(await fs.readFile(path.join(dest, 'astro.config.ts'), 'utf-8')).toMatchSnapshot();
@@ -100,25 +101,21 @@ test('create, eject and build a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
     cwd: tmpDir,
-    env: {
-      TK_DIRECTORY: baseDir,
-    },
   });
+
+  await runPnpmInstall(dest, baseDir);
 
   await execa('node', [cli, 'eject', name, '--force', '--defaults'], {
     cwd: tmpDir,
-    env: {
-      TK_DIRECTORY: baseDir,
-    },
   });
 
-  await execa('npm', ['install'], {
+  await execa('pnpm', ['install', '--no-frozen-lockfile'], {
     cwd: dest,
   });
 
-  await execa('npm', ['run', 'build'], {
+  await execa('pnpm', ['run', 'build'], {
     cwd: dest,
   });
 
@@ -139,9 +136,6 @@ test('cannot eject on an empty folder', async (context) => {
   await expect(
     execa('node', [cli, 'eject', name, '--force', '--defaults'], {
       cwd: tmpDir,
-      env: {
-        TK_DIRECTORY: baseDir,
-      },
     }),
   ).rejects.toThrow('package.json does not exists!');
 });
@@ -157,9 +151,6 @@ test('cannot eject on a node project that is not an Astro project', async (conte
   await expect(
     execa('node', [cli, 'eject', name, '--force', '--defaults'], {
       cwd: tmpDir,
-      env: {
-        TK_DIRECTORY: baseDir,
-      },
     }),
   ).rejects.toThrow('astro.config.ts does not exists!');
 });
@@ -188,9 +179,6 @@ test('cannot eject on an astro project that is not using TutorialKit', async (co
   await expect(
     execa('node', [cli, 'eject', name, '--force', '--defaults'], {
       cwd: tmpDir,
-      env: {
-        TK_DIRECTORY: baseDir,
-      },
     }),
   ).rejects.toThrow(`@tutorialkit${path.sep}astro does not exists!`);
 });
@@ -216,20 +204,39 @@ test('cannot eject on an astro project that is not using TutorialKit 2', async (
   `,
   );
 
-  await execa('npm', ['install'], {
+  await execa('pnpm', ['install'], {
     cwd: dest,
   });
 
   await expect(
     execa('node', [cli, 'eject', name, '--force', '--defaults'], {
       cwd: tmpDir,
-      env: {
-        TK_DIRECTORY: baseDir,
-      },
     }),
   ).rejects.toThrow(`Could not find import to '@tutorialkit/astro'`);
 });
 
 function normaliseSlash(filePath: string) {
   return filePath.replace(/\\/g, '/');
+}
+
+async function runPnpmInstall(dest: string, baseDir: string) {
+  const packageJsonPath = path.join(dest, 'package.json');
+  const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf-8'));
+
+  packageJson.pnpm = {
+    overrides: {
+      '@astrojs/language-server': '2.11.1',
+      '@tutorialkit/astro': `file:${baseDir}/packages/astro`,
+      '@tutorialkit/components-react': `file:${baseDir}/packages/components/react`,
+      '@tutorialkit/runtime': `file:${baseDir}/packages/runtime`,
+      '@tutorialkit/theme': `file:${baseDir}/packages/theme`,
+      '@tutorialkit/types': `file:${baseDir}/packages/types`,
+    },
+  };
+
+  await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2), 'utf8');
+
+  await execa('pnpm', ['install'], {
+    cwd: dest,
+  });
 }

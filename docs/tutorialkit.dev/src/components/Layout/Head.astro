@@ -9,10 +9,15 @@ import Default from '@astrojs/starlight/components/Head.astro';
 <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-64MFE82HG5"></script>
 
 <script is:inline>
+  // @ts-ignore
   window.dataLayer = window.dataLayer || [];
+
   function gtag() {
+    // @ts-ignore
     dataLayer.push(arguments);
   }
+  // @ts-ignore
   gtag('js', new Date());
+  // @ts-ignore
   gtag('config', 'G-64MFE82HG5');
 </script>
