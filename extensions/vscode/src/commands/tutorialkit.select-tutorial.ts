@@ -4,6 +4,7 @@ import { cmd } from '.';
 
 export async function selectTutorial() {
   const tutorialWorkpaces = (vscode.workspace.workspaceFolders || []).filter(isTutorialKitWorkspace);
+
   const selectedWorkspace =
     tutorialWorkpaces.length === 1
       ? tutorialWorkpaces[0]

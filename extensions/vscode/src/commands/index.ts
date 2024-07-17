@@ -46,6 +46,7 @@ function createExecutor<T extends (...args: any) => any>(name: string) {
   function executor(...args: Parameters<T>) {
     return vscode.commands.executeCommand(name, ...args);
   }
+
   executor.command = name;
 
   return executor;

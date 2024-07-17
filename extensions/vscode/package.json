@@ -115,6 +115,10 @@
     "vscode:prepublish": "pnpm run package",
     "package": "pnpm run check-types && node build.mjs --production"
   },
+  "dependencies": {
+    "case-anything": "^3.1.0",
+    "gray-matter": "^4.0.3"
+  },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
@@ -126,9 +130,5 @@
     "esbuild": "^0.21.5",
     "execa": "^9.2.0",
     "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "case-anything": "^3.1.0",
-    "gray-matter": "^4.0.3"
   }
 }

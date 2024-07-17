@@ -85,12 +85,14 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
 
   getTreeItem(lesson: Lesson): vscode.TreeItem {
     const treeItem = new vscode.TreeItem(lesson.name);
+
     treeItem.collapsibleState =
       lesson.children.length > 0 ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
 
     treeItem.contextValue = lesson.metadata?.type;
 
     const shouldOpenFile = lesson.metadata?.type === 'lesson';
+
     treeItem.command = {
       command: cmd.goto.command,
       title: 'Go to the lesson',

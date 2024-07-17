@@ -65,6 +65,7 @@ async function createUnitFolder(parentPath: string, unitNumber: number, unitName
 
 async function navigateToUnit(path: string, unitType: LessonType, title: string) {
   const metaFile = unitType === 'lesson' ? 'content.mdx' : 'meta.md';
+
   return cmd.goto(
     path,
     {
