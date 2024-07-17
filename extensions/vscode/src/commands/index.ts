@@ -7,8 +7,8 @@ import { loadTutorial } from './tutorialkit.load-tutorial';
 import { initialize } from './tutorialkit.initialize';
 
 /**
- * No need to use these consts outsite of this file
- * – use `cmd[name].command` instead.
+ * No need to use these consts outside of this file:
+ *   – Use `cmd[name].command` instead.
  */
 const CMD = {
   INITIALIZE: 'tutorialkit.initialize',
