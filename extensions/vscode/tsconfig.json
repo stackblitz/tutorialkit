@@ -10,6 +10,6 @@
     "sourceMap": true,
     "rootDir": "."
   },
-  "include": ["src", "./build.mjs"],
+  "include": ["src", "scripts"],
   "references": [{ "path": "../../packages/types" }]
 }
