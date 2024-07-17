@@ -1,3 +1,12 @@
+## [0.0.1](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.26...0.0.1) "@tutorialkit/astro" (2024-07-17)
+
+
+### Bug Fixes
+
+* a transition-theme class was missing for the content right border ([#139](https://github.com/stackblitz/tutorialkit/issues/139)) ([c75ef40](https://github.com/stackblitz/tutorialkit/commit/c75ef4089833b8974c2b0877535f1967065ef08a))
+
+
+
 ## [0.0.1-alpha.26](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.25...0.0.1-alpha.26) "@tutorialkit/astro" (2024-07-15)
 
 

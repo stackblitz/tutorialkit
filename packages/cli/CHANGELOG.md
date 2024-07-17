@@ -1,3 +1,12 @@
+## [0.0.1](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.26...0.0.1) "tutorialkit" (2024-07-17)
+
+
+### Bug Fixes
+
+* **ci:** override @astrojs/language-server with an older version ([#145](https://github.com/stackblitz/tutorialkit/issues/145)) ([bf9119e](https://github.com/stackblitz/tutorialkit/commit/bf9119ef29913eadd66581a103c3b34d9bf58401))
+
+
+
 ## [0.0.1-alpha.26](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.25...0.0.1-alpha.26) "tutorialkit" (2024-07-15)
 
 

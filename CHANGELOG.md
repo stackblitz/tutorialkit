@@ -1,3 +1,19 @@
+## [0.0.1](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.26...0.0.1) (2024-07-17)
+
+
+### Bug Fixes
+
+* a transition-theme class was missing for the content right border ([#139](https://github.com/stackblitz/tutorialkit/issues/139)) ([c75ef40](https://github.com/stackblitz/tutorialkit/commit/c75ef4089833b8974c2b0877535f1967065ef08a))
+* **ci:** override @astrojs/language-server with an older version ([#145](https://github.com/stackblitz/tutorialkit/issues/145)) ([bf9119e](https://github.com/stackblitz/tutorialkit/commit/bf9119ef29913eadd66581a103c3b34d9bf58401))
+* **extension:** setup CI and minor improvements ([#142](https://github.com/stackblitz/tutorialkit/issues/142)) ([5a1f108](https://github.com/stackblitz/tutorialkit/commit/5a1f1084d018de789eb563c5959f557658963168))
+
+
+### Features
+
+* add vscode extension ([#109](https://github.com/stackblitz/tutorialkit/issues/109)) ([33a69f9](https://github.com/stackblitz/tutorialkit/commit/33a69f9de5d163029b78133b129147ff23a6de0b))
+
+
+
 ## [0.0.1-alpha.26](https://github.com/stackblitz/tutorialkit/compare/0.0.1-alpha.25...0.0.1-alpha.26) (2024-07-15)
 
 
