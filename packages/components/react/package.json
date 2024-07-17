@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/components-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "TutorialKit's React components",
   "author": "StackBlitz Inc.",
   "type": "module",
