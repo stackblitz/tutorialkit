@@ -6,7 +6,7 @@
     "changelog": "./scripts/changelog.mjs",
     "clean": "./scripts/clean.sh",
     "prepare": "is-ci || husky install",
-    "extension:dev": "pnpm run --filter=tutorialkit-vscode dev",
+    "extension:dev": "pnpm --parallel --stream --filter=@tutorialkit/types --filter=tutorialkit-vscode run dev",
     "extension:build": "pnpm run --filter=tutorialkit-vscode build",
     "template:dev": "TUTORIALKIT_DEV=true pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",

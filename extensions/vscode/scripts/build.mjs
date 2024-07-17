@@ -1,11 +1,13 @@
-import { chapterSchema, lessonSchema, partSchema, tutorialSchema } from '@tutorialkit/types';
 import { watch } from 'chokidar';
 import * as esbuild from 'esbuild';
 import { execa } from 'execa';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
-import { zodToJsonSchema } from 'zod-to-json-schema';
+import { join, dirname } from 'path';
+import { Worker } from 'node:worker_threads';
+import { fileURLToPath } from 'node:url';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 const production = process.argv.includes('--production');
 const isWatch = process.argv.includes('--watch');
@@ -30,11 +32,10 @@ async function main() {
   });
 
   if (isWatch) {
-    const buildMetadataSchemaDebounced = debounce(buildMetadataSchema);
+    const buildMetadataSchemaDebounced = debounce(buildMetadataSchema, 100);
+    const dependencyPath = dirname(require.resolve('@tutorialkit/types'));
 
-    watch(join(require.resolve('@tutorialkit/types'), 'dist'), {
-      followSymlinks: false,
-    }).on('all', (eventName, path) => {
+    watch(dependencyPath).on('all', (eventName, path) => {
       if (eventName !== 'change' && eventName !== 'add' && eventName !== 'unlink') {
         return;
       }
@@ -53,7 +54,7 @@ async function main() {
     await ctx.rebuild();
     await ctx.dispose();
 
-    buildMetadataSchema();
+    await buildMetadataSchema();
 
     if (production) {
       // rename name in package json to match extension name on store:
@@ -66,11 +67,16 @@ async function main() {
   }
 }
 
-function buildMetadataSchema() {
-  const schema = tutorialSchema.strict().or(partSchema.strict()).or(chapterSchema.strict()).or(lessonSchema.strict());
+async function buildMetadataSchema() {
+  const schema = await new Promise((resolve) => {
+    const worker = new Worker(join(__dirname, './load-schema-worker.mjs'));
+    worker.on('message', (value) => resolve(value));
+  });
 
   fs.mkdirSync('./dist', { recursive: true });
-  fs.writeFileSync('./dist/schema.json', JSON.stringify(zodToJsonSchema(schema), undefined, 2), 'utf-8');
+  fs.writeFileSync('./dist/schema.json', JSON.stringify(schema, undefined, 2), 'utf-8');
+
+  console.log('Updated schema.json');
 }
 
 /**

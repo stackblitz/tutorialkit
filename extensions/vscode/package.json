@@ -123,11 +123,11 @@
     "__dev": "pnpm run esbuild-base -- --sourcemap --watch",
     "__vscode:prepublish": "pnpm run esbuild-base -- --minify",
     "__build": "vsce package",
-    "dev": "node build.mjs --watch",
-    "build": "pnpm run check-types && node build.mjs",
+    "dev": "node scripts/build.mjs --watch",
+    "build": "pnpm run check-types && node scripts/build.mjs",
     "check-types": "tsc --noEmit",
     "vscode:prepublish": "pnpm run package",
-    "package": "pnpm run check-types && node build.mjs --production"
+    "package": "pnpm run check-types && node scripts/build.mjs --production"
   },
   "dependencies": {
     "@volar/language-core": "2.3.4",
