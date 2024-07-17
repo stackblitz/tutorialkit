@@ -1,0 +1,132 @@
+{
+  "name": "tutorialkit-vscode",
+  "displayName": "TutorialKit",
+  "description": "TutorialKit support in VS Code",
+  "icon": "resources/tutorialkit-icon.png",
+  "publisher": "StackBlitz",
+  "version": "0.0.11",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "repository": {
+    "url": "https://github.com/stackblitz/tutorialkit"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "tutorialkit.select-tutorial",
+        "title": "Select Tutorial",
+        "icon": "$(book)"
+      },
+      {
+        "command": "tutorialkit.add-lesson",
+        "title": "Add Lesson"
+      },
+      {
+        "command": "tutorialkit.add-chapter",
+        "title": "Add Chapter"
+      },
+      {
+        "command": "tutorialkit.add-part",
+        "title": "Add Part"
+      },
+      {
+        "command": "tutorialkit.refresh",
+        "title": "Refresh Lessons",
+        "icon": "$(refresh)"
+      }
+    ],
+    "viewsWelcome": [
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-splashscreen",
+        "contents": "",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "!tutorialkit:initialized"
+      },
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-splashscreen",
+        "contents": "Looks like there is no TutorialKit project in this workspace.\n[Rescan workspace](command:tutorialkit.initialize?true)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "tutorialkit:initialized && !tutorialkit:multiple-tutorials"
+      },
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-multiple-tutorials",
+        "contents": "Welcome to TutorialKit!\nLooks like there is more than one tutorial in your workspace.\n[Select a tutorial](command:tutorialkit.select-tutorial)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "tutorialkit:multiple-tutorials"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "tutorialkit-lessons-tree",
+          "name": "Tutorial",
+          "visibility": "visible",
+          "initialSize": 3
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "tutorialkit.select-tutorial",
+          "when": "view == tutorialkit-lessons-tree && tutorialkit:multiple-tutorials",
+          "group": "navigation"
+        },
+        {
+          "command": "tutorialkit.refresh",
+          "when": "view == tutorialkit-lessons-tree && tutorialkit:tree",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "tutorialkit.add-lesson",
+          "when": "view == tutorialkit-lessons-tree && viewItem == chapter"
+        },
+        {
+          "command": "tutorialkit.add-chapter",
+          "when": "view == tutorialkit-lessons-tree && viewItem == part"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "__esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "__dev": "pnpm run esbuild-base -- --sourcemap --watch",
+    "__vscode:prepublish": "pnpm run esbuild-base -- --minify",
+    "__build": "vsce package",
+    "compile": "pnpm run check-types && node build.mjs",
+    "check-types": "tsc --noEmit",
+    "dev": "node build.mjs --watch",
+    "vscode:prepublish": "pnpm run package",
+    "package": "pnpm run check-types && node build.mjs --production"
+  },
+  "dependencies": {
+    "case-anything": "^3.1.0",
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.14.11",
+    "@types/vscode": "^1.80.0",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0",
+    "esbuild": "^0.21.5",
+    "execa": "^9.2.0",
+    "typescript": "^5.4.5"
+  }
+}

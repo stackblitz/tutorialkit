@@ -6,6 +6,7 @@
     "changelog": "./scripts/changelog.mjs",
     "clean": "./scripts/clean.sh",
     "prepare": "is-ci || husky install",
+    "extension:dev": "pnpm run --filter=tutorialkit-vscode dev",
     "template:dev": "TUTORIALKIT_DEV=true pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
     "cli:build-release": "pnpm run --filter=tutorialkit build-release",
@@ -13,7 +14,7 @@
     "docs:build": "pnpm run build && pnpm run --filter=tutorialkit.dev build",
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
     "demo:build": "pnpm run build && pnpm run --filter=demo.tutorialkit.dev build",
-    "lint": "eslint \"{packages,docs}/**/*\"",
+    "lint": "eslint \"{packages,docs,extensions,integration}/**/*\"",
     "test": "pnpm run --stream --filter=@tutorialkit/* --filter=tutorialkit test --run"
   },
   "license": "MIT",

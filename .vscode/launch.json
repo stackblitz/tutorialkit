@@ -5,8 +5,19 @@
       "command": "./node_modules/.bin/astro dev",
       "name": "Development Server",
       "request": "launch",
-      "cwd": "${workspaceFolder}/template",
+      "cwd": "${workspaceFolder}/packages/template",
       "type": "node-terminal"
+    },
+    {
+      "name": "Run extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceRoot}/extensions/vscode",
+        "--folder-uri=${workspaceRoot}/packages/template"
+      ],
+      "outFiles": ["${workspaceRoot}/extensions/vscode/dist/**/*.js"]
     }
   ]
 }
