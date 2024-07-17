@@ -61,7 +61,6 @@ jobs:
         run: >
           pnpm --recursive
           --filter tutorialkit
-          --filter create-tutorial
           exec npm version --no-git-tag-version --allow-same-version ${{ steps.resolve-release-version.outputs.version }}
 
       - name: Create Pull Request
@@ -102,7 +101,6 @@ jobs:
         run: >
           pnpm --recursive
           --filter tutorialkit
-          --filter create-tutorial
           exec pnpm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
