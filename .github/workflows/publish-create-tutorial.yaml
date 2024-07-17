@@ -1,0 +1,66 @@
+name: Prepare create-tutorial Release PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish, e.g. 0.0.1'
+        required: true
+        default: '0.0.1'
+        type: string
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/create-tutorial/package.json'
+
+jobs:
+  prepare_release_create_tutorial:
+    name: Prepare Release PR
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
+      - name: Bump versions
+        run: >
+          pnpm --recursive
+          --filter "create-tutorial"
+          exec pnpm version --no-git-tag-version --allow-same-version ${{ inputs.version }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c
+        with:
+          commit-message: 'chore: release `create-tutorial` v${{ inputs.version }}'
+          title: 'chore: release `create-tutorial` v${{ inputs.version }}'
+          body: 'Bump `create-tutorial` to version ${{ inputs.version }}.'
+          reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
+          branch: chore/release-create-tutorial-${{ inputs.version }}
+
+  publish_release_create_tutorial:
+    name: Publish Release create-tutorial
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    if: ${{ contains(github.event.head_commit.message, 'release `create-tutorial`') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
+      - name: Publish to npm
+        run: >
+          pnpm --recursive
+          --filter create-tutorial
+          exec pnpm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
