@@ -458,7 +458,7 @@ importers:
   packages/create-tutorial:
     dependencies:
       tutorialkit:
-        specifier: workspace:*
+        specifier: latest
         version: link:../cli
     devDependencies:
       '@types/node':
