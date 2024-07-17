@@ -6,9 +6,8 @@ import { cmd } from '../commands';
 import { Lesson } from '../models/Lesson';
 import { getIcon } from '../utils/getIcon';
 
-// import isTutorialKitWorkspace from '../utils/isTutorialKit';
-
 const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
+
 export const tutorialMimeType = 'application/tutorialkit.unit';
 
 let lessonsTreeDataProvider: LessonsTreeDataProvider;
@@ -22,7 +21,6 @@ export function setLessonsTreeDataProvider(provider: LessonsTreeDataProvider) {
 
 export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   private _lessons: Lesson[] = [];
-  private _isTutorialKitWorkspace = false;
 
   constructor(
     private readonly _workspaceRoot: vscode.Uri,
@@ -34,10 +32,9 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
   private _loadLessons(): void {
     try {
       const tutorialFolderPath = vscode.Uri.joinPath(this._workspaceRoot, 'src', 'content', 'tutorial').fsPath;
-      this._isTutorialKitWorkspace = true;
       this._lessons = this._loadLessonsFromFolder(tutorialFolderPath);
     } catch {
-      this._isTutorialKitWorkspace = false;
+      // do nothing
     }
   }
 
@@ -91,12 +88,10 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
 
     treeItem.contextValue = lesson.metadata?.type;
 
-    const shouldOpenFile = lesson.metadata?.type === 'lesson';
-
     treeItem.command = {
       command: cmd.goto.command,
       title: 'Go to the lesson',
-      arguments: [lesson.path, lesson.metadata, shouldOpenFile],
+      arguments: [lesson.metadata?._path],
     };
 
     treeItem.iconPath =
@@ -115,52 +110,5 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
 }
 
 export async function useLessonTree() {
-  /**
-   * `
-   * vscode.workspace.onDidChangeWorkspaceFolders((event) => {
-   *   event.added.forEach((folder) => {
-   *     if (isTutorialKitWorkspace(folder)) {
-   *     }
-   *   });
-   * });
-   */
-
-  // vscode.commands.executeCommand('setContext', 'tutorialkit:tree', true);
-
   cmd.initialize();
-
-  /**
-   * `
-   * const tutorialWorkpaces = (vscode.workspace.workspaceFolders || []).filter(
-   *   isTutorialKitWorkspace,
-   * );
-   * const selectedWorkspace =
-   *   tutorialWorkpaces.length === 1
-   *     ? tutorialWorkpaces[0]
-   *     : await vscode.window
-   *         .showQuickPick(
-   *           tutorialWorkpaces.map((workspace) => workspace.name),
-   *           {
-   *             placeHolder: 'Select a workspace',
-   *           },
-   *         )
-   *         .then((selected) =>
-   *           tutorialWorkpaces.find((workspace) => workspace.name === selected),
-   *         );
-   */
-
-  /**
-   * `
-   * if (selectedWorkspace) {
-   *   setLessonsTreeDataProvider(
-   *     new LessonsTreeDataProvider(selectedWorkspace.uri, context),
-   *   );
-   *   context.subscriptions.push(
-   *     vscode.window.createTreeView('tutorialkit-lessons-tree', {
-   *       treeDataProvider: getLessonsTreeDataProvider(),
-   *       canSelectMany: true,
-   *     }),
-   *   );
-   * }
-   */
 }

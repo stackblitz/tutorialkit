@@ -109,9 +109,9 @@
     "__dev": "pnpm run esbuild-base -- --sourcemap --watch",
     "__vscode:prepublish": "pnpm run esbuild-base -- --minify",
     "__build": "vsce package",
-    "compile": "pnpm run check-types && node build.mjs",
-    "check-types": "tsc --noEmit",
     "dev": "node build.mjs --watch",
+    "build": "pnpm run check-types && node build.mjs",
+    "check-types": "tsc --noEmit",
     "vscode:prepublish": "pnpm run package",
     "package": "pnpm run check-types && node build.mjs --production"
   },
@@ -123,8 +123,6 @@
     "@types/mocha": "^10.0.6",
     "@types/node": "20.14.11",
     "@types/vscode": "^1.80.0",
-    "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.4.0",
     "esbuild": "^0.21.5",
     "execa": "^9.2.0",
     "typescript": "^5.4.5"

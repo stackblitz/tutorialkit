@@ -19,10 +19,11 @@ export async function addLesson(parent: Lesson) {
   const lessonFolderPath = await createUnitFolder(parent.path, lessonNumber, lessonName, 'lesson');
 
   await vscode.workspace.fs.createDirectory(vscode.Uri.file(`${lessonFolderPath}/_files`));
+  await vscode.workspace.fs.createDirectory(vscode.Uri.file(`${lessonFolderPath}/_solution`));
 
   await cmd.refresh();
 
-  return navigateToUnit(lessonFolderPath, 'lesson', lessonName);
+  return navigateToUnit(lessonFolderPath, 'lesson');
 }
 
 export async function addChapter(parent: Lesson) {
@@ -32,7 +33,7 @@ export async function addChapter(parent: Lesson) {
 
   const chapterFolderPath = await createUnitFolder(parent.path, chapterNumber, chapterName, 'chapter');
 
-  await navigateToUnit(chapterFolderPath, 'chapter', chapterName);
+  await navigateToUnit(chapterFolderPath, 'chapter');
 
   await cmd.refresh();
 }
@@ -57,22 +58,14 @@ async function createUnitFolder(parentPath: string, unitNumber: number, unitName
 
   await vscode.workspace.fs.writeFile(
     vscode.Uri.file(`${unitFolderPath}/${metaFile}`),
-    new TextEncoder().encode(`---\ntitle: ${unitName}\ntype: ${unitType}\n---\n`),
+    new TextEncoder().encode(`---\ntype: ${unitType}\ntitle: ${unitName}\n---\n`),
   );
 
   return unitFolderPath;
 }
 
-async function navigateToUnit(path: string, unitType: LessonType, title: string) {
+async function navigateToUnit(path: string, unitType: LessonType) {
   const metaFile = unitType === 'lesson' ? 'content.mdx' : 'meta.md';
 
-  return cmd.goto(
-    path,
-    {
-      _path: `${path}/${metaFile}`,
-      type: unitType,
-      title,
-    },
-    true,
-  );
+  return cmd.goto(`${path}/${metaFile}`);
 }
