@@ -28,7 +28,7 @@
     "husky": "^9.0.11",
     "is-ci": "^3.0.1",
     "prettier": "^3.3.2",
-    "prettier-plugin-astro": "^0.13.0",
+    "prettier-plugin-astro": "^0.14.1",
     "tempfile": "^5.0.0"
   },
   "lint-staged": {},
