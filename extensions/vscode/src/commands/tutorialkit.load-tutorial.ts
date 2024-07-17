@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { LessonsTreeDataProvider, getLessonsTreeDataProvider, setLessonsTreeDataProvider } from '../views/lessonsTree';
 import { extContext } from '../extension';
+import { LessonsTreeDataProvider, getLessonsTreeDataProvider, setLessonsTreeDataProvider } from '../views/lessonsTree';
 
 export async function loadTutorial(uri: vscode.Uri) {
   setLessonsTreeDataProvider(new LessonsTreeDataProvider(uri, extContext));

@@ -15,12 +15,15 @@ let lessonsTreeDataProvider: LessonsTreeDataProvider;
 export function getLessonsTreeDataProvider() {
   return lessonsTreeDataProvider;
 }
+
 export function setLessonsTreeDataProvider(provider: LessonsTreeDataProvider) {
   lessonsTreeDataProvider = provider;
 }
 
 export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   private _lessons: Lesson[] = [];
+  private _onDidChangeTreeData: vscode.EventEmitter<Lesson | undefined> = new vscode.EventEmitter<Lesson | undefined>();
+  readonly onDidChangeTreeData: vscode.Event<Lesson | undefined> = this._onDidChangeTreeData.event;
 
   constructor(
     private readonly _workspaceRoot: vscode.Uri,
@@ -59,11 +62,14 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
           const metadataFilePath = path.join(filePath, metadataFile);
           const metadataFileContent = fs.readFileSync(metadataFilePath, 'utf8');
           const parsedContent = grayMatter(metadataFileContent);
+
           lesson.name = parsedContent.data.title;
+
           lesson.metadata = {
             _path: metadataFilePath,
             ...(parsedContent.data as any),
           };
+
           lessons.push(lesson);
         }
       }
@@ -71,9 +77,6 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> 
 
     return lessons;
   }
-
-  private _onDidChangeTreeData: vscode.EventEmitter<Lesson | undefined> = new vscode.EventEmitter<Lesson | undefined>();
-  readonly onDidChangeTreeData: vscode.Event<Lesson | undefined> = this._onDidChangeTreeData.event;
 
   refresh(): void {
     this._loadLessons();
