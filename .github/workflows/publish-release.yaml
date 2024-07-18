@@ -13,7 +13,7 @@ jobs:
       contents: write
       id-token: write
     # Note: `prepare-release.yaml` sets this commit message
-    if: ${{ contains(github.event.head_commit.message, 'release `@tutorialkit` packages') }}
+    if: ${{ contains(github.event.head_commit.message, 'release core packages') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,6 +29,7 @@ jobs:
       - name: Publish to npm
         run: >
           pnpm --recursive
+          --filter "!@tutorialkit/cli"
           --filter "@tutorialkit/*"
           exec pnpm publish --provenance --access public
         env:
@@ -60,16 +61,16 @@ jobs:
       - name: Bump version
         run: >
           pnpm --recursive
-          --filter tutorialkit
+          --filter @tutorialkit/cli
           exec npm version --no-git-tag-version --allow-same-version ${{ steps.resolve-release-version.outputs.version }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c
         with:
           # Note: `publish-release.yaml` checks explicitly for this commit message
-          commit-message: 'chore: release TutorialKit CLI v${{ steps.resolve-release-version.outputs.version }}'
-          title: 'chore: release TutorialKit CLI v${{ steps.resolve-release-version.outputs.version }}'
-          body: 'Bump TutorialKit CLI to version ${{ steps.resolve-release-version.outputs.version }}.'
+          commit-message: 'chore: release CLI v${{ steps.resolve-release-version.outputs.version }}'
+          title: 'chore: release CLI v${{ steps.resolve-release-version.outputs.version }}'
+          body: 'Bump CLI to version ${{ steps.resolve-release-version.outputs.version }}.'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-cli-${{ steps.resolve-release-version.outputs.version }}
           token: ${{ secrets.GITOPS_REPO_PAT }}
@@ -80,8 +81,8 @@ jobs:
     permissions:
       contents: write
       id-token: write
-    # Note: `prepare-release.yaml` sets this commit message
-    if: ${{ contains(github.event.head_commit.message, 'release TutorialKit CLI') }}
+    # Note: commit message is set by prepare_cli_release above
+    if: ${{ contains(github.event.head_commit.message, 'release CLI') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -101,7 +102,7 @@ jobs:
       - name: Publish to npm
         run: >
           pnpm --recursive
-          --filter tutorialkit
+          --filter @tutorialkit/cli
           exec pnpm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
