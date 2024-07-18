@@ -1,5 +1,5 @@
 {
-  "name": "tutorialkit-vscode",
+  "name": "tutorialkit",
   "displayName": "TutorialKit",
   "description": "TutorialKit support in VS Code",
   "icon": "resources/tutorialkit-icon.png",
