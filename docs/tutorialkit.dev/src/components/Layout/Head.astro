@@ -21,9 +21,10 @@ import Default from '@astrojs/starlight/components/Head.astro';
   // @ts-ignore -- see above
   window.dataLayer = window.dataLayer || [];
 
+  // @ts-ignore -- see above
   function gtag(...args) {
     // @ts-ignore -- see above
-    dataLayer.push(...args);
+    window.dataLayer.push(...args);
   }
 
   gtag('js', new Date());
