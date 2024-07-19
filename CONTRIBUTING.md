@@ -24,6 +24,26 @@ cd tutorialkit
 
 5. Run `pnpm run test` to run core tests
 
+The monorepo consists of multiple packages that are grouped into following groups:
+
+### Core Packages
+
+These packages will be installed by the end-users in their `package.json`.
+
+- `@tutorialkit/astro`
+- `@tutorialkit/react`
+- `@tutorialkit/runtime`
+- `@tutorialkit/theme`
+- `@tutorialkit/types`
+
+### CLI Packages
+
+The CLI packages are expected to be run by users using `npm create tutorial` and `npx tutorialkit` commands.
+These should not be installed in their `package.json`.
+
+- `@tutorialkit/cli`
+- `create-tutorial`
+
 ## Testing TutorialKit against external packages
 
 You may wish to test your locally-modified copy of TutorialKit against another package that is using it. For pnpm, after building TutorialKit, you can use [`pnpm.overrides`](https://pnpm.io/package_json#pnpmoverrides). Please note that `pnpm.overrides` must be specified in the root `package.json` and you must first list the package as a dependency in the root `package.json`:
@@ -33,7 +53,7 @@ You may wish to test your locally-modified copy of TutorialKit against another p
   "pnpm": {
     "overrides": {
       "@tutorialkit/astro": "file:../tutorialkit/packages/astro",
-      "@tutorialkit/components-react": "file:../tutorialkit/packages/components/react",
+      "@tutorialkit/react": "file:../tutorialkit/packages/react",
       "@tutorialkit/runtime": "file:../tutorialkit/packages/runtime",
       "@tutorialkit/theme": "file:../tutorialkit/packages/theme",
       "@tutorialkit/types": "file:../tutorialkit/packages/types"

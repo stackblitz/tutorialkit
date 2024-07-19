@@ -35,7 +35,7 @@
     "@expressive-code/plugin-collapsible-sections": "^0.35.3",
     "@expressive-code/plugin-line-numbers": "^0.35.3",
     "@nanostores/react": "0.7.2",
-    "@tutorialkit/components-react": "workspace:*",
+    "@tutorialkit/react": "workspace:*",
     "@tutorialkit/runtime": "workspace:*",
     "@tutorialkit/theme": "workspace:*",
     "@tutorialkit/types": "workspace:*",

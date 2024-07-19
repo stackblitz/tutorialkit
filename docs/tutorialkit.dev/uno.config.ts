@@ -9,11 +9,11 @@ export default defineConfig({
   rules,
   shortcuts,
   content: {
-    inline: globSync(
-      `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`,
-    ).map((filePath) => {
-      return () => fs.readFile(filePath, { encoding: 'utf8' });
-    }),
+    inline: globSync(`${convertPathToPattern(join(require.resolve('@tutorialkit/react'), '..'))}/**/*.js`).map(
+      (filePath) => {
+        return () => fs.readFile(filePath, { encoding: 'utf8' });
+      },
+    ),
   },
   transformers: [transformerDirectives()],
   presets: [presetUno(), presetIcons()],

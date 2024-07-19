@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { WorkspacePanel } from '@tutorialkit/components-react';
+import { WorkspacePanel } from '@tutorialkit/react';
 import type { Lesson } from '@tutorialkit/types';
 import { themeStore } from '../stores/theme-store.js';
 import { tutorialStore } from './webcontainer.js';

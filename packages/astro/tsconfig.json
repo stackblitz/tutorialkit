@@ -8,10 +8,5 @@
     "outDir": "dist"
   },
   "include": ["src"],
-  "references": [
-    { "path": "../runtime" },
-    { "path": "../types" },
-    { "path": "../components/react" },
-    { "path": "../theme" }
-  ]
+  "references": [{ "path": "../runtime" }, { "path": "../types" }, { "path": "../react" }, { "path": "../theme" }]
 }
