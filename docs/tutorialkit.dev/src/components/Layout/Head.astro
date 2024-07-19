@@ -9,15 +9,25 @@ import Default from '@astrojs/starlight/components/Head.astro';
 <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-64MFE82HG5"></script>
 
 <script is:inline>
-  // @ts-ignore
+  /**
+   * We have all those @ts-ignore because the latest version of @astro/language-server
+   * type check all scripts even if they are interpreted as JavaScript by the language
+   * server.
+   *
+   * Given this script is kinda considered as external, we should do minimal changes
+   * to it. Adding a single `@ts-nocheck` didn't work :'(.
+   */
+
+  // @ts-ignore -- see above
   window.dataLayer = window.dataLayer || [];
 
-  function gtag() {
-    // @ts-ignore
-    dataLayer.push(arguments);
+  // @ts-ignore -- see above
+  function gtag(...args) {
+    // @ts-ignore -- see above
+    window.dataLayer.push(...args);
   }
-  // @ts-ignore
+
   gtag('js', new Date());
-  // @ts-ignore
+
   gtag('config', 'G-64MFE82HG5');
 </script>
