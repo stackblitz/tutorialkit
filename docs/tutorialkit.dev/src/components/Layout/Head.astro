@@ -15,20 +15,18 @@ import Default from '@astrojs/starlight/components/Head.astro';
    * server.
    *
    * Given this script is kinda considered as external, we should do minimal changes
-   * to it. Adding a single `@ts-nocheck` didn't work :'(
+   * to it. Adding a single `@ts-nocheck` didn't work :'(.
    */
 
-  // @ts-ignore
+  // @ts-ignore -- see above
   window.dataLayer = window.dataLayer || [];
 
-  function gtag() {
-    // @ts-ignore
-    dataLayer.push(arguments);
+  function gtag(...args) {
+    // @ts-ignore -- see above
+    dataLayer.push(...args);
   }
 
-  // @ts-ignore
   gtag('js', new Date());
 
-  // @ts-ignore
   gtag('config', 'G-64MFE82HG5');
 </script>
