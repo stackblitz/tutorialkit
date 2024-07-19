@@ -1,12 +1,13 @@
 import blitzPlugin from '@blitz/eslint-plugin';
 import { getNamingConventionRule, tsFileExtensions } from '@blitz/eslint-plugin/dist/configs/typescript.js';
+import eslintPluginAstro from 'eslint-plugin-astro';
 
 export default [
   {
     ignores: [
       '**/dist',
       '**/node_modules',
-      '**/.astro',
+      '**/.astro/**',
 
       // we ignore our demo templates because they may contain code that is formatted specifically for the demo
       'docs/demo/src/templates',
@@ -21,6 +22,7 @@ export default [
       },
     },
   }),
+  ...eslintPluginAstro.configs.recommended,
   {
     files: ['**/env.d.ts', '**/env-default.d.ts'],
     rules: {

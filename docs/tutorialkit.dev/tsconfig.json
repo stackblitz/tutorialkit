@@ -8,5 +8,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "types": ["@types/gtag.js"]
-  }
+  },
+  "include": ["src"]
 }

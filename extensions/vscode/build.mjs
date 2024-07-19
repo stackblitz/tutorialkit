@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild';
-import fs from 'node:fs';
 import { execa } from 'execa';
+import fs from 'node:fs';
 
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
@@ -18,7 +18,7 @@ async function main() {
     external: ['vscode'],
     logLevel: 'silent',
     plugins: [
-      /* add to the end of plugins array */
+      // add to the end of plugins array
       esbuildProblemMatcherPlugin,
     ],
   });
@@ -33,7 +33,7 @@ async function main() {
     await ctx.dispose();
 
     if (production) {
-      // rename name in package json to match extension name on store:
+      // rename name in package json to match extension name on store
       const pkgJSON = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf8' }));
 
       pkgJSON.name = 'tutorialkit';
@@ -50,14 +50,16 @@ const esbuildProblemMatcherPlugin = {
   name: 'esbuild-problem-matcher',
   setup(build) {
     build.onStart(() => {
-      console.log('[watch] build started');
+      console.log('[watch] Build started');
     });
+
     build.onEnd((result) => {
       result.errors.forEach(({ text, location }) => {
         console.error(`✘ [ERROR] ${text}`);
         console.error(`    ${location.file}:${location.line}:${location.column}:`);
       });
-      console.log('[watch] build finished');
+
+      console.log('[watch] Build finished');
     });
   },
 };

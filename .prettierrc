@@ -5,5 +5,13 @@
   "tabWidth": 2,
   "semi": true,
   "bracketSpacing": true,
-  "plugins": ["prettier-plugin-astro"]
+  "plugins": ["prettier-plugin-astro"],
+  "overrides": [
+    {
+      "files": "*.astro",
+      "options": {
+        "parser": "astro"
+      }
+    }
+  ]
 }

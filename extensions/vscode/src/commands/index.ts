@@ -6,10 +6,7 @@ import { selectTutorial } from './tutorialkit.select-tutorial';
 import { loadTutorial } from './tutorialkit.load-tutorial';
 import { initialize } from './tutorialkit.initialize';
 
-/**
- * No need to use these consts outside of this file:
- *   – Use `cmd[name].command` instead.
- */
+// no need to use these consts outside of this file, use `cmd[name].command` instead
 const CMD = {
   INITIALIZE: 'tutorialkit.initialize',
   SELECT_TUTORIAL: 'tutorialkit.select-tutorial',

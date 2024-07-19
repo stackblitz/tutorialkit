@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import isTutorialKitWorkspace from '../utils/isTutorialKit';
 import { cmd } from '.';
+import isTutorialKitWorkspace from '../utils/isTutorialKit';
 
 export async function initialize(toastIfEmpty = false) {
   const tutorialWorkpaces = (vscode.workspace.workspaceFolders || []).filter(isTutorialKitWorkspace);
@@ -10,6 +10,7 @@ export async function initialize(toastIfEmpty = false) {
       vscode.window.showInformationMessage(
         'No TutorialKit project found in the current workspace. Make sure there is a "@tutorialkit/astro" dependency or devDependency in your package.json file.',
       );
+
       vscode.commands.executeCommand('setContext', 'tutorialkit:tree', false);
     }
   } else if (tutorialWorkpaces.length === 1) {
