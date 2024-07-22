@@ -50,25 +50,25 @@ export const i18nSchema = z.object({
   prepareEnvironmentTitleText: z.string().optional().describe('Text shown on top of the steps section.'),
 
   /**
-   * Text shown for the toggle terminal button.
+   * Text for the toggle terminal button.
    *
    * @default 'Toggle Terminal'
    */
-  toggleTerminalButtonText: z.string().optional().describe('Text shown for the toggle terminal button.'),
+  toggleTerminalButtonText: z.string().optional().describe('Text for the toggle terminal button.'),
 
   /**
-   * Text shown for the solve button.
+   * Text for the solve button.
    *
    * @default 'Solve'
    */
-  solveButtonText: z.string().optional().describe('Text shown for the solve button.'),
+  solveButtonText: z.string().optional().describe('Text for the solve button.'),
 
   /**
-   * Text shown for the reset button.
+   * Text for the reset button.
    *
    * @default 'Reset'
    */
-  resetButtonText: z.string().optional().describe('Text shown for the reset button.'),
+  resetButtonText: z.string().optional().describe('Text for the reset button.'),
 });
 
 export type I18nSchema = z.infer<typeof i18nSchema>;

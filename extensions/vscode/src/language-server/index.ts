@@ -23,7 +23,7 @@ connection.onInitialize((params) => {
         isKubernetes: false,
         schemas: [
           {
-            uri: 'https://tutorialkit.dev/reference/configuration/',
+            uri: 'https://tutorialkit.dev/reference/configuration',
             schema,
             fileMatch: [
               '**/*',

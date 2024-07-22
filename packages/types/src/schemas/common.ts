@@ -57,7 +57,7 @@ const panelTypeSchema = z
 const allowRedirectsSchema = z
   .boolean()
   .optional()
-  .describe('`true` if you want to enable output redirects in the terminal, disabled by default.');
+  .describe("Set to `true` if you want to enable output redirects in the terminal. It's disabled by default.");
 
 const allowCommandsSchema = z
   .array(z.string())
@@ -173,7 +173,7 @@ export const webcontainerSchema = commandsSchema.extend({
     .string()
     .optional()
     .describe(
-      'Specified which folder from the src/templates/ directory should be used as the basis for the code. See the “Code templates” guide for a detailed explainer.',
+      'Specified which folder from the `src/templates/` directory should be used as the basis for the code. See the "Code templates" guide for a detailed explainer.',
     ),
   terminal: terminalSchema
     .optional()
@@ -210,7 +210,7 @@ export const webcontainerSchema = commandsSchema.extend({
     ])
     .optional()
     .describe(
-      'Display a link in lesson for editing the page content. The value is a URL pattern where ${path} is replaced with the lesson’s location relative to src/content/tutorial.',
+      'Display a link in lesson for editing the page content. The value is a URL pattern where `${path}` is replaced with the lesson’s location relative to `src/content/tutorial`.',
     ),
 });
 
@@ -220,7 +220,7 @@ export const baseSchema = webcontainerSchema.extend({
     .string()
     .optional()
     .describe(
-      'Customize the URL segment of this part / chapter or lesson. The full URL path is /:partSlug/:chapterSlug/:lessonSlug.',
+      'Customize the URL segment of this part, chapter or lesson. The full URL path is `/:partSlug/:chapterSlug/:lessonSlug`.',
     ),
 });
 

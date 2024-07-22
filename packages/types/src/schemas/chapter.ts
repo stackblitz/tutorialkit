@@ -7,7 +7,7 @@ export const chapterSchema = baseSchema.extend({
     .array(z.string())
     .optional()
     .describe(
-      'The list of lessons in this chapter. The order in this array defines the order of the lessons. If not specified a folder-based numbering system is used instead.',
+      'The list of lessons in this chapter. The order of the array defines the order of the lessons. If not specified a folder-based numbering system is used instead.',
     ),
 });
 

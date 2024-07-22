@@ -57,7 +57,7 @@ async function main() {
     await buildMetadataSchema();
 
     if (production) {
-      // rename name in package json to match extension name on store:
+      // rename name in `package.json` to match extension name on store
       const pkgJSON = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf8' }));
 
       pkgJSON.name = 'tutorialkit';

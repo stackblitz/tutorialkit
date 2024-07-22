@@ -2,8 +2,8 @@ import { CodeMapping, type LanguagePlugin, type VirtualCode } from '@volar/langu
 import type * as ts from 'typescript';
 import type { URI } from 'vscode-uri';
 
-export const frontmatterPlugin = (debug: (message: string) => void) =>
-  ({
+export function frontmatterPlugin(debug: (message: string) => void): LanguagePlugin<URI> {
+  return {
     getLanguageId(uri) {
       debug('URI: ' + uri.path);
 
@@ -24,7 +24,8 @@ export const frontmatterPlugin = (debug: (message: string) => void) =>
 
       return undefined;
     },
-  }) satisfies LanguagePlugin<URI>;
+  };
+}
 
 export class FrontMatterVirtualCode implements VirtualCode {
   id = 'root';

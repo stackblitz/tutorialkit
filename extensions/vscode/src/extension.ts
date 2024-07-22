@@ -18,6 +18,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const serverModule = vscode.Uri.joinPath(context.extensionUri, 'dist', 'server.js');
   const runOptions = { execArgv: <string[]>[] };
   const debugOptions = { execArgv: ['--nolazy', '--inspect=' + 6009] };
+
   const serverOptions: lsp.ServerOptions = {
     run: {
       module: serverModule.fsPath,
@@ -30,10 +31,12 @@ export async function activate(context: vscode.ExtensionContext) {
       options: debugOptions,
     },
   };
+
   const clientOptions: lsp.LanguageClientOptions = {
     documentSelector: [{ language: 'markdown' }, { language: 'mdx' }],
     initializationOptions: {},
   };
+
   client = new lsp.LanguageClient('tutorialkit-language-server', 'TutorialKit', serverOptions, clientOptions);
 
   await client.start();
