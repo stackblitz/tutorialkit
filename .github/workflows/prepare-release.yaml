@@ -37,6 +37,7 @@ jobs:
           commit-message: 'chore: release `@tutorialkit` packages v${{ inputs.version }}'
           title: 'chore: release `@tutorialkit` packages v${{ inputs.version }}'
           body: 'Bump `@tutorialkit` packages to version ${{ inputs.version }} and generate changelogs.'
-          reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
+          #reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
+          reviewers: AriPerkkio
           branch: chore/release-${{ inputs.version }}
           token: ${{ secrets.GITOPS_REPO_PAT }}
