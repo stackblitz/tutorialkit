@@ -3,7 +3,7 @@ import { useTheme } from './hooks/useTheme';
 import type { Terminal as XTerm } from '@xterm/xterm';
 import { useWebContainer } from './hooks/useWebcontainer';
 
-const Terminal = lazy(() => import('@tutorialkit/components-react/core/Terminal'));
+const Terminal = lazy(() => import('@tutorialkit/react/core/Terminal'));
 
 export default function ExampleTerminal() {
   // only needed in astro because of SSR

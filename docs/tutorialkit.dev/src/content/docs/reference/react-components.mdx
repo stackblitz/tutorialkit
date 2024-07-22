@@ -32,17 +32,17 @@ These components use TutorialKit's design system which is based on an atomic CSS
 <PackageManagerTabs>
   <Fragment slot="npm">
   ```shell
-  npm install @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  npm install @tutorialkit/react @tutorialkit/theme unocss @iconify-json/ph fast-glob
   ```
   </Fragment>
   <Fragment slot="pnpm">
   ```shell
-  pnpm install @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  pnpm install @tutorialkit/react @tutorialkit/theme unocss @iconify-json/ph fast-glob
   ```
   </Fragment>
   <Fragment slot="yarn">
   ```shell
-  yarn add @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  yarn add @tutorialkit/react @tutorialkit/theme unocss @iconify-json/ph fast-glob
   ```
   </Fragment>
 </PackageManagerTabs>
@@ -62,7 +62,7 @@ export default defineConfig({
   shortcuts,
   content: {
     inline: globSync(
-      `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`,
+      `${convertPathToPattern(join(require.resolve('@tutorialkit/react'), '..'))}/**/*.js`,
     ).map((filePath) => {
       return () => fs.readFile(filePath, { encoding: 'utf8' });
     }),

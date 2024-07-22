@@ -1,5 +1,5 @@
 ---
-import { classNames } from '@tutorialkit/components-react';
+import { classNames } from '@tutorialkit/react';
 import '@tutorialkit/astro/default-theme.css';
 
 interface Props {
@@ -14,7 +14,7 @@ const { className, previewClassName } = Astro.props;
   <div
     class={classNames(
       'border border-[var(--ec-brdCol)] border-b-transparent border-solid rounded-t overflow-y-auto',
-      previewClassName,
+      previewClassName
     )}
   >
     <slot name="preview" />
