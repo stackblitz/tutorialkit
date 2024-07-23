@@ -72,6 +72,7 @@ jobs:
           body: 'Bump TutorialKit CLI to version ${{ steps.resolve-release-version.outputs.version }}.'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-cli-${{ steps.resolve-release-version.outputs.version }}
+          token: ${{ secrets.GITOPS_REPO_PAT }}
 
   publish_release_CLI:
     name: Publish Release CLI
