@@ -182,6 +182,9 @@ export const webcontainerSchema = commandsSchema.extend({
       z.strictObject({
         // name of the template
         name: z.string(),
+
+        // list of globs of files that should be visible
+        visibleFiles: z.array(z.string()).optional(),
       }),
     ])
     .describe(

@@ -1,7 +1,7 @@
 ---
 type: lesson
 title: Welcome to TutorialKit
-focus: /src/index.js
+focus: /src/template-only-file.js
 previews: [8080]
 mainCommand: ['node -e setTimeout(()=>{},10_000)', 'Running dev server']
 prepareCommands:
@@ -13,6 +13,7 @@ terminal:
   panels: ['terminal', 'output']
 template:
   name: default
+  visibleFiles: ['src/template-only-file.js']
 ---
 
 # Kitchen Sink [Heading 1]

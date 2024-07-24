@@ -42,9 +42,17 @@ export class TutorialStore {
   private _ref: number = 1;
   private _themeRef = atom(1);
 
+  /** Files from lesson's `_files` directory */
   private _lessonFiles: Files | undefined;
+
+  /** Files from lesson's `_solution` directory */
   private _lessonSolution: Files | undefined;
+
+  /** All files from `template` directory */
   private _lessonTemplate: Files | undefined;
+
+  /** Files from `template` directory that match `template.visibleFiles` patterns */
+  private _visibleTemplateFiles: Files | undefined;
 
   /**
    * Whether or not the current lesson is fully loaded in WebContainer
@@ -165,15 +173,17 @@ export class TutorialStore {
 
         signal.throwIfAborted();
 
-        this._lessonTemplate = template;
         this._lessonFiles = files;
         this._lessonSolution = solution;
+        this._lessonTemplate = template;
+        this._visibleTemplateFiles = filterEntries(template, lesson.files[1]);
 
-        this._editorStore.setDocuments(files);
+        const editorFiles = { ...this._visibleTemplateFiles, ...this._lessonFiles };
+        this._editorStore.setDocuments(editorFiles);
 
         if (lesson.data.focus === undefined) {
           this._editorStore.setSelectedFile(undefined);
-        } else if (files[lesson.data.focus] !== undefined) {
+        } else if (editorFiles[lesson.data.focus] !== undefined) {
           this._editorStore.setSelectedFile(lesson.data.focus);
         }
 
@@ -283,8 +293,10 @@ export class TutorialStore {
       return;
     }
 
-    this._editorStore.setDocuments(this._lessonFiles);
-    this._runner.updateFiles(this._lessonFiles);
+    const files = { ...this._visibleTemplateFiles, ...this._lessonFiles };
+
+    this._editorStore.setDocuments(files);
+    this._runner.updateFiles(files);
   }
 
   solve() {
@@ -294,7 +306,7 @@ export class TutorialStore {
       return;
     }
 
-    const files = { ...this._lessonFiles, ...this._lessonSolution };
+    const files = { ...this._visibleTemplateFiles, ...this._lessonFiles, ...this._lessonSolution };
 
     this._editorStore.setDocuments(files);
     this._runner.updateFiles(files);
@@ -360,4 +372,8 @@ export class TutorialStore {
   takeSnapshot() {
     return this._runner.takeSnapshot();
   }
+}
+
+function filterEntries<T extends object>(obj: T, filter: string[]) {
+  return Object.fromEntries(Object.entries(obj).filter(([entry]) => filter.includes(entry)));
 }

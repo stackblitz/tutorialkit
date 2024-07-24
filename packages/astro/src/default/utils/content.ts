@@ -1,12 +1,15 @@
 import type { ChapterSchema, Lesson, LessonSchema, PartSchema, Tutorial, TutorialSchema } from '@tutorialkit/types';
 import { interpolateString } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
+import mm from 'micromatch';
 import path from 'node:path';
 import { DEFAULT_LOCALIZATION } from './content/default-localization';
 import { squash } from './content/squash.js';
 import { logger } from './logger';
 import { joinPaths } from './url';
 import { getFilesRefList } from './content/files-ref';
+
+const TEMPLATES_DIR = path.join(process.cwd(), 'src/templates');
 
 export async function getTutorial(): Promise<Tutorial> {
   const collection = sortCollection(await getCollection('tutorial'));
@@ -253,6 +256,22 @@ export async function getTutorial(): Promise<Tutorial> {
       ),
     };
 
+    if (lesson.data.template && typeof lesson.data.template !== 'string' && lesson.data.template.visibleFiles?.length) {
+      const templateFilesRef = await getFilesRefList(lesson.data.template.name, TEMPLATES_DIR);
+
+      for (const filename of templateFilesRef[1]) {
+        if (lesson.files[1].includes(filename)) {
+          continue;
+        }
+
+        if (mm.isMatch(filename, lesson.data.template.visibleFiles, { format: formatTemplateFile })) {
+          lesson.files[1].push(filename);
+        }
+      }
+
+      lesson.files[1].sort();
+    }
+
     if (prevLesson) {
       const partSlug = _tutorial.parts[prevLesson.part.id].slug;
       const chapterSlug = _tutorial.parts[prevLesson.part.id].chapters[prevLesson.chapter.id].slug;
@@ -319,6 +338,15 @@ function getSlug(entry: CollectionEntryTutorial) {
   }
 
   return slug;
+}
+
+function formatTemplateFile(filename: string) {
+  // compare files without leading "/" so that patterns like ["src/index.js"] match "/src/index.js"
+  if (filename.startsWith('/')) {
+    return filename.substring(1);
+  }
+
+  return filename;
 }
 
 interface CollectionEntryTutorial {
