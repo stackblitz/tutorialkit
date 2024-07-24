@@ -23,7 +23,7 @@
     "@tutorialkit/astro": "workspace:*",
     "@tutorialkit/types": "workspace:*",
     "@unocss/reset": "^0.59.4",
-    "astro": "^4.10.3",
+    "astro": "^4.12.0",
     "fast-glob": "^3.3.2",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.4.5",

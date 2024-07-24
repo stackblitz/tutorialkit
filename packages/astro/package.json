@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/astro",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "TutorialKit integration for Astro (https://astro.build)",
   "author": "StackBlitz Inc.",
   "type": "module",
@@ -41,7 +41,7 @@
     "@tutorialkit/types": "workspace:*",
     "@types/react": "^18.3.3",
     "@webcontainer/api": "1.2.0",
-    "astro": "^4.10.3",
+    "astro": "^4.12.0",
     "astro-expressive-code": "^0.35.3",
     "chokidar": "3.6.0",
     "fast-glob": "^3.3.2",
@@ -70,6 +70,6 @@
     "vitest": "^1.6.0"
   },
   "peerDependencies": {
-    "astro": "^4.10.2"
+    "astro": "^4.12.0"
   }
 }

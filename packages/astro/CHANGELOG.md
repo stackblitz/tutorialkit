@@ -1,3 +1,12 @@
+## [0.0.3](https://github.com/stackblitz/tutorialkit/compare/0.0.2...0.0.3) "@tutorialkit/astro" (2024-07-23)
+
+
+### Bug Fixes
+
+* **deps:** update `astro` for Node 18.18 compatibility ([#159](https://github.com/stackblitz/tutorialkit/issues/159)) ([4b50335](https://github.com/stackblitz/tutorialkit/commit/4b50335d284fd22d38d9dab2c0f85e219533a9e5))
+
+
+
 ## [0.0.2](https://github.com/stackblitz/tutorialkit/compare/0.0.1...0.0.2) "@tutorialkit/astro" (2024-07-17)
 
 
