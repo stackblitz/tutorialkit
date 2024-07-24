@@ -42,7 +42,8 @@ export class LessonFilesFetcher {
   }
 
   async getLessonTemplate(lesson: Lesson): Promise<Files> {
-    const templatePathname = `template-${lesson.data.template}.json`;
+    const templateName = typeof lesson.data.template === 'string' ? lesson.data.template : lesson.data.template?.name;
+    const templatePathname = `template-${templateName}.json`;
 
     if (this._map.has(templatePathname)) {
       return this._map.get(templatePathname)!;

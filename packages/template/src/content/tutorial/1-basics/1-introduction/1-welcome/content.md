@@ -11,6 +11,8 @@ prepareCommands:
   - ['node -e setTimeout(()=>{process.exit(1)},5000)', 'This is going to fail']
 terminal:
   panels: ['terminal', 'output']
+template:
+  name: default
 ---
 
 # Kitchen Sink [Heading 1]

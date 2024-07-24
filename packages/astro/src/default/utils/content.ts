@@ -232,6 +232,7 @@ export async function getTutorial(): Promise<Tutorial> {
     const partMetadata = _tutorial.parts[lesson.part.id].data;
     const chapterMetadata = _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].data;
 
+    // now we inherit options from upper levels
     lesson.data = {
       ...lesson.data,
       ...squash(
