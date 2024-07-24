@@ -10,6 +10,7 @@ import type {
 import { folderPathToFilesRef, interpolateString } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import glob from 'fast-glob';
+import mm from 'micromatch';
 import path from 'node:path';
 import { IGNORED_FILES } from './constants';
 import { DEFAULT_LOCALIZATION } from './content/default-localization';
@@ -18,6 +19,7 @@ import { logger } from './logger';
 import { joinPaths } from './url';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
+const TEMPLATES_DIR = path.join(process.cwd(), 'src/templates');
 
 export async function getTutorial(): Promise<Tutorial> {
   const collection = sortCollection(await getCollection('tutorial'));
@@ -262,6 +264,22 @@ export async function getTutorial(): Promise<Tutorial> {
       ),
     };
 
+    if (lesson.data.template && typeof lesson.data.template !== 'string' && lesson.data.template.visibleFiles?.length) {
+      const templateFilesRef = await getFilesRefList(lesson.data.template.name, TEMPLATES_DIR);
+
+      for (const filename of templateFilesRef[1]) {
+        if (lesson.files[1].includes(filename)) {
+          continue;
+        }
+
+        if (mm.isMatch(filename, lesson.data.template.visibleFiles, { format: formatTemplateFile })) {
+          lesson.files[1].push(filename);
+        }
+      }
+
+      lesson.files[1].sort();
+    }
+
     if (prevLesson) {
       const partSlug = _tutorial.parts[prevLesson.part.id].slug;
       const chapterSlug = _tutorial.parts[prevLesson.part.id].chapters[prevLesson.chapter.id].slug;
@@ -330,8 +348,8 @@ function getSlug(entry: CollectionEntryTutorial) {
   return slug;
 }
 
-async function getFilesRefList(pathToFolder: string): Promise<FilesRefList> {
-  const root = path.join(CONTENT_DIR, pathToFolder);
+async function getFilesRefList(pathToFolder: string, base = CONTENT_DIR): Promise<FilesRefList> {
+  const root = path.join(base, pathToFolder);
 
   const filePaths = (
     await glob(`${glob.convertPathToPattern(root)}/**/*`, {
@@ -346,6 +364,15 @@ async function getFilesRefList(pathToFolder: string): Promise<FilesRefList> {
   const filesRef = folderPathToFilesRef(pathToFolder);
 
   return [filesRef, filePaths];
+}
+
+function formatTemplateFile(filename: string) {
+  // compare files without leading "/" so that patterns like ["src/index.js"] match "/src/index.js"
+  if (filename.startsWith('/')) {
+    return filename.substring(1);
+  }
+
+  return filename;
 }
 
 interface CollectionEntryTutorial {

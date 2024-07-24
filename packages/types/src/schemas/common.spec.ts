@@ -362,6 +362,16 @@ describe('webcontainerSchema', () => {
       webcontainerSchema.parse({
         template: {
           name: 'default',
+          visibleFiles: ['**/fixture.json', '*/tests/*'],
+        },
+      });
+    }).not.toThrow();
+  });
+  it('should allow specifying the template to omit visibleFiles', () => {
+    expect(() => {
+      webcontainerSchema.parse({
+        template: {
+          name: 'default',
         },
       });
     }).not.toThrow();

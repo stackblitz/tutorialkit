@@ -3,6 +3,7 @@ title: Content creation
 description: 'Creating content in TutorialKit.'
 ---
 import { FileTree } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 From an information architecture perspective, tutorial content is divided into **parts**, which are further divided into **chapters**, each consisting of **lessons**.
 
@@ -110,6 +111,19 @@ template: my-advanced-template
 
 This declaration will make TutorialKit use the `src/templates/my-advanced-template` directory as the base for the lesson.
 
+By default files in template are not shown in the code editor.
+To make them visible, you can use `visibleFiles` option.
+This can reduce repetition when you want to show same files visible in multiple lessons.
+
+```markdown {5}
+---
+title: Advanced Topics
+template:
+  name: my-advanced-template
+  visibleFiles: ['src/index.js', '**/utils/**']
+---
+```
+
 If you start having a lot of templates and they all share some files, you can create a shared template that they all extend. This way, you can keep the shared files in one place and avoid duplication. To do that, you need to specify the `extends` property in the template's `.tk-config.json` file:
 
 ```json
@@ -144,3 +158,75 @@ src/templates
     │   # Overrides "index.js" from "shared-template"
     └── index.js
 ```
+
+## Editor File Visibility
+
+Editor's files are resolved in three steps. Each step overrides previous one:
+
+1. Display files matching `template.visibleFiles` (lowest priority)
+2. Display files from `_files` directory
+3. When solution is revealed, display files from `_solution` directory. (highest priority)
+
+<Tabs syncKey="file-visibilty">
+  <TabItem label="Initially">
+
+```markdown ins=/.{24}├── (first.js)/ ins=/└── (second.js)/ ins=/third.js/
+---
+template:
+  name: default
+  visibleFiles: ['src/**']
+---
+
+src
+├── content
+│   └── tutorial
+│       └── 1-basics
+│           └── 1-introduction
+│               └── 1-welcome
+│                   ├── _files
+│                   │   ├── first.js
+│                   │   └── second.js
+│                   └── _solution
+│                       └── first.js
+└── templates
+    └── default
+        ├── src
+        │   ├── first.js
+        │   ├── second.js
+        │   └── third.js
+        └── package.json
+```
+
+  </TabItem>
+
+  <TabItem label="After solution is revealed">
+
+```markdown ins=/└── (first.js)/ ins=/└── (second.js)/ ins=/third.js/
+---
+template:
+  name: default
+  visibleFiles: ['src/**']
+---
+
+src
+├── content
+│   └── tutorial
+│       └── 1-basics
+│           └── 1-introduction
+│               └── 1-welcome
+│                   ├── _files
+│                   │   ├── first.js
+│                   │   └── second.js
+│                   └── _solution
+│                       └── first.js
+└── templates
+    └── default
+        ├── src
+        │   ├── first.js
+        │   ├── second.js
+        │   └── third.js
+        └── package.json
+```
+
+  </TabItem>
+</Tabs>
