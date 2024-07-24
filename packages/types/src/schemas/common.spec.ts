@@ -350,10 +350,19 @@ describe('webcontainerSchema', () => {
     }).not.toThrow();
   });
 
-  it('should allow specifying the template', () => {
+  it('should allow specifying the template by name', () => {
     expect(() => {
       webcontainerSchema.parse({
         template: 'default',
+      });
+    }).not.toThrow();
+  });
+  it('should allow specifying the template by object type', () => {
+    expect(() => {
+      webcontainerSchema.parse({
+        template: {
+          name: 'default',
+        },
       });
     }).not.toThrow();
   });
