@@ -1,3 +1,12 @@
+# [0.1.0](https://github.com/stackblitz/tutorialkit/compare/0.0.3...0.1.0) "@tutorialkit/runtime" (2024-07-25)
+
+
+### Bug Fixes
+
+* solve shows lesson-only files empty ([#168](https://github.com/stackblitz/tutorialkit/issues/168)) ([bbb13f7](https://github.com/stackblitz/tutorialkit/commit/bbb13f7251a5259a3f7b4fc8300d0b308828bd73))
+
+
+
 ## [0.0.3](https://github.com/stackblitz/tutorialkit/compare/0.0.2...0.0.3) "@tutorialkit/runtime" (2024-07-23)
 
 
