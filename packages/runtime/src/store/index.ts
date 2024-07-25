@@ -290,8 +290,10 @@ export class TutorialStore {
       return;
     }
 
-    this._editorStore.setDocuments(this._lessonSolution);
-    this._runner.updateFiles(this._lessonSolution);
+    const files = { ...this._lessonFiles, ...this._lessonSolution };
+
+    this._editorStore.setDocuments(files);
+    this._runner.updateFiles(files);
   }
 
   setSelectedFile(filePath: string | undefined) {
