@@ -173,7 +173,7 @@ export const webcontainerSchema = commandsSchema.extend({
     .string()
     .optional()
     .describe(
-      'Specified which folder from the `src/templates/` directory should be used as the basis for the code. See the "Code templates" guide for a detailed explainer.',
+      'Specifies which folder from the `src/templates/` directory should be used as the basis for the code. See the "Code templates" guide for a detailed explainer.',
     ),
   terminal: terminalSchema
     .optional()

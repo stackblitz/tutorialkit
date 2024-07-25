@@ -28,7 +28,7 @@ connection.onInitialize((params) => {
             fileMatch: [
               '**/*',
 
-              // TODO: those don't work
+              // TODO: these don't work
               'src/content/*.md',
               'src/content/**/*.md',
               'src/content/**/*.mdx',
