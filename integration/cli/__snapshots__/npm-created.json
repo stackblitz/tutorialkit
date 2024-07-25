@@ -3,7 +3,6 @@
   ".vscode",
   ".vscode/extensions.json",
   ".vscode/launch.json",
-  ".vscode/settings.json",
   "README.md",
   "astro.config.ts",
   "icons",
