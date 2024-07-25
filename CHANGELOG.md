@@ -1,3 +1,21 @@
+# [0.1.0](https://github.com/stackblitz/tutorialkit/compare/0.0.3...0.1.0) (2024-07-25)
+
+
+### Bug Fixes
+
+* **cli:** remove vs code `settings.json` ([#173](https://github.com/stackblitz/tutorialkit/issues/173)) ([8dde2c3](https://github.com/stackblitz/tutorialkit/commit/8dde2c3248fe897921c1e928f5084c426270ede2))
+* **docs:** jumping to bottom of getting started page ([#170](https://github.com/stackblitz/tutorialkit/issues/170)) ([55430f9](https://github.com/stackblitz/tutorialkit/commit/55430f9006427e9435e9ce7d1be62315c6575e2b))
+* solve shows lesson-only files empty ([#168](https://github.com/stackblitz/tutorialkit/issues/168)) ([bbb13f7](https://github.com/stackblitz/tutorialkit/commit/bbb13f7251a5259a3f7b4fc8300d0b308828bd73))
+
+
+### Features
+
+* add `contentSchema` ([#156](https://github.com/stackblitz/tutorialkit/issues/156)) ([bc0fde2](https://github.com/stackblitz/tutorialkit/commit/bc0fde26025465f5ab1fa71613d92293f0dafa89))
+* **cli:** add vs code extension to recommendations ([#172](https://github.com/stackblitz/tutorialkit/issues/172)) ([f6fd489](https://github.com/stackblitz/tutorialkit/commit/f6fd48986c4760447c11743174c3448b9b733c4f))
+* **extension:** metadata autocompletion ([#143](https://github.com/stackblitz/tutorialkit/issues/143)) ([be0a096](https://github.com/stackblitz/tutorialkit/commit/be0a0965bbd7b553bc6b5b1f4019e22ee0651d30))
+
+
+
 ## [0.0.3](https://github.com/stackblitz/tutorialkit/compare/0.0.2...0.0.3) (2024-07-23)
 
 

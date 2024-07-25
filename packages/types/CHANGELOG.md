@@ -1,3 +1,13 @@
+# [0.1.0](https://github.com/stackblitz/tutorialkit/compare/0.0.3...0.1.0) "@tutorialkit/types" (2024-07-25)
+
+
+### Features
+
+* add `contentSchema` ([#156](https://github.com/stackblitz/tutorialkit/issues/156)) ([bc0fde2](https://github.com/stackblitz/tutorialkit/commit/bc0fde26025465f5ab1fa71613d92293f0dafa89))
+* **extension:** metadata autocompletion ([#143](https://github.com/stackblitz/tutorialkit/issues/143)) ([be0a096](https://github.com/stackblitz/tutorialkit/commit/be0a0965bbd7b553bc6b5b1f4019e22ee0651d30))
+
+
+
 ## [0.0.3](https://github.com/stackblitz/tutorialkit/compare/0.0.2...0.0.3) "@tutorialkit/types" (2024-07-23)
 
 
