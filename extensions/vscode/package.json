@@ -4,7 +4,7 @@
   "description": "TutorialKit support in VS Code",
   "icon": "resources/tutorialkit-icon.png",
   "publisher": "StackBlitz",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.80.0"
   },

@@ -4,6 +4,10 @@ All notable changes to the "tutorialkit" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.1.0]
+
+- Add autocompletion in the metadata of TutorialKit markdown and mdx files (see: https://github.com/stackblitz/tutorialkit/pull/143)
+
 ## [0.0.11]
 
 - Remove the error toast appearing when loading the extension with no workspace present
