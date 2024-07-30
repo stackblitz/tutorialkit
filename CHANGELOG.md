@@ -1,3 +1,12 @@
+## [0.1.1](https://github.com/stackblitz/tutorialkit/compare/0.1.0...0.1.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **cli:** normalize windows paths for `fast-glob` ([#184](https://github.com/stackblitz/tutorialkit/issues/184)) ([eaa9890](https://github.com/stackblitz/tutorialkit/commit/eaa9890da93169ec2e3249a6065501a1326b4df9))
+
+
+
 # [0.1.0](https://github.com/stackblitz/tutorialkit/compare/0.0.3...0.1.0) (2024-07-25)
 
 
