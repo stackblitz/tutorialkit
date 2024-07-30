@@ -1,3 +1,7 @@
+## [0.1.1](https://github.com/stackblitz/tutorialkit/compare/0.1.0...0.1.1) "@tutorialkit/astro" (2024-07-30)
+
+
+
 # [0.1.0](https://github.com/stackblitz/tutorialkit/compare/0.0.3...0.1.0) "@tutorialkit/astro" (2024-07-25)
 
 
