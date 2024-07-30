@@ -23,8 +23,8 @@ export default defineConfig({
   ...unoCSSConfig,
   content: {
     inline: globSync([
-      `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`,
-      `${convertPathToPattern(join(require.resolve('@tutorialkit/astro'), '..'))}/default/**/*.astro`,
+      `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..')).replace('\\@', '/@')}/**/*.js`,
+      `${convertPathToPattern(join(require.resolve('@tutorialkit/astro'), '..')).replace('\\@', '/@')}/default/**/*.astro`,
     ]).map((filePath) => {
       return () => fs.readFile(filePath, { encoding: 'utf8' });
     }),
