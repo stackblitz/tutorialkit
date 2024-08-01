@@ -1,3 +1,7 @@
+## [0.0.2](https://github.com/stackblitz/tutorialkit/compare/0.1.1...0.0.2) "create-tutorial" (2024-08-01)
+
+
+
 ## [0.0.2](https://github.com/stackblitz/tutorialkit/compare/0.1.0...0.0.2) "create-tutorial" (2024-07-30)
 
 

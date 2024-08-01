@@ -1,3 +1,12 @@
+## [0.1.2](https://github.com/stackblitz/tutorialkit/compare/0.1.1...0.1.2) "@tutorialkit/astro" (2024-08-01)
+
+
+### Bug Fixes
+
+* ignore templates `node_modules` ([#198](https://github.com/stackblitz/tutorialkit/issues/198)) ([d7215ca](https://github.com/stackblitz/tutorialkit/commit/d7215ca2a080267a3cc2c660dc997665d2fcfc26))
+
+
+
 ## [0.1.1](https://github.com/stackblitz/tutorialkit/compare/0.1.0...0.1.1) "@tutorialkit/astro" (2024-07-30)
 
 
