@@ -245,6 +245,10 @@
   --tk-elements-navCard-iconColor: var(--tk-elements-app-textColor);
   --tk-elements-navCard-iconColorHover: var(--tk-text-accent);
 
+  /* Webcontainers link */
+  --tk-elements-webcontainersLink-textColor: var(--tk-text-secondary);
+  --tk-elements-webcontainersLink-textColorHover: var(--tk-text-active);
+
   /* Edit Page Link */
   --tk-elements-editPageLink-textColor: var(--tk-elements-app-textColor);
   --tk-elements-editPageLink-textColorHover: var(--tk-text-active);
@@ -330,7 +334,6 @@
   --tk-elements-bootScreen-primaryButton-textColorHover: var(--tk-text-primary-inverted);
   --tk-elements-bootScreen-primaryButton-iconColor: var(--tk-text-primary-inverted);
   --tk-elements-bootScreen-primaryButton-iconColorHover: var(--tk-text-primary-inverted);
-
 
   /* BootScreen > Status > Positive */
   --tk-elements-status-positive-textColor: var(--tk-text-positive);

@@ -252,6 +252,10 @@ export const theme = {
           iconColor: 'var(--tk-elements-navCard-iconColor)',
           iconColorHover: 'var(--tk-elements-navCard-iconColorHover)',
         },
+        webcontainersLink: {
+          textColor: 'var(--tk-elements-webcontainersLink-textColor)',
+          textColorHover: 'var(--tk-elements-webcontainersLink-textColorHover)',
+        },
         editPageLink: {
           textColor: 'var(--tk-elements-editPageLink-textColor)',
           textColorHover: 'var(--tk-elements-editPageLink-textColorHover)',
