@@ -78,6 +78,13 @@ export const supportedLanguages = [
       return import('@codemirror/lang-wast').then((module) => module.wast());
     },
   }),
+  LanguageDescription.of({
+    name: 'Svelte',
+    extensions: ['svelte'],
+    async load() {
+      return import('@replit/codemirror-lang-svelte').then((module) => module.svelte());
+    },
+  }),
 ];
 
 export async function getLanguage(fileName: string) {
