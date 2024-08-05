@@ -135,7 +135,12 @@
   --tk-elements-app-backgroundColor: var(--tk-background-primary);
   --tk-elements-app-borderColor: var(--tk-border-primary);
   --tk-elements-app-textColor: var(--tk-text-primary);
-  --tk-elements-app-linkColor: var(--tk-text-accent);
+
+  /* Links */
+  --tk-elements-link-primaryColor: var(--tk-text-accent);
+  --tk-elements-link-primaryHoverColor: unset;
+  --tk-elements-link-secondaryColor: var(--tk-text-secondary);
+  --tk-elements-link-secondaryColorHover: var(--tk-text-primary);
 
   /* Content */
   --tk-elements-content-textColor: var(--tk-text-body);
@@ -244,17 +249,6 @@
   --tk-elements-navCard-textColorHover: var(--tk-text-active);
   --tk-elements-navCard-iconColor: var(--tk-elements-app-textColor);
   --tk-elements-navCard-iconColorHover: var(--tk-text-accent);
-
-  /* Webcontainers link */
-  --tk-elements-webcontainersLink-textColor: var(--tk-text-secondary);
-  --tk-elements-webcontainersLink-textColorHover: var(--tk-text-active);
-
-  /* Edit Page Link */
-  --tk-elements-editPageLink-textColor: var(--tk-elements-app-textColor);
-  --tk-elements-editPageLink-textColorHover: var(--tk-text-active);
-  --tk-elements-editPageLink-iconColor: var(--tk-elements-app-textColor);
-  --tk-elements-editPageLink-iconColorHover: var(--tk-text-accent);
-  --tk-elements-editPageLink-borderColor: var(--tk-border-secondary);
 
   /* Breadcrumb > Nav Button */
   --tk-elements-breadcrumbs-navButton-iconColor: var(--tk-text-secondary);
