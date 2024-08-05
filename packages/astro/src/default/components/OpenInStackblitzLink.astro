@@ -1,0 +1,91 @@
+<button
+  transition:persist
+  data-id="open-in-stackblitz"
+  class="flex items-center font-size-3.5 text-tk-elements-topBar-iconButton-iconColor hover:text-tk-elements-topBar-iconButton-iconColorHover transition-theme bg-tk-elements-topBar-iconButton-backgroundColor hover:bg-tk-elements-topBar-iconButton-backgroundColorHover p-1 px-2 rounded-md"
+>
+  <span aria-hidden="true" class="i-ph-arrow-square-out text-xl mr-1"></span>
+  Open in StackBlitz
+</button>
+
+<script>
+  import StackBlitzSDK from '@stackblitz/sdk';
+  import { tutorialStore } from '../components/webcontainer.js';
+
+  // initialize handlers on each page load as it's possible some pages disable openInStackBlitzLink
+  document.addEventListener('astro:page-load', onInit);
+
+  function onInit() {
+    const buttons = document.querySelectorAll('[data-id="open-in-stackblitz"]');
+    buttons.forEach((button) => button.addEventListener('click', onClick));
+  }
+
+  function onClick() {
+    const lesson = tutorialStore.lesson;
+
+    if (!lesson) {
+      throw new Error('Missing lesson');
+    }
+
+    const files: Record<string, string> = {};
+
+    // first add template files
+    for (const [filePath, value] of Object.entries(tutorialStore.template || {})) {
+      files[removeLeadingSlash(filePath)] = value.toString();
+    }
+
+    // next overwrite with files from editor
+    for (const { filePath, value } of Object.values(tutorialStore.documents.get())) {
+      files[removeLeadingSlash(filePath)] = value.toString();
+    }
+
+    const packageJson = parseJson(files['package.json']);
+
+    // add start commands
+    if (files['package.json']) {
+      const mainCommand = resolveCommand(lesson.data.mainCommand);
+      const prepareCommands = (lesson.data.prepareCommands || []).map(resolveCommand);
+      const startCommand = [...prepareCommands, mainCommand].filter(Boolean).join(' && ');
+
+      files['package.json'] = JSON.stringify({ ...packageJson, stackblitz: { startCommand } }, null, 2);
+    }
+
+    StackBlitzSDK.openProject({
+      title: lesson.data.title || 'Lesson',
+      description: `${lesson.part.title} / ${lesson.chapter.title}`,
+      template: 'node',
+      files,
+    });
+
+    function resolveCommand(command: NonNullable<typeof lesson>['data']['mainCommand']): string {
+      if (!command) {
+        return '';
+      }
+
+      if (typeof command === 'string') {
+        return command;
+      }
+
+      if (Array.isArray(command)) {
+        return command[0];
+      }
+
+      return command.command;
+    }
+
+    function removeLeadingSlash(filePath: string) {
+      if (filePath.startsWith('/')) {
+        return filePath.slice(1);
+      }
+
+      return filePath;
+    }
+
+    function parseJson(deserialized: undefined | string): any {
+      try {
+        return JSON.parse(deserialized || '{}');
+      } catch {
+        return {};
+      }
+    }
+  }
+</script>

@@ -41,6 +41,7 @@ export async function getTutorial(): Promise<Tutorial> {
       // default template if not specified
       tutorialMetaData.template ??= 'default';
       tutorialMetaData.i18n = Object.assign({ ...DEFAULT_LOCALIZATION }, tutorialMetaData.i18n);
+      tutorialMetaData.openInStackBlitzLink ??= true;
 
       _tutorial.logoLink = data.logoLink;
     } else if (type === 'part') {
@@ -257,6 +258,7 @@ export async function getTutorial(): Promise<Tutorial> {
           'focus',
           'i18n',
           'editPageLink',
+          'openInStackBlitzLink',
         ],
       ),
     };
