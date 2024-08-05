@@ -16,11 +16,11 @@ export const i18nSchema = z.object({
   editPageText: z.string().optional().describe('Text of the edit page link.'),
 
   /**
-   * Text of the webcontainer link.
+   * Text of the WebContainer link.
    *
    * @default 'Powered by WebContainer'
    */
-  webcontainerLinkText: z.string().optional().describe('Text of the webcontainer link.'),
+  webcontainerLinkText: z.string().optional().describe('Text of the WebContainer link.'),
 
   /**
    * Text shown when there are no previews or steps to show in the prepare environment section.
