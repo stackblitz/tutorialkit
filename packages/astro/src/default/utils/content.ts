@@ -1,7 +1,7 @@
 import type { ChapterSchema, Lesson, LessonSchema, PartSchema, Tutorial, TutorialSchema } from '@tutorialkit/types';
 import { interpolateString } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
-import mm from 'micromatch';
+import micromatch from 'micromatch';
 import path from 'node:path';
 import { DEFAULT_LOCALIZATION } from './content/default-localization';
 import { squash } from './content/squash.js';
@@ -257,14 +257,14 @@ export async function getTutorial(): Promise<Tutorial> {
     };
 
     if (lesson.data.template && typeof lesson.data.template !== 'string' && lesson.data.template.visibleFiles?.length) {
-      const templateFilesRef = await getFilesRefList(lesson.data.template.name, TEMPLATES_DIR);
+      const [, tempalteFiles] = await getFilesRefList(lesson.data.template.name, TEMPLATES_DIR);
 
-      for (const filename of templateFilesRef[1]) {
+      for (const filename of tempalteFiles) {
         if (lesson.files[1].includes(filename)) {
           continue;
         }
 
-        if (mm.isMatch(filename, lesson.data.template.visibleFiles, { format: formatTemplateFile })) {
+        if (micromatch.isMatch(filename, lesson.data.template.visibleFiles, { format: formatTemplateFile })) {
           lesson.files[1].push(filename);
         }
       }

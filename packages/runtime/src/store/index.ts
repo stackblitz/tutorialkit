@@ -176,7 +176,7 @@ export class TutorialStore {
         this._lessonFiles = files;
         this._lessonSolution = solution;
         this._lessonTemplate = template;
-        this._visibleTemplateFiles = filterEntries(template, lesson.files[1]);
+        this._visibleTemplateFiles = pick(template, lesson.files[1]);
 
         const editorFiles = { ...this._visibleTemplateFiles, ...this._lessonFiles };
         this._editorStore.setDocuments(editorFiles);
@@ -374,6 +374,14 @@ export class TutorialStore {
   }
 }
 
-function filterEntries<T extends object>(obj: T, filter: string[]) {
-  return Object.fromEntries(Object.entries(obj).filter(([entry]) => filter.includes(entry)));
+function pick<T>(obj: Record<string, T>, entries: string[]) {
+  const result: Record<string, T> = {};
+
+  for (const entry of entries) {
+    if (entry in obj) {
+      result[entry] = obj[entry];
+    }
+  }
+
+  return result;
 }
