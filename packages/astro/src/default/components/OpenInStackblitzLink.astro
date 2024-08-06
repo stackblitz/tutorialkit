@@ -32,12 +32,16 @@
 
     // first add template files
     for (const [filePath, value] of Object.entries(tutorialStore.template || {})) {
-      files[removeLeadingSlash(filePath)] = value.toString();
+      if (typeof value === 'string') {
+        files[removeLeadingSlash(filePath)] = value;
+      }
     }
 
     // next overwrite with files from editor
     for (const { filePath, value } of Object.values(tutorialStore.documents.get())) {
-      files[removeLeadingSlash(filePath)] = value.toString();
+      if (typeof value === 'string') {
+        files[removeLeadingSlash(filePath)] = value;
+      }
     }
 
     const packageJson = parseJson(files['package.json']);
