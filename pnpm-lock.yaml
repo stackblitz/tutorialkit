@@ -530,7 +530,7 @@ importers:
 
   packages/create-tutorial:
     dependencies:
-      tutorialkit:
+      '@tutorialkit/cli':
         specifier: latest
         version: link:../cli
     devDependencies:

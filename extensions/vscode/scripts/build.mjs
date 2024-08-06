@@ -55,15 +55,6 @@ async function main() {
     await ctx.dispose();
 
     await buildMetadataSchema();
-
-    if (production) {
-      // rename name in `package.json` to match extension name on store
-      const pkgJSON = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf8' }));
-
-      pkgJSON.name = 'tutorialkit';
-
-      fs.writeFileSync('./package.json', JSON.stringify(pkgJSON, undefined, 2), 'utf8');
-    }
   }
 }
 

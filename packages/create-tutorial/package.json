@@ -23,7 +23,7 @@
     "dist"
   ],
   "dependencies": {
-    "tutorialkit": "latest"
+    "@tutorialkit/cli": "latest"
   },
   "devDependencies": {
     "@types/node": "^20.14.6",
