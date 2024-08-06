@@ -264,7 +264,7 @@ export async function getTutorial(): Promise<Tutorial> {
           continue;
         }
 
-        if (micromatch.isMatch(filename, lesson.data.template.visibleFiles, { format: formatTemplateFile })) {
+        if (micromatch.isMatch(filename, lesson.data.template.visibleFiles, { basename: true })) {
           lesson.files[1].push(filename);
         }
       }
@@ -338,15 +338,6 @@ function getSlug(entry: CollectionEntryTutorial) {
   }
 
   return slug;
-}
-
-function formatTemplateFile(filename: string) {
-  // compare files without leading "/" so that patterns like ["src/index.js"] match "/src/index.js"
-  if (filename.startsWith('/')) {
-    return filename.substring(1);
-  }
-
-  return filename;
 }
 
 interface CollectionEntryTutorial {
