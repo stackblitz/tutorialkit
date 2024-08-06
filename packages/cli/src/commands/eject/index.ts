@@ -18,7 +18,15 @@ interface PackageJson {
 }
 
 const TUTORIALKIT_VERSION = pkg.version;
-const REQUIRED_DEPENDENCIES = ['@tutorialkit/runtime', '@webcontainer/api', 'nanostores', '@nanostores/react', 'kleur'];
+const REQUIRED_DEPENDENCIES = [
+  '@tutorialkit/runtime',
+  '@webcontainer/api',
+  'nanostores',
+  '@nanostores/react',
+  'kleur',
+  'micromatch',
+  '@types/micromatch',
+];
 
 export function ejectRoutes(flags: Arguments) {
   if (flags._[1] === 'help' || flags.help || flags.h) {
@@ -104,6 +112,7 @@ async function _eject(flags: EjectOptions) {
   for (const dep of REQUIRED_DEPENDENCIES) {
     if (!(dep in pkgJson.dependencies) && !(dep in pkgJson.devDependencies)) {
       pkgJson.dependencies[dep] = astroIntegrationPkgJson.dependencies[dep];
+      pkgJson.devDependencies[dep] = astroIntegrationPkgJson.devDependencies[dep];
 
       newDependencies.push(dep);
     }
