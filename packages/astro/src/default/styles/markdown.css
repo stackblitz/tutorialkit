@@ -9,7 +9,8 @@
   --code-border-radius: 4px;
   --code-border-width: 1px;
   --code-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
-  --link-color: var(--tk-text-accent);
+  --link-color: var(--tk-elements-link-primaryColor);
+  --link-color-hover: var(--tk-elements-link-primaryColorHover);
   --blockquote-border-color: theme('colors.gray.500');
   --blockquote-background: var(--code-background-color);
   --content-font-size: 16px;
@@ -295,7 +296,7 @@
 .markdown-content a code,
 .markdown-content code a,
 .markdown-content a:hover {
-  color: unset;
+  color: var(--link-color-hover);
 }
 
 /* Blockquotes */

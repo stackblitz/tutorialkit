@@ -144,6 +144,12 @@ export const theme = {
           textColor: 'var(--tk-elements-app-textColor)',
           linkColor: 'var(--tk-elements-app-linkColor)',
         },
+        link: {
+          primaryColor: 'var(--tk-elements-link-primaryColor)',
+          primaryColorHover: 'var(--tk-elements-link-primaryColorHover)',
+          secondaryColor: 'var(--tk-elements-link-secondaryColor)',
+          secondaryColorHover: 'var(--tk-elements-link-secondaryColorHover)',
+        },
         content: {
           textColor: 'var(--tk-elements-content-textColor)',
           headingTextColor: 'var(--tk-elements-content-headingTextColor)',
@@ -251,13 +257,6 @@ export const theme = {
           textColorHover: 'var(--tk-elements-navCard-textColorHover)',
           iconColor: 'var(--tk-elements-navCard-iconColor)',
           iconColorHover: 'var(--tk-elements-navCard-iconColorHover)',
-        },
-        editPageLink: {
-          textColor: 'var(--tk-elements-editPageLink-textColor)',
-          textColorHover: 'var(--tk-elements-editPageLink-textColorHover)',
-          iconColor: 'var(--tk-elements-editPageLink-iconColor)',
-          iconColorHover: 'var(--tk-elements-editPageLink-iconColorHover)',
-          borderColor: 'var(--tk-elements-editPageLink-borderColor)',
         },
         breadcrumbs: {
           navButton: {

@@ -18,12 +18,12 @@ const { Markdown, editPageLink, prev, next } = lesson;
 
   {
     editPageLink && (
-      <div class="pb-4 mt-8 border-b border-tk-elements-editPageLink-borderColor">
+      <div class="pb-4 mt-8 border-b border-tk-border-secondary">
         <a
           href={editPageLink}
-          class="inline-flex flex-items-center text-tk-elements-editPageLink-textColor hover:text-tk-elements-editPageLink-textColorHover hover:underline"
+          class="inline-flex flex-items-center text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover hover:underline"
         >
-          <span class="icon i-ph-note-pencil pointer-events-none h-5 w-5 mr-2 text-tk-elements-editPageLink-iconColor group-hover:text-tk-elements-editPageLink-iconColorHover" />
+          <span class="icon i-ph-note-pencil pointer-events-none h-5 w-5 mr-2" />
           <span>{lesson.data.i18n!.editPageText}</span>
         </a>
       </div>
@@ -38,4 +38,11 @@ const { Markdown, editPageLink, prev, next } = lesson;
       {next && <NavCard lesson={next} type="next" />}
     </div>
   </div>
+
+  <a
+    class="inline-block mt-6 font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover"
+    href="https://webcontainers.io/"
+  >
+    {lesson.data.i18n!.webcontainerLinkText}
+  </a>
 </div>
