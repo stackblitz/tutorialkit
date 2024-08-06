@@ -13,7 +13,7 @@ terminal:
   panels: ['terminal', 'output']
 template:
   name: default
-  visibleFiles: ['src/template-only-file.js']
+  visibleFiles: ['template-only-file.js']
 ---
 
 # Kitchen Sink [Heading 1]
