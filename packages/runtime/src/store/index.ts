@@ -356,4 +356,8 @@ export class TutorialStore {
   refreshStyles() {
     this._themeRef.set(this._themeRef.get() + 1);
   }
+
+  takeSnapshot() {
+    return this._runner.takeSnapshot();
+  }
 }

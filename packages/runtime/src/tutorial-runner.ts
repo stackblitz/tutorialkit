@@ -302,6 +302,43 @@ export class TutorialRunner {
     );
   }
 
+  /**
+   * Get snapshot of runner's current files.
+   * Also prepares `package.json`'s `stackblitz.startCommand` with runner's commands.
+   *
+   * Note that file paths do not contain the leading `/`.
+   */
+  takeSnapshot() {
+    const files: Record<string, string> = {};
+
+    // first add template files
+    for (const [filePath, value] of Object.entries(this._currentTemplate || {})) {
+      if (typeof value === 'string') {
+        files[removeLeadingSlash(filePath)] = value;
+      }
+    }
+
+    // next overwrite with files from editor
+    for (const [filePath, value] of Object.entries(this._currentFiles || {})) {
+      if (typeof value === 'string') {
+        files[removeLeadingSlash(filePath)] = value;
+      }
+    }
+
+    const packageJson = parseJson(files['package.json']);
+
+    // add start commands
+    if (files['package.json']) {
+      const mainCommand = this._currentRunCommands?.mainCommand?.shellCommand;
+      const prepareCommands = (this._currentRunCommands?.prepareCommands || []).map((c) => c.shellCommand);
+      const startCommand = [...prepareCommands, mainCommand].filter(Boolean).join(' && ');
+
+      files['package.json'] = JSON.stringify({ ...packageJson, stackblitz: { startCommand } }, null, 2);
+    }
+
+    return { files };
+  }
+
   private async _runCommands(webcontainer: WebContainer, commands: Commands, signal: AbortSignal) {
     const output = this._terminalStore.getOutputPanel();
 
@@ -483,4 +520,20 @@ async function updateFiles(webcontainer: WebContainer, previousFiles: Files, new
   }
 
   await webcontainer.mount(toFileTree(addedOrModified));
+}
+
+function removeLeadingSlash(filePath: string) {
+  if (filePath.startsWith('/')) {
+    return filePath.slice(1);
+  }
+
+  return filePath;
+}
+
+function parseJson(deserialized: undefined | string): any {
+  try {
+    return JSON.parse(deserialized || '{}');
+  } catch {
+    return {};
+  }
 }

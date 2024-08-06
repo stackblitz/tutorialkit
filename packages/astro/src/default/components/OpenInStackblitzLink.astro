@@ -23,75 +23,17 @@
 
   function onClick() {
     const lesson = tutorialStore.lesson;
+    const snapshot = tutorialStore.takeSnapshot();
 
     if (!lesson) {
       throw new Error('Missing lesson');
-    }
-
-    const files: Record<string, string> = {};
-
-    // first add template files
-    for (const [filePath, value] of Object.entries(tutorialStore.template || {})) {
-      if (typeof value === 'string') {
-        files[removeLeadingSlash(filePath)] = value;
-      }
-    }
-
-    // next overwrite with files from editor
-    for (const { filePath, value } of Object.values(tutorialStore.documents.get())) {
-      if (typeof value === 'string') {
-        files[removeLeadingSlash(filePath)] = value;
-      }
-    }
-
-    const packageJson = parseJson(files['package.json']);
-
-    // add start commands
-    if (files['package.json']) {
-      const mainCommand = resolveCommand(lesson.data.mainCommand);
-      const prepareCommands = (lesson.data.prepareCommands || []).map(resolveCommand);
-      const startCommand = [...prepareCommands, mainCommand].filter(Boolean).join(' && ');
-
-      files['package.json'] = JSON.stringify({ ...packageJson, stackblitz: { startCommand } }, null, 2);
     }
 
     StackBlitzSDK.openProject({
       title: lesson.data.title || 'Lesson',
       description: `${lesson.part.title} / ${lesson.chapter.title}`,
       template: 'node',
-      files,
+      files: snapshot.files,
     });
-
-    function resolveCommand(command: NonNullable<typeof lesson>['data']['mainCommand']): string {
-      if (!command) {
-        return '';
-      }
-
-      if (typeof command === 'string') {
-        return command;
-      }
-
-      if (Array.isArray(command)) {
-        return command[0];
-      }
-
-      return command.command;
-    }
-
-    function removeLeadingSlash(filePath: string) {
-      if (filePath.startsWith('/')) {
-        return filePath.slice(1);
-      }
-
-      return filePath;
-    }
-
-    function parseJson(deserialized: undefined | string): any {
-      try {
-        return JSON.parse(deserialized || '{}');
-      } catch {
-        return {};
-      }
-    }
   }
 </script>
