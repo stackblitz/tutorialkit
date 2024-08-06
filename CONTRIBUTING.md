@@ -39,7 +39,7 @@ These packages will be installed by the end-users in their `package.json`.
 ### CLI Packages
 
 The CLI packages are expected to be run by users using `npm create tutorial` and `npx tutorialkit` commands.
-These should not be installed in their `package.json`.
+These should not be added to `package.json`.
 
 - `@tutorialkit/cli`
 - `create-tutorial`
