@@ -138,7 +138,7 @@
 
   /* Links */
   --tk-elements-link-primaryColor: var(--tk-text-accent);
-  --tk-elements-link-primaryHoverColor: unset;
+  --tk-elements-link-primaryColorHover: unset;
   --tk-elements-link-secondaryColor: var(--tk-text-secondary);
   --tk-elements-link-secondaryColorHover: var(--tk-text-primary);
 
