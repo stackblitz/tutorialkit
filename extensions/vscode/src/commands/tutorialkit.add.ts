@@ -2,6 +2,7 @@ import { cmd } from '.';
 import { Node, NodeType } from '../models/Node';
 import * as vscode from 'vscode';
 import { FILES_FOLDER, SOLUTION_FOLDER } from '../models/tree/constants';
+import { updateNodeMetadataInVFS } from '../models/tree/update';
 
 let kebabCase: (string: string) => string;
 let capitalize: (string: string) => string;
@@ -56,9 +57,15 @@ async function getUnitName(unitType: NodeType, unitNumber: number) {
 async function createUnitFolder(parent: Node, unitType: NodeType) {
   const unitNumber = parent.children.length + 1;
   const unitName = await getUnitName(unitType, unitNumber);
-  const unitFolderPath = `${unitNumber}-${kebabCase(unitName)}`;
+  const unitFolderPath = parent.order ? kebabCase(unitName) : `${unitNumber}-${kebabCase(unitName)}`;
+
   const metaFile = unitType === 'lesson' ? 'content.mdx' : 'meta.md';
   const metaFilePath = vscode.Uri.joinPath(parent.path, unitFolderPath, metaFile);
+
+  if (parent.order) {
+    parent.pushChild(unitFolderPath);
+    await updateNodeMetadataInVFS(parent);
+  }
 
   await vscode.workspace.fs.writeFile(
     metaFilePath,

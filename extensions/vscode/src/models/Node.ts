@@ -53,6 +53,29 @@ export class Node {
     readonly path: vscode.Uri,
     private _customName?: string,
   ) {}
+
+  pushChild(folderPath: string) {
+    this.childCount += 1;
+
+    if (this.order) {
+      this.order.set(folderPath, this.order.size);
+
+      switch (this.metadata?.type) {
+        case 'chapter': {
+          this.metadata.lessons!.push(folderPath);
+          break;
+        }
+        case 'tutorial': {
+          this.metadata.parts!.push(folderPath);
+          break;
+        }
+        case 'part': {
+          this.metadata.chapters!.push(folderPath);
+          break;
+        }
+      }
+    }
+  }
 }
 
 export type Metadata = PartSchema | ChapterSchema | LessonSchema | TutorialSchema;
