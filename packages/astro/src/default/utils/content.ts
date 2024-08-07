@@ -1,23 +1,12 @@
-import type {
-  ChapterSchema,
-  FilesRefList,
-  Lesson,
-  LessonSchema,
-  PartSchema,
-  Tutorial,
-  TutorialSchema,
-} from '@tutorialkit/types';
-import { folderPathToFilesRef, interpolateString } from '@tutorialkit/types';
+import type { ChapterSchema, Lesson, LessonSchema, PartSchema, Tutorial, TutorialSchema } from '@tutorialkit/types';
+import { interpolateString } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
-import glob from 'fast-glob';
 import path from 'node:path';
-import { IGNORED_FILES } from './constants';
 import { DEFAULT_LOCALIZATION } from './content/default-localization';
 import { squash } from './content/squash.js';
 import { logger } from './logger';
 import { joinPaths } from './url';
-
-const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
+import { getFilesRefList } from './content/files-ref';
 
 export async function getTutorial(): Promise<Tutorial> {
   const collection = sortCollection(await getCollection('tutorial'));
@@ -329,24 +318,6 @@ function getSlug(entry: CollectionEntryTutorial) {
   }
 
   return slug;
-}
-
-async function getFilesRefList(pathToFolder: string): Promise<FilesRefList> {
-  const root = path.join(CONTENT_DIR, pathToFolder);
-
-  const filePaths = (
-    await glob(`${glob.convertPathToPattern(root)}/**/*`, {
-      onlyFiles: true,
-      ignore: IGNORED_FILES,
-      dot: true,
-    })
-  ).map((filePath) => `/${path.relative(root, filePath)}`);
-
-  filePaths.sort();
-
-  const filesRef = folderPathToFilesRef(pathToFolder);
-
-  return [filesRef, filePaths];
 }
 
 interface CollectionEntryTutorial {
