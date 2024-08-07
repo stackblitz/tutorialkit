@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/stackblitz/tutorialkit/compare/0.1.2...0.1.3) "@tutorialkit/components-react" (2024-08-07)
+
+
+### Features
+
+* add Svelte language to CodeMirror ([#212](https://github.com/stackblitz/tutorialkit/issues/212)) ([359c0e0](https://github.com/stackblitz/tutorialkit/commit/359c0e05c91c437066ff9a19a61bb74365faf3f0))
+
+
+
 ## [0.1.2](https://github.com/stackblitz/tutorialkit/compare/0.1.1...0.1.2) "@tutorialkit/components-react" (2024-08-01)
 
 
