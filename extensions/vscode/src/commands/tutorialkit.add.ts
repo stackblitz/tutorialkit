@@ -1,5 +1,5 @@
 import { cmd } from '.';
-import { Lesson, LessonType } from '../models/Lesson';
+import { Node, NodeType } from '../models/Node';
 import * as vscode from 'vscode';
 
 let kebabCase: (string: string) => string;
@@ -11,7 +11,7 @@ let capitalize: (string: string) => string;
   capitalize = module.capitalCase;
 })();
 
-export async function addLesson(parent: Lesson) {
+export async function addLesson(parent: Node) {
   const lessonNumber = parent.children.length + 1;
 
   const lessonName = await getUnitName('lesson', lessonNumber);
@@ -26,7 +26,7 @@ export async function addLesson(parent: Lesson) {
   return navigateToUnit(lessonFolderPath, 'lesson');
 }
 
-export async function addChapter(parent: Lesson) {
+export async function addChapter(parent: Node) {
   const chapterNumber = parent.children.length + 1;
 
   const chapterName = await getUnitName('chapter', chapterNumber);
@@ -38,7 +38,7 @@ export async function addChapter(parent: Lesson) {
   await cmd.refresh();
 }
 
-async function getUnitName(unitType: LessonType, unitNumber: number) {
+async function getUnitName(unitType: NodeType, unitNumber: number) {
   const unitName = await vscode.window.showInputBox({
     prompt: `Enter the name of the new ${unitType}`,
     value: `${capitalize(unitType)} ${unitNumber}`,
@@ -52,19 +52,19 @@ async function getUnitName(unitType: LessonType, unitNumber: number) {
   return unitName;
 }
 
-async function createUnitFolder(parentPath: string, unitNumber: number, unitName: string, unitType: LessonType) {
-  const unitFolderPath = `${parentPath}/${unitNumber}-${kebabCase(unitName)}`;
+async function createUnitFolder(parentPath: vscode.Uri, unitNumber: number, unitName: string, unitType: NodeType) {
+  const unitFolderPath = `${unitNumber}-${kebabCase(unitName)}`;
   const metaFile = unitType === 'lesson' ? 'content.mdx' : 'meta.md';
 
   await vscode.workspace.fs.writeFile(
-    vscode.Uri.file(`${unitFolderPath}/${metaFile}`),
+    vscode.Uri.joinPath(parentPath, unitFolderPath, metaFile),
     new TextEncoder().encode(`---\ntype: ${unitType}\ntitle: ${unitName}\n---\n`),
   );
 
   return unitFolderPath;
 }
 
-async function navigateToUnit(path: string, unitType: LessonType) {
+async function navigateToUnit(path: string, unitType: NodeType) {
   const metaFile = unitType === 'lesson' ? 'content.mdx' : 'meta.md';
 
   return cmd.goto(`${path}/${metaFile}`);
