@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/stackblitz/tutorialkit/compare/0.1.2...0.1.3) "@tutorialkit/runtime" (2024-08-07)
+
+
+### Features
+
+* add 'Open in StackBlitz'-button ([#219](https://github.com/stackblitz/tutorialkit/issues/219)) ([af428c8](https://github.com/stackblitz/tutorialkit/commit/af428c84f0cd817debd336dc43e88c19583800ce))
+
+
+
 ## [0.1.2](https://github.com/stackblitz/tutorialkit/compare/0.1.1...0.1.2) "@tutorialkit/runtime" (2024-08-01)
 
 

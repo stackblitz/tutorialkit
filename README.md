@@ -36,7 +36,7 @@ Read our documentation on [tutorialkit.dev](https://tutorialkit.dev/guides/about
 
 ### Contribution
 
-See [Contributing Guide](https://github.com/stackblitz/tutorialkit/blob/main/CONTRIBUTING.md).
+See [Contributing Guide](./CONTRIBUTING.md).
 
 ## Community
 

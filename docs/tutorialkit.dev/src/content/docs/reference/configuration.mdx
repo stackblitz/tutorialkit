@@ -211,3 +211,17 @@ You can instruct Github to show the source code instead by adding `plain=1` quer
 
 :::
 
+### `openInStackBlitz`
+Display a link for opening current lesson in StackBlitz.
+<PropertyTable inherited type="OpenInStackBlitz" />
+
+The `OpenInStackBlitz` type has the following shape:
+
+```ts
+type OpenInStackBlitz =
+    | boolean
+    | { projectTitle?: string, projectDescription?: string, projectTemplate?: TemplateType }
+
+type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "javascript" | "polymer" | "typescript" | "vue"
+
+```

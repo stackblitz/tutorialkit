@@ -35,14 +35,14 @@ async function processPackages() {
     packages.set(pkg.name, pkg);
   }
 
-  // overwrites temporarily the version on the `tutorialkit` package as it's released separately later
-  const tutorialkit = packages.get('tutorialkit');
+  // overwrites temporarily the version on the `@tutorialkit/cli` package as it's released separately later
+  const tutorialkitCli = packages.get('@tutorialkit/cli');
   const tutorialkitAstro = packages.get('@tutorialkit/astro');
 
-  const originalVersion = tutorialkit.version;
-  tutorialkit.version = tutorialkitAstro.version;
+  const originalVersion = tutorialkitCli.version;
+  tutorialkitCli.version = tutorialkitAstro.version;
 
-  tutorialkit.write();
+  tutorialkitCli.write();
 
   // generate change logs
   await Promise.all(
@@ -67,8 +67,8 @@ async function processPackages() {
   // generate root changelog
   await generateChangelog(
     {
-      version: tutorialkit.version,
-      path: tutorialkit.path,
+      version: tutorialkitCli.version,
+      path: tutorialkitCli.path,
       gitPath: '.',
       changelogPath: 'CHANGELOG.md',
     },
@@ -76,6 +76,6 @@ async function processPackages() {
   );
 
   // reset the version of the CLI:
-  tutorialkit.version = originalVersion;
-  tutorialkit.write();
+  tutorialkitCli.version = originalVersion;
+  tutorialkitCli.write();
 }

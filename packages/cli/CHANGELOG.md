@@ -1,3 +1,13 @@
+## [0.1.3](https://github.com/stackblitz/tutorialkit/compare/0.1.2...0.1.3) "@tutorialkit/cli" (2024-08-07)
+
+
+### Features
+
+* add 'Open in StackBlitz'-button ([#219](https://github.com/stackblitz/tutorialkit/issues/219)) ([af428c8](https://github.com/stackblitz/tutorialkit/commit/af428c84f0cd817debd336dc43e88c19583800ce))
+* rename `tutorialkit` to `@tutorialkit/cli` ([#153](https://github.com/stackblitz/tutorialkit/issues/153)) ([2986157](https://github.com/stackblitz/tutorialkit/commit/298615748b1f2d3ea737c591ce193eb0d28407ca))
+
+
+
 ## [0.1.2](https://github.com/stackblitz/tutorialkit/compare/0.1.1...0.1.2) "tutorialkit" (2024-08-01)
 
 

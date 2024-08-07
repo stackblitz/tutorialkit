@@ -9,4 +9,7 @@ prepareCommands:
   - ['npm install', 'Installing dependencies']
 i18n:
   partTemplate: ${title}
+openInStackBlitz:
+  projectTitle: Example Title
+  projectDescription: Example Description
 ---

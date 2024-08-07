@@ -1,3 +1,15 @@
+## [0.1.3](https://github.com/stackblitz/tutorialkit/compare/0.1.2...0.1.3) (2024-08-07)
+
+
+### Features
+
+* add 'Open in StackBlitz'-button ([#219](https://github.com/stackblitz/tutorialkit/issues/219)) ([af428c8](https://github.com/stackblitz/tutorialkit/commit/af428c84f0cd817debd336dc43e88c19583800ce))
+* add link to webcontainers.io ([#202](https://github.com/stackblitz/tutorialkit/issues/202)) ([70d20c7](https://github.com/stackblitz/tutorialkit/commit/70d20c7b3801b458aa11c7d70a11ea1392d0fa60))
+* add Svelte language to CodeMirror ([#212](https://github.com/stackblitz/tutorialkit/issues/212)) ([359c0e0](https://github.com/stackblitz/tutorialkit/commit/359c0e05c91c437066ff9a19a61bb74365faf3f0))
+* rename `tutorialkit` to `@tutorialkit/cli` ([#153](https://github.com/stackblitz/tutorialkit/issues/153)) ([2986157](https://github.com/stackblitz/tutorialkit/commit/298615748b1f2d3ea737c591ce193eb0d28407ca))
+
+
+
 ## [0.1.2](https://github.com/stackblitz/tutorialkit/compare/0.1.1...0.1.2) (2024-08-01)
 
 

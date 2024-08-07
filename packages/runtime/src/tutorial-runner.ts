@@ -65,6 +65,7 @@ export class TutorialRunner {
 
   // this strongly assumes that there's a single package json which might not be true
   private _packageJsonContent = '';
+  private _packageJsonPath = '';
 
   constructor(
     private _webcontainer: Promise<WebContainer>,
@@ -188,7 +189,7 @@ export class TutorialRunner {
         this._currentTemplate = { ...template };
         this._currentFiles = { ...files };
 
-        this._updateDirtyState(files);
+        this._updateDirtyState({ ...template, ...files });
       },
       { ignoreCancel: true, signal },
     );
@@ -300,6 +301,53 @@ export class TutorialRunner {
       },
       { ignoreCancel: true },
     );
+  }
+
+  /**
+   * Get snapshot of runner's current files.
+   * Also prepares `package.json`'s `stackblitz.startCommand` with runner's commands.
+   *
+   * Note that file paths do not contain the leading `/`.
+   */
+  takeSnapshot() {
+    const files: Record<string, string> = {};
+
+    // first add template files
+    for (const [filePath, value] of Object.entries(this._currentTemplate || {})) {
+      if (typeof value === 'string') {
+        files[filePath.slice(1)] = value;
+      }
+    }
+
+    // next overwrite with files from editor
+    for (const [filePath, value] of Object.entries(this._currentFiles || {})) {
+      if (typeof value === 'string') {
+        files[filePath.slice(1)] = value;
+      }
+    }
+
+    if (this._packageJsonContent) {
+      let packageJson;
+
+      try {
+        packageJson = JSON.parse(this._packageJsonContent);
+      } catch {}
+
+      // add start commands when missing
+      if (packageJson && !packageJson.stackblitz?.startCommand) {
+        const mainCommand = this._currentRunCommands?.mainCommand?.shellCommand;
+        const prepareCommands = (this._currentRunCommands?.prepareCommands || []).map((c) => c.shellCommand);
+        const startCommand = [...prepareCommands, mainCommand].filter(Boolean).join(' && ');
+
+        files[this._packageJsonPath.slice(1)] = JSON.stringify(
+          { ...packageJson, stackblitz: { startCommand } },
+          null,
+          2,
+        );
+      }
+    }
+
+    return { files };
   }
 
   private async _runCommands(webcontainer: WebContainer, commands: Commands, signal: AbortSignal) {
@@ -417,6 +465,7 @@ export class TutorialRunner {
     for (const filePath in files) {
       if (filePath.endsWith('/package.json') && files[filePath] != this._packageJsonContent) {
         this._packageJsonContent = files[filePath] as string;
+        this._packageJsonPath = filePath;
         this._packageJsonDirty = true;
 
         return;

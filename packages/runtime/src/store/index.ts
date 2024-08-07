@@ -207,6 +207,10 @@ export class TutorialStore {
     return this._editorStore.documents;
   }
 
+  get template(): Files | undefined {
+    return this._lessonTemplate;
+  }
+
   get selectedFile(): ReadableAtom<string | undefined> {
     return this._editorStore.selectedFile;
   }
@@ -351,5 +355,9 @@ export class TutorialStore {
 
   refreshStyles() {
     this._themeRef.set(this._themeRef.get() + 1);
+  }
+
+  takeSnapshot() {
+    return this._runner.takeSnapshot();
   }
 }

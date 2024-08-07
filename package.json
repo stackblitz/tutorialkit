@@ -1,22 +1,22 @@
 {
   "private": true,
   "scripts": {
-    "build": "pnpm run --filter=@tutorialkit/* --filter=tutorialkit --filter=create-tutorial build",
+    "build": "pnpm run --stream --filter=@tutorialkit/* --filter=create-tutorial build",
     "dev": "TUTORIALKIT_DEV=true pnpm -r --parallel --stream --filter='./packages/**' run dev",
     "changelog": "./scripts/changelog.mjs",
     "clean": "./scripts/clean.sh",
     "prepare": "is-ci || husky install",
-    "extension:dev": "pnpm --parallel --stream --filter=@tutorialkit/types --filter=tutorialkit-vscode run dev",
-    "extension:build": "pnpm run --filter=tutorialkit-vscode build",
+    "extension:dev": "pnpm run --parallel --stream --filter=@tutorialkit/types --filter='./extensions/**' dev",
+    "extension:build": "pnpm run --filter='./extensions/**' build",
     "template:dev": "TUTORIALKIT_DEV=true pnpm run build && pnpm run --filter=tutorialkit-starter dev",
     "template:build": "pnpm run build && pnpm run --filter=tutorialkit-starter build",
-    "cli:build-release": "pnpm run --filter=tutorialkit build-release",
+    "cli:build-release": "pnpm run --filter=@tutorialkit/cli build-release",
     "docs": "pnpm run --filter=tutorialkit.dev dev",
     "docs:build": "pnpm run build && pnpm run --filter=tutorialkit.dev build",
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
     "demo:build": "pnpm run build && pnpm run --filter=demo.tutorialkit.dev build",
     "lint": "eslint \"{packages,docs,extensions,integration}/**/*\"",
-    "test": "pnpm run --stream --filter=@tutorialkit/* --filter=tutorialkit test --run"
+    "test": "pnpm run --stream --filter=@tutorialkit/* test --run"
   },
   "license": "MIT",
   "packageManager": "pnpm@8.15.6",
