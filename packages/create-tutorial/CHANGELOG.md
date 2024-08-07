@@ -1,3 +1,12 @@
+## [0.0.2](https://github.com/stackblitz/tutorialkit/compare/0.1.2...0.0.2) "create-tutorial" (2024-08-07)
+
+
+### Features
+
+* rename `tutorialkit` to `@tutorialkit/cli` ([#153](https://github.com/stackblitz/tutorialkit/issues/153)) ([2986157](https://github.com/stackblitz/tutorialkit/commit/298615748b1f2d3ea737c591ce193eb0d28407ca))
+
+
+
 ## [0.0.2](https://github.com/stackblitz/tutorialkit/compare/0.1.1...0.0.2) "create-tutorial" (2024-08-01)
 
 
