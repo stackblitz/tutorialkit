@@ -314,26 +314,32 @@ export class TutorialRunner {
     // first add template files
     for (const [filePath, value] of Object.entries(this._currentTemplate || {})) {
       if (typeof value === 'string') {
-        files[removeLeadingSlash(filePath)] = value;
+        files[filePath.slice(1)] = value;
       }
     }
 
     // next overwrite with files from editor
     for (const [filePath, value] of Object.entries(this._currentFiles || {})) {
       if (typeof value === 'string') {
-        files[removeLeadingSlash(filePath)] = value;
+        files[filePath.slice(1)] = value;
       }
     }
 
-    const packageJson = parseJson(files['package.json']);
-
-    // add start commands
     if (files['package.json']) {
-      const mainCommand = this._currentRunCommands?.mainCommand?.shellCommand;
-      const prepareCommands = (this._currentRunCommands?.prepareCommands || []).map((c) => c.shellCommand);
-      const startCommand = [...prepareCommands, mainCommand].filter(Boolean).join(' && ');
+      let packageJson;
 
-      files['package.json'] = JSON.stringify({ ...packageJson, stackblitz: { startCommand } }, null, 2);
+      try {
+        packageJson = JSON.parse(files['package.json']);
+      } catch {}
+
+      // add start commands when missing
+      if (packageJson && !packageJson.stackblitz?.startCommand) {
+        const mainCommand = this._currentRunCommands?.mainCommand?.shellCommand;
+        const prepareCommands = (this._currentRunCommands?.prepareCommands || []).map((c) => c.shellCommand);
+        const startCommand = [...prepareCommands, mainCommand].filter(Boolean).join(' && ');
+
+        files['package.json'] = JSON.stringify({ ...packageJson, stackblitz: { startCommand } }, null, 2);
+      }
     }
 
     return { files };
@@ -520,20 +526,4 @@ async function updateFiles(webcontainer: WebContainer, previousFiles: Files, new
   }
 
   await webcontainer.mount(toFileTree(addedOrModified));
-}
-
-function removeLeadingSlash(filePath: string) {
-  if (filePath.startsWith('/')) {
-    return filePath.slice(1);
-  }
-
-  return filePath;
-}
-
-function parseJson(deserialized: undefined | string): any {
-  try {
-    return JSON.parse(deserialized || '{}');
-  } catch {
-    return {};
-  }
 }
