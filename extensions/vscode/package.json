@@ -19,6 +19,13 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "keybindings":[
+      {
+        "command": "tutorialkit.delete",
+        "key": "Shift+Backspace",
+        "when": "focusedView == tutorialkit-lessons-tree"
+      }
+    ],
     "commands": [
       {
         "command": "tutorialkit.select-tutorial",

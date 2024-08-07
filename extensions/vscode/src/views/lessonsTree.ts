@@ -8,16 +8,6 @@ import { METADATA_FILES } from '../models/tree/constants';
 
 export const tutorialMimeType = 'application/tutorialkit.unit';
 
-let lessonsTreeDataProvider: LessonsTreeDataProvider;
-
-export function getLessonsTreeDataProvider() {
-  return lessonsTreeDataProvider;
-}
-
-export function setLessonsTreeDataProvider(provider: LessonsTreeDataProvider) {
-  lessonsTreeDataProvider = provider;
-}
-
 export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Node>, vscode.Disposable {
   private _tutorial!: Node;
   private _tutorialName: string;

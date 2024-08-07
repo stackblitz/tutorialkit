@@ -1,4 +1,4 @@
-import { getLessonsTreeDataProvider } from '../views/lessonsTree';
+import { getLessonsTreeDataProvider } from '../global-state';
 
 export default () => {
   getLessonsTreeDataProvider().refresh();
