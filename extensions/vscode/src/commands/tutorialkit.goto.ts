@@ -16,7 +16,7 @@ export default async (path: string | vscode.Uri | undefined) => {
    * ;
    * ```
    *
-   * type check correctly despite doing nothing different on each branch.
+   * Type check correctly despite doing nothing different on each branch.
    *
    * To avoid this TypeScript bug here we just cast to any.
    */

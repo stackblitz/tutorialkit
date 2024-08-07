@@ -19,7 +19,7 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "keybindings":[
+    "keybindings": [
       {
         "command": "tutorialkit.delete",
         "key": "Shift+Backspace",

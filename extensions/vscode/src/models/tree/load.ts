@@ -95,14 +95,18 @@ async function updateNodeFromMetadata(node: Node, metadataFilePath: vscode.Uri) 
 
 function getOrder(metadata: Metadata): Map<string, number> | undefined {
   switch (metadata.type) {
-    case 'part':
+    case 'part': {
       return fromArrayToInversedMap(metadata.chapters);
-    case 'chapter':
+    }
+    case 'chapter': {
       return fromArrayToInversedMap(metadata.lessons);
-    case 'tutorial':
+    }
+    case 'tutorial': {
       return fromArrayToInversedMap(metadata.parts);
-    default:
+    }
+    default: {
       return;
+    }
   }
 }
 
