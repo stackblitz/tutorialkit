@@ -15,7 +15,7 @@ export async function getFilesRefList(pathToFolder: string, base = CONTENT_DIR):
       ignore: IGNORED_FILES,
       dot: true,
     })
-  ).map((filePath) => `/${path.relative(root, filePath)}`);
+  ).map((filePath) => `/${path.relative(root, filePath).replaceAll(path.sep, '/')}`);
 
   filePaths.sort();
 
