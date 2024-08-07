@@ -79,7 +79,7 @@ export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Node>, v
       treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
     }
 
-    treeItem.contextValue = node.metadata?.type;
+    treeItem.contextValue = node.type;
 
     treeItem.command = {
       command: cmd.goto.command,

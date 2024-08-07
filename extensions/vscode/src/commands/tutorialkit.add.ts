@@ -1,6 +1,7 @@
 import { cmd } from '.';
 import { Node, NodeType } from '../models/Node';
 import * as vscode from 'vscode';
+import { FILES_FOLDER, SOLUTION_FOLDER } from '../models/tree/constants';
 
 let kebabCase: (string: string) => string;
 let capitalize: (string: string) => string;
@@ -12,30 +13,30 @@ let capitalize: (string: string) => string;
 })();
 
 export async function addLesson(parent: Node) {
-  const lessonNumber = parent.children.length + 1;
+  const { folderPath, metaFilePath } = await createUnitFolder(parent, 'lesson');
 
-  const lessonName = await getUnitName('lesson', lessonNumber);
-
-  const lessonFolderPath = await createUnitFolder(parent.path, lessonNumber, lessonName, 'lesson');
-
-  await vscode.workspace.fs.createDirectory(vscode.Uri.file(`${lessonFolderPath}/_files`));
-  await vscode.workspace.fs.createDirectory(vscode.Uri.file(`${lessonFolderPath}/_solution`));
+  await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(folderPath, FILES_FOLDER));
+  await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(folderPath, SOLUTION_FOLDER));
 
   await cmd.refresh();
 
-  return navigateToUnit(lessonFolderPath, 'lesson');
+  return cmd.goto(metaFilePath);
 }
 
 export async function addChapter(parent: Node) {
-  const chapterNumber = parent.children.length + 1;
-
-  const chapterName = await getUnitName('chapter', chapterNumber);
-
-  const chapterFolderPath = await createUnitFolder(parent.path, chapterNumber, chapterName, 'chapter');
-
-  await navigateToUnit(chapterFolderPath, 'chapter');
+  const { metaFilePath } = await createUnitFolder(parent, 'chapter');
 
   await cmd.refresh();
+
+  return cmd.goto(metaFilePath);
+}
+
+export async function addPart(parent: Node) {
+  const { metaFilePath } = await createUnitFolder(parent, 'part');
+
+  await cmd.refresh();
+
+  return cmd.goto(metaFilePath);
 }
 
 async function getUnitName(unitType: NodeType, unitNumber: number) {
@@ -52,20 +53,20 @@ async function getUnitName(unitType: NodeType, unitNumber: number) {
   return unitName;
 }
 
-async function createUnitFolder(parentPath: vscode.Uri, unitNumber: number, unitName: string, unitType: NodeType) {
+async function createUnitFolder(parent: Node, unitType: NodeType) {
+  const unitNumber = parent.children.length + 1;
+  const unitName = await getUnitName(unitType, unitNumber);
   const unitFolderPath = `${unitNumber}-${kebabCase(unitName)}`;
   const metaFile = unitType === 'lesson' ? 'content.mdx' : 'meta.md';
+  const metaFilePath = vscode.Uri.joinPath(parent.path, unitFolderPath, metaFile);
 
   await vscode.workspace.fs.writeFile(
-    vscode.Uri.joinPath(parentPath, unitFolderPath, metaFile),
+    metaFilePath,
     new TextEncoder().encode(`---\ntype: ${unitType}\ntitle: ${unitName}\n---\n`),
   );
 
-  return unitFolderPath;
-}
-
-async function navigateToUnit(path: string, unitType: NodeType) {
-  const metaFile = unitType === 'lesson' ? 'content.mdx' : 'meta.md';
-
-  return cmd.goto(`${path}/${metaFile}`);
+  return {
+    folderPath: vscode.Uri.joinPath(parent.path, unitFolderPath),
+    metaFilePath,
+  };
 }

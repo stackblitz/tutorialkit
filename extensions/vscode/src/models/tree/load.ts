@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import grayMatter from 'gray-matter';
 import { Metadata, Node } from '../Node';
-import { METADATA_FILES, FILE_FOLDER, SOLUTION_FOLDER } from './constants';
+import { METADATA_FILES, FILES_FOLDER, SOLUTION_FOLDER } from './constants';
 import { uriDirname } from '../../utils/uri';
 
 export async function loadTutorialTree(tutorialFolderPath: vscode.Uri, tutorialName: string): Promise<Node> {
@@ -126,7 +126,7 @@ async function getChildCount(nodeFolder: vscode.Uri): Promise<number> {
   let childCount = 0;
 
   for (const [file, fileType] of filesInFolder) {
-    if (fileType !== vscode.FileType.Directory || file === FILE_FOLDER || file === SOLUTION_FOLDER) {
+    if (fileType !== vscode.FileType.Directory || file === FILES_FOLDER || file === SOLUTION_FOLDER) {
       continue;
     }
 

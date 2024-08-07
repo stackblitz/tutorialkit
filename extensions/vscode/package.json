@@ -38,6 +38,10 @@
         "title": "Add Part"
       },
       {
+        "command": "tutorialkit.delete",
+        "title": "Delete"
+      },
+      {
         "command": "tutorialkit.refresh",
         "title": "Refresh Lessons",
         "icon": "$(refresh)"
@@ -100,6 +104,14 @@
         {
           "command": "tutorialkit.add-chapter",
           "when": "view == tutorialkit-lessons-tree && viewItem == part"
+        },
+        {
+          "command": "tutorialkit.add-part",
+          "when": "view == tutorialkit-lessons-tree && viewItem == tutorial"
+        },
+        {
+          "command": "tutorialkit.delete",
+          "when": "view == tutorialkit-lessons-tree && (viewItem == chapter || viewItem == part || viewItem == lesson)"
         }
       ]
     },
