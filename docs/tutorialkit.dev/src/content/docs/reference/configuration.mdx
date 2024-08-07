@@ -211,6 +211,15 @@ You can instruct Github to show the source code instead by adding `plain=1` quer
 
 :::
 
-### `openInStackBlitzLink`
+### `openInStackBlitz`
 Display a link for opening current lesson in StackBlitz.
-<PropertyTable inherited type="boolean" />
+<PropertyTable inherited type="OpenInStackBlitz" />
+
+The `OpenInStackBlitz` type has the following shape:
+
+```ts
+type OpenInStackBlitz = string
+    | boolean
+    | { projectTitle?: string, projectDescription?: string }
+
+```

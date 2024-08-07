@@ -65,6 +65,7 @@ export class TutorialRunner {
 
   // this strongly assumes that there's a single package json which might not be true
   private _packageJsonContent = '';
+  private _packageJsonPath = '';
 
   constructor(
     private _webcontainer: Promise<WebContainer>,
@@ -188,7 +189,7 @@ export class TutorialRunner {
         this._currentTemplate = { ...template };
         this._currentFiles = { ...files };
 
-        this._updateDirtyState(files);
+        this._updateDirtyState({ ...template, ...files });
       },
       { ignoreCancel: true, signal },
     );
@@ -325,11 +326,11 @@ export class TutorialRunner {
       }
     }
 
-    if (files['package.json']) {
+    if (this._packageJsonContent) {
       let packageJson;
 
       try {
-        packageJson = JSON.parse(files['package.json']);
+        packageJson = JSON.parse(this._packageJsonContent);
       } catch {}
 
       // add start commands when missing
@@ -338,7 +339,11 @@ export class TutorialRunner {
         const prepareCommands = (this._currentRunCommands?.prepareCommands || []).map((c) => c.shellCommand);
         const startCommand = [...prepareCommands, mainCommand].filter(Boolean).join(' && ');
 
-        files['package.json'] = JSON.stringify({ ...packageJson, stackblitz: { startCommand } }, null, 2);
+        files[this._packageJsonPath.slice(1)] = JSON.stringify(
+          { ...packageJson, stackblitz: { startCommand } },
+          null,
+          2,
+        );
       }
     }
 
@@ -460,6 +465,7 @@ export class TutorialRunner {
     for (const filePath in files) {
       if (filePath.endsWith('/package.json') && files[filePath] != this._packageJsonContent) {
         this._packageJsonContent = files[filePath] as string;
+        this._packageJsonPath = filePath;
         this._packageJsonDirty = true;
 
         return;
