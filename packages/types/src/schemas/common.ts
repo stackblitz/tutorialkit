@@ -220,6 +220,18 @@ export const webcontainerSchema = commandsSchema.extend({
       z.strictObject({
         projectTitle: z.string().optional(),
         projectDescription: z.string().optional(),
+        projectTemplate: z
+          .union([
+            z.literal('html'),
+            z.literal('node'),
+            z.literal('angular-cli'),
+            z.literal('create-react-app'),
+            z.literal('javascript'),
+            z.literal('polymer'),
+            z.literal('typescript'),
+            z.literal('vue'),
+          ])
+          .optional(),
       }),
     ])
     .optional()

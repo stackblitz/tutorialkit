@@ -218,8 +218,10 @@ Display a link for opening current lesson in StackBlitz.
 The `OpenInStackBlitz` type has the following shape:
 
 ```ts
-type OpenInStackBlitz = string
+type OpenInStackBlitz =
     | boolean
-    | { projectTitle?: string, projectDescription?: string }
+    | { projectTitle?: string, projectDescription?: string, projectTemplate?: TemplateType }
+
+type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "javascript" | "polymer" | "typescript" | "vue"
 
 ```
