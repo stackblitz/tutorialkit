@@ -94,6 +94,58 @@ exports[`create a project 1`] = `
 ]
 `;
 
+exports[`create and build a project > built project file references 1`] = `
+{
+  "1-basics-1-introduction-1-welcome-files.json": [
+    "/src/index.js",
+    "/src/test/bar.js",
+  ],
+  "1-basics-1-introduction-1-welcome-solution.json": [
+    "/src/index.js",
+  ],
+  "1-basics-1-introduction-2-foo-files.json": [
+    "/bar/styles.css",
+    "/src/index.html",
+    "/src/unicorn.js",
+    "/src/windows_xp.png",
+  ],
+  "1-basics-1-introduction-2-foo-solution.json": [
+    "/src/index.html",
+  ],
+  "1-basics-1-introduction-3-bar-files.json": [
+    "/src/index.html",
+  ],
+  "template-default.json": [
+    "/package-lock.json",
+    "/package.json",
+    "/src/index.js",
+  ],
+  "template-vite-app-2.json": [
+    "/.gitignore",
+    "/counter.js",
+    "/foo.txt",
+    "/index.html",
+    "/javascript.svg",
+    "/main.js",
+    "/package-lock.json",
+    "/package.json",
+    "/public/vite.svg",
+    "/style.css",
+  ],
+  "template-vite-app.json": [
+    "/.gitignore",
+    "/counter.js",
+    "/index.html",
+    "/javascript.svg",
+    "/main.js",
+    "/package-lock.json",
+    "/package.json",
+    "/public/vite.svg",
+    "/style.css",
+  ],
+}
+`;
+
 exports[`create and build a project 1`] = `
 [
   "1-basics",
