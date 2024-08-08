@@ -14,7 +14,7 @@ let capitalize: (string: string) => string;
 })();
 
 export async function addLesson(parent: Node) {
-  const { folderPath, metaFilePath } = await createUnitFolder(parent, 'lesson');
+  const { folderPath, metaFilePath } = await createNodeFolder(parent, 'lesson');
 
   await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(folderPath, FILES_FOLDER));
   await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(folderPath, SOLUTION_FOLDER));
@@ -25,7 +25,7 @@ export async function addLesson(parent: Node) {
 }
 
 export async function addChapter(parent: Node) {
-  const { metaFilePath } = await createUnitFolder(parent, 'chapter');
+  const { metaFilePath } = await createNodeFolder(parent, 'chapter');
 
   await cmd.refresh();
 
@@ -33,14 +33,14 @@ export async function addChapter(parent: Node) {
 }
 
 export async function addPart(parent: Node) {
-  const { metaFilePath } = await createUnitFolder(parent, 'part');
+  const { metaFilePath } = await createNodeFolder(parent, 'part');
 
   await cmd.refresh();
 
   return cmd.goto(metaFilePath);
 }
 
-async function getUnitName(unitType: NodeType, unitNumber: number) {
+async function getNodeName(unitType: NodeType, unitNumber: number) {
   const unitName = await vscode.window.showInputBox({
     prompt: `Enter the name of the new ${unitType}`,
     value: `${capitalize(unitType)} ${unitNumber}`,
@@ -54,12 +54,12 @@ async function getUnitName(unitType: NodeType, unitNumber: number) {
   return unitName;
 }
 
-async function createUnitFolder(parent: Node, unitType: NodeType) {
+async function createNodeFolder(parent: Node, nodeType: NodeType) {
   const unitNumber = parent.children.length + 1;
-  const unitName = await getUnitName(unitType, unitNumber);
+  const unitName = await getNodeName(nodeType, unitNumber);
   const unitFolderPath = parent.order ? kebabCase(unitName) : `${unitNumber}-${kebabCase(unitName)}`;
 
-  const metaFile = unitType === 'lesson' ? 'content.mdx' : 'meta.md';
+  const metaFile = nodeType === 'lesson' ? 'content.mdx' : 'meta.md';
   const metaFilePath = vscode.Uri.joinPath(parent.path, unitFolderPath, metaFile);
 
   if (parent.order) {
@@ -69,7 +69,7 @@ async function createUnitFolder(parent: Node, unitType: NodeType) {
 
   await vscode.workspace.fs.writeFile(
     metaFilePath,
-    new TextEncoder().encode(`---\ntype: ${unitType}\ntitle: ${unitName}\n---\n`),
+    new TextEncoder().encode(`---\ntype: ${nodeType}\ntitle: ${unitName}\n---\n`),
   );
 
   return {

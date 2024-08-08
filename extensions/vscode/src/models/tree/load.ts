@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import grayMatter from 'gray-matter';
 import { Metadata, Node } from '../Node';
 import { METADATA_FILES, FILES_FOLDER, SOLUTION_FOLDER } from './constants';
-import { uriDirname } from '../../utils/uri';
+import { Utils } from 'vscode-uri';
 
 export async function loadTutorialTree(tutorialFolderPath: vscode.Uri, tutorialName: string): Promise<Node> {
   const metaFilePath = vscode.Uri.joinPath(tutorialFolderPath, 'meta.md');
@@ -23,7 +23,7 @@ export async function loadChildrenForNode(node: Node) {
     return;
   }
 
-  node.children = await loadTutorialTreeFromBaseFolder(node.path);
+  node.setChildren(await loadTutorialTreeFromBaseFolder(node.path));
 
   // sort children based on their order if defined in the metadata
   const order = node.order;
@@ -83,7 +83,7 @@ async function loadTutorialTreeFromBaseFolder(baseFolderPath: vscode.Uri): Promi
 }
 
 async function updateNodeFromMetadata(node: Node, metadataFilePath: vscode.Uri) {
-  const folderPath = uriDirname(metadataFilePath);
+  const folderPath = Utils.dirname(metadataFilePath);
   const metadataFileContent = await readFileContent(metadataFilePath);
   const parsedContent = grayMatter(metadataFileContent);
 

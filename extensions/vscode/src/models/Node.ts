@@ -26,6 +26,11 @@ export class Node {
   children: Node[] = [];
 
   /**
+   * The parent of that node.
+   */
+  parent?: Node;
+
+  /**
    * If specified, describe the order of the children.
    * When children are loaded, this should be used to sort
    * them appropriately.
@@ -54,26 +59,57 @@ export class Node {
     private _customName?: string,
   ) {}
 
-  pushChild(folderPath: string) {
+  pushChild(folderName: string) {
     this.childCount += 1;
 
     if (this.order) {
-      this.order.set(folderPath, this.order.size);
+      this.order.set(folderName, this.order.size);
 
       switch (this.metadata?.type) {
         case 'chapter': {
-          this.metadata.lessons!.push(folderPath);
+          this.metadata.lessons!.push(folderName);
           break;
         }
         case 'tutorial': {
-          this.metadata.parts!.push(folderPath);
+          this.metadata.parts!.push(folderName);
           break;
         }
         case 'part': {
-          this.metadata.chapters!.push(folderPath);
+          this.metadata.chapters!.push(folderName);
           break;
         }
       }
+    }
+  }
+
+  removeChild(node: Node) {
+    if (!removeFromArray(this.children, node)) {
+      return;
+    }
+
+    if (this.order) {
+      switch (this.metadata?.type) {
+        case 'chapter': {
+          removeFromArray(this.metadata.lessons!, node.folderName);
+          break;
+        }
+        case 'tutorial': {
+          removeFromArray(this.metadata.parts!, node.folderName);
+          break;
+        }
+        case 'part': {
+          removeFromArray(this.metadata.chapters!, node.folderName);
+          break;
+        }
+      }
+    }
+  }
+
+  setChildren(children: Node[]) {
+    this.children = children;
+
+    for (const child of this.children) {
+      child.parent = this;
     }
   }
 }
@@ -81,3 +117,15 @@ export class Node {
 export type Metadata = PartSchema | ChapterSchema | LessonSchema | TutorialSchema;
 
 export type NodeType = Metadata['type'];
+
+function removeFromArray<T>(array: T[], element: T) {
+  const index = array.indexOf(element);
+
+  if (index != -1) {
+    array.splice(index, 1);
+
+    return true;
+  }
+
+  return false;
+}

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { addChapter, addLesson, addPart } from './tutorialkit.add';
-import { deleteUnit } from './tutorialkit.delete';
+import { deleteNode } from './tutorialkit.delete';
 import tutorialkitGoto from './tutorialkit.goto';
 import { initialize } from './tutorialkit.initialize';
 import { loadTutorial } from './tutorialkit.load-tutorial';
@@ -29,7 +29,7 @@ export function useCommands() {
   vscode.commands.registerCommand(CMD.ADD_LESSON, addLesson);
   vscode.commands.registerCommand(CMD.ADD_CHAPTER, addChapter);
   vscode.commands.registerCommand(CMD.ADD_PART, addPart);
-  vscode.commands.registerCommand(CMD.DELETE, deleteUnit);
+  vscode.commands.registerCommand(CMD.DELETE, deleteNode);
   vscode.commands.registerCommand(CMD.REFRESH, tutorialkitRefresh);
 }
 
@@ -39,7 +39,7 @@ export const cmd = {
   selectTutorial: createExecutor<typeof selectTutorial>(CMD.SELECT_TUTORIAL),
   loadTutorial: createExecutor<typeof loadTutorial>(CMD.LOAD_TUTORIAL),
   goto: createExecutor<typeof tutorialkitGoto>(CMD.GOTO),
-  delete: createExecutor<typeof deleteUnit>(CMD.DELETE),
+  delete: createExecutor<typeof deleteNode>(CMD.DELETE),
   addLesson: createExecutor<typeof addLesson>(CMD.ADD_LESSON),
   addPart: createExecutor<typeof addPart>(CMD.ADD_PART),
   addChapter: createExecutor<typeof addChapter>(CMD.ADD_CHAPTER),
