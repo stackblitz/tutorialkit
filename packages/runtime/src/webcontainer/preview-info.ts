@@ -18,12 +18,18 @@ export class PreviewInfo {
   constructor(preview: Exclude<PreviewSchema, boolean>[0], ready?: boolean) {
     if (typeof preview === 'number') {
       this.port = preview;
+    } else if (typeof preview === 'string') {
+      const [port, ...rest] = preview.split('/');
+      this.port = parseInt(port);
+      this.pathname = rest.join('/');
     } else if (Array.isArray(preview)) {
       this.port = preview[0];
       this.title = preview[1];
+      this.pathname = preview[2];
     } else {
       this.port = preview.port;
       this.title = preview.title;
+      this.pathname = preview.pathname;
     }
 
     this.ready = !!ready;
