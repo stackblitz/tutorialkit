@@ -2,11 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
-    "module": "Node16",
+    "module": "ES2022",
     "target": "ES2022",
     "outDir": "dist",
     "lib": ["ES2022"],
     "verbatimModuleSyntax": false,
+    "moduleResolution": "Bundler",
     "sourceMap": true,
     "rootDir": "."
   },

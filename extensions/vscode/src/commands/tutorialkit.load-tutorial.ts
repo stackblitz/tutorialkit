@@ -1,16 +1,22 @@
 import * as vscode from 'vscode';
 import { extContext } from '../extension';
-import { LessonsTreeDataProvider, getLessonsTreeDataProvider, setLessonsTreeDataProvider } from '../views/lessonsTree';
+import { LessonsTreeDataProvider } from '../views/lessonsTree';
+import { setLessonsTreeDataProvider, setLessonsTreeView } from '../global-state';
 
 export async function loadTutorial(uri: vscode.Uri) {
-  setLessonsTreeDataProvider(new LessonsTreeDataProvider(uri, extContext));
+  const treeDataProvider = new LessonsTreeDataProvider(uri, extContext);
 
-  extContext.subscriptions.push(
-    vscode.window.createTreeView('tutorialkit-lessons-tree', {
-      treeDataProvider: getLessonsTreeDataProvider(),
-      canSelectMany: true,
-    }),
-  );
+  await treeDataProvider.init();
+
+  const treeView = vscode.window.createTreeView('tutorialkit-lessons-tree', {
+    treeDataProvider,
+    canSelectMany: true,
+  });
+
+  setLessonsTreeDataProvider(treeDataProvider);
+  setLessonsTreeView(treeView);
+
+  extContext.subscriptions.push(treeView, treeDataProvider);
 
   vscode.commands.executeCommand('setContext', 'tutorialkit:tree', true);
 }

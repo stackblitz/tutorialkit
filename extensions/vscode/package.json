@@ -19,6 +19,13 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "keybindings": [
+      {
+        "command": "tutorialkit.delete",
+        "key": "Shift+Backspace",
+        "when": "focusedView == tutorialkit-lessons-tree"
+      }
+    ],
     "commands": [
       {
         "command": "tutorialkit.select-tutorial",
@@ -36,6 +43,10 @@
       {
         "command": "tutorialkit.add-part",
         "title": "Add Part"
+      },
+      {
+        "command": "tutorialkit.delete",
+        "title": "Delete"
       },
       {
         "command": "tutorialkit.refresh",
@@ -100,6 +111,14 @@
         {
           "command": "tutorialkit.add-chapter",
           "when": "view == tutorialkit-lessons-tree && viewItem == part"
+        },
+        {
+          "command": "tutorialkit.add-part",
+          "when": "view == tutorialkit-lessons-tree && viewItem == tutorial"
+        },
+        {
+          "command": "tutorialkit.delete",
+          "when": "view == tutorialkit-lessons-tree && (viewItem == chapter || viewItem == part || viewItem == lesson)"
         }
       ]
     },
@@ -119,10 +138,6 @@
     ]
   },
   "scripts": {
-    "__esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-    "__dev": "pnpm run esbuild-base -- --sourcemap --watch",
-    "__vscode:prepublish": "pnpm run esbuild-base -- --minify",
-    "__build": "vsce package",
     "dev": "node scripts/build.mjs --watch",
     "build": "pnpm run check-types && node scripts/build.mjs",
     "check-types": "tsc --noEmit",
