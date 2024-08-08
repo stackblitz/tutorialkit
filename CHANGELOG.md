@@ -1,3 +1,18 @@
+## [0.1.4](https://github.com/stackblitz/tutorialkit/compare/0.1.3...0.1.4) (2024-08-08)
+
+
+### Bug Fixes
+
+* **astro:** sub folders not working on Windows ([#225](https://github.com/stackblitz/tutorialkit/issues/225)) ([694f5ca](https://github.com/stackblitz/tutorialkit/commit/694f5ca26dafae33554136ffbedea70c6c87585c))
+* **astro:** webcontainers link to be in plural ([#227](https://github.com/stackblitz/tutorialkit/issues/227)) ([0b86ebd](https://github.com/stackblitz/tutorialkit/commit/0b86ebd4e6e2b28dd2ef0ff97a5c66f9eb780973))
+
+
+### Features
+
+* **extension:** support config-based ordering ([#223](https://github.com/stackblitz/tutorialkit/issues/223)) ([3b2c776](https://github.com/stackblitz/tutorialkit/commit/3b2c7763a9af488bf32586708b2af328256e0c41))
+
+
+
 ## [0.1.3](https://github.com/stackblitz/tutorialkit/compare/0.1.2...0.1.3) (2024-08-07)
 
 
