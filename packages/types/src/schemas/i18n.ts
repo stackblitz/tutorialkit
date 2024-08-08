@@ -18,7 +18,7 @@ export const i18nSchema = z.object({
   /**
    * Text of the WebContainer link.
    *
-   * @default 'Powered by WebContainer'
+   * @default 'Powered by WebContainers'
    */
   webcontainerLinkText: z.string().optional().describe('Text of the WebContainer link.'),
 
