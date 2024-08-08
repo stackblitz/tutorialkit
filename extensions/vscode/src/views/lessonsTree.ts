@@ -1,114 +1,98 @@
-import * as fs from 'fs';
-import grayMatter from 'gray-matter';
-import * as path from 'path';
 import * as vscode from 'vscode';
+import path from 'path';
 import { cmd } from '../commands';
-import { Lesson } from '../models/Lesson';
+import { Node } from '../models/Node';
 import { getIcon } from '../utils/getIcon';
-
-const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
+import { loadChildrenForNode, loadTutorialTree } from '../models/tree/load';
+import { METADATA_FILES } from '../models/tree/constants';
 
 export const tutorialMimeType = 'application/tutorialkit.unit';
 
-let lessonsTreeDataProvider: LessonsTreeDataProvider;
+export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Node>, vscode.Disposable {
+  private _tutorial!: Node;
+  private _tutorialName: string;
+  private _onDidChangeTextDocumentDisposable: vscode.Disposable;
+  private _onDidChangeTreeData: vscode.EventEmitter<Node | undefined> = new vscode.EventEmitter<Node | undefined>();
 
-export function getLessonsTreeDataProvider() {
-  return lessonsTreeDataProvider;
-}
-
-export function setLessonsTreeDataProvider(provider: LessonsTreeDataProvider) {
-  lessonsTreeDataProvider = provider;
-}
-
-export class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
-  private _lessons: Lesson[] = [];
-  private _onDidChangeTreeData: vscode.EventEmitter<Lesson | undefined> = new vscode.EventEmitter<Lesson | undefined>();
-  readonly onDidChangeTreeData: vscode.Event<Lesson | undefined> = this._onDidChangeTreeData.event;
+  readonly onDidChangeTreeData: vscode.Event<Node | undefined> = this._onDidChangeTreeData.event;
 
   constructor(
     private readonly _workspaceRoot: vscode.Uri,
     private _context: vscode.ExtensionContext,
   ) {
-    this._loadLessons();
+    this._tutorialName = path.basename(_workspaceRoot.path);
+
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let loading = false;
+
+    this._onDidChangeTextDocumentDisposable = vscode.workspace.onDidChangeTextDocument((documentChange) => {
+      if (loading || !METADATA_FILES.has(path.basename(documentChange.document.fileName))) {
+        return;
+      }
+
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(async () => {
+        loading = true;
+        await this.refresh();
+        loading = false;
+      }, 100);
+    });
   }
 
-  private _loadLessons(): void {
+  dispose() {
+    this._onDidChangeTextDocumentDisposable.dispose();
+  }
+
+  async init() {
     try {
-      const tutorialFolderPath = vscode.Uri.joinPath(this._workspaceRoot, 'src', 'content', 'tutorial').fsPath;
-      this._lessons = this._loadLessonsFromFolder(tutorialFolderPath);
+      const tutorialFolderPath = vscode.Uri.joinPath(this._workspaceRoot, 'src', 'content', 'tutorial');
+      this._tutorial = await loadTutorialTree(tutorialFolderPath, this._tutorialName);
     } catch {
       // do nothing
     }
   }
 
-  private _loadLessonsFromFolder(folderPath: string): Lesson[] {
-    const lessons: Lesson[] = [];
-    const files = fs.readdirSync(folderPath);
-
-    for (const file of files) {
-      const filePath = path.join(folderPath, file);
-      const stats = fs.statSync(filePath);
-
-      if (stats.isDirectory()) {
-        const lessonName = path.basename(filePath);
-        const subLessons = this._loadLessonsFromFolder(filePath);
-        const lesson = new Lesson(lessonName, filePath, subLessons);
-
-        // check if the folder directly includes one of the metadata files
-        const folderFiles = fs.readdirSync(filePath);
-        const metadataFile = folderFiles.find((folderFile) => metadataFiles.includes(folderFile));
-
-        if (metadataFile) {
-          const metadataFilePath = path.join(filePath, metadataFile);
-          const metadataFileContent = fs.readFileSync(metadataFilePath, 'utf8');
-          const parsedContent = grayMatter(metadataFileContent);
-
-          lesson.name = parsedContent.data.title;
-
-          lesson.metadata = {
-            _path: metadataFilePath,
-            ...(parsedContent.data as any),
-          };
-
-          lessons.push(lesson);
-        }
-      }
-    }
-
-    return lessons;
-  }
-
-  refresh(): void {
-    this._loadLessons();
+  async refresh() {
+    await this.init();
     this._onDidChangeTreeData.fire(undefined);
   }
 
-  getTreeItem(lesson: Lesson): vscode.TreeItem {
-    const treeItem = new vscode.TreeItem(lesson.name);
+  getTreeItem(node: Node): vscode.TreeItem {
+    const treeItem = new vscode.TreeItem(node.name);
 
-    treeItem.collapsibleState =
-      lesson.children.length > 0 ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
+    if (node.type === 'tutorial') {
+      treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
+    } else if (node.childCount > 0) {
+      treeItem.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+    } else {
+      treeItem.collapsibleState = vscode.TreeItemCollapsibleState.None;
+    }
 
-    treeItem.contextValue = lesson.metadata?.type;
+    treeItem.contextValue = node.type;
 
     treeItem.command = {
       command: cmd.goto.command,
       title: 'Go to the lesson',
-      arguments: [lesson.metadata?._path],
+      arguments: [node.metadataFilePath],
     };
 
-    treeItem.iconPath =
-      lesson.metadata?.type === 'lesson' ? getIcon(this._context, 'lesson.svg') : getIcon(this._context, 'chapter.svg');
+    if (node.metadata && node.type !== 'tutorial') {
+      treeItem.iconPath =
+        node.metadata.type === 'lesson' ? getIcon(this._context, 'lesson.svg') : getIcon(this._context, 'chapter.svg');
+    }
 
     return treeItem;
   }
 
-  getChildren(element?: Lesson): Lesson[] {
+  async getChildren(element?: Node): Promise<Node[]> {
     if (element) {
+      await loadChildrenForNode(element);
+
       return element.children;
     }
 
-    return this._lessons;
+    return [this._tutorial];
   }
 }
 

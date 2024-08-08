@@ -1,5 +1,6 @@
 import { execa } from 'execa';
 import fs from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, expect, test } from 'vitest';
@@ -67,6 +68,20 @@ test('create and build a project', async (context) => {
   const distFiles = await fs.readdir(path.join(dest, 'dist'), { recursive: true });
 
   expect(distFiles.map(normaliseSlash).sort()).toMatchSnapshot();
+
+  // create snapshot of lesson, solution and template file reference JSONs
+  const lessonJsons = distFiles.filter((file) => file.endsWith('-files.json'));
+  const solutionJsons = distFiles.filter((file) => file.endsWith('-solution.json'));
+  const templateJsons = distFiles.filter((file) => file.startsWith('template-') && file.endsWith('.json'));
+
+  const contents = [...lessonJsons, ...solutionJsons, ...templateJsons].reduce((jsons, current) => {
+    const fileJson = JSON.parse(readFileSync(path.join(dest, 'dist', current), 'utf8'));
+    const filenames = Object.keys(fileJson);
+
+    return { ...jsons, [current]: filenames };
+  }, {});
+
+  expect(contents).toMatchSnapshot('built project file references');
 });
 
 test('create and eject a project', async (context) => {
