@@ -1,3 +1,12 @@
+## [0.1.4](https://github.com/stackblitz/tutorialkit/compare/0.1.3...0.1.4) "@tutorialkit/cli" (2024-08-08)
+
+
+### Bug Fixes
+
+* **astro:** sub folders not working on Windows ([#225](https://github.com/stackblitz/tutorialkit/issues/225)) ([694f5ca](https://github.com/stackblitz/tutorialkit/commit/694f5ca26dafae33554136ffbedea70c6c87585c))
+
+
+
 ## [0.1.3](https://github.com/stackblitz/tutorialkit/compare/0.1.2...0.1.3) "@tutorialkit/cli" (2024-08-07)
 
 
