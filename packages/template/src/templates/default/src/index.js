@@ -15,7 +15,7 @@ createServer((_req, res) => {
   `);
 }).listen(1);
 
-createServer((_req, res) => res.end('Server 2')).listen(2);
+createServer((req, res) => res.end(`Server 2\n${req.method} ${req.url}`)).listen(2);
 
 servor({
   root: 'src/',

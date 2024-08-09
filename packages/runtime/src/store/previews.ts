@@ -4,7 +4,7 @@ import { PreviewInfo } from '../webcontainer/preview-info.js';
 import type { WebContainer } from '@webcontainer/api';
 
 export class PreviewsStore {
-  private _availablePreviews = new Map<number, PreviewInfo>();
+  private _availablePreviews: PreviewInfo[] = [];
   private _previewsLayout: PreviewInfo[] = [];
 
   /**
@@ -21,18 +21,21 @@ export class PreviewsStore {
     const webcontainer = await webcontainerPromise;
 
     webcontainer.on('port', (port, type, url) => {
-      let previewInfo = this._availablePreviews.get(port);
+      const previewInfos = this._availablePreviews.filter((preview) => preview.port === port);
 
-      if (!previewInfo) {
-        previewInfo = new PreviewInfo(port, type === 'open');
-        this._availablePreviews.set(port, previewInfo);
+      if (previewInfos.length === 0) {
+        const info = new PreviewInfo(port, type === 'open');
+        previewInfos.push(info);
+        this._availablePreviews.push(info);
       }
 
-      previewInfo.ready = type === 'open';
-      previewInfo.baseUrl = url;
+      previewInfos.forEach((info) => {
+        info.ready = type === 'open';
+        info.baseUrl = url;
+      });
 
       if (this._previewsLayout.length === 0) {
-        this.previews.set([previewInfo]);
+        this.previews.set(previewInfos);
       } else {
         this._previewsLayout = [...this._previewsLayout];
         this.previews.set(this._previewsLayout);
@@ -58,14 +61,12 @@ export class PreviewsStore {
     const previewInfos = previews.map((preview) => {
       const info = new PreviewInfo(preview);
 
-      let previewInfo = this._availablePreviews.get(info.port);
+      let previewInfo = this._availablePreviews.find((availablePreview) => PreviewInfo.equals(info, availablePreview));
 
       if (!previewInfo) {
         previewInfo = info;
 
-        this._availablePreviews.set(previewInfo.port, previewInfo);
-      } else {
-        previewInfo.title = info.title;
+        this._availablePreviews.push(previewInfo);
       }
 
       return previewInfo;

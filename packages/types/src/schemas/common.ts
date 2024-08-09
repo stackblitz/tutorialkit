@@ -37,12 +37,17 @@ export const previewSchema = z.union([
       // a single number, the port for the preview
       z.number(),
 
-      // a tuple, the port followed by a title
+      // a string, the port and pathname
+      z.string(),
+
+      // a tuple, the port followed by a title and optional pathname
       z.tuple([z.number(), z.string()]),
+      z.tuple([z.number(), z.string(), z.string()]),
 
       z.strictObject({
         port: z.number().describe('Port number of the preview.'),
         title: z.string().describe('Title of the preview.'),
+        pathname: z.string().optional().describe('Pathname of the preview URL.'),
       }),
     ])
     .array(),

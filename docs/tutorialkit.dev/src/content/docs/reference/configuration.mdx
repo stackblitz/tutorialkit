@@ -91,16 +91,30 @@ Configure whether or not the editor should be rendered. If an object is provided
 ##### `previews`
 Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used.
 
-You can optionally provide these as an array of tuples where the first element is the port number and the second is the title of the preview, or as an object.
 <PropertyTable inherited type={'Preview[]'} />
 
 The `Preview` type has the following shape:
 
 ```ts
-type Preview = string
+type Preview =
+    | number
+    | string
     | [port: number, title: string]
-    | { port: number, title: string }
+    | [port: number, title: string, pathname: string]
+    | { port: number, title: string, pathname?: string }
 
+```
+
+Example value:
+
+```yaml
+previews:
+  - 3000 # Preview is on :3000/
+  - "3001/docs" # Preview is on :3001/docs/
+  - [3002, "Dev Server"] # Preview is on :3002/. Displayed title is "Dev Server".
+  - [3003, "Dev Server", "/docs"] # Preview is on :3003/docs/. Displayed title is "Dev Server".
+  - { port: 3004, title: "Dev Server" } # Preview is on :3004/. Displayed title is "Dev Server".
+  - { port: 3005, title: "Dev Server", pathname: "/docs" } # Preview is on :3005/docs/. Displayed title is "Dev Server".
 ```
 
 ##### `mainCommand`

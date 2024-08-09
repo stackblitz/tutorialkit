@@ -2,10 +2,20 @@ import { describe, it, expect } from 'vitest';
 import { PreviewInfo } from './preview-info.js';
 
 describe('PreviewInfo', () => {
-  it('should accept a port', () => {
+  it('should accept a number for port', () => {
     const previewInfo = new PreviewInfo(3000);
 
     expect(previewInfo.port).toBe(3000);
+    expect(previewInfo.title).toBe(undefined);
+    expect(previewInfo.pathname).toBe(undefined);
+  });
+
+  it('should accept a string for port and pathname', () => {
+    const previewInfo = new PreviewInfo('3000/some/nested/path');
+
+    expect(previewInfo.port).toBe(3000);
+    expect(previewInfo.pathname).toBe('some/nested/path');
+    expect(previewInfo.title).toBe(undefined);
   });
 
   it('should accept a tuple of [port, title]', () => {
@@ -13,6 +23,15 @@ describe('PreviewInfo', () => {
 
     expect(previewInfo.port).toBe(3000);
     expect(previewInfo.title).toBe('Local server');
+    expect(previewInfo.pathname).toBe(undefined);
+  });
+
+  it('should accept a tuple of [port, title, pathname]', () => {
+    const previewInfo = new PreviewInfo([3000, 'Local server', '/docs']);
+
+    expect(previewInfo.port).toBe(3000);
+    expect(previewInfo.title).toBe('Local server');
+    expect(previewInfo.pathname).toBe('/docs');
   });
 
   it('should accept an object with { port, title }', () => {
@@ -20,6 +39,15 @@ describe('PreviewInfo', () => {
 
     expect(previewInfo.port).toBe(3000);
     expect(previewInfo.title).toBe('Local server');
+    expect(previewInfo.pathname).toBe(undefined);
+  });
+
+  it('should accept an object with { port, title, pathname }', () => {
+    const previewInfo = new PreviewInfo({ port: 3000, title: 'Local server', pathname: '/docs' });
+
+    expect(previewInfo.port).toBe(3000);
+    expect(previewInfo.title).toBe('Local server');
+    expect(previewInfo.pathname).toBe('/docs');
   });
 
   it('should not be ready by default', () => {
@@ -41,9 +69,8 @@ describe('PreviewInfo', () => {
   });
 
   it('should have a url with a custom pathname and baseUrl', () => {
-    const previewInfo = new PreviewInfo(3000);
+    const previewInfo = new PreviewInfo('3000/foo');
     previewInfo.baseUrl = 'https://example.com';
-    previewInfo.pathname = '/foo';
 
     expect(previewInfo.url).toBe('https://example.com/foo');
   });
@@ -71,10 +98,10 @@ describe('PreviewInfo', () => {
 
   it('should not be equal to another preview info with a different pathname', () => {
     const a = new PreviewInfo(3000);
-    const b = new PreviewInfo(3000);
-
-    a.pathname = '/foo';
+    const b = new PreviewInfo('3000/b');
+    const c = new PreviewInfo('3000/c');
 
     expect(PreviewInfo.equals(a, b)).toBe(false);
+    expect(PreviewInfo.equals(b, c)).toBe(false);
   });
 });
