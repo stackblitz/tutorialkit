@@ -70,7 +70,7 @@ describe('PreviewInfo', () => {
 
   it('should have a url with a custom pathname and baseUrl', () => {
     const previewInfo = new PreviewInfo('3000/foo');
-    previewInfo.baseUrl = 'https://example.com';
+    previewInfo.portInfo.origin = 'https://example.com';
 
     expect(previewInfo.url).toBe('https://example.com/foo');
   });

@@ -1,10 +1,11 @@
 import type { PreviewSchema } from '@tutorialkit/types';
+import type { WebContainer } from '@webcontainer/api';
 import { atom } from 'nanostores';
 import { PreviewInfo } from '../webcontainer/preview-info.js';
-import type { WebContainer } from '@webcontainer/api';
+import { PortInfo } from '../webcontainer/port-info.js';
 
 export class PreviewsStore {
-  private _availablePreviews: PreviewInfo[] = [];
+  private _availablePreviews = new Map<number, PortInfo>();
   private _previewsLayout: PreviewInfo[] = [];
 
   /**
@@ -21,21 +22,19 @@ export class PreviewsStore {
     const webcontainer = await webcontainerPromise;
 
     webcontainer.on('port', (port, type, url) => {
-      const previewInfos = this._availablePreviews.filter((preview) => preview.port === port);
+      let portInfo = this._availablePreviews.get(port);
 
-      if (previewInfos.length === 0) {
-        const info = new PreviewInfo(port, type === 'open');
-        previewInfos.push(info);
-        this._availablePreviews.push(info);
+      if (!portInfo) {
+        portInfo = new PortInfo(port, url, type === 'open');
+
+        this._availablePreviews.set(port, portInfo);
       }
 
-      previewInfos.forEach((info) => {
-        info.ready = type === 'open';
-        info.baseUrl = url;
-      });
+      portInfo.ready = type === 'open';
+      portInfo.origin = url;
 
       if (this._previewsLayout.length === 0) {
-        this.previews.set(previewInfos);
+        this.previews.set([new PreviewInfo(portInfo)]);
       } else {
         this._previewsLayout = [...this._previewsLayout];
         this.previews.set(this._previewsLayout);
@@ -60,16 +59,15 @@ export class PreviewsStore {
 
     const previewInfos = previews.map((preview) => {
       const info = new PreviewInfo(preview);
+      const portInfo = this._availablePreviews.get(info.port);
 
-      let previewInfo = this._availablePreviews.find((availablePreview) => PreviewInfo.equals(info, availablePreview));
-
-      if (!previewInfo) {
-        previewInfo = info;
-
-        this._availablePreviews.push(previewInfo);
+      if (!portInfo) {
+        this._availablePreviews.set(info.port, info.portInfo);
+      } else {
+        info.portInfo = portInfo;
       }
 
-      return previewInfo;
+      return info;
     });
 
     let areDifferent = previewInfos.length != this._previewsLayout.length;
