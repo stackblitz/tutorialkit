@@ -1,10 +1,11 @@
 import type { PreviewSchema } from '@tutorialkit/types';
+import type { WebContainer } from '@webcontainer/api';
 import { atom } from 'nanostores';
 import { PreviewInfo } from '../webcontainer/preview-info.js';
-import type { WebContainer } from '@webcontainer/api';
+import { PortInfo } from '../webcontainer/port-info.js';
 
 export class PreviewsStore {
-  private _availablePreviews = new Map<number, PreviewInfo>();
+  private _availablePreviews = new Map<number, PortInfo>();
   private _previewsLayout: PreviewInfo[] = [];
 
   /**
@@ -21,18 +22,19 @@ export class PreviewsStore {
     const webcontainer = await webcontainerPromise;
 
     webcontainer.on('port', (port, type, url) => {
-      let previewInfo = this._availablePreviews.get(port);
+      let portInfo = this._availablePreviews.get(port);
 
-      if (!previewInfo) {
-        previewInfo = new PreviewInfo(port, type === 'open');
-        this._availablePreviews.set(port, previewInfo);
+      if (!portInfo) {
+        portInfo = new PortInfo(port, url, type === 'open');
+
+        this._availablePreviews.set(port, portInfo);
       }
 
-      previewInfo.ready = type === 'open';
-      previewInfo.baseUrl = url;
+      portInfo.ready = type === 'open';
+      portInfo.origin = url;
 
       if (this._previewsLayout.length === 0) {
-        this.previews.set([previewInfo]);
+        this.previews.set([new PreviewInfo({}, portInfo)]);
       } else {
         this._previewsLayout = [...this._previewsLayout];
         this.previews.set(this._previewsLayout);
@@ -55,20 +57,16 @@ export class PreviewsStore {
     // if the schema is `true`, we just use the default empty array
     const previews = config === true ? [] : config ?? [];
 
-    const previewInfos = previews.map((preview) => {
-      const info = new PreviewInfo(preview);
+    const previewInfos = previews.map((previewConfig) => {
+      const preview = PreviewInfo.parse(previewConfig);
+      let portInfo = this._availablePreviews.get(preview.port);
 
-      let previewInfo = this._availablePreviews.get(info.port);
-
-      if (!previewInfo) {
-        previewInfo = info;
-
-        this._availablePreviews.set(previewInfo.port, previewInfo);
-      } else {
-        previewInfo.title = info.title;
+      if (!portInfo) {
+        portInfo = new PortInfo(preview.port);
+        this._availablePreviews.set(preview.port, portInfo);
       }
 
-      return previewInfo;
+      return new PreviewInfo(preview, portInfo);
     });
 
     let areDifferent = previewInfos.length != this._previewsLayout.length;
