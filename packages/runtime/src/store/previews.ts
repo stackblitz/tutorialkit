@@ -34,7 +34,7 @@ export class PreviewsStore {
       portInfo.origin = url;
 
       if (this._previewsLayout.length === 0) {
-        this.previews.set([new PreviewInfo(portInfo)]);
+        this.previews.set([new PreviewInfo({}, portInfo)]);
       } else {
         this._previewsLayout = [...this._previewsLayout];
         this.previews.set(this._previewsLayout);
@@ -57,17 +57,16 @@ export class PreviewsStore {
     // if the schema is `true`, we just use the default empty array
     const previews = config === true ? [] : config ?? [];
 
-    const previewInfos = previews.map((preview) => {
-      const info = new PreviewInfo(preview);
-      const portInfo = this._availablePreviews.get(info.port);
+    const previewInfos = previews.map((previewConfig) => {
+      const preview = PreviewInfo.parse(previewConfig);
+      let portInfo = this._availablePreviews.get(preview.port);
 
       if (!portInfo) {
-        this._availablePreviews.set(info.port, info.portInfo);
-      } else {
-        info.portInfo = portInfo;
+        portInfo = new PortInfo(preview.port);
+        this._availablePreviews.set(preview.port, portInfo);
       }
 
-      return info;
+      return new PreviewInfo(preview, portInfo);
     });
 
     let areDifferent = previewInfos.length != this._previewsLayout.length;
