@@ -6,16 +6,6 @@ import { FILES_FOLDER, SOLUTION_FOLDER } from '../models/tree/constants';
 export function frontmatterPlugin(_debug: (message: string) => void): LanguagePlugin<URI> {
   return {
     getLanguageId(uri) {
-      // only match markdown files inside the src/content/tutorial folder
-      if (!uri.path.match(/.*src\/content\/tutorial\/.*(content|meta)\.mdx?$/)) {
-        return undefined;
-      }
-
-      // but ignore all files under _files or _solution
-      if (uri.path.includes(FILES_FOLDER) || uri.path.includes(SOLUTION_FOLDER)) {
-        return undefined;
-      }
-
       if (uri.path.endsWith('.md')) {
         return 'markdown';
       }
@@ -26,7 +16,17 @@ export function frontmatterPlugin(_debug: (message: string) => void): LanguagePl
 
       return undefined;
     },
-    createVirtualCode(_uri, languageId, snapshot) {
+    createVirtualCode(uri, languageId, snapshot) {
+      // only match markdown files inside the src/content/tutorial folder
+      if (!uri.path.match(/.*src\/content\/tutorial\/.*(content|meta)\.mdx?$/)) {
+        return undefined;
+      }
+
+      // but ignore all files under _files or _solution
+      if (uri.path.includes(FILES_FOLDER) || uri.path.includes(SOLUTION_FOLDER)) {
+        return undefined;
+      }
+
       if (languageId === 'markdown' || languageId === 'mdx') {
         return new FrontMatterVirtualCode(snapshot);
       }
