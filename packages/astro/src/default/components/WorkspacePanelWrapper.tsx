@@ -13,7 +13,7 @@ export function WorkspacePanelWrapper({ lesson }: Props) {
   const theme = useStore(themeStore);
 
   useEffect(() => {
-    tutorialStore.setLesson(lesson, { ssr: import.meta.env.SSR });
+    tutorialStore.setLesson(lesson);
   }, [lesson]);
 
   if (import.meta.env.SSR || !tutorialStore.lesson) {
