@@ -25,6 +25,7 @@ export default defineConfig({
       },
       components: {
         Head: './src/components/Layout/Head.astro',
+        PageFrame: './src/components/Layout/PageFrame.astro',
       },
       customCss: ['./src/styles/custom.scss'],
       logo: {

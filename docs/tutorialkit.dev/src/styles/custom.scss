@@ -12,6 +12,7 @@ body {
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
   overscroll-behavior: none;
+  --footer-height: 50px;
 
   &::before {
     position: absolute;
@@ -30,17 +31,10 @@ body {
 
     [data-theme='dark'] & {
       background-image: radial-gradient(100% 100% at 50% 0%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
-      &::before {
-        background-image: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.8) 100%);
-      }
     }
 
     [data-theme='light'] & {
       background-image: radial-gradient(100% 100% at 50% 0%, #fff 60%, #eff0f3 100%);
-
-      &::before {
-        background-image: linear-gradient(transparent 60%, rgba(255, 255, 255, 0.8) 100%);
-      }
     }
   }
 }
@@ -86,11 +80,18 @@ site-search button[data-open-modal] {
 }
 
 // ----------------------------------------
+// Left sidebar
+#starlight__sidebar {
+  margin-bottom: var(--footer-height);
+}
+
+// ----------------------------------------
 // Table of contents
 
 .right-sidebar {
   padding-left: 32px;
   border: none;
+  height: calc(100% - var(--footer-height));
 }
 
 #starlight__on-this-page {

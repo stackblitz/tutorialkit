@@ -1,40 +1,46 @@
 ---
 import { Button } from '@components/Buttons/Button/Button';
-import tutorialkitThemesImg from '@assets/tutorialkit-themes.png';
+import tutorialkitImg from '@assets/tutorialkit-preview.png';
 ---
 
 <div class="simple-page-hero">
-  <h1>Increase Library Adoption with Interactive Coding Tutorials.</h1>
-  <p>
-    TutorialKit by <a href="https://stackblitz.com" target="_blank" rel="noopener">StackBlitz</a> enables you to create interactive
-    coding tutorials effortlessly, boosting the adoption of your framework, UI library or design system.
-  </p>
-  <div class="simple-page-hero__links">
-    <Button url="/guides/about/" theme="accent">Get Started</Button>
-    <Button url="https://demo.tutorialkit.dev">Try Demo</Button>
+  <div class="main">
+    <h1>Increase Library Adoption with Interactive Coding Tutorials.</h1>
+    <p>
+      TutorialKit by <a href="https://stackblitz.com" target="_blank" rel="noopener">StackBlitz</a> enables you to create
+      interactive coding tutorials effortlessly, boosting the adoption of your framework, UI library or design system.
+    </p>
+    <div class="simple-page-hero__links">
+      <Button url="/guides/about/" theme="accent">Get Started</Button>
+      <Button url="https://demo.tutorialkit.dev">Try Demo</Button>
+    </div>
   </div>
   <div class="ui-example">
-    <img src={tutorialkitThemesImg.src} />
+    <a href="https://demo.tutorialkit.dev" target="_blank">
+      <img src={tutorialkitImg.src} />
+    </a>
   </div>
 </div>
 
 <style lang="scss">
   @import '../../styles/breakpoints.scss';
 
+  :global(body) {
+    --sl-content-width: 75rem;
+  }
+
   .simple-page-hero {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
-    gap: 16px;
-    width: 820px;
+    align-items: start;
+    gap: 48px;
     max-width: 100%;
-    margin: 9dvh auto 0;
-    padding: 0 24px;
-    overflow-y: hidden;
+    margin: 9dvh auto 6dvh;
 
     @media screen and (max-width: $breakpoint-tablet-small) {
-      gap: 8px;
+      display: block;
+      padding: 0 24px;
     }
 
     @media screen and (max-width: $breakpoint-small) {
@@ -47,38 +53,49 @@ import tutorialkitThemesImg from '@assets/tutorialkit-themes.png';
     }
   }
 
+  .simple-page-hero .main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media screen and (max-width: $breakpoint-tablet-small) {
+      gap: 12px;
+    }
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      gap: 8px;
+    }
+  }
+
   .simple-page-hero h1 {
-    font-size: 56px;
+    font-size: 48px;
     font-weight: 600;
-    line-height: 1.12;
+    line-height: 1.3;
     letter-spacing: -2px;
-    text-align: center;
 
     @media screen and (max-width: $breakpoint-tablet-small) {
       max-width: 620px;
       font-size: 40px;
       letter-spacing: -1px;
+      text-align: center;
     }
 
     @media screen and (max-width: $breakpoint-mobile) {
       font-size: 28px;
       line-height: 1.2;
     }
-
-    @media screen and (max-width: $breakpoint-tiny) {
-      // font-size: 24px;
-    }
   }
 
   .simple-page-hero p {
     max-width: 680px;
-    font-size: 16px;
+    font-size: 20px;
     line-height: 1.8;
-    text-align: center;
+    margin-bottom: 1em;
 
     @media screen and (max-width: $breakpoint-tablet-small) {
       max-width: 680px;
       text-wrap: pretty;
+      text-align: center;
     }
 
     @media screen and (max-width: $breakpoint-small) {
@@ -104,23 +121,24 @@ import tutorialkitThemesImg from '@assets/tutorialkit-themes.png';
   .simple-page-hero__links {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 44px;
 
     @media screen and (max-width: $breakpoint-mobile) {
       width: 100%;
       flex-direction: column;
     }
+
+    :global(> *) {
+      @media screen and (max-width: $breakpoint-mobile) {
+        margin: 0 auto;
+      }
+    }
   }
 
   .ui-example {
-    position: fixed;
-    top: max(532px, 50dvh);
-    width: 1400px;
-    max-width: 100%;
-    height: auto;
-    padding: 0 32px;
+    width: 100%;
     mask-image: radial-gradient(160% 100% at 50% 0%, #000 70%, transparent);
-    z-index: -1;
+    overflow: visible;
 
     html[data-theme='light'] & {
       mask-image: none;
@@ -128,18 +146,22 @@ import tutorialkitThemesImg from '@assets/tutorialkit-themes.png';
 
     @media screen and (max-width: $breakpoint-small) {
       top: 524px;
-      padding: 0 16px;
     }
 
-    @media screen and (max-width: $breakpoint-mobile) {
-      padding: 0;
+    a {
+      display: block;
+      transition: all 0.1s ease-in-out;
+      transform-origin: 0 150%;
+      scale: 0.98;
+    }
+
+    a:hover {
+      scale: 1;
     }
 
     img {
+      transition: all 0.2s ease-in-out;
       border-radius: 6px;
-      box-shadow:
-        -2px -2px 2px 0 hsla(0, 0%, 6%, 0.02),
-        0 0 0 1px rgba(0, 0, 0, 0.032);
 
       @media screen and (max-width: $breakpoint-mobile) {
         border-radius: 0;
