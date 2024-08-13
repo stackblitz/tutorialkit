@@ -83,4 +83,5 @@ export const Terminal = forwardRef<TerminalRef, TerminalProps>(
   },
 );
 
+Terminal.displayName = 'Terminal';
 export default Terminal;
