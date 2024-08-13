@@ -120,6 +120,7 @@ exports[`create and build a project > built project file references 1`] = `
     "/package-lock.json",
     "/package.json",
     "/src/index.js",
+    "/src/template-only-file.js",
   ],
   "template-vite-app-2.json": [
     "/.gitignore",
