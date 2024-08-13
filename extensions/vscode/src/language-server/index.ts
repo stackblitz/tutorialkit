@@ -25,14 +25,7 @@ connection.onInitialize((params) => {
           {
             uri: 'https://tutorialkit.dev/reference/configuration',
             schema,
-            fileMatch: [
-              '**/*',
-
-              // TODO: these don't work
-              'src/content/*.md',
-              'src/content/**/*.md',
-              'src/content/**/*.mdx',
-            ],
+            fileMatch: ['volar-embedded-content://tutorialkit_frontmatter/**/*'],
             priority: SchemaPriority.Settings,
           },
         ],
