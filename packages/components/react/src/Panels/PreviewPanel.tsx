@@ -134,6 +134,7 @@ export const PreviewPanel = memo(
     return createElement(PanelGroup, { id: 'preview-panel', direction: 'horizontal' }, ...children);
   }),
 );
+PreviewPanel.displayName = 'PreviewPanel';
 
 interface PreviewProps {
   iframe: IFrameRef;

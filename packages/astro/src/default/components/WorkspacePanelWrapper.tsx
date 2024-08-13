@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { WorkspacePanel } from '@tutorialkit/components-react';
 import type { Lesson } from '@tutorialkit/types';
@@ -11,7 +12,13 @@ interface Props {
 export function WorkspacePanelWrapper({ lesson }: Props) {
   const theme = useStore(themeStore);
 
-  tutorialStore.setLesson(lesson, { ssr: import.meta.env.SSR });
+  useEffect(() => {
+    tutorialStore.setLesson(lesson, { ssr: import.meta.env.SSR });
+  }, [lesson]);
+
+  if (import.meta.env.SSR || !tutorialStore.lesson) {
+    tutorialStore.setLesson(lesson, { ssr: import.meta.env.SSR });
+  }
 
   return <WorkspacePanel tutorialStore={tutorialStore} theme={theme} />;
 }
