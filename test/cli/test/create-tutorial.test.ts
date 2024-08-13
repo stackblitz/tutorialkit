@@ -4,7 +4,7 @@ import { describe, beforeEach, afterAll, expect, it } from 'vitest';
 import { execa } from 'execa';
 import { temporaryDirectory } from 'tempy';
 
-const baseDir = path.resolve(__dirname, '../..');
+const baseDir = path.resolve(__dirname, '../../..');
 
 const cli = path.join(baseDir, 'packages/cli/dist/index.js');
 
