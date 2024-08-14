@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { tutorialkitCore } from './vite-plugins/core.js';
+import { astroSwapFunctions } from './vite-plugins/astro-swap-functions.js';
 import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
 import { tutorialkitStore } from './vite-plugins/store.js';
 import { overrideComponents, type OverrideComponentsOptions } from './vite-plugins/override-components.js';
@@ -108,6 +109,7 @@ export default function createPlugin({
               tutorialkitStore,
               tutorialkitCore,
               overrideComponents({ components, defaultRoutes: !!defaultRoutes }),
+              astroSwapFunctions(),
               process.env.TUTORIALKIT_DEV ? (await import('vite-plugin-inspect')).default() : null,
             ],
           },

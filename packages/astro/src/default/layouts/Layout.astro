@@ -38,7 +38,8 @@ const baseURL = import.meta.env.BASE_URL;
       }
     </script>
     <script>
-      import * as builtInSwap from './swap-functions.js';
+      // @ts-ignore -- untyped
+      import * as builtInSwap from 'tutorialkit:astro-swap-functions';
 
       declare global {
         function setTutorialKitTheme(): void;
