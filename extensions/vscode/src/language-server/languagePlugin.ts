@@ -1,12 +1,11 @@
 import { CodeMapping, type LanguagePlugin, type VirtualCode } from '@volar/language-core';
 import type * as ts from 'typescript';
 import type { URI } from 'vscode-uri';
+import { FILES_FOLDER, SOLUTION_FOLDER } from '../models/tree/constants';
 
-export function frontmatterPlugin(debug: (message: string) => void): LanguagePlugin<URI> {
+export function frontmatterPlugin(_debug: (message: string) => void): LanguagePlugin<URI> {
   return {
     getLanguageId(uri) {
-      debug('URI: ' + uri.path);
-
       if (uri.path.endsWith('.md')) {
         return 'markdown';
       }
@@ -17,7 +16,17 @@ export function frontmatterPlugin(debug: (message: string) => void): LanguagePlu
 
       return undefined;
     },
-    createVirtualCode(_uri, languageId, snapshot) {
+    createVirtualCode(uri, languageId, snapshot) {
+      // only match markdown files inside the src/content/tutorial folder
+      if (!uri.path.match(/.*src\/content\/tutorial\/.*(content|meta)\.mdx?$/)) {
+        return undefined;
+      }
+
+      // but ignore all files under _files or _solution
+      if (uri.path.includes(FILES_FOLDER) || uri.path.includes(SOLUTION_FOLDER)) {
+        return undefined;
+      }
+
       if (languageId === 'markdown' || languageId === 'mdx') {
         return new FrontMatterVirtualCode(snapshot);
       }
@@ -74,7 +83,7 @@ function* frontMatterCode(snapshot: ts.IScriptSnapshot): Generator<VirtualCode> 
   const frontMatterText = content.substring(frontMatterStartIndex, frontMatterEndIndex);
 
   yield {
-    id: 'frontmatter_1',
+    id: 'tutorialkit_frontmatter',
     languageId: 'yaml',
     snapshot: {
       getText: (start, end) => frontMatterText.slice(start, end),
