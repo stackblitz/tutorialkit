@@ -13,5 +13,7 @@ declare module 'tutorialkit:override-components' {
   export { topBar as TopBar };
 }
 
+declare module 'tutorialkit:astro-swap-functions';
+
 declare const __ENTERPRISE__: boolean;
 declare const __WC_CONFIG__: WebContainerConfig | undefined;
