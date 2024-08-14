@@ -2,7 +2,6 @@
  * A plugin for importing Astro's private 'transitions/swap-functions.js' module.
  * This is temporary solution and can break at any time when end-user's update their `astro` version.
  */
-import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 import type { VitePlugin } from '../types.js';
@@ -27,7 +26,7 @@ export function astroSwapFunctions(): VitePlugin {
 
     async load(id) {
       if (id === resolvedId) {
-        return await readFile(swapFunctionEntry, 'utf8');
+        return `export * from '${swapFunctionEntry}';`;
       }
 
       return undefined;
