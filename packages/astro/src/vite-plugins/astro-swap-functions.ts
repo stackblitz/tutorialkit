@@ -3,12 +3,12 @@
  * This is temporary solution and can break at any time when end-user's update their `astro` version.
  */
 import { createRequire } from 'node:module';
-import { resolve } from 'node:path';
+import { resolve, join } from 'node:path';
 import type { VitePlugin } from '../types.js';
 
 const require = createRequire(import.meta.url);
-const astroDist = resolve(require.resolve('astro/package.json'), '..');
-const swapFunctionEntry = resolve(astroDist, 'dist/transitions/swap-functions.js');
+const astroDist = resolve(require.resolve(join('astro', 'package.json')), '..');
+const swapFunctionEntry = join(astroDist, 'dist', 'transitions', 'swap-functions.js');
 
 const virtualModuleId = 'tutorialkit:astro-swap-functions';
 const resolvedId = `\0${virtualModuleId}`;
