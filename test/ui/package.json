@@ -1,0 +1,32 @@
+{
+  "name": "@tutorialkit/test-ui",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "preview": "astro build && astro preview",
+    "test": "playwright test",
+    "test:ui": "pnpm run test --ui"
+  },
+  "devDependencies": {
+    "@astrojs/react": "^3.6.0",
+    "@iconify-json/ph": "^1.1.13",
+    "@iconify-json/svg-spinners": "^1.1.2",
+    "@playwright/test": "^1.46.0",
+    "@tutorialkit/astro": "workspace:*",
+    "@tutorialkit/components-react": "workspace:*",
+    "@tutorialkit/runtime": "workspace:*",
+    "@tutorialkit/theme": "workspace:*",
+    "@tutorialkit/types": "workspace:*",
+    "@types/node": "^22.2.0",
+    "@unocss/reset": "^0.59.4",
+    "@unocss/transformer-directives": "^0.62.0",
+    "astro": "^4.12.0",
+    "fast-glob": "^3.3.2",
+    "playwright": "^1.46.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "unocss": "^0.59.4"
+  }
+}

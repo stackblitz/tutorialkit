@@ -23,3 +23,5 @@ tsconfig.tsbuildinfo
 tsconfig.build.tsbuildinfo
 .tmp
 .tmp-*
+/test/**/test-results
+/test/**/.astro
