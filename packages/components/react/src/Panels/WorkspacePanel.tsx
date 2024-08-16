@@ -3,15 +3,11 @@ import { TutorialStore } from '@tutorialkit/runtime';
 import type { I18n } from '@tutorialkit/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
-import type {
-  OnChangeCallback as OnEditorChange,
-  OnScrollCallback as OnEditorScroll,
-} from '../core/CodeMirrorEditor/index.js';
 import type { Theme } from '../core/types.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
 import { classNames } from '../utils/classnames.js';
 import { EditorPanel } from './EditorPanel.js';
-import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
+import { PreviewPanel } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';
 
 const DEFAULT_TERMINAL_SIZE = 25;
@@ -21,42 +17,82 @@ interface Props {
   theme: Theme;
 }
 
+interface PanelProps extends Props {
+  hasEditor: boolean;
+  hasPreviews: boolean;
+  hideTerminalPanel: boolean;
+}
+
+interface TerminalProps extends PanelProps {
+  terminalPanelRef: React.RefObject<ImperativePanelHandle>;
+  terminalExpanded: React.MutableRefObject<boolean>;
+}
+
 /**
  * This component is the orchestrator between various interactive components.
  */
 export function WorkspacePanel({ tutorialStore, theme }: Props) {
-  const fileTree = tutorialStore.hasFileTree();
   const hasEditor = tutorialStore.hasEditor();
   const hasPreviews = tutorialStore.hasPreviews();
   const hideTerminalPanel = !tutorialStore.hasTerminalPanel();
 
-  const editorPanelRef = useRef<ImperativePanelHandle>(null);
-  const previewPanelRef = useRef<ImperativePanelHandle>(null);
   const terminalPanelRef = useRef<ImperativePanelHandle>(null);
-  const previewRef = useRef<ImperativePreviewHandle>(null);
   const terminalExpanded = useRef(false);
 
-  const [helpAction, setHelpAction] = useState<'solve' | 'reset'>('reset');
+  return (
+    <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
+      <Editor
+        theme={theme}
+        tutorialStore={tutorialStore}
+        hasEditor={hasEditor}
+        hasPreviews={hasPreviews}
+        hideTerminalPanel={hideTerminalPanel}
+      />
 
+      <PanelResizeHandle
+        className={resizePanelStyles.PanelResizeHandle}
+        hitAreaMargins={{ fine: 5, coarse: 5 }}
+        disabled={!hasEditor}
+      />
+
+      <Preview
+        theme={theme}
+        tutorialStore={tutorialStore}
+        terminalPanelRef={terminalPanelRef}
+        terminalExpanded={terminalExpanded}
+        hideTerminalPanel={hideTerminalPanel}
+        hasPreviews={hasPreviews}
+        hasEditor={hasEditor}
+      />
+
+      <PanelResizeHandle
+        className={resizePanelStyles.PanelResizeHandle}
+        hitAreaMargins={{ fine: 5, coarse: 5 }}
+        disabled={hideTerminalPanel || !hasPreviews}
+      />
+
+      <Terminal
+        tutorialStore={tutorialStore}
+        theme={theme}
+        terminalPanelRef={terminalPanelRef}
+        terminalExpanded={terminalExpanded}
+        hideTerminalPanel={hideTerminalPanel}
+        hasEditor={hasEditor}
+        hasPreviews={hasPreviews}
+      />
+    </PanelGroup>
+  );
+}
+
+function Editor({ theme, tutorialStore, hasEditor }: PanelProps) {
+  const [helpAction, setHelpAction] = useState<'solve' | 'reset'>('reset');
   const selectedFile = useStore(tutorialStore.selectedFile);
   const currentDocument = useStore(tutorialStore.currentDocument);
   const lessonFullyLoaded = useStore(tutorialStore.lessonFullyLoaded);
 
   const lesson = tutorialStore.lesson!;
 
-  const onEditorChange = useCallback<OnEditorChange>((update) => {
-    tutorialStore.setCurrentDocumentContent(update.content);
-  }, []);
-
-  const onEditorScroll = useCallback<OnEditorScroll>((position) => {
-    tutorialStore.setCurrentDocumentScrollPosition(position);
-  }, []);
-
-  const onFileSelect = useCallback((filePath: string | undefined) => {
-    tutorialStore.setSelectedFile(filePath);
-  }, []);
-
-  const onHelpClick = useCallback(() => {
+  function onHelpClick() {
     if (tutorialStore.hasSolution()) {
       setHelpAction((action) => {
         if (action === 'reset') {
@@ -72,161 +108,154 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
     } else {
       tutorialStore.reset();
     }
-  }, [tutorialStore.ref]);
+  }
 
   useEffect(() => {
-    const lesson = tutorialStore.lesson!;
-
-    const unsubscribe = tutorialStore.lessonFullyLoaded.subscribe((loaded) => {
-      if (loaded && lesson.data.autoReload) {
-        /**
-         * @todo This causes some race with the preview where the iframe can show the "wrong" page.
-         * I think the reason is that when the ports are different then we render new frames which
-         * races against the reload which will internally reset the `src` attribute.
-         */
-        // previewRef.current?.reload();
-      }
-    });
-
     if (tutorialStore.hasSolution()) {
       setHelpAction('solve');
     } else {
       setHelpAction('reset');
     }
-
-    if (tutorialStore.terminalConfig.value?.defaultOpen) {
-      showTerminal();
-    }
-
-    return () => unsubscribe();
   }, [tutorialStore.ref]);
+
+  return (
+    <Panel
+      id={hasEditor ? 'editor-opened' : 'editor-closed'}
+      defaultSize={hasEditor ? 50 : 0}
+      minSize={10}
+      maxSize={hasEditor ? 100 : 0}
+      collapsible={!hasEditor}
+      className="transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor"
+    >
+      <EditorPanel
+        id={tutorialStore.ref}
+        theme={theme}
+        showFileTree={tutorialStore.hasFileTree()}
+        editorDocument={currentDocument}
+        files={lesson.files[1]}
+        i18n={lesson.data.i18n as I18n}
+        hideRoot={lesson.data.hideRoot}
+        helpAction={helpAction}
+        onHelpClick={lessonFullyLoaded ? onHelpClick : undefined}
+        onFileSelect={(filePath) => tutorialStore.setSelectedFile(filePath)}
+        selectedFile={selectedFile}
+        onEditorScroll={(position) => tutorialStore.setCurrentDocumentScrollPosition(position)}
+        onEditorChange={(update) => tutorialStore.setCurrentDocumentContent(update.content)}
+      />
+    </Panel>
+  );
+}
+
+function Preview({
+  tutorialStore,
+  terminalPanelRef,
+  terminalExpanded,
+  hideTerminalPanel,
+  hasPreviews,
+  hasEditor,
+}: TerminalProps) {
+  const lesson = tutorialStore.lesson!;
+  const terminalConfig = useStore(tutorialStore.terminalConfig);
+
+  function showTerminal() {
+    const { current: terminal } = terminalPanelRef;
+
+    if (terminal && !terminalExpanded.current) {
+      terminalExpanded.current = true;
+      terminal.resize(DEFAULT_TERMINAL_SIZE);
+    } else if (terminal) {
+      terminal.expand();
+    }
+  }
+
+  const toggleTerminal = useCallback(() => {
+    if (terminalPanelRef.current?.isCollapsed()) {
+      showTerminal();
+    } else if (terminalPanelRef.current) {
+      terminalPanelRef.current.collapse();
+    }
+  }, []);
 
   useEffect(() => {
     if (hideTerminalPanel) {
       // force hide the terminal if we don't have any panels to show
-      hideTerminal();
+      terminalPanelRef.current?.collapse();
 
       terminalExpanded.current = false;
     }
   }, [hideTerminalPanel]);
 
-  const showTerminal = useCallback(() => {
-    const { current: terminal } = terminalPanelRef;
-
-    if (!terminal) {
-      return;
-    }
-
-    if (!terminalExpanded.current) {
-      terminalExpanded.current = true;
-      terminal.resize(DEFAULT_TERMINAL_SIZE);
-    } else {
-      terminal.expand();
-    }
-  }, []);
-
-  const hideTerminal = useCallback(() => {
-    terminalPanelRef.current?.collapse();
-  }, []);
-
-  const toggleTerminal = useCallback(() => {
-    const { current: terminal } = terminalPanelRef;
-
-    if (!terminal) {
-      return;
-    }
-
-    if (terminalPanelRef.current?.isCollapsed()) {
+  useEffect(() => {
+    if (terminalConfig.defaultOpen) {
       showTerminal();
-    } else {
-      hideTerminal();
     }
-  }, []);
+  }, [terminalConfig.defaultOpen]);
 
   return (
-    <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
-      <Panel
-        id={hasEditor ? 'editor-opened' : 'editor-closed'}
-        defaultSize={hasEditor ? 50 : 0}
-        minSize={10}
-        maxSize={hasEditor ? 100 : 0}
-        collapsible={!hasEditor}
-        ref={editorPanelRef}
-        className="transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor"
-      >
-        <EditorPanel
-          id={tutorialStore.ref}
-          theme={theme}
-          showFileTree={fileTree}
-          editorDocument={currentDocument}
-          files={lesson.files[1]}
-          i18n={lesson.data.i18n as I18n}
-          hideRoot={lesson.data.hideRoot}
-          helpAction={helpAction}
-          onHelpClick={lessonFullyLoaded ? onHelpClick : undefined}
-          onFileSelect={onFileSelect}
-          selectedFile={selectedFile}
-          onEditorScroll={onEditorScroll}
-          onEditorChange={onEditorChange}
-        />
-      </Panel>
-      <PanelResizeHandle
-        className={resizePanelStyles.PanelResizeHandle}
-        hitAreaMargins={{ fine: 5, coarse: 5 }}
-        disabled={!hasEditor}
+    <Panel
+      id={hasPreviews ? 'previews-opened' : 'previews-closed'}
+      defaultSize={hasPreviews ? 50 : 0}
+      minSize={10}
+      maxSize={hasPreviews ? 100 : 0}
+      collapsible={!hasPreviews}
+      className={classNames({
+        'transition-theme border-t border-tk-elements-app-borderColor': hasEditor,
+      })}
+    >
+      <PreviewPanel
+        tutorialStore={tutorialStore}
+        i18n={lesson.data.i18n as I18n}
+        showToggleTerminal={!hideTerminalPanel}
+        toggleTerminal={toggleTerminal}
       />
-      <Panel
-        id={hasPreviews ? 'previews-opened' : 'previews-closed'}
-        defaultSize={hasPreviews ? 50 : 0}
-        minSize={10}
-        maxSize={hasPreviews ? 100 : 0}
-        collapsible={!hasPreviews}
-        ref={previewPanelRef}
-        className={classNames({
-          'transition-theme border-t border-tk-elements-app-borderColor': hasEditor,
-        })}
-      >
-        <PreviewPanel
-          tutorialStore={tutorialStore}
-          i18n={lesson.data.i18n as I18n}
-          ref={previewRef}
-          showToggleTerminal={!hideTerminalPanel}
-          toggleTerminal={toggleTerminal}
-        />
-      </Panel>
-      <PanelResizeHandle
-        className={resizePanelStyles.PanelResizeHandle}
-        hitAreaMargins={{ fine: 5, coarse: 5 }}
-        disabled={hideTerminalPanel || !hasPreviews}
-      />
-      <Panel
-        id={
-          hideTerminalPanel
-            ? 'terminal-none'
-            : !hasPreviews && !hasEditor
-              ? 'terminal-full'
-              : !hasPreviews
-                ? 'terminal-opened'
-                : 'terminal-closed'
-        }
-        defaultSize={
-          hideTerminalPanel ? 0 : !hasPreviews && !hasEditor ? 100 : !hasPreviews ? DEFAULT_TERMINAL_SIZE : 0
-        }
-        minSize={hideTerminalPanel ? 0 : 10}
-        collapsible={hasPreviews}
-        ref={terminalPanelRef}
-        onExpand={() => {
-          terminalExpanded.current = true;
-        }}
-        className={classNames(
-          'transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor',
-          {
-            'border-t border-tk-elements-app-borderColor': hasPreviews,
-          },
-        )}
-      >
-        <TerminalPanel tutorialStore={tutorialStore} theme={theme} />
-      </Panel>
-    </PanelGroup>
+    </Panel>
+  );
+}
+
+function Terminal({
+  tutorialStore,
+  theme,
+  terminalPanelRef,
+  terminalExpanded,
+  hideTerminalPanel,
+  hasEditor,
+  hasPreviews,
+}: TerminalProps) {
+  let id = 'terminal-closed';
+
+  if (hideTerminalPanel) {
+    id = 'terminal-none';
+  } else if (!hasPreviews && !hasEditor) {
+    id = 'terminal-full';
+  } else if (!hasPreviews) {
+    id = 'terminal-opened';
+  }
+
+  let defaultSize = 0;
+
+  if (hideTerminalPanel) {
+    defaultSize = 0;
+  } else if (!hasPreviews && !hasEditor) {
+    defaultSize = 100;
+  } else if (!hasPreviews) {
+    defaultSize = DEFAULT_TERMINAL_SIZE;
+  }
+
+  return (
+    <Panel
+      id={id}
+      defaultSize={defaultSize}
+      minSize={hideTerminalPanel ? 0 : 10}
+      collapsible={hasPreviews}
+      ref={terminalPanelRef}
+      onExpand={() => {
+        terminalExpanded.current = true;
+      }}
+      className={classNames('transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor', {
+        'border-t border-tk-elements-app-borderColor': hasPreviews,
+      })}
+    >
+      <TerminalPanel tutorialStore={tutorialStore} theme={theme} />
+    </Panel>
   );
 }
