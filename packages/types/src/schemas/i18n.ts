@@ -57,7 +57,7 @@ export const i18nSchema = z.object({
   prepareEnvironmentTitleText: z.string().optional().describe('Text shown on top of the steps section.'),
 
   /**
-   * Text shown on top of the preview section.
+   * Text shown on top of the preview section when `previews[_].title` is not configured.
    *
    * @default 'Preview'
    */
