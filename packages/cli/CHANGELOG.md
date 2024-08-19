@@ -1,3 +1,7 @@
+## [0.1.5](https://github.com/stackblitz/tutorialkit/compare/0.1.4...0.1.5) "@tutorialkit/cli" (2024-08-16)
+
+
+
 ## [0.1.4](https://github.com/stackblitz/tutorialkit/compare/0.1.3...0.1.4) "@tutorialkit/cli" (2024-08-08)
 
 
