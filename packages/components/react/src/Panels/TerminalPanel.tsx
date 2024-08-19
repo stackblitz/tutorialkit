@@ -70,7 +70,10 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
                       },
                     )}
                     title={title}
+                    id={`tk-terminal-tab-${index}`}
+                    role="tab"
                     aria-selected={selected}
+                    aria-controls={`tk-terminal-tapbanel-${index}`}
                     onClick={() => setTabIndex(index)}
                   >
                     <span
@@ -93,6 +96,9 @@ export function TerminalPanel({ theme, tutorialStore }: TerminalPanelProps) {
             {terminalConfig.panels.map(({ id, type }, index) => (
               <Terminal
                 key={id}
+                role="tabpanel"
+                id={`tk-terminal-tapbanel-${index}`}
+                aria-labelledby={`tk-terminal-tab-${index}`}
                 className={tabIndex !== index ? 'hidden h-full' : 'h-full'}
                 theme={theme}
                 readonly={type === 'output'}

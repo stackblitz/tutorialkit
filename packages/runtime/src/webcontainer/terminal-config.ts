@@ -5,6 +5,7 @@ import type { ITerminal } from '../utils/terminal.js';
 interface NormalizedTerminalConfig {
   panels: TerminalPanel[];
   activePanel: number;
+  defaultOpen: boolean;
 }
 
 interface TerminalPanelOptions {
@@ -29,6 +30,10 @@ export class TerminalConfig {
 
   get activePanel() {
     return this._config.activePanel;
+  }
+
+  get defaultOpen() {
+    return this._config.defaultOpen;
   }
 }
 
@@ -192,6 +197,7 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
     return {
       panels: [],
       activePanel,
+      defaultOpen: false,
     };
   }
 
@@ -203,6 +209,7 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
     return {
       panels: [new TerminalPanel('output')],
       activePanel,
+      defaultOpen: false,
     };
   }
 
@@ -254,5 +261,6 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
   return {
     activePanel,
     panels,
+    defaultOpen: config.open || false,
   };
 }

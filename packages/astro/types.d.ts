@@ -5,5 +5,5 @@ declare module 'tutorialkit:store' {
 }
 
 declare module 'tutorialkit:core' {
-  export const webcontainer: import('@webcontainer/api').WebContainer;
+  export const webcontainer: Promise<import('@webcontainer/api').WebContainer>;
 }

@@ -74,6 +74,8 @@ export const terminalSchema = z.union([
   z.boolean(),
 
   z.strictObject({
+    open: z.boolean().optional().describe('Defines if terminal should be open by default'),
+
     panels: z.union([
       // either literally just `output`
       z.literal('output'),
