@@ -31,7 +31,9 @@ export const i18nSchema = z.object({
   startWebContainerText: z
     .string()
     .optional()
-    .describe('Text shown on the call to action button to start webcontainer when boot was blocked due to memory restrictions.'),
+    .describe(
+      'Text shown on the call to action button to start webcontainer when boot was blocked due to memory restrictions.',
+    ),
 
   /**
    * Text shown in the preview section when there are no steps to run and no preview to show.
