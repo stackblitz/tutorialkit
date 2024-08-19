@@ -41,7 +41,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
 
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
-      <Editor
+      <EditorSection
         theme={theme}
         tutorialStore={tutorialStore}
         hasEditor={hasEditor}
@@ -55,7 +55,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         disabled={!hasEditor}
       />
 
-      <Preview
+      <PreviewsSection
         theme={theme}
         tutorialStore={tutorialStore}
         terminalPanelRef={terminalPanelRef}
@@ -71,7 +71,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
         disabled={hideTerminalPanel || !hasPreviews}
       />
 
-      <Terminal
+      <TerminalSection
         tutorialStore={tutorialStore}
         theme={theme}
         terminalPanelRef={terminalPanelRef}
@@ -84,7 +84,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
   );
 }
 
-function Editor({ theme, tutorialStore, hasEditor }: PanelProps) {
+function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
   const [helpAction, setHelpAction] = useState<'solve' | 'reset'>('reset');
   const selectedFile = useStore(tutorialStore.selectedFile);
   const currentDocument = useStore(tutorialStore.currentDocument);
@@ -146,7 +146,7 @@ function Editor({ theme, tutorialStore, hasEditor }: PanelProps) {
   );
 }
 
-function Preview({
+function PreviewsSection({
   tutorialStore,
   terminalPanelRef,
   terminalExpanded,
@@ -212,7 +212,7 @@ function Preview({
   );
 }
 
-function Terminal({
+function TerminalSection({
   tutorialStore,
   theme,
   terminalPanelRef,
