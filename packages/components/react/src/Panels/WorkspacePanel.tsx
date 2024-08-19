@@ -93,6 +93,10 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
       setHelpAction('reset');
     }
 
+    if (tutorialStore.terminalConfig.value?.defaultOpen) {
+      showTerminal();
+    }
+
     return () => unsubscribe();
   }, [tutorialStore.ref]);
 
