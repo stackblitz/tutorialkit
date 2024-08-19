@@ -10,31 +10,15 @@ export interface TerminalRef {
   reloadStyles: () => void;
 }
 
-export interface TerminalProps {
+export interface TerminalProps extends ComponentProps<'div'> {
   theme: 'dark' | 'light';
-  className?: string;
-  id?: string;
-  role?: ComponentProps<'div'>['role'];
-  'aria-labelledby'?: string;
   readonly?: boolean;
   onTerminalReady?: (terminal: XTerm) => void;
   onTerminalResize?: (cols: number, rows: number) => void;
 }
 
 export const Terminal = forwardRef<TerminalRef, TerminalProps>(
-  (
-    {
-      theme,
-      className,
-      id,
-      role,
-      'aria-labelledby': ariaLabelledby,
-      readonly = true,
-      onTerminalReady,
-      onTerminalResize,
-    },
-    ref,
-  ) => {
+  ({ theme, readonly = true, onTerminalReady, onTerminalResize, ...props }, ref) => {
     const divRef = useRef<HTMLDivElement>(null);
     const terminalRef = useRef<XTerm>();
 
@@ -94,7 +78,7 @@ export const Terminal = forwardRef<TerminalRef, TerminalProps>(
       };
     }, []);
 
-    return <div id={id} role={role} aria-labelledby={ariaLabelledby} className={className} ref={divRef} />;
+    return <div {...props} ref={divRef} />;
   },
 );
 
