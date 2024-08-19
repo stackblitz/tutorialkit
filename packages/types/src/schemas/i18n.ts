@@ -61,7 +61,7 @@ export const i18nSchema = z.object({
    *
    * @default 'Preview'
    */
-  previewTitleText: z.string().optional().describe('Text shown on top of the preview section.'),
+  defaultPreviewTitleText: z.string().optional().describe('Text shown on top of the preview section.'),
 
   /**
    * Text for the toggle terminal button.

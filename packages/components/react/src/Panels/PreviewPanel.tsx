@@ -215,7 +215,7 @@ function previewTitle(preview: PreviewInfo, previewCount: number, i18n: I18n) {
   }
 
   if (previewCount === 1) {
-    return i18n.previewTitleText;
+    return i18n.defaultPreviewTitleText;
   }
 
   return `Preview on port ${preview.port}`;

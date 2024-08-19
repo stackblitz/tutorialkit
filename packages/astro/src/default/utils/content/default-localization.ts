@@ -8,7 +8,7 @@ export const DEFAULT_LOCALIZATION = {
   webcontainerLinkText: 'Powered by WebContainers',
   filesTitleText: 'Files',
   prepareEnvironmentTitleText: 'Preparing Environment',
-  previewTitleText: 'Preview',
+  defaultPreviewTitleText: 'Preview',
   toggleTerminalButtonText: 'Toggle Terminal',
   solveButtonText: 'Solve',
   resetButtonText: 'Reset',
