@@ -23,14 +23,17 @@ export const i18nSchema = z.object({
   webcontainerLinkText: z.string().optional().describe('Text of the WebContainer link.'),
 
   /**
-   * Text shown when there are no previews or steps to show in the prepare environment section.
+   * Text shown on the call to action button to start webcontainer when boot was blocked
+   * due to memory restrictions.
    *
    * @default 'Start WebContainer'
    */
   startWebContainerText: z
     .string()
     .optional()
-    .describe('Text shown when there are no previews or steps to show in the prepare environment section.'),
+    .describe(
+      'Text shown on the call to action button to start webcontainer when boot was blocked due to memory restrictions.',
+    ),
 
   /**
    * Text shown in the preview section when there are no steps to run and no preview to show.
@@ -55,6 +58,13 @@ export const i18nSchema = z.object({
    * @default 'Preparing Environment'
    */
   prepareEnvironmentTitleText: z.string().optional().describe('Text shown on top of the steps section.'),
+
+  /**
+   * Text shown on top of the preview section when `previews[_].title` is not configured.
+   *
+   * @default 'Preview'
+   */
+  defaultPreviewTitleText: z.string().optional().describe('Text shown on top of the preview section.'),
 
   /**
    * Text for the toggle terminal button.
