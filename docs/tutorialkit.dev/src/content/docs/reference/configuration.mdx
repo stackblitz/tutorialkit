@@ -42,7 +42,7 @@ The `I18nText` type has the following shape:
 ```ts
 type I18nText = {
   /**
-   * Template for formatting a part. Variables: ${index} and ${title}.
+   * Template on how to format a part. Variables: ${index} and ${title}.
    *
    * @default 'Part ${index}: ${title}'
    */
@@ -53,7 +53,7 @@ type I18nText = {
    *
    * @default 'Edit this page'
    */
-  editPageText?: string
+  editPageText?: string,
 
   /**
    * Text of the WebContainer link.
@@ -70,12 +70,53 @@ type I18nText = {
   startWebContainerText?: string,
 
   /**
-   * Text shown on the call to action button to start webcontainer when boot was blocked
-   * due to memory restrictions.
+   * Text shown in the preview section when there are no steps to run and no preview to show.
    *
    * @default 'No preview to run nor steps to show'
    */
   noPreviewNorStepsText?: string,
+
+  /**
+   * Text shown on top of the file tree.
+   *
+   * @default 'Files'
+   */
+  filesTitleText?: string,
+
+  /**
+   * Text shown on top of the steps section.
+   *
+   * @default 'Preparing Environment'
+   */
+  prepareEnvironmentTitleText?: string,
+
+  /**
+   * Text shown on top of the preview section when `previews[_].title` is not configured.
+   *
+   * @default 'Preview'
+   */
+  defaultPreviewTitleText?: string,
+
+  /**
+   * Text for the toggle terminal button.
+   *
+   * @default 'Toggle Terminal'
+   */
+  toggleTerminalButtonText?: string,
+
+  /**
+   * Text for the solve button.
+   *
+   * @default 'Solve'
+   */
+  solveButtonText?: string,
+
+  /**
+   * Text for the reset button.
+   *
+   * @default 'Reset'
+   */
+  resetButtonText?: string,
 }
 
 ```
