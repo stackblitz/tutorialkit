@@ -125,7 +125,7 @@ function FileTab({ i18n, editorDocument, helpAction, onHelpClick }: FileTabProps
         <span className="text-sm">{fileName}</span>
       </div>
       {!!helpAction && (
-        <button onClick={onHelpClick} className="panel-button px-2 py-0.5 -mr-1 -my-1">
+        <button onClick={onHelpClick} disabled={!onHelpClick} className="panel-button px-2 py-0.5 -mr-1 -my-1">
           {helpAction === 'solve' && <div className="i-ph-lightbulb-duotone text-lg" />}
           {helpAction === 'solve' && i18n.solveButtonText}
           {helpAction === 'reset' && <div className="i-ph-clock-counter-clockwise-duotone" />}

@@ -160,6 +160,10 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
     if (preview.url) {
       iframe.ref.src = preview.url;
     }
+
+    if (preview.title) {
+      iframe.ref.title = preview.title;
+    }
   }, [preview.url, iframe.ref]);
 
   return (

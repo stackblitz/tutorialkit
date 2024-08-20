@@ -208,6 +208,7 @@ function newEditorState(
   return EditorState.create({
     doc: content,
     extensions: [
+      EditorView.contentAttributes.of({ 'aria-label': 'Editor' }),
       EditorView.domEventHandlers({
         scroll: debounce((_event, view) => {
           onScrollRef.current?.({ left: view.scrollDOM.scrollLeft, top: view.scrollDOM.scrollTop });
