@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/components-react",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "TutorialKit's React components",
   "author": "StackBlitz Inc.",
   "type": "module",
@@ -62,6 +62,7 @@
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/lang-markdown": "^6.2.5",
     "@codemirror/lang-sass": "^6.0.2",
+    "@codemirror/lang-vue": "^0.1.3",
     "@codemirror/lang-wast": "^6.0.2",
     "@codemirror/language": "^6.10.2",
     "@codemirror/state": "^6.4.1",

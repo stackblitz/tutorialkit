@@ -40,6 +40,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
 
   const selectedFile = useStore(tutorialStore.selectedFile);
   const currentDocument = useStore(tutorialStore.currentDocument);
+  const lessonFullyLoaded = useStore(tutorialStore.lessonFullyLoaded);
 
   const lesson = tutorialStore.lesson!;
 
@@ -91,6 +92,10 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
       setHelpAction('solve');
     } else {
       setHelpAction('reset');
+    }
+
+    if (tutorialStore.terminalConfig.value?.defaultOpen) {
+      showTerminal();
     }
 
     return () => unsubscribe();
@@ -158,7 +163,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
           i18n={lesson.data.i18n as I18n}
           hideRoot={lesson.data.hideRoot}
           helpAction={helpAction}
-          onHelpClick={onHelpClick}
+          onHelpClick={lessonFullyLoaded ? onHelpClick : undefined}
           onFileSelect={onFileSelect}
           selectedFile={selectedFile}
           onEditorScroll={onEditorScroll}

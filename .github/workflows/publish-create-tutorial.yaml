@@ -41,6 +41,7 @@ jobs:
           body: 'Bump `create-tutorial` to version ${{ inputs.version }}.'
           reviewers: SamVerschueren,d3lm,Nemikolh,AriPerkkio
           branch: chore/release-create-tutorial-${{ inputs.version }}
+          token: ${{ secrets.GITOPS_REPO_PAT }}
 
   publish_release_create_tutorial:
     name: Publish Release create-tutorial

@@ -1,10 +1,9 @@
 import type { PreviewSchema } from '@tutorialkit/types';
+import { PortInfo } from './port-info.js';
 
 export class PreviewInfo {
-  port: number;
-  ready: boolean;
+  readonly portInfo: PortInfo;
   title?: string;
-  baseUrl?: string;
   pathname?: string;
 
   get url(): string | undefined {
@@ -15,21 +14,53 @@ export class PreviewInfo {
     return undefined;
   }
 
-  constructor(preview: Exclude<PreviewSchema, boolean>[0], ready?: boolean) {
-    if (typeof preview === 'number') {
-      this.port = preview;
-    } else if (Array.isArray(preview)) {
-      this.port = preview[0];
-      this.title = preview[1];
-    } else {
-      this.port = preview.port;
-      this.title = preview.title;
-    }
+  get port() {
+    return this.portInfo.port;
+  }
 
-    this.ready = !!ready;
+  get baseUrl() {
+    return this.portInfo.origin;
+  }
+
+  get ready() {
+    return this.portInfo.ready;
+  }
+
+  constructor(preview: Omit<Preview, 'port'>, portInfo: PortInfo) {
+    this.title = preview.title;
+    this.pathname = preview.pathname;
+    this.portInfo = portInfo;
+  }
+
+  static parse(preview: Exclude<PreviewSchema, boolean>[0]): Preview {
+    if (typeof preview === 'number') {
+      return {
+        port: preview,
+      };
+    } else if (typeof preview === 'string') {
+      const [port, ...rest] = preview.split('/');
+      return {
+        port: parseInt(port),
+        pathname: rest.join('/'),
+      };
+    } else if (Array.isArray(preview)) {
+      return {
+        port: preview[0],
+        title: preview[1],
+        pathname: preview[2],
+      };
+    } else {
+      return preview;
+    }
   }
 
   static equals(a: PreviewInfo, b: PreviewInfo) {
-    return a.port === b.port && a.pathname === b.pathname && a.title === b.title;
+    return a.portInfo.port === b.portInfo.port && a.pathname === b.pathname && a.title === b.title;
   }
+}
+
+interface Preview {
+  port: number;
+  pathname?: string;
+  title?: string;
 }

@@ -122,6 +122,7 @@ export const PreviewPanel = memo(
             first={index === 0}
             last={index === previews.length - 1}
             toggleTerminal={toggleTerminal}
+            i18n={i18n}
           />
         </Panel>,
       );
@@ -134,6 +135,7 @@ export const PreviewPanel = memo(
     return createElement(PanelGroup, { id: 'preview-panel', direction: 'horizontal' }, ...children);
   }),
 );
+PreviewPanel.displayName = 'PreviewPanel';
 
 interface PreviewProps {
   iframe: IFrameRef;
@@ -142,9 +144,10 @@ interface PreviewProps {
   first?: boolean;
   last?: boolean;
   toggleTerminal?: () => void;
+  i18n: I18n;
 }
 
-function Preview({ preview, iframe, previewCount, first, last, toggleTerminal }: PreviewProps) {
+function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i18n }: PreviewProps) {
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -157,6 +160,10 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal }:
     if (preview.url) {
       iframe.ref.src = preview.url;
     }
+
+    if (preview.title) {
+      iframe.ref.title = preview.title;
+    }
   }, [preview.url, iframe.ref]);
 
   return (
@@ -168,7 +175,7 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal }:
       >
         <div className="panel-title">
           <div className="panel-icon i-ph-globe-duotone"></div>
-          <span className="text-sm truncate">{previewTitle(preview, previewCount)}</span>
+          <span className="text-sm truncate">{previewTitle(preview, previewCount, i18n)}</span>
         </div>
         {last && (
           <button
@@ -177,7 +184,7 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal }:
             onClick={() => toggleTerminal?.()}
           >
             <div className="panel-button-icon i-ph-terminal-window-duotone"></div>
-            <span className="text-sm">Toggle Terminal</span>
+            <span className="text-sm">{i18n.toggleTerminalButtonText}</span>
           </button>
         )}
       </div>
@@ -206,13 +213,13 @@ function requestAnimationFrameLoop(loop: () => void): () => void {
   };
 }
 
-function previewTitle(preview: PreviewInfo, previewCount: number) {
+function previewTitle(preview: PreviewInfo, previewCount: number, i18n: I18n) {
   if (preview.title) {
     return preview.title;
   }
 
   if (previewCount === 1) {
-    return 'Preview';
+    return i18n.defaultPreviewTitleText;
   }
 
   return `Preview on port ${preview.port}`;

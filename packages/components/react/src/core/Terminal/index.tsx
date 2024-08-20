@@ -2,7 +2,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, type ComponentProps } from 'react';
 import '../../styles/terminal.css';
 import { getTerminalTheme } from './theme.js';
 
@@ -10,16 +10,15 @@ export interface TerminalRef {
   reloadStyles: () => void;
 }
 
-export interface TerminalProps {
+export interface TerminalProps extends ComponentProps<'div'> {
   theme: 'dark' | 'light';
-  className?: string;
   readonly?: boolean;
   onTerminalReady?: (terminal: XTerm) => void;
   onTerminalResize?: (cols: number, rows: number) => void;
 }
 
 export const Terminal = forwardRef<TerminalRef, TerminalProps>(
-  ({ theme, className = '', readonly = true, onTerminalReady, onTerminalResize }, ref) => {
+  ({ theme, readonly = true, onTerminalReady, onTerminalResize, ...props }, ref) => {
     const divRef = useRef<HTMLDivElement>(null);
     const terminalRef = useRef<XTerm>();
 
@@ -79,8 +78,9 @@ export const Terminal = forwardRef<TerminalRef, TerminalProps>(
       };
     }, []);
 
-    return <div className={className} ref={divRef} />;
+    return <div {...props} ref={divRef} />;
   },
 );
 
+Terminal.displayName = 'Terminal';
 export default Terminal;

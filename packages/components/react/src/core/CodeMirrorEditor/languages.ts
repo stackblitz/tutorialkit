@@ -79,6 +79,13 @@ export const supportedLanguages = [
     },
   }),
   LanguageDescription.of({
+    name: 'Vue',
+    extensions: ['vue'],
+    async load() {
+      return import('@codemirror/lang-vue').then((module) => module.vue());
+    },
+  }),
+  LanguageDescription.of({
     name: 'Svelte',
     extensions: ['svelte'],
     async load() {

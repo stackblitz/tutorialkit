@@ -1,3 +1,18 @@
+## [0.1.5](https://github.com/stackblitz/tutorialkit/compare/0.1.4...0.1.5) (2024-08-16)
+
+
+### Bug Fixes
+
+* **astro:** don't modify state during re-renders of `<WorkspacePanelWrapper />` ([#240](https://github.com/stackblitz/tutorialkit/issues/240)) ([745be37](https://github.com/stackblitz/tutorialkit/commit/745be37ef20ae97d6ded221fca24670742981879))
+* **extension:** only match tutorialkit content and meta files ([#242](https://github.com/stackblitz/tutorialkit/issues/242)) ([9c1b55a](https://github.com/stackblitz/tutorialkit/commit/9c1b55abd0967053782458db4ee41180f26d6c5d))
+
+
+### Features
+
+* **runtime:** add `preview.pathname` ([#233](https://github.com/stackblitz/tutorialkit/issues/233)) ([9bf2156](https://github.com/stackblitz/tutorialkit/commit/9bf2156df26656427482645d3d134127863de233))
+
+
+
 ## [0.1.4](https://github.com/stackblitz/tutorialkit/compare/0.1.3...0.1.4) (2024-08-08)
 
 

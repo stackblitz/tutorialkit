@@ -1,6 +1,6 @@
 {
   "name": "create-tutorial",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Interactive tutorials powered by WebContainer API",
   "author": "StackBlitz Inc.",
   "type": "module",

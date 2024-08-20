@@ -150,6 +150,7 @@ function File({ file: { depth, name }, onClick, selected }: FileProps) {
         'text-tk-elements-fileTree-file-iconColorSelected': selected,
       })}
       onClick={onClick}
+      aria-pressed={selected}
     >
       {name}
     </NodeButton>
@@ -162,14 +163,16 @@ interface ButtonProps {
   children: ReactNode;
   className?: string;
   onClick?: () => void;
+  'aria-pressed'?: boolean;
 }
 
-function NodeButton({ depth, iconClasses, onClick, className, children }: ButtonProps) {
+function NodeButton({ depth, iconClasses, onClick, className, 'aria-pressed': ariaPressed, children }: ButtonProps) {
   return (
     <button
       className={`flex items-center gap-2 w-full pr-2 border-2 border-transparent text-faded ${className ?? ''}`}
       style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
       onClick={() => onClick?.()}
+      aria-pressed={ariaPressed === true ? 'true' : undefined}
     >
       <div className={classNames('scale-120 shrink-0', iconClasses)}></div>
       <span>{children}</span>

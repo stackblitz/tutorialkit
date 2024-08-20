@@ -1,3 +1,12 @@
+## [0.1.5](https://github.com/stackblitz/tutorialkit/compare/0.1.4...0.1.5) "@tutorialkit/types" (2024-08-16)
+
+
+### Features
+
+* **runtime:** add `preview.pathname` ([#233](https://github.com/stackblitz/tutorialkit/issues/233)) ([9bf2156](https://github.com/stackblitz/tutorialkit/commit/9bf2156df26656427482645d3d134127863de233))
+
+
+
 ## [0.1.4](https://github.com/stackblitz/tutorialkit/compare/0.1.3...0.1.4) "@tutorialkit/types" (2024-08-08)
 
 

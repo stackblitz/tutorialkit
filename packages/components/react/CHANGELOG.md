@@ -1,3 +1,12 @@
+## [0.1.5](https://github.com/stackblitz/tutorialkit/compare/0.1.4...0.1.5) "@tutorialkit/components-react" (2024-08-16)
+
+
+### Bug Fixes
+
+* **astro:** don't modify state during re-renders of `<WorkspacePanelWrapper />` ([#240](https://github.com/stackblitz/tutorialkit/issues/240)) ([745be37](https://github.com/stackblitz/tutorialkit/commit/745be37ef20ae97d6ded221fca24670742981879))
+
+
+
 ## [0.1.4](https://github.com/stackblitz/tutorialkit/compare/0.1.3...0.1.4) "@tutorialkit/components-react" (2024-08-08)
 
 

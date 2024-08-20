@@ -42,7 +42,7 @@ The `I18nText` type has the following shape:
 ```ts
 type I18nText = {
   /**
-   * Template for formatting a part. Variables: ${index} and ${title}.
+   * Template on how to format a part. Variables: ${index} and ${title}.
    *
    * @default 'Part ${index}: ${title}'
    */
@@ -53,7 +53,7 @@ type I18nText = {
    *
    * @default 'Edit this page'
    */
-  editPageText?: string
+  editPageText?: string,
 
   /**
    * Text of the WebContainer link.
@@ -63,19 +63,61 @@ type I18nText = {
   webcontainerLinkText?: string,
 
   /**
-   * Text shown when there are no previews or steps to show in the prepare environment section.
+   * Text shown on the call to action button to start webcontainer when boot was blocked
+   * due to memory restrictions.
    *
    * @default 'Start WebContainer'
    */
   startWebContainerText?: string,
 
   /**
-   * Text shown on the call to action button to start webcontainer when boot was blocked
-   * due to memory restrictions.
+   * Text shown in the preview section when there are no steps to run and no preview to show.
    *
    * @default 'No preview to run nor steps to show'
    */
   noPreviewNorStepsText?: string,
+
+  /**
+   * Text shown on top of the file tree.
+   *
+   * @default 'Files'
+   */
+  filesTitleText?: string,
+
+  /**
+   * Text shown on top of the steps section.
+   *
+   * @default 'Preparing Environment'
+   */
+  prepareEnvironmentTitleText?: string,
+
+  /**
+   * Text shown on top of the preview section when `previews[_].title` is not configured.
+   *
+   * @default 'Preview'
+   */
+  defaultPreviewTitleText?: string,
+
+  /**
+   * Text for the toggle terminal button.
+   *
+   * @default 'Toggle Terminal'
+   */
+  toggleTerminalButtonText?: string,
+
+  /**
+   * Text for the solve button.
+   *
+   * @default 'Solve'
+   */
+  solveButtonText?: string,
+
+  /**
+   * Text for the reset button.
+   *
+   * @default 'Reset'
+   */
+  resetButtonText?: string,
 }
 
 ```
@@ -91,16 +133,30 @@ Configure whether or not the editor should be rendered. If an object is provided
 ##### `previews`
 Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used.
 
-You can optionally provide these as an array of tuples where the first element is the port number and the second is the title of the preview, or as an object.
 <PropertyTable inherited type={'Preview[]'} />
 
 The `Preview` type has the following shape:
 
 ```ts
-type Preview = string
+type Preview =
+    | number
+    | string
     | [port: number, title: string]
-    | { port: number, title: string }
+    | [port: number, title: string, pathname: string]
+    | { port: number, title: string, pathname?: string }
 
+```
+
+Example value:
+
+```yaml
+previews:
+  - 3000 # Preview is on :3000/
+  - "3001/docs" # Preview is on :3001/docs/
+  - [3002, "Dev Server"] # Preview is on :3002/. Displayed title is "Dev Server".
+  - [3003, "Dev Server", "/docs"] # Preview is on :3003/docs/. Displayed title is "Dev Server".
+  - { port: 3004, title: "Dev Server" } # Preview is on :3004/. Displayed title is "Dev Server".
+  - { port: 3005, title: "Dev Server", pathname: "/docs" } # Preview is on :3005/docs/. Displayed title is "Dev Server".
 ```
 
 ##### `mainCommand`
@@ -134,6 +190,8 @@ Configures one or more terminals. TutorialKit provides two types of terminals: r
 
 You can define which terminal panel will be active by default by specifying the `activePanel` value. The value is the given terminal's position in the `panels` array. If you omit the `activePanel` property, the first panel will be the active one.
 
+You can set terminal open by default by specifying the `open` value.
+
 An interactive terminal will disable the output redirect syntax by default. For instance, you cannot create a file `world.txt` with the contents `hello` using the command `echo hello > world.txt`. The reason is that this could disrupt the lesson if a user overwrites certain files. To allow output redirection, you can change the behavior with the `allowRedirects` setting. You can define this setting either per panel or for all panels at once.
 
 Additionally, you may not want users to run arbitrary commands. For example, if you are creating a lesson about `vitest`, you could specify that the only command the user can run is `vitest` by providing a list of `allowCommands`. Any other command executed by the user will be blocked. You can define the `allowCommands` setting either per panel or for all panels at once.
@@ -148,7 +206,8 @@ type Terminal = {
     panels: TerminalPanel[],
     activePanel?: number,
     allowRedirects?: boolean,
-    allowCommands?: string[]
+    allowCommands?: string[],
+    open?: boolean,
 }
 
 type TerminalPanel = TerminalType
@@ -163,6 +222,7 @@ Example value:
 
 ```yaml
 terminal:
+  open: true
   activePanel: 1
   panels:
     - ['output', 'Dev Server']
