@@ -9,9 +9,9 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../runtime" },
-    { "path": "../types" },
-    { "path": "../components/react" },
+    { "path": "../runtime/tsconfig.build.json" },
+    { "path": "../types/tsconfig.build.json" },
+    { "path": "../components/react/tsconfig.build.json" },
     { "path": "../theme" }
   ]
 }

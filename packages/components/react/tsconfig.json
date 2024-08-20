@@ -9,5 +9,9 @@
     "rootDir": "src"
   },
   "include": ["src"],
-  "references": [{ "path": "../../runtime" }, { "path": "../../theme" }, { "path": "../../types" }]
+  "references": [
+    { "path": "../../runtime/tsconfig.build.json" },
+    { "path": "../../theme" },
+    { "path": "../../types/tsconfig.build.json" }
+  ]
 }
