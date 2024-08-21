@@ -1,5 +1,5 @@
 {
-  "name": "@tutorialkit/test-ui",
+  "name": "tutorialkit-e2e",
   "private": true,
   "type": "module",
   "scripts": {
