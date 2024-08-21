@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "start": "astro dev",
     "preview": "astro build && astro preview",
     "test": "playwright test",
     "test:ui": "pnpm run test --ui"
