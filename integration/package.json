@@ -1,5 +1,5 @@
 {
-  "name": "@tutorialkit-cli/test-cli",
+  "name": "tutorialkit-integration",
   "private": true,
   "type": "module",
   "scripts": {

@@ -23,5 +23,5 @@ jobs:
         run: pnpm build-release
 
       - name: Integration Tests
-        working-directory: ./test/cli
+        working-directory: ./integration
         run: pnpm test
