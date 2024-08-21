@@ -16,7 +16,8 @@
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
     "demo:build": "pnpm run build && pnpm run --filter=demo.tutorialkit.dev build",
     "lint": "eslint \"{packages,docs,extensions,integration}/**/*\"",
-    "test": "CI=true pnpm run --stream --filter='@tutorialkit/*' test"
+    "test": "pnpm run --stream --filter='@tutorialkit/*' test --run",
+    "test:e2e": "pnpm run --filter='./e2e' test"
   },
   "license": "MIT",
   "packageManager": "pnpm@8.15.6",
@@ -30,7 +31,6 @@
     "eslint-plugin-astro": "^1.2.3",
     "husky": "^9.0.11",
     "is-ci": "^3.0.1",
-    "playwright": "^1.46.0",
     "prettier": "^3.3.2",
     "prettier-plugin-astro": "^0.14.1",
     "tempfile": "^5.0.0"

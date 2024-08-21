@@ -32,11 +32,27 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Test
+        run: pnpm test
+
+  test-e2e:
+    name: Test E2E
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-and-build
+        with:
+          node-version: ${{ matrix.node-version }}
+
       - name: Install Playwright Dependencies
         run: pnpm exec playwright install chromium --with-deps
+        working-directory: e2e
 
       - name: Test
         run: pnpm test
+        working-directory: e2e
 
   docs:
     name: Docs
