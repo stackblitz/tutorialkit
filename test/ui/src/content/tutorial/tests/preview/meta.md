@@ -1,5 +1,5 @@
 ---
 type: chapter
 title: Preview
-mainCommand: 'pnpm start'
+mainCommand: 'node ./index.mjs'
 ---
