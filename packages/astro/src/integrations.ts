@@ -1,11 +1,13 @@
+import { createRequire } from 'node:module';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import expressiveCode from 'astro-expressive-code';
 import UnoCSS from 'unocss/astro';
+import { getInlineContentForPackage } from '@tutorialkit/theme';
 
-export function extraIntegrations() {
+export function extraIntegrations({ root }: { root: string }) {
   return [
     react(),
     expressiveCode({
@@ -47,7 +49,14 @@ export function extraIntegrations() {
     mdx(),
     UnoCSS({
       configDeps: ['./theme.ts'],
-      injectReset: true,
+      injectReset: createRequire(root).resolve('@unocss/reset/tailwind.css'),
+      content: {
+        inline: getInlineContentForPackage({
+          name: '@tutorialkit/astro',
+          pattern: '/dist/default/**/*.astro',
+          root,
+        }),
+      },
     }),
   ];
 }
