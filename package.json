@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "pnpm run --stream --filter=@tutorialkit/* --filter=create-tutorial build",
+    "build": "pnpm run --stream --filter='@tutorialkit/*' --filter=create-tutorial build",
     "dev": "TUTORIALKIT_DEV=true pnpm -r --parallel --stream --filter='./packages/**' run dev",
     "changelog": "./scripts/changelog.mjs",
     "clean": "./scripts/clean.sh",
@@ -16,7 +16,8 @@
     "demo": "pnpm run --filter=demo.tutorialkit.dev dev",
     "demo:build": "pnpm run build && pnpm run --filter=demo.tutorialkit.dev build",
     "lint": "eslint \"{packages,docs,extensions,integration}/**/*\"",
-    "test": "pnpm run --stream --filter=@tutorialkit/* test --run"
+    "test": "pnpm run --stream --filter='@tutorialkit/*' test --run",
+    "test:e2e": "pnpm run --filter='./e2e' test"
   },
   "license": "MIT",
   "packageManager": "pnpm@8.15.6",

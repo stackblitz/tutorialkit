@@ -4,3 +4,4 @@ packages:
   - 'docs/*'
   - 'extensions/*'
   - 'integration'
+  - 'e2e'
