@@ -11,6 +11,9 @@ import { transitionTheme } from './transition-theme.js';
 const { globSync, convertPathToPattern } = fastGlob.default;
 const require = createRequire(import.meta.url);
 
+/**
+ * Testing testing.
+ */
 export function defineConfig(config: UserConfig) {
   return mergeConfigs([
     {
