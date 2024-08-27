@@ -32,17 +32,17 @@ These components use TutorialKit's design system which is based on an atomic CSS
 <PackageManagerTabs>
   <Fragment slot="npm">
   ```shell
-  npm install @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  npm install @tutorialkit/components-react @tutorialkit/theme
   ```
   </Fragment>
   <Fragment slot="pnpm">
   ```shell
-  pnpm install @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  pnpm install @tutorialkit/components-react @tutorialkit/theme
   ```
   </Fragment>
   <Fragment slot="yarn">
   ```shell
-  yarn add @tutorialkit/components-react @tutorialkit/theme unocss @iconify-json/ph fast-glob
+  yarn add @tutorialkit/components-react @tutorialkit/theme
   ```
   </Fragment>
 </PackageManagerTabs>
@@ -50,25 +50,10 @@ These components use TutorialKit's design system which is based on an atomic CSS
 To setup UnoCSS with TutorialKit's components, you need to create a `uno.config.ts`:
 
 ```ts title=uno.config.ts
-import { theme, rules, shortcuts } from '@tutorialkit/theme';
-import { convertPathToPattern, globSync } from 'fast-glob';
-import fs from 'node:fs/promises';
-import { join } from 'path';
-import { defineConfig, presetIcons, presetUno, transformerDirectives } from 'unocss';
+import { defineConfig } from '@tutorialkit/theme';
 
 export default defineConfig({
-  theme,
-  rules,
-  shortcuts,
-  content: {
-    inline: globSync(
-      `${convertPathToPattern(join(require.resolve('@tutorialkit/components-react'), '..'))}/**/*.js`,
-    ).map((filePath) => {
-      return () => fs.readFile(filePath, { encoding: 'utf8' });
-    }),
-  },
-  transformers: [transformerDirectives()],
-  presets: [presetUno(), presetIcons()],
+  // add your UnoCSS config here: https://unocss.dev/guide/config-file
 });
 ```
 
