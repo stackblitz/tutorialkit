@@ -1,5 +1,5 @@
-import type { EditorDocument, EditorUpdate, ScrollPosition } from '@tutorialkit/components-react/core';
-import CodeMirrorEditor from '@tutorialkit/components-react/core/CodeMirrorEditor';
+import type { EditorDocument, EditorUpdate, ScrollPosition } from '@tutorialkit/react/core';
+import CodeMirrorEditor from '@tutorialkit/react/core/CodeMirrorEditor';
 import { useState } from 'react';
 import { useTheme } from './hooks/useTheme';
 
