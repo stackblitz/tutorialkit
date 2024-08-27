@@ -75,6 +75,7 @@ exports[`create a project 1`] = `
   "src/templates/default/package.json",
   "src/templates/default/src",
   "src/templates/default/src/index.js",
+  "src/templates/default/src/template-only-file.js",
   "src/templates/vite-app",
   "src/templates/vite-app-2",
   "src/templates/vite-app-2/.tk-config.json",
@@ -119,6 +120,7 @@ exports[`create and build a project > built project file references 1`] = `
     "/package-lock.json",
     "/package.json",
     "/src/index.js",
+    "/src/template-only-file.js",
   ],
   "template-vite-app-2.json": [
     "/.gitignore",
@@ -286,6 +288,7 @@ exports[`create and eject a project 1`] = `
   "src/templates/default/package.json",
   "src/templates/default/src",
   "src/templates/default/src/index.js",
+  "src/templates/default/src/template-only-file.js",
   "src/templates/vite-app",
   "src/templates/vite-app-2",
   "src/templates/vite-app-2/.tk-config.json",

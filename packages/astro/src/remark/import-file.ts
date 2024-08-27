@@ -78,7 +78,7 @@ function getTemplateName(file: string) {
   );
 
   if (meta.attributes.template) {
-    return meta.attributes.template;
+    return typeof meta.attributes.template === 'string' ? meta.attributes.template : meta.attributes.template.name;
   }
 
   /**

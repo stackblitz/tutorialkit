@@ -25,6 +25,8 @@ const REQUIRED_DEPENDENCIES = [
   '@nanostores/react',
   'kleur',
   '@stackblitz/sdk',
+  'micromatch',
+  '@types/micromatch',
 ];
 
 export function ejectRoutes(flags: Arguments) {
@@ -111,6 +113,7 @@ async function _eject(flags: EjectOptions) {
   for (const dep of REQUIRED_DEPENDENCIES) {
     if (!(dep in pkgJson.dependencies) && !(dep in pkgJson.devDependencies)) {
       pkgJson.dependencies[dep] = astroIntegrationPkgJson.dependencies[dep];
+      pkgJson.devDependencies[dep] = astroIntegrationPkgJson.devDependencies[dep];
 
       newDependencies.push(dep);
     }

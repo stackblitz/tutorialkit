@@ -177,7 +177,18 @@ export const webcontainerSchema = commandsSchema.extend({
       'Navigating to a lesson that specifies autoReload will always reload the preview. This is typically only needed if your server does not support HMR.',
     ),
   template: z
-    .string()
+    .union([
+      // name of the template
+      z.string(),
+
+      z.strictObject({
+        // name of the template
+        name: z.string(),
+
+        // list of globs of files that should be visible
+        visibleFiles: z.array(z.string()).optional().describe('Specifies which files from template should be visible'),
+      }),
+    ])
     .optional()
     .describe(
       'Specifies which folder from the `src/templates/` directory should be used as the basis for the code. See the "Code templates" guide for a detailed explainer.',

@@ -1,12 +1,15 @@
 import type { ChapterSchema, Lesson, LessonSchema, PartSchema, Tutorial, TutorialSchema } from '@tutorialkit/types';
 import { interpolateString } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
+import micromatch from 'micromatch';
 import path from 'node:path';
 import { DEFAULT_LOCALIZATION } from './content/default-localization';
 import { squash } from './content/squash.js';
 import { logger } from './logger';
 import { joinPaths } from './url';
 import { getFilesRefList } from './content/files-ref';
+
+const TEMPLATES_DIR = path.join(process.cwd(), 'src/templates');
 
 export async function getTutorial(): Promise<Tutorial> {
   const collection = sortCollection(await getCollection('tutorial'));
@@ -232,6 +235,7 @@ export async function getTutorial(): Promise<Tutorial> {
     const partMetadata = _tutorial.parts[lesson.part.id].data;
     const chapterMetadata = _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].data;
 
+    // now we inherit options from upper levels
     lesson.data = {
       ...lesson.data,
       ...squash(
@@ -251,6 +255,22 @@ export async function getTutorial(): Promise<Tutorial> {
         ],
       ),
     };
+
+    if (lesson.data.template && typeof lesson.data.template !== 'string' && lesson.data.template.visibleFiles?.length) {
+      const [, tempalteFiles] = await getFilesRefList(lesson.data.template.name, TEMPLATES_DIR);
+
+      for (const filename of tempalteFiles) {
+        if (lesson.files[1].includes(filename)) {
+          continue;
+        }
+
+        if (micromatch.isMatch(filename, lesson.data.template.visibleFiles, { basename: true })) {
+          lesson.files[1].push(filename);
+        }
+      }
+
+      lesson.files[1].sort();
+    }
 
     if (prevLesson) {
       const partSlug = _tutorial.parts[prevLesson.part.id].slug;
