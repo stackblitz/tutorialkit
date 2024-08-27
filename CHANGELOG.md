@@ -1,3 +1,23 @@
+## [0.1.6](https://github.com/stackblitz/tutorialkit/compare/0.1.5...0.1.6) (2024-08-26)
+
+
+### Bug Fixes
+
+* **astro/types:** `webcontainer` should be a `Promise<WebContainer>` ([#259](https://github.com/stackblitz/tutorialkit/issues/259)) ([c7bad20](https://github.com/stackblitz/tutorialkit/commit/c7bad203045b702afda3176cece645bee4d4f6e3))
+* **cli:** `create-tutorial` not depending on `@tutorialkit/cli` package ([#254](https://github.com/stackblitz/tutorialkit/issues/254)) ([3b480db](https://github.com/stackblitz/tutorialkit/commit/3b480dbd682a8c7657151dc93054f8209fdad312))
+* missing preview i18n ([#255](https://github.com/stackblitz/tutorialkit/issues/255)) ([095ed57](https://github.com/stackblitz/tutorialkit/commit/095ed570702d1b8de9370565b94103cd0740c408))
+* **react:** editor and preview missing accessible names ([#267](https://github.com/stackblitz/tutorialkit/issues/267)) ([bcbffe6](https://github.com/stackblitz/tutorialkit/commit/bcbffe6df0321aca1f649d26b09d9c3c8f8e4b7c))
+* **react:** file tree's files to indicate selected state ([#268](https://github.com/stackblitz/tutorialkit/issues/268)) ([bd8a3be](https://github.com/stackblitz/tutorialkit/commit/bd8a3be8165b4a66efd550370fd5a7bebb9e62aa))
+* **react:** solve-button not working before lesson loads ([#266](https://github.com/stackblitz/tutorialkit/issues/266)) ([547e70a](https://github.com/stackblitz/tutorialkit/commit/547e70a090d4509a60e9fc776f5abd3eb4315477))
+
+
+### Features
+
+* add Vue language to CodeMirror ([#256](https://github.com/stackblitz/tutorialkit/issues/256)) ([f9b265f](https://github.com/stackblitz/tutorialkit/commit/f9b265f7372c8246a4ccf2d41f0be8fe44d30aa7))
+* **runtime:** option for setting terminal open by default ([#246](https://github.com/stackblitz/tutorialkit/issues/246)) ([5419038](https://github.com/stackblitz/tutorialkit/commit/5419038d1c0a6f80da4d9f31e330d0dc0e41def8))
+
+
+
 ## [0.1.5](https://github.com/stackblitz/tutorialkit/compare/0.1.4...0.1.5) (2024-08-16)
 
 

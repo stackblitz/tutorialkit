@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/runtime",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "TutorialKit runtime",
   "author": "StackBlitz Inc.",
   "type": "module",

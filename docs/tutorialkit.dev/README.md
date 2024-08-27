@@ -1,4 +1,4 @@
-# [TutorialKit.dev](https://www.tutorialkit.dev)
+# [TutorialKit.dev](https://tutorialkit.dev)
 
 ## Local Development
 

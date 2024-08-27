@@ -1,3 +1,12 @@
+## [0.0.3](https://github.com/stackblitz/tutorialkit/compare/0.1.5...0.0.3) "create-tutorial" (2024-08-26)
+
+
+### Bug Fixes
+
+* **cli:** `create-tutorial` not depending on `@tutorialkit/cli` package ([#254](https://github.com/stackblitz/tutorialkit/issues/254)) ([3b480db](https://github.com/stackblitz/tutorialkit/commit/3b480dbd682a8c7657151dc93054f8209fdad312))
+
+
+
 ## [0.0.2](https://github.com/stackblitz/tutorialkit/compare/0.1.4...0.0.2) "create-tutorial" (2024-08-16)
 
 
