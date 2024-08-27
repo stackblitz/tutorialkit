@@ -19,8 +19,7 @@
     "./default-theme.css": "./dist/default/styles/variables.css",
     "./default/pages/index.astro": "./dist/default/pages/index.astro",
     "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro",
-    "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro",
-    "./package.json": "./package.json"
+    "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro"
   },
   "files": [
     "dist"
@@ -42,7 +41,6 @@
     "@tutorialkit/theme": "workspace:*",
     "@tutorialkit/types": "workspace:*",
     "@types/react": "^18.3.3",
-    "@unocss/reset": "^0.62.2",
     "@webcontainer/api": "1.2.0",
     "astro": "^4.12.0",
     "astro-expressive-code": "^0.35.3",

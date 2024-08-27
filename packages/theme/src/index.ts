@@ -1,83 +1,21 @@
-import fs from 'node:fs/promises';
-import { basename, dirname, resolve } from 'node:path';
-import { createRequire } from 'node:module';
-import * as fastGlob from 'fast-glob';
-import { mergeConfigs, presetIcons, presetUno, transformerDirectives, type UserConfig } from 'unocss';
-
+import type { ConfigBase } from 'unocss';
 import { toCSSRules } from './utils.js';
-import { theme } from './theme.js';
-import { transitionTheme } from './transition-theme.js';
 
-const { globSync, convertPathToPattern } = fastGlob.default;
-const require = createRequire(import.meta.url);
+export { theme } from './theme.js';
 
-export function defineConfig(config: UserConfig) {
-  return mergeConfigs([
-    {
-      theme,
-      shortcuts,
-      rules,
-      transformers: [transformerDirectives()],
-      content: {
-        inline: getInlineContentForPackage({
-          name: '@tutorialkit/components-react',
-          pattern: '/dist/**/*.js',
-          root: process.cwd(),
-        }),
-      },
-      presets: [
-        presetUno({
-          dark: {
-            dark: '[data-theme="dark"]',
-          },
-        }),
-        presetIcons({
-          collections: {
-            ...readCustomIcons(),
-            ph: () => import('@iconify-json/ph').then((i) => i.icons),
-            'svg-spinners': () => import('@iconify-json/svg-spinners').then((i) => i.icons),
-          },
-        }),
-      ],
-    },
-    config,
-  ]);
-}
+export const transitionTheme = {
+  transitionProperty: 'background-color, border-color, box-shadow',
+  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  transitionDuration: '150ms',
+};
 
-export function getInlineContentForPackage({ name, pattern, root }: { name: string; pattern: string; root: string }) {
-  try {
-    const packageRoot = resolve(require.resolve(`${name}/package.json`, { paths: [root] }), '..');
-
-    // work-around for https://github.com/mrmlnc/fast-glob/issues/452
-    const packagePattern = convertPathToPattern(packageRoot.replace('\\@', '/@'));
-
-    return globSync(`${packagePattern}${pattern}`).map((filePath) => () => fs.readFile(filePath, { encoding: 'utf8' }));
-  } catch {
-    return [];
-  }
-}
-
-function readCustomIcons() {
-  const iconPaths = globSync('./icons/languages/*.svg');
-
-  return iconPaths.reduce<Record<string, Record<string, () => Promise<string>>>>((acc, iconPath) => {
-    const collectionName = basename(dirname(iconPath));
-    const [iconName] = basename(iconPath).split('.');
-
-    acc[collectionName] ??= {};
-    acc[collectionName][iconName] = async () => fs.readFile(iconPath, 'utf8');
-
-    return acc;
-  }, {});
-}
-
-const rules: UserConfig['rules'] = [
+export const rules: ConfigBase['rules'] = [
   ['scrollbar-transparent', { 'scrollbar-color': '#0000004d transparent' }],
   ['nav-box-shadow', { 'box-shadow': '0 2px 4px -1px rgba(0, 0, 0, 0.1)' }],
   ['transition-theme', toCSSRules(transitionTheme)],
 ];
 
-const shortcuts: UserConfig['shortcuts'] = {
+export const shortcuts: ConfigBase['shortcuts'] = {
   'panel-container': 'grid grid-rows-[min-content_1fr] h-full',
   'panel-header':
     'flex items-center px-4 py-2 transition-theme bg-tk-elements-panel-header-backgroundColor min-h-[38px] overflow-x-hidden',

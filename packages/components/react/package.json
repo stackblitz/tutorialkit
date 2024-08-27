@@ -43,8 +43,7 @@
         "types": "./dist/core/Terminal/index.d.ts",
         "default": "./dist/core/Terminal/index.js"
       }
-    },
-    "./package.json": "./package.json"
+    }
   },
   "files": [
     "dist"

@@ -1,3 +1,4 @@
+import { rules, shortcuts, theme } from '@tutorialkit/theme';
 import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import { extraIntegrations } from './integrations.js';
@@ -7,6 +8,12 @@ import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
 import { tutorialkitStore } from './vite-plugins/store.js';
 import { overrideComponents, type OverrideComponentsOptions } from './vite-plugins/override-components.js';
 import { WebContainerFiles } from './webcontainer-files/index.js';
+
+export const unoCSSConfig = {
+  theme,
+  rules,
+  shortcuts,
+};
 
 export interface Options {
   /**
@@ -126,7 +133,7 @@ export default function createPlugin({
 
         // inject the additional integrations right after ours
         const selfIndex = config.integrations.findIndex((integration) => integration.name === '@tutorialkit/astro');
-        config.integrations.splice(selfIndex + 1, 0, ...extraIntegrations({ root: fileURLToPath(config.root) }));
+        config.integrations.splice(selfIndex + 1, 0, ...extraIntegrations());
       },
       'astro:config:done'({ config }) {
         _config = config;

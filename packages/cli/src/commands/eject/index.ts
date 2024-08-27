@@ -25,7 +25,6 @@ const REQUIRED_DEPENDENCIES = [
   '@nanostores/react',
   'kleur',
   '@stackblitz/sdk',
-  'fast-glob',
 ];
 
 export function ejectRoutes(flags: Arguments) {
