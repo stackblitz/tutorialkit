@@ -61,7 +61,7 @@ jobs:
         run: >
           pnpm dlx pkg-pr-new@0.0 publish --compact --pnpm
           ./packages/astro
-          ./packages/react
+          ./packages/components/react
           ./packages/runtime
           ./packages/theme
           ./packages/types

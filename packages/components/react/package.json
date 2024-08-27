@@ -1,7 +1,7 @@
 {
-  "name": "@tutorialkit/react",
+  "name": "@tutorialkit/components-react",
   "version": "0.1.6",
-  "description": "TutorialKit's React components and utilities",
+  "description": "TutorialKit's React components",
   "author": "StackBlitz Inc.",
   "type": "module",
   "bugs": "https://github.com/stackblitz/tutorialkit/issues",
@@ -10,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stackblitz/tutorialkit.git",
-    "directory": "packages/react"
+    "directory": "packages/components/react"
   },
   "types": "./dist/index.d.ts",
   "exports": {

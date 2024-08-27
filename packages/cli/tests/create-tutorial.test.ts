@@ -242,7 +242,7 @@ async function runPnpmInstall(dest: string, baseDir: string) {
     overrides: {
       '@astrojs/language-server': '2.14.1',
       '@tutorialkit/astro': `file:${baseDir}/packages/astro`,
-      '@tutorialkit/react': `file:${baseDir}/packages/react`,
+      '@tutorialkit/components-react': `file:${baseDir}/packages/components/react`,
       '@tutorialkit/runtime': `file:${baseDir}/packages/runtime`,
       '@tutorialkit/theme': `file:${baseDir}/packages/theme`,
       '@tutorialkit/types': `file:${baseDir}/packages/types`,

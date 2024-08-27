@@ -11,7 +11,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@tutorialkit/react": "workspace:*",
+    "@tutorialkit/components-react": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

@@ -37,7 +37,7 @@
     "@expressive-code/plugin-line-numbers": "^0.35.3",
     "@nanostores/react": "0.7.2",
     "@stackblitz/sdk": "^1.11.0",
-    "@tutorialkit/react": "workspace:*",
+    "@tutorialkit/components-react": "workspace:*",
     "@tutorialkit/runtime": "workspace:*",
     "@tutorialkit/theme": "workspace:*",
     "@tutorialkit/types": "workspace:*",

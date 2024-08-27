@@ -31,7 +31,7 @@ The monorepo consists of multiple packages that are grouped into following group
 These packages will be installed by the end-users in their `package.json`.
 
 - `@tutorialkit/astro`
-- `@tutorialkit/react`
+- `@tutorialkit/components-react`
 - `@tutorialkit/runtime`
 - `@tutorialkit/theme`
 - `@tutorialkit/types`
@@ -53,7 +53,7 @@ You may wish to test your locally-modified copy of TutorialKit against another p
   "pnpm": {
     "overrides": {
       "@tutorialkit/astro": "file:../tutorialkit/packages/astro",
-      "@tutorialkit/react": "file:../tutorialkit/packages/react",
+      "@tutorialkit/components-react": "file:../tutorialkit/packages/components/react",
       "@tutorialkit/runtime": "file:../tutorialkit/packages/runtime",
       "@tutorialkit/theme": "file:../tutorialkit/packages/theme",
       "@tutorialkit/types": "file:../tutorialkit/packages/types"

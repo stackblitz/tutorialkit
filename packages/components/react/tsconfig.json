@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
     "baseUrl": "./",
@@ -10,8 +10,8 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../runtime/tsconfig.build.json" },
-    { "path": "../theme" },
-    { "path": "../types/tsconfig.build.json" }
+    { "path": "../../runtime/tsconfig.build.json" },
+    { "path": "../../theme" },
+    { "path": "../../types/tsconfig.build.json" }
   ]
 }

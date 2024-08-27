@@ -1,4 +1,4 @@
-import { Nav } from '@tutorialkit/react';
+import { Nav } from '@tutorialkit/components-react';
 import type { Lesson, NavList } from '@tutorialkit/types';
 
 interface Props {

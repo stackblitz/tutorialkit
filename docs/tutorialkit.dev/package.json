@@ -11,7 +11,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@tutorialkit/react": "workspace:*",
+    "@tutorialkit/components-react": "workspace:*",
     "@webcontainer/api": "1.2.0",
     "classnames": "^2.5.1",
     "react": "^18.3.1",
