@@ -20,7 +20,7 @@ export function defineConfig(config: UserConfig) {
       transformers: [transformerDirectives()],
       content: {
         inline: getInlineContentForPackage({
-          name: '@tutorialkit/components-react',
+          name: '@tutorialkit/react',
           pattern: '/dist/**/*.js',
           root: process.cwd(),
         }),

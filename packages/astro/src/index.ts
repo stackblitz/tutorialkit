@@ -87,14 +87,14 @@ export default function createPlugin({
           vite: {
             optimizeDeps: {
               entries: ['!**/src/(content|templates)/**'],
-              include: process.env.TUTORIALKIT_DEV ? [] : ['@tutorialkit/components-react'],
+              include: process.env.TUTORIALKIT_DEV ? [] : ['@tutorialkit/react'],
             },
             define: {
               __ENTERPRISE__: `${!!enterprise}`,
               __WC_CONFIG__: enterprise ? JSON.stringify(enterprise) : 'undefined',
             },
             ssr: {
-              noExternal: ['@tutorialkit/astro', '@tutorialkit/components-react'],
+              noExternal: ['@tutorialkit/astro', '@tutorialkit/react'],
             },
             plugins: [
               userlandCSS,

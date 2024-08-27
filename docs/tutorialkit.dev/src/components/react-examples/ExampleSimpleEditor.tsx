@@ -1,13 +1,13 @@
-import type { EditorDocument, EditorUpdate, ScrollPosition } from '@tutorialkit/components-react/core';
-import CodeMirrorEditor from '@tutorialkit/components-react/core/CodeMirrorEditor';
-import FileTree from '@tutorialkit/components-react/core/FileTree';
+import type { EditorDocument, EditorUpdate, ScrollPosition } from '@tutorialkit/react/core';
+import CodeMirrorEditor from '@tutorialkit/react/core/CodeMirrorEditor';
+import FileTree from '@tutorialkit/react/core/FileTree';
 import type { FileSystemTree, DirectoryNode } from '@webcontainer/api';
 import type { Terminal as XTerm } from '@xterm/xterm';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { useTheme } from './hooks/useTheme';
 import { useWebContainer } from './hooks/useWebcontainer';
 
-const Terminal = lazy(() => import('@tutorialkit/components-react/core/Terminal'));
+const Terminal = lazy(() => import('@tutorialkit/react/core/Terminal'));
 
 export default function ExampleSimpleEditor() {
   const [domLoaded, setDomLoaded] = useState(false);

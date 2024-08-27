@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import FileTree from '@tutorialkit/components-react/core/FileTree';
+import FileTree from '@tutorialkit/react/core/FileTree';
 
 export default function ExampleFileTree() {
   const [selectedFile, setSelectedFile] = useState(FILES[0]);
