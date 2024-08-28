@@ -18,7 +18,6 @@ import sourceExampleSimpleEditor from '@components/react-examples/ExampleSimpleE
 import sourceExampleFileTree from '@components/react-examples/ExampleFileTree?raw';
 import sourceExampleCodeMirrorEditor from '@components/react-examples/ExampleCodeMirrorEditor?raw';
 import sourceExampleTerminal from '@components/react-examples/ExampleTerminal?raw';
-import sourceUseTheme from "@components/react-examples/hooks/useTheme?raw";
 import sourceUseWebcontainer from "@components/react-examples/hooks/useWebcontainer?raw";
 
 You can reuse TutorialKit's React components in your own applications. They are designed to work well with the [WebContainer API][webcontainers].
@@ -77,11 +76,11 @@ See a full example on [StackBlitz][stackblitz-example].
 
 ## Components
 
-These examples have references to following files:
+These examples have references to the following files:
 
 <Tabs syncKey="referenced-files">
   <TabItem label="hooks/useTheme.ts">
-    <Code code={sourceUseTheme} lang="ts" class="limit-code-height" />
+    <Code code={"export function useTheme() {\n  return 'light';\n}"} lang="ts" class="limit-code-height" />
   </TabItem>
 
   <TabItem label="hooks/useWebcontainer.ts">
