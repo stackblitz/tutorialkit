@@ -43,10 +43,19 @@ export function generateChangelog(pkg, preset) {
     path: pkg.gitPath ?? pkg.path,
   };
 
-  const changelogStream = conventionalChangelog(options, context, gitRawCommitsOpts).on('error', (error) => {
-    console.error(error.stack);
-    process.exit(1);
-  });
+  // detect breaking change headers: https://github.com/conventional-changelog/conventional-changelog/issues/648#issuecomment-704867077
+  const parserOptions = {
+    headerPattern: /^(\w*)(?:\((.*)\))?!?: (.*)$/,
+    breakingHeaderPattern: /^(\w*)(?:\((.*)\))?!: (.*)$/,
+  };
+
+  const changelogStream = conventionalChangelog(options, context, gitRawCommitsOpts, parserOptions).on(
+    'error',
+    (error) => {
+      console.error(error.stack);
+      process.exit(1);
+    },
+  );
 
   const CHANGELOG_FILE = pkg.changelogPath;
 

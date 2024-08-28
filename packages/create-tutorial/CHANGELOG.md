@@ -1,3 +1,7 @@
+## [0.0.3](https://github.com/AriPerkkio/tutorialkit/compare/0.1.6...0.0.3) "create-tutorial" (2024-08-28)
+
+
+
 ## [0.0.3](https://github.com/stackblitz/tutorialkit/compare/0.1.6...0.0.3) "create-tutorial" (2024-08-28)
 
 

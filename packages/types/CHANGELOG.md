@@ -1,3 +1,7 @@
+# [0.2.0](https://github.com/AriPerkkio/tutorialkit/compare/0.1.6...0.2.0) "@tutorialkit/types" (2024-08-28)
+
+
+
 # [0.2.0](https://github.com/stackblitz/tutorialkit/compare/0.1.6...0.2.0) "@tutorialkit/types" (2024-08-28)
 
 
