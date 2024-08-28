@@ -42,6 +42,19 @@ jobs:
           git tag ${{ steps.resolve-release-version.outputs.version }}
           git push origin ${{ steps.resolve-release-version.outputs.version }}
 
+      - name: Build docs
+        run: pnpm run docs:build
+
+      - name: Deploy documentation
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: tutorialkit-docs-page
+          workingDirectory: 'docs/tutorialkit.dev'
+          directory: dist
+          packageManager: pnpm
+
   prepare_cli_release:
     name: Prepare Release for CLI
     needs: [publish_release]
