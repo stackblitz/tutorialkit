@@ -73,6 +73,6 @@
     "vitest": "^1.6.0"
   },
   "peerDependencies": {
-    "astro": "^4.12.0"
+    "astro": "^4.15.0"
   }
 }

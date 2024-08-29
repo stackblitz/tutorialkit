@@ -21,7 +21,7 @@
     "@tutorialkit/astro": "workspace:*",
     "@tutorialkit/theme": "workspace:*",
     "@tutorialkit/types": "workspace:*",
-    "astro": "^4.12.0",
+    "astro": "^4.15.0",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.4.5"
   }
