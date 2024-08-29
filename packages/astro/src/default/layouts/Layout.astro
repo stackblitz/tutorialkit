@@ -38,7 +38,7 @@ const baseURL = import.meta.env.BASE_URL;
       }
     </script>
     <script>
-      import * as builtInSwap from 'node_modules/astro/dist/transitions/swap-functions';
+      import { swapFunctions as builtInSwap } from 'astro:transitions/client';
 
       declare global {
         function setTutorialKitTheme(): void;
