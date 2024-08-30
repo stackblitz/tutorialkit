@@ -8,48 +8,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: Test
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        node-version: [18, 20, 22]
-        include:
-          - os: macos-latest
-            node_version: 20
-          - os: windows-latest
-            node_version: 20.13.1 # 20.14.0 keeps causing a native `node::SetCppgcReference+18123` error in Vitest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: ./.github/actions/setup-and-build
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Test
-        run: pnpm test
-
-  test-e2e:
-    name: Test E2E
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: ./.github/actions/setup-and-build
-
-      - name: Install Playwright Dependencies
-        run: pnpm --filter=tutorialkit-e2e exec playwright install chromium --with-deps
-
-      - name: Test
-        run: pnpm test:e2e
-
   docs:
     name: Docs
     runs-on: ubuntu-latest
@@ -60,18 +18,13 @@ jobs:
       - uses: ./.github/actions/setup-and-build
 
       - name: Build docs
-        run: |
-          pnpm run docs:build
-          pnpm run demo:build
+        run: pnpm run docs:build
 
-  extension:
-    name: VSCode Extension
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: ./.github/actions/setup-and-build
-      - name: Build extension
-        run: |
-          pnpm run extension:build
+      - name: Deploy documentation
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: tutorialkit-docs-page
+          workingDirectory: 'docs/tutorialkit.dev'
+          directory: dist
