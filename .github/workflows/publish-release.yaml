@@ -42,6 +42,18 @@ jobs:
           git tag ${{ steps.resolve-release-version.outputs.version }}
           git push origin ${{ steps.resolve-release-version.outputs.version }}
 
+  publish_docs:
+    name: Publish documentation
+    needs: [publish_release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-and-build
+
       - name: Build docs
         run: pnpm run docs:build
 
@@ -53,7 +65,6 @@ jobs:
           projectName: tutorialkit-docs-page
           workingDirectory: 'docs/tutorialkit.dev'
           directory: dist
-          packageManager: pnpm
 
   prepare_cli_release:
     name: Prepare Release for CLI
