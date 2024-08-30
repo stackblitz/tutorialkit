@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/stackblitz/tutorialkit/compare/0.2.0...0.2.1) (2024-08-30)
+
+
+### Bug Fixes
+
+* **astro:** work-around for dev-mode's `ReferenceError: __WC_CONFIG__ is not defined` errors ([#293](https://github.com/stackblitz/tutorialkit/issues/293)) ([70fa3e2](https://github.com/stackblitz/tutorialkit/commit/70fa3e2895f2f2c4d25aa3410690297afb49a44b))
+
+
+
 # [0.2.0](https://github.com/stackblitz/tutorialkit/compare/0.1.6...0.2.0) (2024-08-28)
 
 
