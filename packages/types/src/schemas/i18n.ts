@@ -67,6 +67,16 @@ export const i18nSchema = z.object({
   defaultPreviewTitleText: z.string().optional().describe('Text shown on top of the preview section.'),
 
   /**
+   * Title or tooltip shown when hovering the reload icon for a preview.
+   *
+   * @default 'Reload Preview'
+   */
+  reloadPreviewTitle: z
+    .string()
+    .optional()
+    .describe('Title or tooltip shown when hovering the reload icon for a preview'),
+
+  /**
    * Text for the toggle terminal button.
    *
    * @default 'Toggle Terminal'

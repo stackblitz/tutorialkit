@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@tutorialkit/types": "workspace:*",
-    "@webcontainer/api": "1.2.0",
+    "@webcontainer/api": "1.2.3",
     "nanostores": "^0.10.3"
   },
   "devDependencies": {

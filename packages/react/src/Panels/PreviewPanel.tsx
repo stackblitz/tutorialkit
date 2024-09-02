@@ -1,6 +1,7 @@
 import { useStore } from '@nanostores/react';
 import type { PreviewInfo, TutorialStore } from '@tutorialkit/runtime';
 import type { I18n } from '@tutorialkit/types';
+import { reloadPreview } from '@webcontainer/api/utils';
 import { createElement, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { BootScreen } from '../BootScreen.js';
@@ -166,6 +167,12 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
     }
   }, [preview.url, iframe.ref]);
 
+  function reload() {
+    if (iframe.ref) {
+      reloadPreview(iframe.ref);
+    }
+  }
+
   return (
     <div className="panel-container">
       <div
@@ -174,7 +181,13 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
         })}
       >
         <div className="panel-title">
-          <div className="panel-icon i-ph-globe-duotone"></div>
+          <button
+            onClick={reload}
+            title={i18n.reloadPreviewTitle}
+            className="panel-button rounded-full p-1.5 -my-1.5 -ml-2"
+          >
+            <div className="panel-icon i-ph-arrow-clockwise-duotone"></div>
+          </button>
           <span className="text-sm truncate">{previewTitle(preview, previewCount, i18n)}</span>
         </div>
         {last && (
