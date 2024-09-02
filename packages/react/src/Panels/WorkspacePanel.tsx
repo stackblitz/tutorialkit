@@ -79,12 +79,7 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
 
     const unsubscribe = tutorialStore.lessonFullyLoaded.subscribe((loaded) => {
       if (loaded && lesson.data.autoReload) {
-        /**
-         * @todo This causes some race with the preview where the iframe can show the "wrong" page.
-         * I think the reason is that when the ports are different then we render new frames which
-         * races against the reload which will internally reset the `src` attribute.
-         */
-        // previewRef.current?.reload();
+        previewRef.current?.reload();
       }
     });
 

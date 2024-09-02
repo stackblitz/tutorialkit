@@ -48,14 +48,9 @@ export const PreviewPanel = memo(
       ref,
       () => ({
         reload: () => {
-          // can't use a ref because PanelGroup does not expose the underlying html element
-          const previewPanel = document.getElementById('preview-panel');
-
-          if (previewPanel) {
-            const iframes = previewPanel.querySelectorAll('iframe');
-
-            for (const iframe of iframes) {
-              iframe.src = iframe.src;
+          for (const iframe of iframeRefs.current) {
+            if (iframe.ref) {
+              iframe.ref.src = iframe.ref.src;
             }
           }
         },
@@ -132,7 +127,7 @@ export const PreviewPanel = memo(
       }
     }
 
-    return createElement(PanelGroup, { id: 'preview-panel', direction: 'horizontal' }, ...children);
+    return createElement(PanelGroup, { direction: 'horizontal' }, ...children);
   }),
 );
 PreviewPanel.displayName = 'PreviewPanel';
