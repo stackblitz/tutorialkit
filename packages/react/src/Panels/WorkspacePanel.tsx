@@ -7,7 +7,7 @@ import type { Theme } from '../core/types.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
 import { classNames } from '../utils/classnames.js';
 import { EditorPanel } from './EditorPanel.js';
-import { PreviewPanel } from './PreviewPanel.js';
+import { PreviewPanel, type ImperativePreviewHandle } from './PreviewPanel.js';
 import { TerminalPanel } from './TerminalPanel.js';
 
 const DEFAULT_TERMINAL_SIZE = 25;
@@ -154,6 +154,7 @@ function PreviewsSection({
   hasPreviews,
   hasEditor,
 }: TerminalProps) {
+  const previewRef = useRef<ImperativePreviewHandle>(null);
   const lesson = tutorialStore.lesson!;
   const terminalConfig = useStore(tutorialStore.terminalConfig);
 
@@ -191,6 +192,18 @@ function PreviewsSection({
     }
   }, [terminalConfig.defaultOpen]);
 
+  useEffect(() => {
+    const lesson = tutorialStore.lesson!;
+
+    const unsubscribe = tutorialStore.lessonFullyLoaded.subscribe((loaded) => {
+      if (loaded && lesson.data.autoReload) {
+        previewRef.current?.reload();
+      }
+    });
+
+    return () => unsubscribe();
+  }, [tutorialStore.ref]);
+
   return (
     <Panel
       id={hasPreviews ? 'previews-opened' : 'previews-closed'}
@@ -203,6 +216,7 @@ function PreviewsSection({
       })}
     >
       <PreviewPanel
+        ref={previewRef}
         tutorialStore={tutorialStore}
         i18n={lesson.data.i18n as I18n}
         showToggleTerminal={!hideTerminalPanel}

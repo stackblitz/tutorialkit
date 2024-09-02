@@ -11,7 +11,7 @@ const PRESET = 'angular';
 const PACKAGES = [
   { path: './packages/astro' },
   { path: './packages/cli' },
-  { path: './packages/components/react' },
+  { path: './packages/react' },
   { path: './packages/runtime' },
   { path: './packages/theme' },
   { path: './packages/types' },

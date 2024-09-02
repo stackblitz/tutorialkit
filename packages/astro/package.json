@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/astro",
-  "version": "0.1.6",
+  "version": "0.2.1",
   "description": "TutorialKit integration for Astro (https://astro.build)",
   "author": "StackBlitz Inc.",
   "type": "module",
@@ -19,7 +19,8 @@
     "./default-theme.css": "./dist/default/styles/variables.css",
     "./default/pages/index.astro": "./dist/default/pages/index.astro",
     "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro",
-    "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro"
+    "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
@@ -36,13 +37,14 @@
     "@expressive-code/plugin-line-numbers": "^0.35.3",
     "@nanostores/react": "0.7.2",
     "@stackblitz/sdk": "^1.11.0",
-    "@tutorialkit/components-react": "workspace:*",
+    "@tutorialkit/react": "workspace:*",
     "@tutorialkit/runtime": "workspace:*",
     "@tutorialkit/theme": "workspace:*",
     "@tutorialkit/types": "workspace:*",
     "@types/react": "^18.3.3",
+    "@unocss/reset": "^0.62.2",
     "@webcontainer/api": "1.2.0",
-    "astro": "^4.12.0",
+    "astro": "^4.15.0",
     "astro-expressive-code": "^0.35.3",
     "chokidar": "3.6.0",
     "fast-glob": "^3.3.2",
@@ -71,6 +73,6 @@
     "vitest": "^1.6.0"
   },
   "peerDependencies": {
-    "astro": "^4.12.0"
+    "astro": "^4.15.0"
   }
 }

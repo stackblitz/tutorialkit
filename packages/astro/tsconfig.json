@@ -11,7 +11,7 @@
   "references": [
     { "path": "../runtime/tsconfig.build.json" },
     { "path": "../types/tsconfig.build.json" },
-    { "path": "../components/react/tsconfig.build.json" },
+    { "path": "../react/tsconfig.build.json" },
     { "path": "../theme" }
   ]
 }

@@ -11,7 +11,7 @@ const { lesson } = Astro.props;
 const { Markdown, editPageLink, prev, next } = lesson;
 ---
 
-<div class="h-full overflow-auto scrollbar-transparent p-6 sm:p-8">
+<div class="flex flex-col h-full overflow-auto scrollbar-transparent p-6 sm:p-8">
   <div class="markdown-content text-tk-elements-content-textColor">
     <Markdown />
   </div>
@@ -30,7 +30,7 @@ const { Markdown, editPageLink, prev, next } = lesson;
     )
   }
 
-  <div class="grid grid-cols-[1fr_1fr] gap-4 mt-8">
+  <div class="grid grid-cols-[1fr_1fr] gap-4 mt-8 mb-6">
     <div class="flex">
       {prev && <NavCard lesson={prev} type="prev" />}
     </div>
@@ -40,7 +40,7 @@ const { Markdown, editPageLink, prev, next } = lesson;
   </div>
 
   <a
-    class="inline-block mt-6 font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover"
+    class="inline-block mt-auto font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover"
     href="https://webcontainers.io/"
   >
     {lesson.data.i18n!.webcontainerLinkText}

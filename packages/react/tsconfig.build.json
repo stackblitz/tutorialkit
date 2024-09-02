@@ -8,8 +8,8 @@
   "include": ["src"],
   "exclude": ["src/**/*.spec.ts"],
   "references": [
-    { "path": "../../runtime/tsconfig.build.json" },
-    { "path": "../../theme" },
-    { "path": "../../types/tsconfig.build.json" }
+    { "path": "../runtime/tsconfig.build.json" },
+    { "path": "../theme" },
+    { "path": "../types/tsconfig.build.json" }
   ]
 }

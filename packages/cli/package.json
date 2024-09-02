@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/cli",
-  "version": "0.1.6",
+  "version": "0.2.1",
   "description": "Interactive tutorials powered by WebContainer API",
   "author": "StackBlitz Inc.",
   "type": "module",
