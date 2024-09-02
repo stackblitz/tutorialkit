@@ -161,10 +161,14 @@ function PreviewsSection({
   function showTerminal() {
     const { current: terminal } = terminalPanelRef;
 
-    if (terminal && !terminalExpanded.current) {
+    if (!terminal) {
+      return;
+    }
+
+    if (!terminalExpanded.current) {
       terminalExpanded.current = true;
       terminal.resize(DEFAULT_TERMINAL_SIZE);
-    } else if (terminal) {
+    } else {
       terminal.expand();
     }
   }
