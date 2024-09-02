@@ -71,10 +71,7 @@ export const i18nSchema = z.object({
    *
    * @default 'Reload Preview'
    */
-  reloadPreviewTitle: z
-    .string()
-    .optional()
-    .describe('Title or tooltip shown when hovering the reload icon for a preview'),
+  reloadPreviewTitle: z.string().optional().describe('Title attribute for the preview reload button.'),
 
   /**
    * Text for the toggle terminal button.
