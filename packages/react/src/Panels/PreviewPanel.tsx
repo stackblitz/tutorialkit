@@ -181,7 +181,7 @@ function Preview({ preview, iframe, previewCount, first, last, toggleTerminal, i
             title={i18n.reloadPreviewTitle}
             className="panel-button rounded-full p-1.5 -my-1.5 -ml-2"
           >
-            <div className="panel-icon i-ph-arrow-clockwise-duotone"></div>
+            <div className="panel-icon i-ph-arrow-clockwise"></div>
           </button>
           <span className="text-sm truncate">{previewTitle(preview, previewCount, i18n)}</span>
         </div>
