@@ -91,8 +91,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react
       '@webcontainer/api':
-        specifier: 1.2.0
-        version: 1.2.0
+        specifier: 1.2.4
+        version: 1.2.4
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -178,6 +178,9 @@ importers:
       '@types/node':
         specifier: ^22.2.0
         version: 22.4.2
+      '@types/react':
+        specifier: ^18.3.3
+        version: 18.3.3
       '@unocss/reset':
         specifier: ^0.59.4
         version: 0.59.4
@@ -312,8 +315,8 @@ importers:
         specifier: ^0.62.2
         version: 0.62.3
       '@webcontainer/api':
-        specifier: 1.2.0
-        version: 1.2.0
+        specifier: 1.2.4
+        version: 1.2.4
       astro:
         specifier: ^4.15.0
         version: 4.15.0(@types/node@22.4.2)(typescript@5.5.3)
@@ -540,8 +543,8 @@ importers:
         specifier: workspace:*
         version: link:../theme
       '@webcontainer/api':
-        specifier: 1.2.0
-        version: 1.2.0
+        specifier: 1.2.4
+        version: 1.2.4
       '@xterm/addon-fit':
         specifier: ^0.10.0
         version: 0.10.0(@xterm/xterm@5.5.0)
@@ -595,8 +598,8 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@webcontainer/api':
-        specifier: 1.2.0
-        version: 1.2.0
+        specifier: 1.2.4
+        version: 1.2.4
       nanostores:
         specifier: ^0.10.3
         version: 0.10.3
@@ -660,8 +663,8 @@ importers:
   packages/test-utils:
     devDependencies:
       '@webcontainer/api':
-        specifier: 1.2.0
-        version: 1.2.0
+        specifier: 1.2.4
+        version: 1.2.4
       typescript:
         specifier: ^5.4.5
         version: 5.5.3
@@ -4038,8 +4041,8 @@ packages:
     resolution: {integrity: sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==}
     dev: true
 
-  /@webcontainer/api@1.2.0:
-    resolution: {integrity: sha512-tzoKBd4lLdhHy5GHFpUkl+ndoSba8JqmB7x0ZQFnWfjbcbQOvKQfxA8MEMUYhgqjWHnbrWdAfnBEHz5f5lYG5A==}
+  /@webcontainer/api@1.2.4:
+    resolution: {integrity: sha512-vV42eKuat5QGz7agFJupT5sZj0CHOj/gg6J3/HanvgOVETt7gupzR+iuVNHwudS3yuW+x78Ai7T6fwvV7uBThQ==}
 
   /@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0):
     resolution: {integrity: sha512-UFYkDm4HUahf2lnEyHvio51TNGiLK66mqP2JoATy7hRZeXaGMRDr00JiSF7m63vR5WKATF605yEggJKsw0JpMQ==}

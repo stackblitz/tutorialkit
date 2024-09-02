@@ -9,6 +9,7 @@ export const DEFAULT_LOCALIZATION = {
   filesTitleText: 'Files',
   prepareEnvironmentTitleText: 'Preparing Environment',
   defaultPreviewTitleText: 'Preview',
+  reloadPreviewTitle: 'Reload Preview',
   toggleTerminalButtonText: 'Toggle Terminal',
   solveButtonText: 'Solve',
   resetButtonText: 'Reset',

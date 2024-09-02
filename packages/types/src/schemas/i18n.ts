@@ -67,6 +67,13 @@ export const i18nSchema = z.object({
   defaultPreviewTitleText: z.string().optional().describe('Text shown on top of the preview section.'),
 
   /**
+   * Title attribute for the preview reload button.
+   *
+   * @default 'Reload Preview'
+   */
+  reloadPreviewTitle: z.string().optional().describe('Title attribute for the preview reload button.'),
+
+  /**
    * Text for the toggle terminal button.
    *
    * @default 'Toggle Terminal'

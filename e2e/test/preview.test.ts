@@ -13,6 +13,22 @@ test('user can see single preview tab', async ({ page }) => {
   await expect(preview.getByText('Index page')).toBeVisible();
 });
 
+test('user can reload a preview tab', async ({ page }) => {
+  await page.goto(`${BASE_URL}/single`);
+
+  const preview = page.frameLocator('[title="Node Server"]');
+
+  await expect(preview.getByText('Index page')).toBeVisible();
+
+  await page.getByTestId('write-to-file').click();
+
+  await expect(preview.getByText('Index page')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Reload Preview' }).click();
+
+  await expect(preview.getByText('New content')).toBeVisible();
+});
+
 test('user can see multiple preview tabs', async ({ page }) => {
   await page.goto(`${BASE_URL}/multiple`);
 
