@@ -13,7 +13,7 @@ test('user can see single preview tab', async ({ page }) => {
   await expect(preview.getByText('Index page')).toBeVisible();
 });
 
-test('user can reload the page', async ({ page }) => {
+test('user can reload a preview tab', async ({ page }) => {
   await page.goto(`${BASE_URL}/single`);
 
   const preview = page.frameLocator('[title="Node Server"]');
@@ -24,7 +24,7 @@ test('user can reload the page', async ({ page }) => {
 
   await expect(preview.getByText('Index page')).toBeVisible();
 
-  await page.getByTitle('Reload Preview').click();
+  await page.getByRole('button', { name: 'Reload Preview' }).click();
 
   await expect(preview.getByText('New content')).toBeVisible();
 });
