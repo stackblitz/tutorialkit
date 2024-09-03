@@ -4,7 +4,7 @@ Hi! We are really excited that you are interested in contributing to TutorialKit
 
 ## Repo Setup
 
-The TutorialKit repo is a monorepo using pnpm workspaces. The package manager used to install and link dependencies must be [pnpm](https://pnpm.io/). Package manager versioning is handled by [`packageManager`](https://nodejs.org/api/packages.html#packagemanager) field that's supported by [Node's Corepack](https://nodejs.org/api/corepack.html) and other tools. You can find the specific pnpm version required at: https://github.com/stackblitz/tutorialkit/blob/main/package.json#L23
+The TutorialKit repo is a monorepo using pnpm workspaces. The package manager used to install and link dependencies must be [pnpm](https://pnpm.io/). Package manager versioning is handled by [`packageManager`](https://nodejs.org/api/packages.html#packagemanager) field that's supported by [Node's Corepack](https://nodejs.org/api/corepack.html) and other tools.
 
 To develop and test packages:
 
