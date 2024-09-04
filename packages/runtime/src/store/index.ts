@@ -207,6 +207,10 @@ export class TutorialStore {
     return this._editorStore.documents;
   }
 
+  get files(): ReadableAtom<string[]> {
+    return this._editorStore.files;
+  }
+
   get template(): Files | undefined {
     return this._lessonTemplate;
   }

@@ -19,6 +19,7 @@ export class EditorStore {
   selectedFile = atom<string | undefined>();
   documents = map<EditorDocuments>({});
 
+  files = computed(this.documents, (documents) => Object.keys(documents).sort());
   currentDocument = computed([this.documents, this.selectedFile], (documents, selectedFile) => {
     if (!selectedFile) {
       return undefined;
