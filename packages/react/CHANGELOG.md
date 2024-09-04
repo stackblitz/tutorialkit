@@ -1,3 +1,17 @@
+## [0.2.2](https://github.com/stackblitz/tutorialkit/compare/0.2.1...0.2.2) "@tutorialkit/react" (2024-09-04)
+
+
+### Bug Fixes
+
+* **react:** refresh preview when `autoReload: true` ([#303](https://github.com/stackblitz/tutorialkit/issues/303)) ([9754b26](https://github.com/stackblitz/tutorialkit/commit/9754b2671c9e896a63ca49053fc1dde78a88e0c7))
+
+
+### Features
+
+* **react:** add button to reload a preview ([#305](https://github.com/stackblitz/tutorialkit/issues/305)) ([d14c404](https://github.com/stackblitz/tutorialkit/commit/d14c4045ad692a45b5b388bb4cfcca9762e6142c))
+
+
+
 ## [0.2.1](https://github.com/stackblitz/tutorialkit/compare/0.2.0...0.2.1) "@tutorialkit/react" (2024-08-30)
 
 
