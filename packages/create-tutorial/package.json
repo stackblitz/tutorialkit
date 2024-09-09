@@ -16,7 +16,7 @@
     "create-tutorial": "./dist/index.js"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc -b",
+    "build": "node ./scripts/build.js",
     "prepublishOnly": "pnpm run build"
   },
   "files": [
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.6",
+    "execa": "^9.2.0",
     "typescript": "^5.4.5"
   }
 }
