@@ -13,7 +13,7 @@ export interface ScrollPosition {
   left: number;
 }
 
-export type EditorDocuments = Record<string, EditorDocument>;
+export type EditorDocuments = Record<string, EditorDocument | undefined>;
 
 export class EditorStore {
   selectedFile = atom<string | undefined>();
@@ -80,6 +80,21 @@ export class EditorStore {
     this.documents.setKey(filePath, {
       ...documentState,
       scroll: position,
+    });
+  }
+
+  addFileOrFolder(filePath: string) {
+    // when adding file to empty folder, remove the empty folder from documents
+    const emptyFolder = this.files.value?.find((path) => filePath.startsWith(path));
+
+    if (emptyFolder) {
+      this.documents.setKey(emptyFolder, undefined);
+    }
+
+    this.documents.setKey(filePath, {
+      filePath,
+      value: '',
+      loading: false,
     });
   }
 

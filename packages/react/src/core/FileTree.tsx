@@ -4,10 +4,17 @@ import { classNames } from '../utils/classnames.js';
 const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 
+interface FileChangeEvent {
+  type: 'FILE' | 'FOLDER';
+  method: 'ADD' | 'REMOVE' | 'RENAME';
+  value: string;
+}
+
 interface Props {
   files: string[];
   selectedFile?: string;
   onFileSelect?: (filePath: string) => void;
+  onFileChange?: (event: FileChangeEvent) => void;
   hideRoot: boolean;
   scope?: string;
   hiddenFiles?: Array<string | RegExp>;

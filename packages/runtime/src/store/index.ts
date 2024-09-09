@@ -308,6 +308,27 @@ export class TutorialStore {
     this._editorStore.setSelectedFile(filePath);
   }
 
+  addFile(filePath: string) {
+    // prevent creating duplicates
+    if (this._editorStore.files.get().includes(filePath)) {
+      return this.setSelectedFile(filePath);
+    }
+
+    this._editorStore.addFileOrFolder(filePath);
+    this.setSelectedFile(filePath);
+    this._runner.updateFile(filePath, '');
+  }
+
+  addFolder(folderPath: string) {
+    // prevent creating duplicates
+    if (this._editorStore.files.get().some((file) => file.startsWith(folderPath))) {
+      return;
+    }
+
+    this._editorStore.addFileOrFolder(folderPath);
+    this._runner.createFolder(folderPath);
+  }
+
   updateFile(filePath: string, content: string) {
     const hasChanged = this._editorStore.updateFile(filePath, content);
 

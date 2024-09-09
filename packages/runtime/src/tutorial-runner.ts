@@ -98,6 +98,23 @@ export class TutorialRunner {
     this._currentCommandProcess?.resize({ cols, rows });
   }
 
+  createFolder(folderPath: string): void {
+    const previousLoadPromise = this._currentLoadTask?.promise;
+
+    this._currentLoadTask = newTask(
+      async (signal) => {
+        await previousLoadPromise;
+
+        const webcontainer = await this._webcontainer;
+
+        signal.throwIfAborted();
+
+        await webcontainer.fs.mkdir(folderPath);
+      },
+      { ignoreCancel: true },
+    );
+  }
+
   /**
    * Update the content of a single file in WebContainer.
    *

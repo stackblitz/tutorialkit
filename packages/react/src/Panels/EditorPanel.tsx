@@ -1,5 +1,5 @@
 import type { I18n } from '@tutorialkit/types';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ComponentProps } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import {
   CodeMirrorEditor,
@@ -29,6 +29,7 @@ interface Props {
   onEditorScroll?: OnEditorScroll;
   onHelpClick?: () => void;
   onFileSelect?: (value?: string) => void;
+  onFileTreeChange?: ComponentProps<typeof FileTree>['onFileChange'];
 }
 
 export function EditorPanel({
@@ -46,6 +47,7 @@ export function EditorPanel({
   onEditorScroll,
   onHelpClick,
   onFileSelect,
+  onFileTreeChange,
 }: Props) {
   const fileTreePanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -81,6 +83,7 @@ export function EditorPanel({
           files={files}
           scope={fileTreeScope}
           onFileSelect={onFileSelect}
+          onFileChange={onFileTreeChange}
         />
       </Panel>
       <PanelResizeHandle
