@@ -134,8 +134,34 @@ Defines which file should be opened in the [code editor](/guides/ui/#code-editor
 <PropertyTable inherited type="string" />
 
 ##### `editor`
-Configure whether or not the editor should be rendered. If an object is provided with `fileTree: false`, only the file tree is hidden.
-<PropertyTable inherited type="boolean | { fileTree: false }" />
+Configures options for the editor and its file tree. Editor can be hidden by providing `false`.
+Optionally you can hide just file tree by providing `fileTree: false`.
+
+File tree can be set to allow file editing from right clicks by setting `fileTree.allowEdits: true`.
+
+<PropertyTable inherited type={'Editor'} />
+
+The `Editor` type has the following shape:
+
+```ts
+type Editor =
+    | false
+    | { editor: { allowEdits: boolean } }
+
+```
+
+Example values:
+
+```yaml
+editor: false # Editor is hidden
+
+editor: # Editor is visible
+  fileTree: false # File tree is hidden
+
+editor: # Editor is visible
+  fileTree: # File tree is visible
+    allowEdits: true # User can add new files and folders from the file tree
+```
 
 ##### `previews`
 Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used.
