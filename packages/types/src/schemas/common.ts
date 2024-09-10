@@ -161,8 +161,32 @@ export const terminalSchema = z.union([
   }),
 ]);
 
+export const editorSchema = z.union([
+  // can either be completely removed by setting it to `false`
+  z.boolean().optional(),
+
+  z.strictObject({
+    fileTree: z
+      .union([
+        // or you can only remove the file tree
+        z.boolean(),
+
+        // or configure file tree with options
+        z.strictObject({
+          allowEdits: z
+            .boolean()
+            .describe(
+              'Allow file tree’s items to be edited by right clicking them. Supports file and folder creation.',
+            ),
+        }),
+      ])
+      .optional(),
+  }),
+]);
+
 export type TerminalPanelType = z.infer<typeof panelTypeSchema>;
 export type TerminalSchema = z.infer<typeof terminalSchema>;
+export type EditorSchema = z.infer<typeof editorSchema>;
 
 export const webcontainerSchema = commandsSchema.extend({
   previews: previewSchema
@@ -191,18 +215,10 @@ export const webcontainerSchema = commandsSchema.extend({
     .string()
     .optional()
     .describe('Defines which file should be opened in the code editor by default when lesson loads.'),
-  editor: z
-    .union([
-      // can either be completely removed by setting it to `false`
-      z.boolean().optional(),
-
-      // or you can only remove the file tree
-      z.strictObject({
-        fileTree: z.boolean().optional(),
-      }),
-    ])
+  editor: editorSchema
+    .optional()
     .describe(
-      'Configure whether or not the editor should be rendered. If an object is provided with fileTree: false, only the file tree is hidden.',
+      'Configure whether or not the editor should be rendered. File tree can be configured by proving an object with fileTree option.',
     ),
   i18n: i18nSchema
     .optional()

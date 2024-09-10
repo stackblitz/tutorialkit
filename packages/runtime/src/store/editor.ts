@@ -1,5 +1,6 @@
-import type { FilesRefList, Files } from '@tutorialkit/types';
+import type { FilesRefList, Files, EditorSchema } from '@tutorialkit/types';
 import { atom, map, computed } from 'nanostores';
+import { EditorConfig } from '../webcontainer/editor-config.js';
 
 export interface EditorDocument {
   value: string | Uint8Array;
@@ -16,6 +17,7 @@ export interface ScrollPosition {
 export type EditorDocuments = Record<string, EditorDocument | undefined>;
 
 export class EditorStore {
+  editorConfig = atom<EditorConfig>(new EditorConfig());
   selectedFile = atom<string | undefined>();
   documents = map<EditorDocuments>({});
 
@@ -27,6 +29,10 @@ export class EditorStore {
 
     return documents[selectedFile];
   });
+
+  setEditorConfig(config?: EditorSchema) {
+    this.editorConfig.set(new EditorConfig(config));
+  }
 
   setSelectedFile(filePath: string | undefined) {
     this.selectedFile.set(filePath);

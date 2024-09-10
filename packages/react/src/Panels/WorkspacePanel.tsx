@@ -98,6 +98,7 @@ function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
   const selectedFile = useStore(tutorialStore.selectedFile);
   const currentDocument = useStore(tutorialStore.currentDocument);
   const lessonFullyLoaded = useStore(tutorialStore.lessonFullyLoaded);
+  const editorConfig = useStore(tutorialStore.editorConfig);
   const storeRef = useStore(tutorialStore.ref);
   const files = useStore(tutorialStore.files);
 
@@ -159,7 +160,7 @@ function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
         helpAction={helpAction}
         onHelpClick={lessonFullyLoaded ? onHelpClick : undefined}
         onFileSelect={(filePath) => tutorialStore.setSelectedFile(filePath)}
-        onFileTreeChange={onFileTreeChange}
+        onFileTreeChange={editorConfig.fileTree.allowEdits ? onFileTreeChange : undefined}
         selectedFile={selectedFile}
         onEditorScroll={(position) => tutorialStore.setCurrentDocumentScrollPosition(position)}
         onEditorChange={(update) => tutorialStore.setCurrentDocumentContent(update.content)}
