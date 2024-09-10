@@ -39,7 +39,7 @@ export class TutorialStore {
   private _lessonFilesFetcher: LessonFilesFetcher;
   private _lessonTask: Task<unknown> | undefined;
   private _lesson: Lesson | undefined;
-  private _ref: number = 1;
+  private _ref = atom(1);
   private _themeRef = atom(1);
 
   private _lessonFiles: Files | undefined;
@@ -135,7 +135,7 @@ export class TutorialStore {
 
     this._lessonTask?.cancel();
 
-    this._ref += 1;
+    this._ref.set(1 + (this._ref.value || 0));
     this._lesson = lesson;
     this.lessonFullyLoaded.set(false);
 
@@ -219,7 +219,7 @@ export class TutorialStore {
     return this._lesson;
   }
 
-  get ref(): unknown {
+  get ref(): ReadableAtom<unknown> {
     return this._ref;
   }
 

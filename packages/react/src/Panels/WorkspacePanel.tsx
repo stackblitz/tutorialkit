@@ -32,6 +32,13 @@ interface TerminalProps extends PanelProps {
  * This component is the orchestrator between various interactive components.
  */
 export function WorkspacePanel({ tutorialStore, theme }: Props) {
+  /**
+   * Re-render when lesson changes.
+   * The `tutorialStore.hasEditor()` and other methods below access
+   * stale data as they are not reactive.
+   */
+  useStore(tutorialStore.ref);
+
   const hasEditor = tutorialStore.hasEditor();
   const hasPreviews = tutorialStore.hasPreviews();
   const hideTerminalPanel = !tutorialStore.hasTerminalPanel();
@@ -89,6 +96,7 @@ function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
   const selectedFile = useStore(tutorialStore.selectedFile);
   const currentDocument = useStore(tutorialStore.currentDocument);
   const lessonFullyLoaded = useStore(tutorialStore.lessonFullyLoaded);
+  const storeRef = useStore(tutorialStore.ref);
 
   const lesson = tutorialStore.lesson!;
 
@@ -116,7 +124,7 @@ function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
     } else {
       setHelpAction('reset');
     }
-  }, [tutorialStore.ref]);
+  }, [storeRef]);
 
   return (
     <Panel
@@ -128,7 +136,7 @@ function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
       className="transition-theme bg-tk-elements-panel-backgroundColor text-tk-elements-panel-textColor"
     >
       <EditorPanel
-        id={tutorialStore.ref}
+        id={storeRef}
         theme={theme}
         showFileTree={tutorialStore.hasFileTree()}
         editorDocument={currentDocument}
@@ -157,6 +165,7 @@ function PreviewsSection({
   const previewRef = useRef<ImperativePreviewHandle>(null);
   const lesson = tutorialStore.lesson!;
   const terminalConfig = useStore(tutorialStore.terminalConfig);
+  const storeRef = useStore(tutorialStore.ref);
 
   function showTerminal() {
     const { current: terminal } = terminalPanelRef;
@@ -206,7 +215,7 @@ function PreviewsSection({
     });
 
     return () => unsubscribe();
-  }, [tutorialStore.ref]);
+  }, [storeRef]);
 
   return (
     <Panel
