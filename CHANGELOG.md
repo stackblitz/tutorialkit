@@ -1,3 +1,12 @@
+## [0.2.3](https://github.com/stackblitz/tutorialkit/compare/0.2.2...0.2.3) (2024-09-10)
+
+
+### Bug Fixes
+
+* **react:** stale lesson data after navigation ([#318](https://github.com/stackblitz/tutorialkit/issues/318)) ([2b5fc92](https://github.com/stackblitz/tutorialkit/commit/2b5fc92fe962fee63b4d2f2efcce04602157268b))
+
+
+
 ## [0.2.2](https://github.com/stackblitz/tutorialkit/compare/0.2.1...0.2.2) (2024-09-04)
 
 
