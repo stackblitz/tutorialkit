@@ -78,6 +78,7 @@ export function EditorPanel({
         </div>
         <FileTree
           className="flex-grow py-2 border-r border-tk-elements-app-borderColor text-sm"
+          i18n={i18n}
           selectedFile={selectedFile}
           hideRoot={hideRoot ?? true}
           files={files}

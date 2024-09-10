@@ -1,27 +1,33 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ComponentProps, type ReactNode } from 'react';
+import { ContextMenu } from './ContextMenu.js';
 import { classNames } from '../utils/classnames.js';
 
 const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 
-interface FileChangeEvent {
-  type: 'FILE' | 'FOLDER';
-  method: 'ADD' | 'REMOVE' | 'RENAME';
-  value: string;
-}
-
 interface Props {
   files: string[];
   selectedFile?: string;
   onFileSelect?: (filePath: string) => void;
-  onFileChange?: (event: FileChangeEvent) => void;
+  onFileChange?: ComponentProps<typeof ContextMenu>['onFileChange'];
+  i18n?: ComponentProps<typeof ContextMenu>['i18n'];
   hideRoot: boolean;
   scope?: string;
   hiddenFiles?: Array<string | RegExp>;
   className?: string;
 }
 
-export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, hiddenFiles, className }: Props) {
+export function FileTree({
+  files,
+  onFileSelect,
+  onFileChange,
+  selectedFile,
+  hideRoot,
+  scope,
+  hiddenFiles,
+  i18n,
+  className,
+}: Props) {
   const computedHiddenFiles = useMemo(() => [...DEFAULT_HIDDEN_FILES, ...(hiddenFiles ?? [])], [hiddenFiles]);
 
   const fileList = useMemo(
@@ -80,7 +86,7 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
   }
 
   return (
-    <div className={classNames(className, 'transition-theme bg-tk-elements-fileTree-backgroundColor')}>
+    <div className={classNames(className, 'h-100% transition-theme bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
           case 'file': {
@@ -98,13 +104,24 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
               <Folder
                 key={fileOrFolder.id}
                 folder={fileOrFolder}
+                i18n={i18n}
                 collapsed={collapsedFolders.has(fileOrFolder.id)}
                 onClick={() => toggleCollapseState(fileOrFolder.id)}
+                onFileChange={onFileChange}
               />
             );
           }
         }
       })}
+
+      <ContextMenu // context menu for the remaining free space area
+        position="after"
+        i18n={i18n}
+        style={getDepthStyle(0)}
+        directory=""
+        onFileChange={onFileChange}
+        triggerProps={{ className: 'h-100%', 'data-testid': 'file-tree-root-context-menu' }}
+      />
     </div>
   );
 }
@@ -115,24 +132,28 @@ interface FolderProps {
   folder: FolderNode;
   collapsed: boolean;
   onClick: () => void;
+  onFileChange: Props['onFileChange'];
+  i18n: Props['i18n'];
 }
 
-function Folder({ folder: { depth, name }, collapsed, onClick }: FolderProps) {
+function Folder({ folder: { depth, name, fullPath }, i18n, collapsed, onClick, onFileChange }: FolderProps) {
   return (
-    <NodeButton
-      className="group transition-theme bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
-      depth={depth}
-      iconClasses={classNames(
-        'text-tk-elements-fileTree-folder-iconColor group-hover:text-tk-elements-fileTree-folder-iconColorHover',
-        {
-          'i-ph-folder-simple-duotone': collapsed,
-          'i-ph-folder-open-duotone': !collapsed,
-        },
-      )}
-      onClick={onClick}
-    >
-      {name}
-    </NodeButton>
+    <ContextMenu onFileChange={onFileChange} i18n={i18n} directory={fullPath} style={getDepthStyle(1 + depth)}>
+      <NodeButton
+        className="group transition-theme bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
+        depth={depth}
+        iconClasses={classNames(
+          'text-tk-elements-fileTree-folder-iconColor group-hover:text-tk-elements-fileTree-folder-iconColorHover',
+          {
+            'i-ph-folder-simple-duotone': collapsed,
+            'i-ph-folder-open-duotone': !collapsed,
+          },
+        )}
+        onClick={onClick}
+      >
+        {name}
+      </NodeButton>
+    </ContextMenu>
   );
 }
 
@@ -177,8 +198,8 @@ function NodeButton({ depth, iconClasses, onClick, className, 'aria-pressed': ar
   return (
     <button
       className={`flex items-center gap-2 w-full pr-2 border-2 border-transparent text-faded ${className ?? ''}`}
-      style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
-      onClick={() => onClick?.()}
+      style={getDepthStyle(depth)}
+      onClick={onClick}
       aria-pressed={ariaPressed === true ? 'true' : undefined}
     >
       <div className={classNames('scale-120 shrink-0', iconClasses)}></div>
@@ -193,11 +214,11 @@ interface BaseNode {
   id: number;
   depth: number;
   name: string;
+  fullPath: string;
 }
 
 interface FileNode extends BaseNode {
   kind: 'file';
-  fullPath: string;
 }
 
 interface FolderNode extends BaseNode {
@@ -215,7 +236,7 @@ function buildFileList(
   const defaultDepth = hideRoot ? 0 : 1;
 
   if (!hideRoot) {
-    fileList.push({ kind: 'folder', name: '/', depth: 0, id: 0 });
+    fileList.push({ kind: 'folder', name: '/', fullPath: '/', depth: 0, id: 0 });
   }
 
   for (const filePath of files) {
@@ -238,7 +259,7 @@ function buildFileList(
 
       if (depth === segments.length - 1) {
         fileList.push({
-          kind: 'file',
+          kind: name.includes('.') ? 'file' : 'folder',
           id: fileList.length,
           name,
           fullPath,
@@ -251,6 +272,7 @@ function buildFileList(
           kind: 'folder',
           id: fileList.length,
           name,
+          fullPath,
           depth: depth + defaultDepth,
         });
       }
@@ -268,4 +290,8 @@ function isHiddenFile(filePath: string, fileName: string, hiddenFiles: Array<str
 
     return pathOrRegex.test(filePath);
   });
+}
+
+function getDepthStyle(depth: number) {
+  return { paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` };
 }
