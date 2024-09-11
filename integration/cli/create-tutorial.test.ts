@@ -49,6 +49,20 @@ describe.each(['npm', 'pnpm', 'yarn'])('%s', (packageManager) => {
 
     expect(filesToJSON(distFiles)).toMatchFileSnapshot(`${snapshotPrefix}-built.json`);
   });
+
+  it<TestContext>('created project contains overwritten UnoCSS config', async ({ projectName, dest }) => {
+    await createProject(projectName, packageManager, { cwd: tmp });
+
+    const unoConfig = await fs.readFile(`${dest}/uno.config.ts`, 'utf8');
+
+    expect(unoConfig).toBe(`\
+import { defineConfig } from '@tutorialkit/theme';
+
+export default defineConfig({
+  // add your UnoCSS config here: https://unocss.dev/guide/config-file
+});
+`);
+  });
 });
 
 async function createProject(name: string, packageManager: string, options: { cwd: string; install?: boolean }) {

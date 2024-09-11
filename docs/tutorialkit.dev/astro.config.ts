@@ -13,6 +13,11 @@ export default defineConfig({
       'Cross-Origin-Opener-Policy': 'same-origin',
     },
   },
+  vite: {
+    ssr: {
+      noExternal: '@tutorialkit/react',
+    },
+  },
   integrations: [
     react(),
     UnoCSS(),
