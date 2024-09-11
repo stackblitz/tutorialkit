@@ -311,13 +311,15 @@ export class TutorialStore {
   }
 
   addFile(filePath: string) {
+    // always select the existing or newly created file
+    this.setSelectedFile(filePath);
+
     // prevent creating duplicates
     if (this._editorStore.files.get().includes(filePath)) {
-      return this.setSelectedFile(filePath);
+      return;
     }
 
     this._editorStore.addFileOrFolder(filePath);
-    this.setSelectedFile(filePath);
     this._runner.updateFile(filePath, '');
   }
 

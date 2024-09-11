@@ -86,7 +86,7 @@ export function FileTree({
   }
 
   return (
-    <div className={classNames(className, 'h-100% transition-theme bg-tk-elements-fileTree-backgroundColor')}>
+    <div className={classNames(className, 'h-full transition-theme bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
           case 'file': {
@@ -120,7 +120,7 @@ export function FileTree({
         style={getDepthStyle(0)}
         directory=""
         onFileChange={onFileChange}
-        triggerProps={{ className: 'h-100%', 'data-testid': 'file-tree-root-context-menu' }}
+        triggerProps={{ className: 'h-full', 'data-testid': 'file-tree-root-context-menu' }}
       />
     </div>
   );
