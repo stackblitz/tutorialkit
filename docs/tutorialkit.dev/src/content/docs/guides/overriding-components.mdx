@@ -44,6 +44,7 @@ tutorialkit({
 When overriding `TopBar` you can place TutorialKit's default components using following [Astro slots](https://docs.astro.build/en/basics/astro-components/#named-slots):
 
 - `logo`: Logo of the application
+- `open-in-stackblitz-link`: Link for opening current lesson in StackBlitz
 - `theme-switch`:  Switch for changing the theme
 - `login-button`: For StackBlitz Enterprise user, the login button
 
@@ -58,6 +59,8 @@ When overriding `TopBar` you can place TutorialKit's default components using fo
   <slot name="theme-switch" />
 
   <LanguageSelect />
+
+  <slot name="open-in-stackblitz-link" />
 
   <slot name="login-button" />
 </nav>
