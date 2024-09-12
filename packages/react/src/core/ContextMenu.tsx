@@ -48,13 +48,11 @@ export function ContextMenu({
 
   function onFileNameEnd(event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>) {
     const name = event.currentTarget.value;
-    const isFile = state === 'ADD_FILE';
 
-    // files must contain extension
-    if (name && (!isFile || name.includes('.'))) {
+    if (name) {
       onFileChange?.({
         value: `${directory}/${name}`,
-        type: isFile ? 'FILE' : 'FOLDER',
+        type: state === 'ADD_FILE' ? 'FILE' : 'FOLDER',
         method: 'ADD',
       });
     }

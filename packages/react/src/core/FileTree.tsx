@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ComponentProps, type ReactNode } from 'react';
+import type { File } from '@tutorialkit/types';
 import { ContextMenu } from './ContextMenu.js';
 import { classNames } from '../utils/classnames.js';
 
@@ -6,7 +7,7 @@ const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 
 interface Props {
-  files: string[];
+  files: File[];
   selectedFile?: string;
   onFileSelect?: (filePath: string) => void;
   onFileChange?: ComponentProps<typeof ContextMenu>['onFileChange'];
@@ -89,7 +90,7 @@ export function FileTree({
     <div className={classNames(className, 'h-full transition-theme bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
-          case 'file': {
+          case 'FILE': {
             return (
               <File
                 key={fileOrFolder.id}
@@ -99,7 +100,7 @@ export function FileTree({
               />
             );
           }
-          case 'folder': {
+          case 'FOLDER': {
             return (
               <Folder
                 key={fileOrFolder.id}
@@ -215,18 +216,19 @@ interface BaseNode {
   depth: number;
   name: string;
   fullPath: string;
+  kind: File['type'];
 }
 
 interface FileNode extends BaseNode {
-  kind: 'file';
+  kind: 'FILE';
 }
 
 interface FolderNode extends BaseNode {
-  kind: 'folder';
+  kind: 'FOLDER';
 }
 
 function buildFileList(
-  files: string[],
+  files: File[],
   hideRoot: boolean,
   scope: string | undefined,
   hiddenFiles: Array<string | RegExp>,
@@ -236,18 +238,18 @@ function buildFileList(
   const defaultDepth = hideRoot ? 0 : 1;
 
   if (!hideRoot) {
-    fileList.push({ kind: 'folder', name: '/', fullPath: '/', depth: 0, id: 0 });
+    fileList.push({ kind: 'FOLDER', name: '/', fullPath: '/', depth: 0, id: 0 });
   }
 
-  for (const filePath of files) {
-    if (scope && !filePath.startsWith(scope)) {
+  for (const file of files) {
+    if (scope && !file.path.startsWith(scope)) {
       continue;
     }
 
-    const segments = filePath.split('/').filter((s) => s);
+    const segments = file.path.split('/').filter((s) => s);
     const fileName = segments.at(-1);
 
-    if (!fileName || isHiddenFile(filePath, fileName, hiddenFiles)) {
+    if (!fileName || isHiddenFile(file.path, fileName, hiddenFiles)) {
       continue;
     }
 
@@ -259,7 +261,7 @@ function buildFileList(
 
       if (depth === segments.length - 1) {
         fileList.push({
-          kind: name.includes('.') ? 'file' : 'folder',
+          kind: file.type,
           id: fileList.length,
           name,
           fullPath,
@@ -269,7 +271,7 @@ function buildFileList(
         folderPaths.add(fullPath);
 
         fileList.push({
-          kind: 'folder',
+          kind: 'FOLDER',
           id: fileList.length,
           name,
           fullPath,

@@ -1,4 +1,4 @@
-import type { FilesRefList, Files, EditorSchema } from '@tutorialkit/types';
+import type { FilesRefList, Files, EditorSchema, File } from '@tutorialkit/types';
 import { atom, map, computed } from 'nanostores';
 import { EditorConfig } from '../webcontainer/editor-config.js';
 
@@ -6,6 +6,7 @@ export interface EditorDocument {
   value: string | Uint8Array;
   loading: boolean;
   filePath: string;
+  type: File['type'];
   scroll?: ScrollPosition;
 }
 
@@ -21,7 +22,11 @@ export class EditorStore {
   selectedFile = atom<string | undefined>();
   documents = map<EditorDocuments>({});
 
-  files = computed(this.documents, (documents) => Object.keys(documents).sort());
+  files = computed(this.documents, (documents) =>
+    Object.entries(documents)
+      .map<File>(([path, doc]) => ({ path, type: doc?.type || 'FILE' }))
+      .sort(),
+  );
   currentDocument = computed([this.documents, this.selectedFile], (documents, selectedFile) => {
     if (!selectedFile) {
       return undefined;
@@ -39,6 +44,9 @@ export class EditorStore {
   }
 
   setDocuments(files: FilesRefList | Files) {
+    // lesson, solution and template file entries are always files  - empty folders are not supported
+    const type = 'FILE';
+
     // check if it is a FilesRef
     if (Array.isArray(files)) {
       this.documents.set(
@@ -48,6 +56,7 @@ export class EditorStore {
               filePath,
               {
                 value: '',
+                type,
                 loading: true,
                 filePath,
               },
@@ -65,6 +74,7 @@ export class EditorStore {
               filePath,
               {
                 value,
+                type,
                 loading: false,
                 filePath,
                 scroll: previousDocuments?.[filePath]?.scroll,
@@ -89,16 +99,17 @@ export class EditorStore {
     });
   }
 
-  addFileOrFolder(filePath: string) {
-    // when adding file to empty folder, remove the empty folder from documents
-    const emptyFolder = this.files.value?.find((path) => filePath.startsWith(path));
+  addFileOrFolder(file: File) {
+    // when adding file or folder to empty folder, remove the empty folder from documents
+    const emptyFolder = this.files.value?.find((f) => file.path.startsWith(f.path));
 
-    if (emptyFolder) {
-      this.documents.setKey(emptyFolder, undefined);
+    if (emptyFolder && emptyFolder.type === 'FOLDER') {
+      this.documents.setKey(emptyFolder.path, undefined);
     }
 
-    this.documents.setKey(filePath, {
-      filePath,
+    this.documents.setKey(file.path, {
+      filePath: file.path,
+      type: file.type,
       value: '',
       loading: false,
     });

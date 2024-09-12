@@ -17,7 +17,7 @@ const DEFAULT_FILE_TREE_SIZE = 25;
 interface Props {
   theme: Theme;
   id: unknown;
-  files: string[];
+  files: ComponentProps<typeof FileTree>['files'];
   i18n: I18n;
   hideRoot?: boolean;
   fileTreeScope?: string;
