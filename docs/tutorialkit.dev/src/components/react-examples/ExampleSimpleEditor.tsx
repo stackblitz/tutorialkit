@@ -227,7 +227,7 @@ const FILES: Record<string, EditorDocument> = {
   },
 };
 
-const FILE_PATHS = Object.keys(FILES);
+const FILE_PATHS = Object.keys(FILES).map((path) => ({ path, type: 'FILE' }));
 
 function stripIndent(string: string) {
   const indent = minIndent(string.slice(1));

@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, type ComponentProps } from 'react';
 import FileTree from '@tutorialkit/react/core/FileTree';
 
 export default function ExampleFileTree() {
   const [files, setFiles] = useState(INITIAL_FILES);
-  const [selectedFile, setSelectedFile] = useState(INITIAL_FILES[0]);
+  const [selectedFile, setSelectedFile] = useState(INITIAL_FILES[0].path);
 
   return (
     <FileTree
@@ -15,18 +15,18 @@ export default function ExampleFileTree() {
       onFileSelect={setSelectedFile}
       onFileChange={(event) => {
         if (event.method === 'ADD') {
-          setFiles([...files, event.value].sort());
+          setFiles([...files, { path: event.value, type: event.type }].sort());
         }
       }}
     />
   );
 }
 
-const INITIAL_FILES = [
-  '/package-lock.json',
-  '/package.json',
-  '/src/assets/logo.svg',
-  '/src/index.html',
-  '/src/index.js',
-  '/vite.config.js',
+const INITIAL_FILES: ComponentProps<typeof FileTree>['files'] = [
+  { path: '/package-lock.json', type: 'FILE' },
+  { path: '/package.json', type: 'FILE' },
+  { path: '/src/assets/logo.svg', type: 'FILE' },
+  { path: '/src/index.html', type: 'FILE' },
+  { path: '/src/index.js', type: 'FILE' },
+  { path: '/vite.config.js', type: 'FILE' },
 ];
