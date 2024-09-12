@@ -25,7 +25,7 @@ export class EditorStore {
   files = computed(this.documents, (documents) =>
     Object.entries(documents)
       .map<File>(([path, doc]) => ({ path, type: doc?.type || 'FILE' }))
-      .sort(),
+      .sort(sortFiles),
   );
   currentDocument = computed([this.documents, this.selectedFile], (documents, selectedFile) => {
     if (!selectedFile) {
@@ -101,7 +101,7 @@ export class EditorStore {
 
   addFileOrFolder(file: File) {
     // when adding file or folder to empty folder, remove the empty folder from documents
-    const emptyFolder = this.files.value?.find((f) => file.path.startsWith(f.path));
+    const emptyFolder = this.files.get().find((f) => f.type === 'FOLDER' && file.path.startsWith(f.path));
 
     if (emptyFolder && emptyFolder.type === 'FOLDER') {
       this.documents.setKey(emptyFolder.path, undefined);
@@ -168,4 +168,47 @@ export class EditorStore {
       unsubscribeFromCurrentDocument();
     };
   }
+}
+
+function sortFiles(fileA: File, fileB: File) {
+  const segmentsA = fileA.path.split('/');
+  const segmentsB = fileB.path.split('/');
+  const minLength = Math.min(segmentsA.length, segmentsB.length);
+
+  for (let i = 0; i < minLength; i++) {
+    const a = toFileSegment(fileA, segmentsA, i);
+    const b = toFileSegment(fileB, segmentsB, i);
+
+    // folders are always shown before files
+    if (a.type !== b.type) {
+      return a.type === 'FOLDER' ? -1 : 1;
+    }
+
+    const comparison = compareString(a.path, b.path);
+
+    // either folder name changed or last segments are compared
+    if (comparison !== 0 || a.isLast || b.isLast) {
+      return comparison;
+    }
+  }
+
+  throw new Error(JSON.stringify({ fileA, fileB }));
+}
+
+function toFileSegment(file: File, segments: string[], current: number) {
+  const isLast = segments[current + 1] === undefined;
+
+  return { path: segments[current], type: isLast ? file.type : 'FOLDER', isLast };
+}
+
+function compareString(a: string, b: string) {
+  if (a < b) {
+    return -1;
+  }
+
+  if (a > b) {
+    return 1;
+  }
+
+  return 0;
 }
