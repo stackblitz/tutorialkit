@@ -123,11 +123,11 @@ function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
   }
 
   function onFileTreeChange({ method, type, value }: FileTreeChangeEvent) {
-    if (method == 'ADD' && type === 'FILE') {
+    if (method === 'add' && type === 'file') {
       return tutorialStore.addFile(value);
     }
 
-    if (method == 'ADD' && type === 'FOLDER') {
+    if (method === 'add' && type === 'folder') {
       return tutorialStore.addFolder(value);
     }
   }

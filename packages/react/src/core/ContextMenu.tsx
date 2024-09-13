@@ -1,15 +1,15 @@
 import { useRef, useState, type ComponentProps } from 'react';
 import { Root, Portal, Content, Item, Trigger } from '@radix-ui/react-context-menu';
-import type { I18n } from '@tutorialkit/types';
+import type { FileDescriptor, I18n } from '@tutorialkit/types';
 
 interface FileChangeEvent {
-  type: 'FILE' | 'FOLDER';
-  method: 'ADD' | 'REMOVE' | 'RENAME';
+  type: FileDescriptor['type'];
+  method: 'add' | 'remove' | 'rename';
   value: string;
 }
 
 interface FileRenameEvent extends FileChangeEvent {
-  method: 'RENAME';
+  method: 'rename';
   oldValue: string;
 }
 
@@ -39,7 +39,7 @@ export function ContextMenu({
   triggerProps,
   ...props
 }: Props) {
-  const [state, setState] = useState<'IDLE' | 'ADD_FILE' | 'ADD_FOLDER'>('IDLE');
+  const [state, setState] = useState<'idle' | 'add_file' | 'add_folder'>('idle');
   const inputRef = useRef<HTMLInputElement>(null);
 
   if (!onFileChange) {
@@ -52,12 +52,12 @@ export function ContextMenu({
     if (name) {
       onFileChange?.({
         value: `${directory}/${name}`,
-        type: state === 'ADD_FILE' ? 'FILE' : 'FOLDER',
-        method: 'ADD',
+        type: state === 'add_file' ? 'file' : 'folder',
+        method: 'add',
       });
     }
 
-    setState('IDLE');
+    setState('idle');
   }
 
   function onFileNameKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -67,7 +67,7 @@ export function ContextMenu({
   }
 
   function onCloseAutoFocus(event: Event) {
-    if ((state === 'ADD_FILE' || state === 'ADD_FOLDER') && inputRef.current) {
+    if ((state === 'add_file' || state === 'add_folder') && inputRef.current) {
       event.preventDefault();
       inputRef.current.focus();
     }
@@ -83,9 +83,9 @@ export function ContextMenu({
     <Root>
       {position === 'before' && element}
 
-      {state !== 'IDLE' && (
+      {state !== 'idle' && (
         <div className="flex items-center gap-2 border-2 border-solid border-transparent" {...props}>
-          <div className={`scale-120 shrink-0 ${state === 'ADD_FILE' ? 'i-ph-file-duotone' : 'i-ph-folder-duotone'}`} />
+          <div className={`scale-120 shrink-0 ${state === 'add_file' ? 'i-ph-file-duotone' : 'i-ph-folder-duotone'}`} />
           <input
             ref={inputRef}
             autoFocus
@@ -104,11 +104,11 @@ export function ContextMenu({
           onCloseAutoFocus={onCloseAutoFocus}
           className="border border-tk-border-brighter b-rounded-md bg-tk-background-brighter py-2"
         >
-          <MenuItem icon="i-ph-file-plus" onClick={() => setState('ADD_FILE')}>
+          <MenuItem icon="i-ph-file-plus" onClick={() => setState('add_file')}>
             {i18n?.fileTreeCreateFileText || 'Create file'}
           </MenuItem>
 
-          <MenuItem icon="i-ph-folder-plus" onClick={() => setState('ADD_FOLDER')}>
+          <MenuItem icon="i-ph-folder-plus" onClick={() => setState('add_folder')}>
             {i18n?.fileTreeCreateFolderText || 'Create folder'}
           </MenuItem>
         </Content>

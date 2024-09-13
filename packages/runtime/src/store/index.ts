@@ -1,4 +1,4 @@
-import type { File, Files, Lesson } from '@tutorialkit/types';
+import type { FileDescriptor, Files, Lesson } from '@tutorialkit/types';
 import type { WebContainer } from '@webcontainer/api';
 import { atom, type ReadableAtom } from 'nanostores';
 import { LessonFilesFetcher } from '../lesson-files.js';
@@ -213,7 +213,7 @@ export class TutorialStore {
     return this._editorStore.documents;
   }
 
-  get files(): ReadableAtom<File[]> {
+  get files(): ReadableAtom<FileDescriptor[]> {
     return this._editorStore.files;
   }
 
@@ -315,11 +315,11 @@ export class TutorialStore {
     this.setSelectedFile(filePath);
 
     // prevent creating duplicates
-    if (this._editorStore.files.get().find((file) => file.type === 'FILE' && file.path === filePath)) {
+    if (this._editorStore.files.get().find((file) => file.path === filePath)) {
       return;
     }
 
-    this._editorStore.addFileOrFolder({ path: filePath, type: 'FILE' });
+    this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
     this._runner.updateFile(filePath, '');
   }
 
@@ -329,7 +329,7 @@ export class TutorialStore {
       return;
     }
 
-    this._editorStore.addFileOrFolder({ path: folderPath, type: 'FOLDER' });
+    this._editorStore.addFileOrFolder({ path: folderPath, type: 'folder' });
     this._runner.createFolder(folderPath);
   }
 

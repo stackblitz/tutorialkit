@@ -23,10 +23,10 @@ export default function ExampleFileTree() {
 }
 
 const INITIAL_FILES: ComponentProps<typeof FileTree>['files'] = [
-  { path: '/package-lock.json', type: 'FILE' },
-  { path: '/package.json', type: 'FILE' },
-  { path: '/src/assets/logo.svg', type: 'FILE' },
-  { path: '/src/index.html', type: 'FILE' },
-  { path: '/src/index.js', type: 'FILE' },
-  { path: '/vite.config.js', type: 'FILE' },
+  { path: '/package-lock.json', type: 'file' },
+  { path: '/package.json', type: 'file' },
+  { path: '/src/assets/logo.svg', type: 'file' },
+  { path: '/src/index.html', type: 'file' },
+  { path: '/src/index.js', type: 'file' },
+  { path: '/vite.config.js', type: 'file' },
 ];

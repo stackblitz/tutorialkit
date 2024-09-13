@@ -1,4 +1,4 @@
-import type { FilesRefList, Files, EditorSchema, File } from '@tutorialkit/types';
+import type { FilesRefList, Files, EditorSchema, FileDescriptor } from '@tutorialkit/types';
 import { atom, map, computed } from 'nanostores';
 import { EditorConfig } from '../webcontainer/editor-config.js';
 
@@ -6,7 +6,7 @@ export interface EditorDocument {
   value: string | Uint8Array;
   loading: boolean;
   filePath: string;
-  type: File['type'];
+  type: FileDescriptor['type'];
   scroll?: ScrollPosition;
 }
 
@@ -24,7 +24,7 @@ export class EditorStore {
 
   files = computed(this.documents, (documents) =>
     Object.entries(documents)
-      .map<File>(([path, doc]) => ({ path, type: doc?.type || 'FILE' }))
+      .map<FileDescriptor>(([path, doc]) => ({ path, type: doc?.type || 'file' }))
       .sort(sortFiles),
   );
   currentDocument = computed([this.documents, this.selectedFile], (documents, selectedFile) => {
@@ -45,7 +45,7 @@ export class EditorStore {
 
   setDocuments(files: FilesRefList | Files) {
     // lesson, solution and template file entries are always files  - empty folders are not supported
-    const type = 'FILE';
+    const type = 'file';
 
     // check if it is a FilesRef
     if (Array.isArray(files)) {
@@ -99,11 +99,11 @@ export class EditorStore {
     });
   }
 
-  addFileOrFolder(file: File) {
+  addFileOrFolder(file: FileDescriptor) {
     // when adding file or folder to empty folder, remove the empty folder from documents
-    const emptyFolder = this.files.get().find((f) => f.type === 'FOLDER' && file.path.startsWith(f.path));
+    const emptyFolder = this.files.get().find((f) => f.type === 'folder' && file.path.startsWith(f.path));
 
-    if (emptyFolder && emptyFolder.type === 'FOLDER') {
+    if (emptyFolder && emptyFolder.type === 'folder') {
       this.documents.setKey(emptyFolder.path, undefined);
     }
 
@@ -170,7 +170,7 @@ export class EditorStore {
   }
 }
 
-function sortFiles(fileA: File, fileB: File) {
+function sortFiles(fileA: FileDescriptor, fileB: FileDescriptor) {
   const segmentsA = fileA.path.split('/');
   const segmentsB = fileB.path.split('/');
   const minLength = Math.min(segmentsA.length, segmentsB.length);
@@ -192,11 +192,11 @@ function sortFiles(fileA: File, fileB: File) {
     }
   }
 
-  throw new Error(JSON.stringify({ fileA, fileB }));
+  return compareString(fileA.path, fileB.path);
 }
 
-function toFileSegment(file: File, segments: string[], current: number) {
-  const isLast = segments[current + 1] === undefined;
+function toFileSegment(file: FileDescriptor, segments: string[], current: number) {
+  const isLast = current + 1 === segments.length;
 
   return { path: segments[current], type: isLast ? file.type : 'FOLDER', isLast };
 }

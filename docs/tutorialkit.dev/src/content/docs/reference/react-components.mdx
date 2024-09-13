@@ -110,7 +110,7 @@ A component to list files in a tree view.
 * `onFileChange: (event: FileChangeEvent) => void` - An optional callback that will be called when a new file or folder is created from the file tree's context menu. When callback is not passed, file tree does not allow adding new files.
   ```ts
   interface FileChangeEvent {
-    type: 'FILE' | 'FOLDER';
+    type: 'file' | 'folder';
     method: 'ADD' | 'REMOVE' | 'RENAME';
     value: string;
   }

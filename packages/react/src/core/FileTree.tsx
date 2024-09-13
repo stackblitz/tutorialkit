@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ComponentProps, type ReactNode } from 'react';
-import type { File } from '@tutorialkit/types';
+import type { FileDescriptor } from '@tutorialkit/types';
 import { ContextMenu } from './ContextMenu.js';
 import { classNames } from '../utils/classnames.js';
 
@@ -7,7 +7,7 @@ const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 
 interface Props {
-  files: File[];
+  files: FileDescriptor[];
   selectedFile?: string;
   onFileSelect?: (filePath: string) => void;
   onFileChange?: ComponentProps<typeof ContextMenu>['onFileChange'];
@@ -90,7 +90,7 @@ export function FileTree({
     <div className={classNames(className, 'h-full transition-theme bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
-          case 'FILE': {
+          case 'file': {
             return (
               <File
                 key={fileOrFolder.id}
@@ -100,7 +100,7 @@ export function FileTree({
               />
             );
           }
-          case 'FOLDER': {
+          case 'folder': {
             return (
               <Folder
                 key={fileOrFolder.id}
@@ -216,19 +216,19 @@ interface BaseNode {
   depth: number;
   name: string;
   fullPath: string;
-  kind: File['type'];
+  kind: FileDescriptor['type'];
 }
 
 interface FileNode extends BaseNode {
-  kind: 'FILE';
+  kind: 'file';
 }
 
 interface FolderNode extends BaseNode {
-  kind: 'FOLDER';
+  kind: 'folder';
 }
 
 function buildFileList(
-  files: File[],
+  files: FileDescriptor[],
   hideRoot: boolean,
   scope: string | undefined,
   hiddenFiles: Array<string | RegExp>,
@@ -238,7 +238,7 @@ function buildFileList(
   const defaultDepth = hideRoot ? 0 : 1;
 
   if (!hideRoot) {
-    fileList.push({ kind: 'FOLDER', name: '/', fullPath: '/', depth: 0, id: 0 });
+    fileList.push({ kind: 'folder', name: '/', fullPath: '/', depth: 0, id: 0 });
   }
 
   for (const file of files) {
@@ -271,7 +271,7 @@ function buildFileList(
         folderPaths.add(fullPath);
 
         fileList.push({
-          kind: 'FOLDER',
+          kind: 'folder',
           id: fileList.length,
           name,
           fullPath,

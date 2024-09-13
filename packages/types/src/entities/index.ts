@@ -3,7 +3,7 @@ import type { ChapterSchema, LessonSchema, PartSchema } from '../schemas/index.j
 
 export type * from './nav.js';
 
-export type File = { path: string; type: 'FILE' | 'FOLDER' };
+export type FileDescriptor = { path: string; type: 'file' | 'folder' };
 export type Files = Record<string, string | Uint8Array>;
 
 /**
