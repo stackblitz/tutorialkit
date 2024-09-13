@@ -107,11 +107,22 @@ A component to list files in a tree view.
 
 * `onFileSelect: (file: string) => void` - A callback that will be called when a file is clicked. The path of the file that was clicked will be passed as an argument.
 
+* `onFileChange: (event: FileChangeEvent) => void` - An optional callback that will be called when a new file or folder is created from the file tree's context menu. When callback is not passed, file tree does not allow adding new files.
+  ```ts
+  interface FileChangeEvent {
+    type: 'file' | 'folder';
+    method: 'add' | 'remove' | 'rename';
+    value: string;
+  }
+  ```
+
 * `hideRoot: boolean` - Whether or not to hide the root directory in the tree. Defaults to `false`.
 
 * `hiddenFiles: (string | RegExp)[]` - A list of file paths that should be hidden from the tree.
 
 * `scope?: string` - Every file path that does not start with this scope will be hidden.
+
+* `i18n?: object` - Texts for file tree's components.
 
 * `className?: string` - A class name to apply to the root element of the component.
 

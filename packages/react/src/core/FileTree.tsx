@@ -1,20 +1,34 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ComponentProps, type ReactNode } from 'react';
+import type { FileDescriptor } from '@tutorialkit/types';
+import { ContextMenu } from './ContextMenu.js';
 import { classNames } from '../utils/classnames.js';
 
 const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];
 
 interface Props {
-  files: string[];
+  files: FileDescriptor[];
   selectedFile?: string;
   onFileSelect?: (filePath: string) => void;
+  onFileChange?: ComponentProps<typeof ContextMenu>['onFileChange'];
+  i18n?: ComponentProps<typeof ContextMenu>['i18n'];
   hideRoot: boolean;
   scope?: string;
   hiddenFiles?: Array<string | RegExp>;
   className?: string;
 }
 
-export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, hiddenFiles, className }: Props) {
+export function FileTree({
+  files,
+  onFileSelect,
+  onFileChange,
+  selectedFile,
+  hideRoot,
+  scope,
+  hiddenFiles,
+  i18n,
+  className,
+}: Props) {
   const computedHiddenFiles = useMemo(() => [...DEFAULT_HIDDEN_FILES, ...(hiddenFiles ?? [])], [hiddenFiles]);
 
   const fileList = useMemo(
@@ -73,7 +87,7 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
   }
 
   return (
-    <div className={classNames(className, 'transition-theme bg-tk-elements-fileTree-backgroundColor')}>
+    <div className={classNames(className, 'h-full transition-theme bg-tk-elements-fileTree-backgroundColor')}>
       {filteredFileList.map((fileOrFolder) => {
         switch (fileOrFolder.kind) {
           case 'file': {
@@ -91,13 +105,24 @@ export function FileTree({ files, onFileSelect, selectedFile, hideRoot, scope, h
               <Folder
                 key={fileOrFolder.id}
                 folder={fileOrFolder}
+                i18n={i18n}
                 collapsed={collapsedFolders.has(fileOrFolder.id)}
                 onClick={() => toggleCollapseState(fileOrFolder.id)}
+                onFileChange={onFileChange}
               />
             );
           }
         }
       })}
+
+      <ContextMenu // context menu for the remaining free space area
+        position="after"
+        i18n={i18n}
+        style={getDepthStyle(0)}
+        directory=""
+        onFileChange={onFileChange}
+        triggerProps={{ className: 'h-full', 'data-testid': 'file-tree-root-context-menu' }}
+      />
     </div>
   );
 }
@@ -108,24 +133,28 @@ interface FolderProps {
   folder: FolderNode;
   collapsed: boolean;
   onClick: () => void;
+  onFileChange: Props['onFileChange'];
+  i18n: Props['i18n'];
 }
 
-function Folder({ folder: { depth, name }, collapsed, onClick }: FolderProps) {
+function Folder({ folder: { depth, name, fullPath }, i18n, collapsed, onClick, onFileChange }: FolderProps) {
   return (
-    <NodeButton
-      className="group transition-theme bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
-      depth={depth}
-      iconClasses={classNames(
-        'text-tk-elements-fileTree-folder-iconColor group-hover:text-tk-elements-fileTree-folder-iconColorHover',
-        {
-          'i-ph-folder-simple-duotone': collapsed,
-          'i-ph-folder-open-duotone': !collapsed,
-        },
-      )}
-      onClick={onClick}
-    >
-      {name}
-    </NodeButton>
+    <ContextMenu onFileChange={onFileChange} i18n={i18n} directory={fullPath} style={getDepthStyle(1 + depth)}>
+      <NodeButton
+        className="group transition-theme bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
+        depth={depth}
+        iconClasses={classNames(
+          'text-tk-elements-fileTree-folder-iconColor group-hover:text-tk-elements-fileTree-folder-iconColorHover',
+          {
+            'i-ph-folder-simple-duotone': collapsed,
+            'i-ph-folder-open-duotone': !collapsed,
+          },
+        )}
+        onClick={onClick}
+      >
+        {name}
+      </NodeButton>
+    </ContextMenu>
   );
 }
 
@@ -170,8 +199,8 @@ function NodeButton({ depth, iconClasses, onClick, className, 'aria-pressed': ar
   return (
     <button
       className={`flex items-center gap-2 w-full pr-2 border-2 border-transparent text-faded ${className ?? ''}`}
-      style={{ paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` }}
-      onClick={() => onClick?.()}
+      style={getDepthStyle(depth)}
+      onClick={onClick}
       aria-pressed={ariaPressed === true ? 'true' : undefined}
     >
       <div className={classNames('scale-120 shrink-0', iconClasses)}></div>
@@ -186,11 +215,12 @@ interface BaseNode {
   id: number;
   depth: number;
   name: string;
+  fullPath: string;
+  kind: FileDescriptor['type'];
 }
 
 interface FileNode extends BaseNode {
   kind: 'file';
-  fullPath: string;
 }
 
 interface FolderNode extends BaseNode {
@@ -198,7 +228,7 @@ interface FolderNode extends BaseNode {
 }
 
 function buildFileList(
-  files: string[],
+  files: FileDescriptor[],
   hideRoot: boolean,
   scope: string | undefined,
   hiddenFiles: Array<string | RegExp>,
@@ -208,18 +238,18 @@ function buildFileList(
   const defaultDepth = hideRoot ? 0 : 1;
 
   if (!hideRoot) {
-    fileList.push({ kind: 'folder', name: '/', depth: 0, id: 0 });
+    fileList.push({ kind: 'folder', name: '/', fullPath: '/', depth: 0, id: 0 });
   }
 
-  for (const filePath of files) {
-    if (scope && !filePath.startsWith(scope)) {
+  for (const file of [...files].sort(sortFiles)) {
+    if (scope && !file.path.startsWith(scope)) {
       continue;
     }
 
-    const segments = filePath.split('/').filter((s) => s);
+    const segments = file.path.split('/').filter((s) => s);
     const fileName = segments.at(-1);
 
-    if (!fileName || isHiddenFile(filePath, fileName, hiddenFiles)) {
+    if (!fileName || isHiddenFile(file.path, fileName, hiddenFiles)) {
       continue;
     }
 
@@ -231,7 +261,7 @@ function buildFileList(
 
       if (depth === segments.length - 1) {
         fileList.push({
-          kind: 'file',
+          kind: file.type,
           id: fileList.length,
           name,
           fullPath,
@@ -244,6 +274,7 @@ function buildFileList(
           kind: 'folder',
           id: fileList.length,
           name,
+          fullPath,
           depth: depth + defaultDepth,
         });
       }
@@ -261,4 +292,51 @@ function isHiddenFile(filePath: string, fileName: string, hiddenFiles: Array<str
 
     return pathOrRegex.test(filePath);
   });
+}
+
+function getDepthStyle(depth: number) {
+  return { paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` };
+}
+
+export function sortFiles(fileA: FileDescriptor, fileB: FileDescriptor) {
+  const segmentsA = fileA.path.split('/');
+  const segmentsB = fileB.path.split('/');
+  const minLength = Math.min(segmentsA.length, segmentsB.length);
+
+  for (let i = 0; i < minLength; i++) {
+    const a = toFileSegment(fileA, segmentsA, i);
+    const b = toFileSegment(fileB, segmentsB, i);
+
+    // folders are always shown before files
+    if (a.type !== b.type) {
+      return a.type === 'folder' ? -1 : 1;
+    }
+
+    const comparison = compareString(a.path, b.path);
+
+    // either folder name changed or last segments are compared
+    if (comparison !== 0 || a.isLast || b.isLast) {
+      return comparison;
+    }
+  }
+
+  return compareString(fileA.path, fileB.path);
+}
+
+function toFileSegment(file: FileDescriptor, segments: string[], current: number) {
+  const isLast = current + 1 === segments.length;
+
+  return { path: segments[current], type: isLast ? file.type : 'folder', isLast };
+}
+
+function compareString(a: string, b: string) {
+  if (a < b) {
+    return -1;
+  }
+
+  if (a > b) {
+    return 1;
+  }
+
+  return 0;
 }

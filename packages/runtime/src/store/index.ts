@@ -1,4 +1,4 @@
-import type { Files, Lesson } from '@tutorialkit/types';
+import type { FileDescriptor, Files, Lesson } from '@tutorialkit/types';
 import type { WebContainer } from '@webcontainer/api';
 import { atom, type ReadableAtom } from 'nanostores';
 import { LessonFilesFetcher } from '../lesson-files.js';
@@ -8,6 +8,7 @@ import type { ITerminal } from '../utils/terminal.js';
 import { bootStatus, unblockBoot, type BootStatus } from '../webcontainer/on-demand-boot.js';
 import type { PreviewInfo } from '../webcontainer/preview-info.js';
 import { StepsController } from '../webcontainer/steps.js';
+import type { EditorConfig } from '../webcontainer/editor-config.js';
 import type { TerminalConfig } from '../webcontainer/terminal-config.js';
 import { EditorStore, type EditorDocument, type EditorDocuments, type ScrollPosition } from './editor.js';
 import { PreviewsStore } from './previews.js';
@@ -141,6 +142,7 @@ export class TutorialStore {
 
     this._previewsStore.setPreviews(lesson.data.previews ?? true);
     this._terminalStore.setTerminalConfiguration(lesson.data.terminal);
+    this._editorStore.setEditorConfig(lesson.data.editor);
     this._runner.setCommands(lesson.data);
     this._editorStore.setDocuments(lesson.files);
 
@@ -195,6 +197,10 @@ export class TutorialStore {
     return this._terminalStore.terminalConfig;
   }
 
+  get editorConfig(): ReadableAtom<EditorConfig> {
+    return this._editorStore.editorConfig;
+  }
+
   get currentDocument(): ReadableAtom<EditorDocument | undefined> {
     return this._editorStore.currentDocument;
   }
@@ -205,6 +211,10 @@ export class TutorialStore {
 
   get documents(): ReadableAtom<EditorDocuments> {
     return this._editorStore.documents;
+  }
+
+  get files(): ReadableAtom<FileDescriptor[]> {
+    return this._editorStore.files;
   }
 
   get template(): Files | undefined {
@@ -239,9 +249,7 @@ export class TutorialStore {
       return false;
     }
 
-    const { editor } = this._lesson.data;
-
-    return editor === undefined || editor === true || (editor !== false && editor?.fileTree !== false);
+    return this.editorConfig.get().fileTree.visible;
   }
 
   hasEditor(): boolean {
@@ -249,9 +257,7 @@ export class TutorialStore {
       return false;
     }
 
-    const { editor } = this._lesson.data;
-
-    return editor !== false;
+    return this.editorConfig.get().visible;
   }
 
   hasPreviews(): boolean {
@@ -302,6 +308,29 @@ export class TutorialStore {
 
   setSelectedFile(filePath: string | undefined) {
     this._editorStore.setSelectedFile(filePath);
+  }
+
+  addFile(filePath: string) {
+    // always select the existing or newly created file
+    this.setSelectedFile(filePath);
+
+    // prevent creating duplicates
+    if (this._editorStore.files.get().find((file) => file.path === filePath)) {
+      return;
+    }
+
+    this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
+    this._runner.updateFile(filePath, '');
+  }
+
+  addFolder(folderPath: string) {
+    // prevent creating duplicates
+    if (this._editorStore.files.get().some((file) => file.path.startsWith(folderPath))) {
+      return;
+    }
+
+    this._editorStore.addFileOrFolder({ path: folderPath, type: 'folder' });
+    this._runner.createFolder(folderPath);
   }
 
   updateFile(filePath: string, content: string) {

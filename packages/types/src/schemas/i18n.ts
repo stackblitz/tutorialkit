@@ -53,6 +53,26 @@ export const i18nSchema = z.object({
   filesTitleText: z.string().optional().describe('Text shown on top of the file tree.'),
 
   /**
+   * Text shown on file tree's context menu's file creation button.
+   *
+   * @default 'Create file'
+   */
+  fileTreeCreateFileText: z
+    .string()
+    .optional()
+    .describe("Text shown on file tree's context menu's file creation button."),
+
+  /**
+   * Text shown on file tree's context menu's folder creation button.
+   *
+   * @default 'Create folder'
+   */
+  fileTreeCreateFolderText: z
+    .string()
+    .optional()
+    .describe("Text shown on file tree's context menu's folder creation button."),
+
+  /**
    * Text shown on top of the steps section.
    *
    * @default 'Preparing Environment'

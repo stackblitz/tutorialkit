@@ -1,5 +1,5 @@
 import type { I18n } from '@tutorialkit/types';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ComponentProps } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
 import {
   CodeMirrorEditor,
@@ -17,7 +17,7 @@ const DEFAULT_FILE_TREE_SIZE = 25;
 interface Props {
   theme: Theme;
   id: unknown;
-  files: string[];
+  files: ComponentProps<typeof FileTree>['files'];
   i18n: I18n;
   hideRoot?: boolean;
   fileTreeScope?: string;
@@ -29,6 +29,7 @@ interface Props {
   onEditorScroll?: OnEditorScroll;
   onHelpClick?: () => void;
   onFileSelect?: (value?: string) => void;
+  onFileTreeChange?: ComponentProps<typeof FileTree>['onFileChange'];
 }
 
 export function EditorPanel({
@@ -46,6 +47,7 @@ export function EditorPanel({
   onEditorScroll,
   onHelpClick,
   onFileSelect,
+  onFileTreeChange,
 }: Props) {
   const fileTreePanelRef = useRef<ImperativePanelHandle>(null);
 
@@ -76,11 +78,13 @@ export function EditorPanel({
         </div>
         <FileTree
           className="flex-grow py-2 border-r border-tk-elements-app-borderColor text-sm"
+          i18n={i18n}
           selectedFile={selectedFile}
           hideRoot={hideRoot ?? true}
           files={files}
           scope={fileTreeScope}
           onFileSelect={onFileSelect}
+          onFileChange={onFileTreeChange}
         />
       </Panel>
       <PanelResizeHandle

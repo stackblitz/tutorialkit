@@ -1,10 +1,12 @@
-import type { FilesRefList, Files } from '@tutorialkit/types';
+import type { FilesRefList, Files, EditorSchema, FileDescriptor } from '@tutorialkit/types';
 import { atom, map, computed } from 'nanostores';
+import { EditorConfig } from '../webcontainer/editor-config.js';
 
 export interface EditorDocument {
   value: string | Uint8Array;
   loading: boolean;
   filePath: string;
+  type: FileDescriptor['type'];
   scroll?: ScrollPosition;
 }
 
@@ -13,12 +15,16 @@ export interface ScrollPosition {
   left: number;
 }
 
-export type EditorDocuments = Record<string, EditorDocument>;
+export type EditorDocuments = Record<string, EditorDocument | undefined>;
 
 export class EditorStore {
+  editorConfig = atom<EditorConfig>(new EditorConfig());
   selectedFile = atom<string | undefined>();
   documents = map<EditorDocuments>({});
 
+  files = computed(this.documents, (documents) =>
+    Object.entries(documents).map<FileDescriptor>(([path, doc]) => ({ path, type: doc?.type || 'file' })),
+  );
   currentDocument = computed([this.documents, this.selectedFile], (documents, selectedFile) => {
     if (!selectedFile) {
       return undefined;
@@ -27,11 +33,18 @@ export class EditorStore {
     return documents[selectedFile];
   });
 
+  setEditorConfig(config?: EditorSchema) {
+    this.editorConfig.set(new EditorConfig(config));
+  }
+
   setSelectedFile(filePath: string | undefined) {
     this.selectedFile.set(filePath);
   }
 
   setDocuments(files: FilesRefList | Files) {
+    // lesson, solution and template file entries are always files  - empty folders are not supported
+    const type = 'file';
+
     // check if it is a FilesRef
     if (Array.isArray(files)) {
       this.documents.set(
@@ -41,6 +54,7 @@ export class EditorStore {
               filePath,
               {
                 value: '',
+                type,
                 loading: true,
                 filePath,
               },
@@ -58,6 +72,7 @@ export class EditorStore {
               filePath,
               {
                 value,
+                type,
                 loading: false,
                 filePath,
                 scroll: previousDocuments?.[filePath]?.scroll,
@@ -79,6 +94,22 @@ export class EditorStore {
     this.documents.setKey(filePath, {
       ...documentState,
       scroll: position,
+    });
+  }
+
+  addFileOrFolder(file: FileDescriptor) {
+    // when adding file or folder to empty folder, remove the empty folder from documents
+    const emptyFolder = this.files.get().find((f) => f.type === 'folder' && file.path.startsWith(f.path));
+
+    if (emptyFolder && emptyFolder.type === 'folder') {
+      this.documents.setKey(emptyFolder.path, undefined);
+    }
+
+    this.documents.setKey(file.path, {
+      filePath: file.path,
+      type: file.type,
+      value: '',
+      loading: false,
     });
   }
 
