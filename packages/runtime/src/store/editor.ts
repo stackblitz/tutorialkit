@@ -181,7 +181,7 @@ function sortFiles(fileA: FileDescriptor, fileB: FileDescriptor) {
 
     // folders are always shown before files
     if (a.type !== b.type) {
-      return a.type === 'FOLDER' ? -1 : 1;
+      return a.type === 'folder' ? -1 : 1;
     }
 
     const comparison = compareString(a.path, b.path);
@@ -198,7 +198,7 @@ function sortFiles(fileA: FileDescriptor, fileB: FileDescriptor) {
 function toFileSegment(file: FileDescriptor, segments: string[], current: number) {
   const isLast = current + 1 === segments.length;
 
-  return { path: segments[current], type: isLast ? file.type : 'FOLDER', isLast };
+  return { path: segments[current], type: isLast ? file.type : 'folder', isLast };
 }
 
 function compareString(a: string, b: string) {

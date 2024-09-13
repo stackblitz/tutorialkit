@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { TutorialStore } from '@tutorialkit/runtime';
+import type { TutorialStore } from '@tutorialkit/runtime';
 import type { I18n } from '@tutorialkit/types';
 import { useCallback, useEffect, useRef, useState, type ComponentProps } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
