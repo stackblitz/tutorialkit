@@ -8,6 +8,7 @@ export default [
       '**/dist',
       '**/node_modules',
       '**/.astro/**',
+      '**/.vscode-test/**',
 
       // we ignore our demo templates because they may contain code that is formatted specifically for the demo
       'docs/demo/src/templates',
