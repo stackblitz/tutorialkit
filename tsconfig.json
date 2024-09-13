@@ -11,7 +11,7 @@
     "noImplicitReturns": true,
     "strict": true,
     "paths": {
-      "@tutorialkit/test-utils": ["./packages/test-utils/src/index.ts"]
+      "test-utils": ["./packages/test-utils/src/index.ts"]
     }
   }
 }
