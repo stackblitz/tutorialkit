@@ -241,7 +241,7 @@ function buildFileList(
     fileList.push({ kind: 'folder', name: '/', fullPath: '/', depth: 0, id: 0 });
   }
 
-  for (const file of files) {
+  for (const file of [...files].sort(sortFiles)) {
     if (scope && !file.path.startsWith(scope)) {
       continue;
     }
@@ -296,4 +296,47 @@ function isHiddenFile(filePath: string, fileName: string, hiddenFiles: Array<str
 
 function getDepthStyle(depth: number) {
   return { paddingLeft: `${12 + depth * NODE_PADDING_LEFT}px` };
+}
+
+export function sortFiles(fileA: FileDescriptor, fileB: FileDescriptor) {
+  const segmentsA = fileA.path.split('/');
+  const segmentsB = fileB.path.split('/');
+  const minLength = Math.min(segmentsA.length, segmentsB.length);
+
+  for (let i = 0; i < minLength; i++) {
+    const a = toFileSegment(fileA, segmentsA, i);
+    const b = toFileSegment(fileB, segmentsB, i);
+
+    // folders are always shown before files
+    if (a.type !== b.type) {
+      return a.type === 'folder' ? -1 : 1;
+    }
+
+    const comparison = compareString(a.path, b.path);
+
+    // either folder name changed or last segments are compared
+    if (comparison !== 0 || a.isLast || b.isLast) {
+      return comparison;
+    }
+  }
+
+  return compareString(fileA.path, fileB.path);
+}
+
+function toFileSegment(file: FileDescriptor, segments: string[], current: number) {
+  const isLast = current + 1 === segments.length;
+
+  return { path: segments[current], type: isLast ? file.type : 'folder', isLast };
+}
+
+function compareString(a: string, b: string) {
+  if (a < b) {
+    return -1;
+  }
+
+  if (a > b) {
+    return 1;
+  }
+
+  return 0;
 }

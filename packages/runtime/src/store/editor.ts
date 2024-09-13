@@ -23,9 +23,7 @@ export class EditorStore {
   documents = map<EditorDocuments>({});
 
   files = computed(this.documents, (documents) =>
-    Object.entries(documents)
-      .map<FileDescriptor>(([path, doc]) => ({ path, type: doc?.type || 'file' }))
-      .sort(sortFiles),
+    Object.entries(documents).map<FileDescriptor>(([path, doc]) => ({ path, type: doc?.type || 'file' })),
   );
   currentDocument = computed([this.documents, this.selectedFile], (documents, selectedFile) => {
     if (!selectedFile) {
@@ -168,47 +166,4 @@ export class EditorStore {
       unsubscribeFromCurrentDocument();
     };
   }
-}
-
-function sortFiles(fileA: FileDescriptor, fileB: FileDescriptor) {
-  const segmentsA = fileA.path.split('/');
-  const segmentsB = fileB.path.split('/');
-  const minLength = Math.min(segmentsA.length, segmentsB.length);
-
-  for (let i = 0; i < minLength; i++) {
-    const a = toFileSegment(fileA, segmentsA, i);
-    const b = toFileSegment(fileB, segmentsB, i);
-
-    // folders are always shown before files
-    if (a.type !== b.type) {
-      return a.type === 'folder' ? -1 : 1;
-    }
-
-    const comparison = compareString(a.path, b.path);
-
-    // either folder name changed or last segments are compared
-    if (comparison !== 0 || a.isLast || b.isLast) {
-      return comparison;
-    }
-  }
-
-  return compareString(fileA.path, fileB.path);
-}
-
-function toFileSegment(file: FileDescriptor, segments: string[], current: number) {
-  const isLast = current + 1 === segments.length;
-
-  return { path: segments[current], type: isLast ? file.type : 'folder', isLast };
-}
-
-function compareString(a: string, b: string) {
-  if (a < b) {
-    return -1;
-  }
-
-  if (a > b) {
-    return 1;
-  }
-
-  return 0;
 }
