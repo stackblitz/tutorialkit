@@ -14,7 +14,7 @@ export default function ExampleFileTree() {
       selectedFile={selectedFile}
       onFileSelect={setSelectedFile}
       onFileChange={(event) => {
-        if (event.method === 'ADD') {
+        if (event.method === 'add') {
           setFiles([...files, { path: event.value, type: event.type }].sort());
         }
       }}
