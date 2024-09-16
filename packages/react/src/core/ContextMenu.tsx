@@ -1,5 +1,6 @@
 import { useRef, useState, type ComponentProps } from 'react';
 import { Root, Portal, Content, Item, Trigger } from '@radix-ui/react-context-menu';
+import picomatch from 'picomatch/posix';
 import type { FileDescriptor, I18n } from '@tutorialkit/types';
 
 interface FileChangeEvent {
@@ -17,6 +18,9 @@ interface Props extends ComponentProps<'div'> {
   /** Callback invoked when file is changed. */
   onFileChange?: (event: FileChangeEvent | FileRenameEvent) => void;
 
+  /** Glob patterns for paths that allow editing files and folders. Defaults to `['**']`. */
+  allowEditPatterns?: string[];
+
   /** Directory of the clicked file. */
   directory: string;
 
@@ -32,6 +36,7 @@ interface Props extends ComponentProps<'div'> {
 
 export function ContextMenu({
   onFileChange,
+  allowEditPatterns = ['**'],
   directory,
   i18n,
   position = 'before',
@@ -50,11 +55,19 @@ export function ContextMenu({
     const name = event.currentTarget.value;
 
     if (name) {
-      onFileChange?.({
-        value: `${directory}/${name}`,
-        type: state === 'add_file' ? 'file' : 'folder',
-        method: 'add',
-      });
+      const value = `${directory}/${name}`;
+      const isAllowed = picomatch.isMatch(value, allowEditPatterns);
+
+      if (isAllowed) {
+        onFileChange?.({
+          value,
+          type: state === 'add_file' ? 'file' : 'folder',
+          method: 'add',
+        });
+      } else {
+        // TODO: Use `@radix-ui/react-dialog` instead
+        alert(`File "${value}" is not allowed. Allowed patterns: [${allowEditPatterns.join(', ')}].`);
+      }
     }
 
     setState('idle');
