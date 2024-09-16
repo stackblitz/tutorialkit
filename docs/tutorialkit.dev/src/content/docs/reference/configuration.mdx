@@ -144,9 +144,11 @@ File tree can be set to allow file editing from right clicks by setting `fileTre
 The `Editor` type has the following shape:
 
 ```ts
+type GlobPattern = string
+
 type Editor =
     | false
-    | { editor: { allowEdits: boolean } }
+    | { editor: { allowEdits: boolean | GlobPattern | GlobPattern[] } }
 
 ```
 
@@ -161,6 +163,18 @@ editor: # Editor is visible
 editor: # Editor is visible
   fileTree: # File tree is visible
     allowEdits: true # User can add new files and folders from the file tree
+
+
+editor: # Editor is visible
+  fileTree: # File tree is visible
+    allowEdits: "/src/**" # User can add files and folders anywhere inside "/src/"
+
+editor: # Editor is visible
+  fileTree: # File tree is visible
+    allowEdits:
+      - "/*" # User can add files and folders directly in the root
+      - "/first-level/allowed-filename-only.js" # Only "allowed-filename-only.js" inside "/first-level" folder
+      - "**/second-level/**" # Anything inside "second-level" folders anywhere
 ```
 
 ##### `previews`

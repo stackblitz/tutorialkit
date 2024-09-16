@@ -9,7 +9,7 @@ interface NormalizedEditorConfig {
     visible: boolean;
 
     /** Whether to allow file and folder editing in file tree */
-    allowEdits: boolean;
+    allowEdits: false | string[];
   };
 }
 
@@ -60,11 +60,25 @@ function normalizeEditorConfig(config?: EditorSchema): NormalizedEditorConfig {
     };
   }
 
+  if (typeof config.fileTree?.allowEdits === 'boolean' || !config.fileTree?.allowEdits) {
+    return {
+      visible: true,
+      fileTree: {
+        visible: true,
+        allowEdits: config.fileTree?.allowEdits ? ['**'] : false,
+      },
+    };
+  }
+
   return {
     visible: true,
     fileTree: {
       visible: true,
-      allowEdits: config.fileTree?.allowEdits || false,
+      allowEdits: toArray(config.fileTree.allowEdits),
     },
   };
+}
+
+function toArray<T>(items: T | T[]): T[] {
+  return Array.isArray(items) ? items : [items];
 }
