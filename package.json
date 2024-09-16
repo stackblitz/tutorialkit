@@ -31,7 +31,7 @@
     "eslint-plugin-astro": "^1.2.4",
     "husky": "^9.0.11",
     "is-ci": "^3.0.1",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
     "tempfile": "^5.0.0"
   },
