@@ -113,7 +113,7 @@ export class EditorStore {
     });
   }
 
-  updateFile(filePath: string, content: string): boolean {
+  updateFile(filePath: string, content: string | Uint8Array): boolean {
     const documentState = this.documents.get()[filePath];
 
     if (!documentState) {

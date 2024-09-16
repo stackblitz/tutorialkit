@@ -4,10 +4,10 @@ import { resetProcessFactory, setProcessFactory } from '@tutorialkit/test-utils'
 import { WebContainer } from '@webcontainer/api';
 import type { MockedWebContainer } from '@tutorialkit/test-utils';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { TerminalStore } from './store/terminal.js';
+import { TerminalStore } from './terminal.js';
 import { TutorialRunner } from './tutorial-runner.js';
-import { withResolvers } from './utils/promises.js';
-import { StepsController } from './webcontainer/steps.js';
+import { withResolvers } from '../utils/promises.js';
+import { StepsController } from '../webcontainer/steps.js';
 
 beforeEach(() => {
   resetProcessFactory();

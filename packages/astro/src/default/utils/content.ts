@@ -248,6 +248,7 @@ export async function getTutorial(): Promise<Tutorial> {
           'i18n',
           'editPageLink',
           'openInStackBlitz',
+          'filesystem',
         ],
       ),
     };
