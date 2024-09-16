@@ -1,13 +1,14 @@
 // must be imported first
 import { resetProcessFactory, setProcessFactory } from '@tutorialkit/test-utils';
 
-import { WebContainer } from '@webcontainer/api';
 import type { MockedWebContainer } from '@tutorialkit/test-utils';
+import { WebContainer } from '@webcontainer/api';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { TerminalStore } from './terminal.js';
-import { TutorialRunner } from './tutorial-runner.js';
 import { withResolvers } from '../utils/promises.js';
 import { StepsController } from '../webcontainer/steps.js';
+import { EditorStore } from './editor.js';
+import { TerminalStore } from './terminal.js';
+import { TutorialRunner } from './tutorial-runner.js';
 
 beforeEach(() => {
   resetProcessFactory();
@@ -17,7 +18,12 @@ describe('TutorialRunner', () => {
   test('prepareFiles should mount files to WebContainer', async () => {
     const webcontainer = WebContainer.boot();
     const mock = (await webcontainer) as MockedWebContainer;
-    const runner = new TutorialRunner(webcontainer, new TerminalStore(webcontainer, false), new StepsController());
+    const runner = new TutorialRunner(
+      webcontainer,
+      new TerminalStore(webcontainer, false),
+      new EditorStore(),
+      new StepsController(),
+    );
 
     await runner.prepareFiles({
       files: {
@@ -72,7 +78,12 @@ describe('TutorialRunner', () => {
 
     setProcessFactory(processFactory);
 
-    const runner = new TutorialRunner(webcontainer, new TerminalStore(webcontainer, false), new StepsController());
+    const runner = new TutorialRunner(
+      webcontainer,
+      new TerminalStore(webcontainer, false),
+      new EditorStore(),
+      new StepsController(),
+    );
 
     runner.setCommands({
       mainCommand: 'some command',
