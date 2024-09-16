@@ -70,7 +70,7 @@
     "execa": "^9.2.0",
     "typescript": "^5.4.5",
     "vite-plugin-inspect": "0.8.4",
-    "vitest": "^1.6.0"
+    "vitest": "^2.1.1"
   },
   "peerDependencies": {
     "astro": "^4.15.0"
