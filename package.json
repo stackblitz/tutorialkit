@@ -28,7 +28,7 @@
     "chalk": "^5.3.0",
     "commitlint": "^19.3.0",
     "conventional-changelog": "^6.0.0",
-    "eslint-plugin-astro": "^1.2.3",
+    "eslint-plugin-astro": "^1.2.4",
     "husky": "^9.0.11",
     "is-ci": "^3.0.1",
     "prettier": "^3.3.2",
