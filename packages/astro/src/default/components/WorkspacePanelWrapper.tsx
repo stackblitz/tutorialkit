@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { WorkspacePanel } from '@tutorialkit/react';
 import type { Lesson } from '@tutorialkit/types';
+import { useEffect } from 'react';
 import { themeStore } from '../stores/theme-store.js';
 import { tutorialStore } from './webcontainer.js';
 

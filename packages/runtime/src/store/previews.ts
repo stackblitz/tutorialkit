@@ -1,8 +1,8 @@
 import type { PreviewSchema } from '@tutorialkit/types';
 import type { WebContainer } from '@webcontainer/api';
 import { atom } from 'nanostores';
-import { PreviewInfo } from '../webcontainer/preview-info.js';
 import { PortInfo } from '../webcontainer/port-info.js';
+import { PreviewInfo } from '../webcontainer/preview-info.js';
 
 export class PreviewsStore {
   private _availablePreviews = new Map<number, PortInfo>();

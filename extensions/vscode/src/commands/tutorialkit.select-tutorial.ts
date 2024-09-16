@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { cmd } from '.';
 import isTutorialKitWorkspace from '../utils/isTutorialKit';
+import { cmd } from '.';
 
 export async function selectTutorial() {
   const tutorialWorkpaces = (vscode.workspace.workspaceFolders || []).filter(isTutorialKitWorkspace);

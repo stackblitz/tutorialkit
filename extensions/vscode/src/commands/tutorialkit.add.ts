@@ -1,8 +1,8 @@
-import { cmd } from '.';
-import { Node, NodeType } from '../models/Node';
 import * as vscode from 'vscode';
+import { Node, NodeType } from '../models/Node';
 import { FILES_FOLDER, SOLUTION_FOLDER } from '../models/tree/constants';
 import { updateNodeMetadataInVFS } from '../models/tree/update';
+import { cmd } from '.';
 
 let kebabCase: (string: string) => string;
 let capitalize: (string: string) => string;

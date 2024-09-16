@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
 import grayMatter from 'gray-matter';
+import * as vscode from 'vscode';
 import { Node } from '../Node';
 
 export async function updateNodeMetadataInVFS(node: Node) {

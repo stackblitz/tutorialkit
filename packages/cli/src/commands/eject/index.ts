@@ -1,9 +1,9 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
 import detectIndent from 'detect-indent';
 import { execa } from 'execa';
-import fs from 'node:fs';
-import path from 'node:path';
 import whichpm from 'which-pm';
 import type { Arguments } from 'yargs-parser';
 import { pkg } from '../../pkg.js';

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { PreviewInfo } from './preview-info.js';
 import { PortInfo } from './port-info.js';
+import { PreviewInfo } from './preview-info.js';
 
 describe('PreviewInfo', () => {
   it('should accept a number for port', () => {

@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
 import type { TutorialSchema, PartSchema, ChapterSchema, LessonSchema } from '@tutorialkit/types';
+import * as vscode from 'vscode';
 
 export class Node {
   /**

@@ -6,11 +6,11 @@
  * the correct location to make sure the CSS customization are added after the
  * default values.
  */
-import { watch } from 'chokidar';
-import fs from 'fs/promises';
-import path from 'path';
-import type { ViteDevServer, VitePlugin } from '../types.js';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import type { AstroIntegrationLogger } from 'astro';
+import { watch } from 'chokidar';
+import type { ViteDevServer, VitePlugin } from '../types.js';
 
 const CUSTOM_PATHS = ['theme.css', 'theme/index.css'];
 
