@@ -55,7 +55,7 @@ export class PreviewsStore {
     }
 
     // if the schema is `true`, we just use the default empty array
-    const previews = config === true ? [] : config ?? [];
+    const previews = config === true ? [] : (config ?? []);
 
     const previewInfos = previews.map((previewConfig) => {
       const preview = PreviewInfo.parse(previewConfig);
