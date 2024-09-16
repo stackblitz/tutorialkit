@@ -155,3 +155,70 @@ test('user can create folders', async ({ page }) => {
     await expect(terminalOutput).toContainText(folder, { useInnerText: true });
   }
 });
+
+test('user can create files and folders in allowed directories', async ({ page }) => {
+  await page.goto(`${BASE_URL}/allow-edits-glob`);
+  await expect(page.getByRole('heading', { level: 1, name: 'File Tree test - Allow Edits Glob' })).toBeVisible();
+
+  // wait for terminal to start
+  const terminal = page.getByRole('textbox', { name: 'Terminal input' });
+  const terminalOutput = page.getByRole('tabpanel', { name: 'Terminal' });
+  await expect(terminalOutput).toContainText('~/tutorial', { useInnerText: true });
+
+  // can create files in root and inside "second-level"
+  for (const [locator, name, type] of [
+    [page.getByTestId('file-tree-root-context-menu'), 'new-file.js', 'file'],
+    [page.getByRole('button', { name: 'second-level' }), 'new-folder.js', 'folder'],
+  ] as const) {
+    await locator.click({ button: 'right' });
+    await page.getByRole('menuitem', { name: `Create ${type}` }).click();
+
+    await page.locator('*:focus').fill(name);
+    await page.locator('*:focus').press('Enter');
+    await expect(page.getByRole('button', { name })).toBeVisible();
+  }
+
+  await expect(page.getByRole('button', { name: 'new-file.js' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'new-folder' })).toBeVisible();
+
+  // verify that files are present on file system via terminal
+  for (const [directory, folder] of [
+    ['./', 'new-file.js'],
+    ['./first-level/second-level/', 'new-folder'],
+  ]) {
+    await terminal.fill(`clear; ls ${directory}`);
+    await terminal.press('Enter');
+
+    await expect(terminalOutput).toContainText(folder, { useInnerText: true });
+  }
+});
+
+test('user cannot create files or folders in disallowed directories', async ({ page }) => {
+  await page.goto(`${BASE_URL}/allow-edits-glob`);
+  await expect(page.getByRole('heading', { level: 1, name: 'File Tree test - Allow Edits Glob' })).toBeVisible();
+
+  // wait for terminal to start
+  const terminalOutput = page.getByRole('tabpanel', { name: 'Terminal' });
+  await expect(terminalOutput).toContainText('~/tutorial', { useInnerText: true });
+
+  for (const [name, type] of [
+    ['new-file.js', 'file'],
+    ['new-folder', 'folder'],
+  ] as const) {
+    await page.getByRole('button', { name: 'first-level' }).click({ button: 'right' });
+    await page.getByRole('menuitem', { name: `Create ${type}` }).click();
+
+    const message = new Promise<string>((resolve) =>
+      page.once('dialog', (dialog) => {
+        resolve(dialog.message());
+        dialog.accept();
+      }),
+    );
+
+    await page.locator('*:focus').fill(name);
+    await page.locator('*:focus').press('Enter');
+    expect(await message).toBe(
+      `File \"/first-level/${name}\" is not allowed. Allowed patterns: [/*, /first-level/allowed-filename-only.js, **/second-level/**].`,
+    );
+  }
+});
