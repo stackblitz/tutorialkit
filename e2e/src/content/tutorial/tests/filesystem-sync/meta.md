@@ -1,6 +1,6 @@
 ---
 type: chapter
-title: filesystem.syncChanges
+title: filesystem.watch
 filesystem:
-  syncChanges: true
+  watch: true
 ---

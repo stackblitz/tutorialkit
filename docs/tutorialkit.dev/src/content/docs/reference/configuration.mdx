@@ -221,7 +221,7 @@ type Command = string
 ##### `filesystem`
 Configures how changes such as files being modified or added in WebContainer should be reflected in the editor when they weren't caused by the user directly. By default, the editor will not reflect these changes.
 
-An example use case is when a user runs a command that modifies a file. For instance when a `package.json` is modified by doing an `npm install <xyz>`. If `syncChanges` is set to `true`, the file will be updated in the editor. If set to `false`, the file will not be updated.
+An example use case is when a user runs a command that modifies a file. For instance when a `package.json` is modified by doing an `npm install <xyz>`. If `watch` is set to `true`, the file will be updated in the editor. If set to `false`, the file will not be updated.
 
 This property is by default set to `false` as it can impact performance. If you are creating a lesson where the user is expected to modify files directly, you may want to keep this to `false`.
 
@@ -231,7 +231,7 @@ The `FileSystem` type has the following shape:
 
 ```ts
 type FileSystem = {
-  syncChanges: boolean
+  watch: boolean
 }
 
 ```
@@ -240,10 +240,10 @@ Example values:
 
 ```yaml
 filesystem:
-  syncChanges: true  # Filesystem changes are reflected in the editor
+  watch: true  # Filesystem changes are reflected in the editor
 
 filesystem:
-  syncChanges: false # Or if it's omitted, the default value is false
+  watch: false # Or if it's omitted, the default value is false
 ```
 
 

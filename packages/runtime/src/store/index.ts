@@ -150,7 +150,7 @@ export class TutorialStore {
       return;
     }
 
-    this._runner.setSyncChangesFromWebContainer(lesson.data.filesystem?.syncChanges ?? false);
+    this._runner.setWatchFromWebContainer(lesson.data.filesystem?.watch ?? false);
 
     this._lessonTask = newTask(
       async (signal) => {

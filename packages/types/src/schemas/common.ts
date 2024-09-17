@@ -56,7 +56,7 @@ export const previewSchema = z.union([
 export type PreviewSchema = z.infer<typeof previewSchema>;
 
 export const fileSystemSchema = z.object({
-  syncChanges: z
+  watch: z
     .boolean()
     .optional()
     .describe('When set to true, when a file is changed in WebContainer, it is updated in the editor as well.'),

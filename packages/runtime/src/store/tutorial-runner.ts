@@ -65,7 +65,7 @@ export class TutorialRunner {
 
   private _ignoreFileEvents = new MultiCounter();
   private _watcher: IFSWatcher | undefined;
-  private _syncContentFromWebContainer = false;
+  private _watchContentFromWebContainer = false;
   private _readyToWatch = false;
 
   private _packageJsonDirty = false;
@@ -82,12 +82,12 @@ export class TutorialRunner {
     private _stepController: StepsController,
   ) {}
 
-  setSyncChangesFromWebContainer(value: boolean) {
-    this._syncContentFromWebContainer = value;
+  setWatchFromWebContainer(value: boolean) {
+    this._watchContentFromWebContainer = value;
 
-    if (this._readyToWatch && this._syncContentFromWebContainer) {
+    if (this._readyToWatch && this._watchContentFromWebContainer) {
       this._webcontainer.then((webcontainer) => this._setupWatcher(webcontainer));
-    } else if (!this._syncContentFromWebContainer) {
+    } else if (!this._watchContentFromWebContainer) {
       this._stopWatcher();
     }
   }
@@ -565,7 +565,7 @@ export class TutorialRunner {
     this._readyToWatch = true;
 
     // if the watcher is alreay setup or we don't sync content we exit
-    if (this._watcher || !this._syncContentFromWebContainer) {
+    if (this._watcher || !this._watchContentFromWebContainer) {
       return;
     }
 
