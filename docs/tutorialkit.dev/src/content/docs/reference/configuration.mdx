@@ -85,6 +85,41 @@ type I18nText = {
   filesTitleText?: string,
 
   /**
+   * Text shown on file tree's context menu's file creation button.
+   *
+   * @default 'Create file'
+   */
+  fileTreeCreateFileText?: string,
+
+  /**
+   * Text shown on file tree's context menu's folder creation button.
+   *
+   * @default 'Create folder'
+   */
+  fileTreeCreateFolderText?: string,
+
+  /**
+   * Text shown on dialog when file creation failed. Variables: ${filename}.
+   *
+   * @default 'Failed to create file "${filename}".'
+   */
+  fileTreeFailedToCreateFileText?: string,
+
+  /**
+   * Text shown on dialog when folder creation failed. Variables: ${filename}.
+   *
+   * @default 'Failed to create folder "${filename}".'
+   */
+  fileTreeFailedToCreateFolderText?: string,
+
+  /**
+   * Text shown on dialog describing allowed patterns when file or folder createion failed.
+   *
+   * @default 'Allowed patterns are:'
+   */
+  fileTreeAllowedPatternsText?: string,
+
+  /**
    * Text shown on top of the steps section.
    *
    * @default 'Preparing Environment'

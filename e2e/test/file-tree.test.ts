@@ -208,17 +208,18 @@ test('user cannot create files or folders in disallowed directories', async ({ p
     await page.getByRole('button', { name: 'first-level' }).click({ button: 'right' });
     await page.getByRole('menuitem', { name: `Create ${type}` }).click();
 
-    const message = new Promise<string>((resolve) =>
-      page.once('dialog', (dialog) => {
-        resolve(dialog.message());
-        dialog.accept();
-      }),
-    );
-
     await page.locator('*:focus').fill(name);
     await page.locator('*:focus').press('Enter');
-    expect(await message).toBe(
-      `File \"/first-level/${name}\" is not allowed. Allowed patterns: [/*, /first-level/allowed-filename-only.js, **/second-level/**].`,
-    );
+
+    const dialog = page.getByRole('dialog', { name: 'Error' });
+    await expect(dialog.getByText(`Failed to create ${type} "/first-level/${name}".`)).toBeVisible();
+
+    await expect(dialog.getByText('Allowed patterns are:')).toBeVisible();
+    await expect(dialog.getByRole('listitem').nth(0)).toHaveText('/*');
+    await expect(dialog.getByRole('listitem').nth(1)).toHaveText('/first-level/allowed-filename-only.js');
+    await expect(dialog.getByRole('listitem').nth(2)).toHaveText('**/second-level/**');
+
+    await dialog.getByRole('button', { name: 'Close' }).click();
+    await expect(dialog).not.toBeVisible();
   }
 });

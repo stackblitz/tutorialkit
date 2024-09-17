@@ -75,6 +75,7 @@
     "@nanostores/react": "0.7.2",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-context-menu": "^2.2.1",
+    "@radix-ui/react-dialog": "^1.1.1",
     "@replit/codemirror-lang-svelte": "^6.0.0",
     "@tutorialkit/runtime": "workspace:*",
     "@tutorialkit/theme": "workspace:*",

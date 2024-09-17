@@ -73,6 +73,36 @@ export const i18nSchema = z.object({
     .describe("Text shown on file tree's context menu's folder creation button."),
 
   /**
+   * Text shown on dialog when file creation failed. Variables: ${filename}.
+   *
+   * @default 'Failed to create file "${filename}".'
+   */
+  fileTreeFailedToCreateFileText: z
+    .string()
+    .optional()
+    .describe('Text shown on dialog when file creation failed. Variables: ${filename}.'),
+
+  /**
+   * Text shown on dialog when folder creation failed. Variables: ${filename}.
+   *
+   * @default 'Failed to create folder "${filename}".'
+   */
+  fileTreeFailedToCreateFolderText: z
+    .string()
+    .optional()
+    .describe('Text shown on dialog when folder creation failed. Variables: ${filename}.'),
+
+  /**
+   * Text shown on dialog describing allowed patterns when file or folder createion failed.
+   *
+   * @default 'Allowed patterns are:'
+   */
+  fileTreeAllowedPatternsText: z
+    .string()
+    .optional()
+    .describe('Text shown on dialog describing allowed patterns when file or folder createion failed.'),
+
+  /**
    * Text shown on top of the steps section.
    *
    * @default 'Preparing Environment'
