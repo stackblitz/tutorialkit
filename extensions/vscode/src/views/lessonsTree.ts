@@ -1,10 +1,10 @@
+import path from 'node:path';
 import * as vscode from 'vscode';
-import path from 'path';
 import { cmd } from '../commands';
 import { Node } from '../models/Node';
-import { getIcon } from '../utils/getIcon';
-import { loadChildrenForNode, loadTutorialTree } from '../models/tree/load';
 import { METADATA_FILES } from '../models/tree/constants';
+import { loadChildrenForNode, loadTutorialTree } from '../models/tree/load';
+import { getIcon } from '../utils/getIcon';
 
 export const tutorialMimeType = 'application/tutorialkit.unit';
 

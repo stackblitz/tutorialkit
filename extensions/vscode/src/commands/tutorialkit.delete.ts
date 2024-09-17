@@ -1,8 +1,8 @@
-import { cmd } from '.';
 import * as vscode from 'vscode';
-import { Node } from '../models/Node';
 import { getLessonsTreeView } from '../global-state';
+import { Node } from '../models/Node';
 import { updateNodeMetadataInVFS } from '../models/tree/update';
+import { cmd } from '.';
 
 export async function deleteNode(selectedNode: Node | undefined, selectedNodes: Node[] | undefined) {
   let nodes: readonly Node[] = (selectedNodes ? selectedNodes : [selectedNode]).filter((node) => node !== undefined);

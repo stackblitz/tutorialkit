@@ -1,6 +1,6 @@
-import { useRef, useState, type ComponentProps } from 'react';
 import { Root, Portal, Content, Item, Trigger } from '@radix-ui/react-context-menu';
 import type { FileDescriptor, I18n } from '@tutorialkit/types';
+import { useRef, useState, type ComponentProps } from 'react';
 
 interface FileChangeEvent {
   type: FileDescriptor['type'];

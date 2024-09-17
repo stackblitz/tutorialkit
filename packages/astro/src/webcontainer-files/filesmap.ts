@@ -1,7 +1,7 @@
-import type { AstroIntegrationLogger } from 'astro';
-import glob from 'fast-glob';
 import fs from 'node:fs';
 import path from 'node:path';
+import type { AstroIntegrationLogger } from 'astro';
+import glob from 'fast-glob';
 import { z } from 'zod';
 import type { Files } from '../types';
 import { EXTEND_CONFIG_FILEPATH, IGNORED_FILES } from './constants';

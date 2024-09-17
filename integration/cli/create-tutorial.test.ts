@@ -1,8 +1,8 @@
-import path from 'node:path';
 import fs from 'node:fs/promises';
-import { describe, beforeEach, afterAll, expect, it } from 'vitest';
+import path from 'node:path';
 import { execa } from 'execa';
 import { temporaryDirectory } from 'tempy';
+import { describe, beforeEach, afterAll, expect, it } from 'vitest';
 
 const baseDir = path.resolve(__dirname, '../..');
 

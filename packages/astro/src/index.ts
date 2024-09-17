@@ -1,11 +1,11 @@
-import type { AstroConfig, AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
+import type { AstroConfig, AstroIntegration } from 'astro';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { tutorialkitCore } from './vite-plugins/core.js';
 import { userlandCSS, watchUserlandCSS } from './vite-plugins/css.js';
-import { tutorialkitStore } from './vite-plugins/store.js';
 import { overrideComponents, type OverrideComponentsOptions } from './vite-plugins/override-components.js';
+import { tutorialkitStore } from './vite-plugins/store.js';
 import { WebContainerFiles } from './webcontainer-files/index.js';
 
 export interface Options {
@@ -101,7 +101,7 @@ export default function createPlugin({
               tutorialkitStore,
               tutorialkitCore,
               overrideComponents({ components, defaultRoutes: !!defaultRoutes }),
-              process.env.TUTORIALKIT_DEV ? (await import('vite-plugin-inspect')).default() : null,
+              process.env.TUTORIALKIT_VITE_INSPECT ? (await import('vite-plugin-inspect')).default() : null,
             ],
           },
         });

@@ -1,6 +1,6 @@
+import type { PortListener, WebContainer } from '@webcontainer/api';
 import { assert, expect, test } from 'vitest';
 import { PreviewsStore } from './previews.js';
-import type { PortListener, WebContainer } from '@webcontainer/api';
 
 test("preview is set ready on webcontainer's event", async () => {
   const { store, emit } = await getStore();

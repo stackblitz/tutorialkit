@@ -1,11 +1,11 @@
+import fs from 'node:fs';
+import { createRequire } from 'node:module';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { Worker } from 'node:worker_threads';
 import { watch } from 'chokidar';
 import * as esbuild from 'esbuild';
 import { execa } from 'execa';
-import fs from 'node:fs';
-import { createRequire } from 'node:module';
-import { join, dirname } from 'path';
-import { Worker } from 'node:worker_threads';
-import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);

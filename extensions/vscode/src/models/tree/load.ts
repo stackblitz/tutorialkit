@@ -1,8 +1,8 @@
-import * as vscode from 'vscode';
 import grayMatter from 'gray-matter';
+import * as vscode from 'vscode';
+import { Utils } from 'vscode-uri';
 import { Metadata, Node } from '../Node';
 import { METADATA_FILES, FILES_FOLDER, SOLUTION_FOLDER } from './constants';
-import { Utils } from 'vscode-uri';
 
 export async function loadTutorialTree(tutorialFolderPath: vscode.Uri, tutorialName: string): Promise<Node> {
   const metaFilePath = vscode.Uri.joinPath(tutorialFolderPath, 'meta.md');

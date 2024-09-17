@@ -1,10 +1,10 @@
-import { interpolateString, type Lesson, type NavItem, type NavList } from '@tutorialkit/types';
 import * as Accordion from '@radix-ui/react-accordion';
-import navStyles from './styles/nav.module.css';
-import { classNames } from './utils/classnames.js';
+import { interpolateString, type Lesson, type NavItem, type NavList } from '@tutorialkit/types';
 import { AnimatePresence, cubicBezier, motion } from 'framer-motion';
 import { useCallback, useRef, useState } from 'react';
 import { useOutsideClick } from './hooks/useOutsideClick.js';
+import navStyles from './styles/nav.module.css';
+import { classNames } from './utils/classnames.js';
 
 const dropdownEasing = cubicBezier(0.4, 0, 0.2, 1);
 

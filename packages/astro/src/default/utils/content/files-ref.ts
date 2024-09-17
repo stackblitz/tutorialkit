@@ -1,7 +1,7 @@
+import path from 'node:path';
 import type { FilesRefList } from '@tutorialkit/types';
 import { folderPathToFilesRef } from '@tutorialkit/types';
 import glob from 'fast-glob';
-import path from 'node:path';
 import { IGNORED_FILES } from '../constants';
 
 const CONTENT_DIR = path.join(process.cwd(), 'src/content/tutorial');
