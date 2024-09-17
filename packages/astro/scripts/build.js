@@ -46,6 +46,7 @@ async function buildJS() {
     outdir: 'dist',
     define: {
       'process.env.TUTORIALKIT_DEV': JSON.stringify(process.env.TUTORIALKIT_DEV ?? null),
+      'process.env.TUTORIALKIT_VITE_INSPECT': JSON.stringify(process.env.TUTORIALKIT_VITE_INSPECT ?? null),
     },
     plugins: [nodeExternalsPlugin()],
   });

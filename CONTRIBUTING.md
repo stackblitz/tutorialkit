@@ -21,7 +21,7 @@ cd tutorialkit
 
 4. Run `pnpm run dev` to build sources in watch mode
   - Development environment starts in http://localhost:4321/
-  - You can use `VITE_INSPECT` environment variable to enable [`vite-plugin-inspect`](https://github.com/antfu-collective/vite-plugin-inspect) during deveplopment.
+  - You can use `TUTORIALKIT_VITE_INSPECT` environment variable to enable [`vite-plugin-inspect`](https://github.com/antfu-collective/vite-plugin-inspect) during deveplopment.
 
 5. Run `pnpm run test` to run core tests
 
