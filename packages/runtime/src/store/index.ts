@@ -3,7 +3,6 @@ import type { WebContainer } from '@webcontainer/api';
 import { atom, type ReadableAtom } from 'nanostores';
 import { LessonFilesFetcher } from '../lesson-files.js';
 import { newTask, type Task } from '../tasks.js';
-import { TutorialRunner } from './tutorial-runner.js';
 import type { ITerminal } from '../utils/terminal.js';
 import type { EditorConfig } from '../webcontainer/editor-config.js';
 import { bootStatus, unblockBoot, type BootStatus } from '../webcontainer/on-demand-boot.js';
@@ -13,6 +12,7 @@ import type { TerminalConfig } from '../webcontainer/terminal-config.js';
 import { EditorStore, type EditorDocument, type EditorDocuments, type ScrollPosition } from './editor.js';
 import { PreviewsStore } from './previews.js';
 import { TerminalStore } from './terminal.js';
+import { TutorialRunner } from './tutorial-runner.js';
 
 interface StoreOptions {
   webcontainer: Promise<WebContainer>;

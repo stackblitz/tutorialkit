@@ -1,13 +1,13 @@
 import type { CommandsSchema, Files } from '@tutorialkit/types';
-import type { WebContainer, WebContainerProcess, IFSWatcher } from '@webcontainer/api';
-import type { TerminalStore } from './terminal.js';
+import type { IFSWatcher, WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { newTask, type Task, type TaskCancelled } from '../tasks.js';
+import { MultiCounter } from '../utils/multi-counter.js';
 import { clearTerminal, escapeCodes, type ITerminal } from '../utils/terminal.js';
 import { Command, Commands } from '../webcontainer/command.js';
 import { StepsController } from '../webcontainer/steps.js';
 import { diffFiles, toFileTree } from '../webcontainer/utils/files.js';
 import type { EditorStore } from './editor.js';
-import { MultiCounter } from '../utils/multi-counter.js';
+import type { TerminalStore } from './terminal.js';
 
 interface LoadFilesOptions {
   /**
