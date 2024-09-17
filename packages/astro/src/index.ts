@@ -101,7 +101,7 @@ export default function createPlugin({
               tutorialkitStore,
               tutorialkitCore,
               overrideComponents({ components, defaultRoutes: !!defaultRoutes }),
-              process.env.TUTORIALKIT_DEV ? (await import('vite-plugin-inspect')).default() : null,
+              process.env.VITE_INSPECT ? (await import('vite-plugin-inspect')).default() : null,
             ],
           },
         });
