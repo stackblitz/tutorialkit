@@ -1,5 +1,5 @@
-import { expect, test } from 'vitest';
 import type { FileDescriptor } from '@tutorialkit/types';
+import { expect, test } from 'vitest';
 import { sortFiles } from './FileTree.js';
 
 expect.addSnapshotSerializer({

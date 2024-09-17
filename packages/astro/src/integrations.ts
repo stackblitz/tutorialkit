@@ -3,9 +3,9 @@ import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
+import { getInlineContentForPackage } from '@tutorialkit/theme';
 import expressiveCode from 'astro-expressive-code';
 import UnoCSS from 'unocss/astro';
-import { getInlineContentForPackage } from '@tutorialkit/theme';
 
 export function extraIntegrations({ root }: { root: string }) {
   return [

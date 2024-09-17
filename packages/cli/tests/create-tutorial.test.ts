@@ -1,8 +1,8 @@
-import { execa } from 'execa';
-import fs from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
+import fs from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { execa } from 'execa';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 
 // on CI on windows we want to make sure to use the same drive, so we use a custom logic

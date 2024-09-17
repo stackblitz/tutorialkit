@@ -1,9 +1,9 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import type { BaseSchema, ChapterSchema, LessonSchema, PartSchema, TutorialSchema } from '@tutorialkit/types';
 import frontMatter from 'front-matter';
 import * as kleur from 'kleur/colors';
 import type { Root } from 'mdast';
-import fs from 'node:fs';
-import path from 'node:path';
 import type { Transformer } from 'unified';
 import { visit } from 'unist-util-visit';
 

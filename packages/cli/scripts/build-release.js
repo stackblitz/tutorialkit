@@ -1,9 +1,9 @@
-import fsExtra from 'fs-extra';
-import ignore from 'ignore';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execa } from 'execa';
+import fsExtra from 'fs-extra';
+import ignore from 'ignore';
 import { temporaryDirectoryTask } from 'tempy';
 import { distFolder, overwritesFolder, templateDest, templatePath } from './_constants.js';
 import { success } from './logger.js';

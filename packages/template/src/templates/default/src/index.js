@@ -1,5 +1,5 @@
+const { createServer } = require('node:http');
 const servor = require('servor');
-const { createServer } = require('http');
 
 createServer((_req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/html' });

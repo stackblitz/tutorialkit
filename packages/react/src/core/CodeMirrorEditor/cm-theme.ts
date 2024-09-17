@@ -4,8 +4,8 @@ import { EditorView } from '@codemirror/view';
 import { transitionTheme } from '@tutorialkit/theme/transition-theme';
 import '../../styles/cm.css';
 import type { Theme } from '../types.js';
-import type { EditorSettings } from './index.js';
 import { vscodeDarkTheme } from './themes/vscode-dark.js';
+import type { EditorSettings } from './index.js';
 
 export const darkTheme = EditorView.theme({}, { dark: true });
 export const themeSelection = new Compartment();

@@ -1,6 +1,6 @@
+import type { Terminal as XTerm } from '@xterm/xterm';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { useTheme } from './hooks/useTheme';
-import type { Terminal as XTerm } from '@xterm/xterm';
 import { useWebContainer } from './hooks/useWebcontainer';
 
 const Terminal = lazy(() => import('@tutorialkit/react/core/Terminal'));

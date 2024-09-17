@@ -1,8 +1,8 @@
-import { execa } from 'execa';
-import { cp } from 'fs/promises';
-import path, { extname } from 'path';
+import { copyFileSync, rmSync } from 'node:fs';
+import { cp } from 'node:fs/promises';
+import path, { extname } from 'node:path';
 import chokidar from 'chokidar';
-import { copyFileSync, rmSync } from 'fs';
+import { execa } from 'execa';
 
 const isWatch = process.argv.includes('--watch');
 

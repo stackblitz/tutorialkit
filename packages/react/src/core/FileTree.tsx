@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState, type ComponentProps, type ReactNode } from 'react';
 import type { FileDescriptor } from '@tutorialkit/types';
-import { ContextMenu } from './ContextMenu.js';
+import { useEffect, useMemo, useState, type ComponentProps, type ReactNode } from 'react';
 import { classNames } from '../utils/classnames.js';
+import { ContextMenu } from './ContextMenu.js';
 
 const NODE_PADDING_LEFT = 12;
 const DEFAULT_HIDDEN_FILES = [/\/node_modules\//];

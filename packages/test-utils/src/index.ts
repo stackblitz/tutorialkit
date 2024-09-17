@@ -1,5 +1,5 @@
-import type { DirectoryNode, FileNode, FileSystemTree, SpawnOptions, WebContainer } from '@webcontainer/api';
 import path from 'node:path';
+import type { DirectoryNode, FileNode, FileSystemTree, SpawnOptions, WebContainer } from '@webcontainer/api';
 import { vi, type Mocked } from 'vitest';
 
 interface FakeProcess {

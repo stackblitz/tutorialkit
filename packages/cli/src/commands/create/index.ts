@@ -1,8 +1,8 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
 import { execa } from 'execa';
-import fs from 'node:fs';
-import path from 'node:path';
 import yargs from 'yargs-parser';
 import { pkg } from '../../pkg.js';
 import { errorLabel, primaryLabel, printHelp, warnLabel } from '../../utils/messages.js';
