@@ -59,7 +59,7 @@ export const fileSystemSchema = z.object({
   watch: z
     .boolean()
     .optional()
-    .describe('When set to true, when a file is changed in WebContainer, it is updated in the editor as well.'),
+    .describe('When set to true, file changes in WebContainer are updated in the editor as well.'),
 });
 
 export type FileSystemSchema = z.infer<typeof fileSystemSchema>;

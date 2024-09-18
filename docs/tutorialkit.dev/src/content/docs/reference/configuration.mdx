@@ -223,7 +223,7 @@ Configures how changes such as files being modified or added in WebContainer sho
 
 An example use case is when a user runs a command that modifies a file. For instance when a `package.json` is modified by doing an `npm install <xyz>`. If `watch` is set to `true`, the file will be updated in the editor. If set to `false`, the file will not be updated.
 
-This property is by default set to `false` as it can impact performance. If you are creating a lesson where the user is expected to modify files directly, you may want to keep this to `false`.
+This property is by default set to `false` as it can impact performance. If you are creating a lesson where the user is expected to modify files outside the editor, you may want to keep this to `false`.
 
 <PropertyTable inherited type={'FileSystem'} />
 
