@@ -48,7 +48,7 @@ export function LoginButton() {
   }, [authStatus.status]);
 
   return (
-    <Button variant={showLogin ? 'primary' : 'secondary'} disabled={disabled} onClick={onClick}>
+    <Button className="ml-2" variant={showLogin ? 'primary' : 'secondary'} disabled={disabled} onClick={onClick}>
       {showLogin ? 'Login' : 'Logout'}
     </Button>
   );

@@ -37,6 +37,7 @@ interface Props extends ComponentProps<'div'> {
     | 'fileTreeCreateFolderText'
     | 'fileTreeActionNotAllowedText'
     | 'fileTreeAllowedPatternsText'
+    | 'confirmationText'
   >;
 
   /** Props for trigger wrapper. */
@@ -56,7 +57,7 @@ export function ContextMenu({
   const [state, setState] = useState<'idle' | 'add_file' | 'add_folder' | 'add_failed'>('idle');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (!onFileChange || !allowEditPatterns?.length) {
+  if (!allowEditPatterns?.length) {
     return children;
   }
 
@@ -142,6 +143,7 @@ export function ContextMenu({
       {state === 'add_failed' && (
         <Dialog
           title={i18n?.fileTreeActionNotAllowedText || DEFAULT_LOCALIZATION.fileTreeActionNotAllowedText}
+          confirmText={i18n?.confirmationText || DEFAULT_LOCALIZATION.confirmationText}
           onClose={() => setState('idle')}
         >
           {i18n?.fileTreeAllowedPatternsText || DEFAULT_LOCALIZATION.fileTreeAllowedPatternsText}
@@ -170,7 +172,17 @@ function MenuItem({ icon, children, ...props }: { icon: string } & ComponentProp
   );
 }
 
-function Dialog({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
+function Dialog({
+  title,
+  confirmText,
+  onClose,
+  children,
+}: {
+  title: string;
+  confirmText: string;
+  onClose: () => void;
+  children: ReactNode;
+}) {
   return (
     <RadixDialog.Root open={true} onOpenChange={(open) => !open && onClose()}>
       <RadixDialog.Portal>
@@ -183,7 +195,7 @@ function Dialog({ title, onClose, children }: { title: string; onClose: () => vo
             <div className="my-4">{children}</div>
 
             <RadixDialog.Close asChild>
-              <Button>OK</Button>
+              <Button className="min-w-20 justify-center">{confirmText}</Button>
             </RadixDialog.Close>
           </div>
         </RadixDialog.Content>

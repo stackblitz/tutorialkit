@@ -12,7 +12,7 @@ export const Button = forwardRef(({ className, variant = 'primary', ...props }: 
       {...props}
       className={classNames(
         className,
-        'flex items-center font-500 text-sm ml-2 px-4 py-1 rounded-md disabled:opacity-32',
+        'flex items-center font-500 text-sm px-4 py-1 rounded-md disabled:opacity-32',
         variant === 'primary' &&
           'bg-tk-elements-primaryButton-backgroundColor text-tk-elements-primaryButton-textColor',
 

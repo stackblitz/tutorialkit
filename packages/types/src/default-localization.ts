@@ -11,6 +11,7 @@ export const DEFAULT_LOCALIZATION = {
   fileTreeCreateFolderText: 'Create folder',
   fileTreeActionNotAllowedText: 'This action is not allowed',
   fileTreeAllowedPatternsText: 'Created files and folders must match following patterns:',
+  confirmationText: 'OK',
   prepareEnvironmentTitleText: 'Preparing Environment',
   defaultPreviewTitleText: 'Preview',
   reloadPreviewTitle: 'Reload Preview',
