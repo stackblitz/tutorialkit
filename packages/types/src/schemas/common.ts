@@ -183,7 +183,16 @@ export const editorSchema = z.union([
         // or configure file tree with options
         z.strictObject({
           allowEdits: z
-            .boolean()
+            .union([
+              // allow editing all files or disable completely
+              z.boolean(),
+
+              // limit file editing to files and folders that match a single glob pattern
+              z.string(),
+
+              // limit file editing to files and folders that match one of multiple glob patterns
+              z.array(z.string()),
+            ])
             .describe(
               'Allow file tree’s items to be edited by right clicking them. Supports file and folder creation.',
             ),

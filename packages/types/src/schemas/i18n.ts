@@ -73,6 +73,33 @@ export const i18nSchema = z.object({
     .describe("Text shown on file tree's context menu's folder creation button."),
 
   /**
+   * Text shown on dialog when user attempts to edit files that don't match allowed patterns.
+   *
+   * @default 'This action is not allowed'
+   */
+  fileTreeActionNotAllowedText: z
+    .string()
+    .optional()
+    .describe("Text shown on dialog when user attempts to edit files that don't match allowed patterns."),
+
+  /**
+   * Text shown on dialog describing allowed patterns when file or folder creation failed.
+   *
+   * @default 'Created files and folders must match following patterns:'
+   */
+  fileTreeAllowedPatternsText: z
+    .string()
+    .optional()
+    .describe('Text shown on dialog describing allowed patterns when file or folder creation failed.'),
+
+  /**
+   * Text shown on confirmation buttons on dialogs.
+   *
+   * @default 'OK'
+   */
+  confirmationText: z.string().optional().describe('Text shown on confirmation buttons on dialogs.'),
+
+  /**
    * Text shown on top of the steps section.
    *
    * @default 'Preparing Environment'

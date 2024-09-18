@@ -1,4 +1,4 @@
-import type { Lesson } from '@tutorialkit/types';
+import type { Lesson } from './entities/index.js';
 
 export const DEFAULT_LOCALIZATION = {
   partTemplate: 'Part ${index}: ${title}',
@@ -9,6 +9,9 @@ export const DEFAULT_LOCALIZATION = {
   filesTitleText: 'Files',
   fileTreeCreateFileText: 'Create file',
   fileTreeCreateFolderText: 'Create folder',
+  fileTreeActionNotAllowedText: 'This action is not allowed',
+  fileTreeAllowedPatternsText: 'Created files and folders must match following patterns:',
+  confirmationText: 'OK',
   prepareEnvironmentTitleText: 'Preparing Environment',
   defaultPreviewTitleText: 'Preview',
   reloadPreviewTitle: 'Reload Preview',

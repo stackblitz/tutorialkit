@@ -11,6 +11,7 @@ interface Props {
   selectedFile?: string;
   onFileSelect?: (filePath: string) => void;
   onFileChange?: ComponentProps<typeof ContextMenu>['onFileChange'];
+  allowEditPatterns?: ComponentProps<typeof ContextMenu>['allowEditPatterns'];
   i18n?: ComponentProps<typeof ContextMenu>['i18n'];
   hideRoot: boolean;
   scope?: string;
@@ -22,6 +23,7 @@ export function FileTree({
   files,
   onFileSelect,
   onFileChange,
+  allowEditPatterns,
   selectedFile,
   hideRoot,
   scope,
@@ -109,6 +111,7 @@ export function FileTree({
                 collapsed={collapsedFolders.has(fileOrFolder.id)}
                 onClick={() => toggleCollapseState(fileOrFolder.id)}
                 onFileChange={onFileChange}
+                allowEditPatterns={allowEditPatterns}
               />
             );
           }
@@ -121,6 +124,7 @@ export function FileTree({
         style={getDepthStyle(0)}
         directory=""
         onFileChange={onFileChange}
+        allowEditPatterns={allowEditPatterns}
         triggerProps={{ className: 'h-full', 'data-testid': 'file-tree-root-context-menu' }}
       />
     </div>
@@ -134,12 +138,26 @@ interface FolderProps {
   collapsed: boolean;
   onClick: () => void;
   onFileChange: Props['onFileChange'];
+  allowEditPatterns: Props['allowEditPatterns'];
   i18n: Props['i18n'];
 }
 
-function Folder({ folder: { depth, name, fullPath }, i18n, collapsed, onClick, onFileChange }: FolderProps) {
+function Folder({
+  folder: { depth, name, fullPath },
+  i18n,
+  collapsed,
+  onClick,
+  onFileChange,
+  allowEditPatterns,
+}: FolderProps) {
   return (
-    <ContextMenu onFileChange={onFileChange} i18n={i18n} directory={fullPath} style={getDepthStyle(1 + depth)}>
+    <ContextMenu
+      onFileChange={onFileChange}
+      allowEditPatterns={allowEditPatterns}
+      i18n={i18n}
+      directory={fullPath}
+      style={getDepthStyle(1 + depth)}
+    >
       <NodeButton
         className="group transition-theme bg-tk-elements-fileTree-folder-backgroundColor hover:bg-tk-elements-fileTree-folder-backgroundColorHover text-tk-elements-fileTree-folder-textColor hover:text-tk-elements-fileTree-folder-textColor"
         depth={depth}

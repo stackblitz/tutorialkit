@@ -1,4 +1,5 @@
 export * from './BootScreen.js';
+export * from './Button.js';
 export * from './Nav.js';
 export * from './Panels/EditorPanel.js';
 export * from './Panels/PreviewPanel.js';
