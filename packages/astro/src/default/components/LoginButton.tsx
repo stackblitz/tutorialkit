@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { classNames } from '@tutorialkit/react';
+import { Button } from '@tutorialkit/react';
 import { useEffect, useRef, useState } from 'react';
 import { authStore } from '../stores/auth-store';
 import { login, logout } from './webcontainer';
@@ -48,21 +48,8 @@ export function LoginButton() {
   }, [authStatus.status]);
 
   return (
-    <button
-      className={classNames('flex font-500 disabled:opacity-32 items-center text-sm ml-2 px-4 py-1 rounded-md', {
-        'bg-tk-elements-topBar-primaryButton-backgroundColor text-tk-elements-topBar-primaryButton-textColor':
-          showLogin,
-        'bg-tk-elements-topBar-secondaryButton-backgroundColor text-tk-elements-topBar-secondaryButton-textColor':
-          !showLogin,
-        'hover:bg-tk-elements-topBar-primaryButton-backgroundColorHover hover:text-tk-elements-topBar-primaryButton-textColorHover':
-          !disabled && showLogin,
-        'hover:bg-tk-elements-topBar-secondaryButton-backgroundColorHover hover:text-tk-elements-topBar-secondaryButton-textColorHover':
-          !disabled && !showLogin,
-      })}
-      disabled={disabled}
-      onClick={onClick}
-    >
+    <Button variant={showLogin ? 'primary' : 'secondary'} disabled={disabled} onClick={onClick}>
       {showLogin ? 'Login' : 'Logout'}
-    </button>
+    </Button>
   );
 }

@@ -3,6 +3,8 @@ import * as RadixDialog from '@radix-ui/react-dialog';
 import { DEFAULT_LOCALIZATION, type FileDescriptor, type I18n } from '@tutorialkit/types';
 import picomatch from 'picomatch/posix';
 import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
+import { Button } from '../Button.js';
+import { classNames } from '../utils/classnames.js';
 
 interface FileChangeEvent {
   type: FileDescriptor['type'];
@@ -19,7 +21,7 @@ interface Props extends ComponentProps<'div'> {
   /** Callback invoked when file is changed. */
   onFileChange?: (event: FileChangeEvent | FileRenameEvent) => void;
 
-  /** Glob patterns for paths that allow editing files and folders. Defaults to `['**']`. */
+  /** Glob patterns for paths that allow editing files and folders. Disabled by default. */
   allowEditPatterns?: string[];
 
   /** Directory of the clicked file. */
@@ -43,7 +45,7 @@ interface Props extends ComponentProps<'div'> {
 
 export function ContextMenu({
   onFileChange,
-  allowEditPatterns = ['**'],
+  allowEditPatterns,
   directory,
   i18n,
   position = 'before',
@@ -54,7 +56,7 @@ export function ContextMenu({
   const [state, setState] = useState<'idle' | 'add_file' | 'add_folder' | 'add_failed'>('idle');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (!onFileChange) {
+  if (!onFileChange || !allowEditPatterns?.length) {
     return children;
   }
 
@@ -67,7 +69,7 @@ export function ContextMenu({
 
     if (name) {
       const value = `${directory}/${name}`;
-      const isAllowed = picomatch.isMatch(value, allowEditPatterns);
+      const isAllowed = picomatch.isMatch(value, allowEditPatterns!);
 
       if (isAllowed) {
         onFileChange?.({
@@ -143,7 +145,7 @@ export function ContextMenu({
           onClose={() => setState('idle')}
         >
           {i18n?.fileTreeAllowedPatternsText || DEFAULT_LOCALIZATION.fileTreeAllowedPatternsText}
-          <ul className="list-disc ml-4 mt-2">
+          <ul className={classNames('mt-2', allowEditPatterns.length > 1 && 'list-disc ml-4')}>
             {allowEditPatterns.map((pattern) => (
               <li key={pattern} className="mb-1">
                 <code>{pattern}</code>
@@ -180,7 +182,9 @@ function Dialog({ title, onClose, children }: { title: string; onClose: () => vo
 
             <div className="my-4">{children}</div>
 
-            <RadixDialog.Close className="px-3 py-1 border border-tk-border-primary rounded">OK</RadixDialog.Close>
+            <RadixDialog.Close asChild>
+              <Button>OK</Button>
+            </RadixDialog.Close>
           </div>
         </RadixDialog.Content>
       </RadixDialog.Portal>
