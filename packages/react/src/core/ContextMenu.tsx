@@ -1,6 +1,6 @@
 import { Root, Portal, Content, Item, Trigger } from '@radix-ui/react-context-menu';
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { interpolateString, type FileDescriptor, type I18n } from '@tutorialkit/types';
+import { DEFAULT_LOCALIZATION, type FileDescriptor, type I18n } from '@tutorialkit/types';
 import picomatch from 'picomatch/posix';
 import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
 
@@ -33,8 +33,7 @@ interface Props extends ComponentProps<'div'> {
     I18n,
     | 'fileTreeCreateFileText'
     | 'fileTreeCreateFolderText'
-    | 'fileTreeFailedToCreateFileText'
-    | 'fileTreeFailedToCreateFolderText'
+    | 'fileTreeActionNotAllowedText'
     | 'fileTreeAllowedPatternsText'
   >;
 
@@ -42,29 +41,18 @@ interface Props extends ComponentProps<'div'> {
   triggerProps?: ComponentProps<'div'> & { 'data-testid'?: string };
 }
 
-const i18nDefaults = {
-  fileTreeFailedToCreateFileText: 'Failed to create file "${filename}".',
-  fileTreeFailedToCreateFolderText: 'Failed to create folder "${filename}".',
-  fileTreeCreateFileText: 'Create file',
-  fileTreeCreateFolderText: 'Create folder',
-  fileTreeAllowedPatternsText: 'Allowed patterns are:',
-} as const satisfies Props['i18n'];
-
 export function ContextMenu({
   onFileChange,
   allowEditPatterns = ['**'],
   directory,
-  i18n: i18nProps,
+  i18n,
   position = 'before',
   children,
   triggerProps,
   ...props
 }: Props) {
-  const [state, setState] = useState<'idle' | 'add_file' | 'add_folder' | { error: string }>('idle');
+  const [state, setState] = useState<'idle' | 'add_file' | 'add_folder' | 'add_failed'>('idle');
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const error = typeof state === 'string' ? false : state.error;
-  const i18n = { ...i18nProps, ...i18nDefaults };
 
   if (!onFileChange) {
     return children;
@@ -80,18 +68,15 @@ export function ContextMenu({
     if (name) {
       const value = `${directory}/${name}`;
       const isAllowed = picomatch.isMatch(value, allowEditPatterns);
-      const isFile = state === 'add_file';
 
       if (isAllowed) {
         onFileChange?.({
           value,
-          type: isFile ? 'file' : 'folder',
+          type: state === 'add_file' ? 'file' : 'folder',
           method: 'add',
         });
       } else {
-        const text = isFile ? i18n.fileTreeFailedToCreateFileText : i18n.fileTreeFailedToCreateFolderText;
-
-        return setState({ error: interpolateString(text, { filename: value }) });
+        return setState('add_failed');
       }
     }
 
@@ -143,29 +128,28 @@ export function ContextMenu({
           className="border border-tk-border-brighter b-rounded-md bg-tk-background-brighter py-2"
         >
           <MenuItem icon="i-ph-file-plus" onClick={() => setState('add_file')}>
-            {i18n.fileTreeCreateFileText}
+            {i18n?.fileTreeCreateFileText || DEFAULT_LOCALIZATION.fileTreeCreateFileText}
           </MenuItem>
 
           <MenuItem icon="i-ph-folder-plus" onClick={() => setState('add_folder')}>
-            {i18n.fileTreeCreateFolderText}
+            {i18n?.fileTreeCreateFolderText || DEFAULT_LOCALIZATION.fileTreeCreateFolderText}
           </MenuItem>
         </Content>
       </Portal>
 
-      {error && (
-        <Dialog onClose={() => setState('idle')}>
-          <p className="mb-2">{error}</p>
-
-          <div>
-            {i18n.fileTreeAllowedPatternsText}
-            <ul className="list-disc ml-4 mt-2">
-              {allowEditPatterns.map((pattern) => (
-                <li key={pattern}>
-                  <code>{pattern}</code>
-                </li>
-              ))}
-            </ul>
-          </div>
+      {state === 'add_failed' && (
+        <Dialog
+          title={i18n?.fileTreeActionNotAllowedText || DEFAULT_LOCALIZATION.fileTreeActionNotAllowedText}
+          onClose={() => setState('idle')}
+        >
+          {i18n?.fileTreeAllowedPatternsText || DEFAULT_LOCALIZATION.fileTreeAllowedPatternsText}
+          <ul className="list-disc ml-4 mt-2">
+            {allowEditPatterns.map((pattern) => (
+              <li key={pattern} className="mb-1">
+                <code>{pattern}</code>
+              </li>
+            ))}
+          </ul>
         </Dialog>
       )}
     </Root>
@@ -184,21 +168,19 @@ function MenuItem({ icon, children, ...props }: { icon: string } & ComponentProp
   );
 }
 
-function Dialog({ onClose, children }: { onClose: () => void; children: ReactNode }) {
+function Dialog({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   return (
     <RadixDialog.Root open={true} onOpenChange={(open) => !open && onClose()}>
       <RadixDialog.Portal>
         <RadixDialog.Overlay className="fixed inset-0 opacity-50 bg-black" />
 
-        <RadixDialog.Content className="fixed top-50% left-50% transform-translate--50% w-90vw max-w-450px max-h-85vh rounded-xl text-tk-text-primary bg-tk-background-negative">
+        <RadixDialog.Content className="fixed top-50% left-50% transform-translate--50% w-90vw max-w-450px max-h-85vh rounded-xl text-tk-text-primary bg-tk-background-primary">
           <div className="relative py-4 px-10">
-            <RadixDialog.Title className="text-6 mb-2">Error</RadixDialog.Title>
+            <RadixDialog.Title className="text-6">{title}</RadixDialog.Title>
 
-            {children}
+            <div className="my-4">{children}</div>
 
-            <RadixDialog.Close title="Close" className="absolute top-4 right-4 w-6 h-6">
-              <span aria-hidden className="i-ph-x block w-full h-full"></span>
-            </RadixDialog.Close>
+            <RadixDialog.Close className="px-3 py-1 border border-tk-border-primary rounded">OK</RadixDialog.Close>
           </div>
         </RadixDialog.Content>
       </RadixDialog.Portal>

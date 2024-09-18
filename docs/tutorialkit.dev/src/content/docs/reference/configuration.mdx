@@ -99,23 +99,16 @@ type I18nText = {
   fileTreeCreateFolderText?: string,
 
   /**
-   * Text shown on dialog when file creation failed. Variables: ${filename}.
+   * Text shown on dialog when user attempts to edit files that don't match allowed patterns.
    *
-   * @default 'Failed to create file "${filename}".'
+   * @default 'This action is not allowed'
    */
-  fileTreeFailedToCreateFileText?: string,
-
-  /**
-   * Text shown on dialog when folder creation failed. Variables: ${filename}.
-   *
-   * @default 'Failed to create folder "${filename}".'
-   */
-  fileTreeFailedToCreateFolderText?: string,
+  fileTreeActionNotAllowed?: string,
 
   /**
    * Text shown on dialog describing allowed patterns when file or folder createion failed.
    *
-   * @default 'Allowed patterns are:'
+   * @default 'Created files and folders must match following patterns:'
    */
   fileTreeAllowedPatternsText?: string,
 
