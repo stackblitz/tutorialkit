@@ -1,9 +1,7 @@
 ---
 type: lesson
-title: Watch
+title: No watch
 focus: /bar.txt
-filesystem:
-  watch: true
 ---
 
 import { ButtonWriteToFile } from '@components/ButtonWriteToFile';
@@ -11,4 +9,3 @@ import { ButtonWriteToFile } from '@components/ButtonWriteToFile';
 # Watch filesystem test
 
 <ButtonWriteToFile client:load access="webcontainer" filePath="/bar.txt" newContent='Something else' />
-<ButtonWriteToFile client:load access="webcontainer" filePath="/a/b/baz.txt" newContent='Foo' testId='write-to-file-in-subfolder' />

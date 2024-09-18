@@ -33,3 +33,20 @@ test('editor should reflect changes made from webcontainer in file in nested fol
     useInnerText: true,
   });
 });
+
+test('editor should not reflect changes made from webcontainer if watch is not set', async ({ page }) => {
+  const testCase = 'no-watch';
+  await page.goto(`${BASE_URL}/${testCase}`);
+
+  await expect(page.getByRole('textbox', { name: 'Editor' })).toHaveText('Initial content\n', {
+    useInnerText: true,
+  });
+
+  await page.getByTestId('write-to-file').click();
+
+  await page.waitForTimeout(1_000);
+
+  await expect(page.getByRole('textbox', { name: 'Editor' })).toHaveText('Initial content\n', {
+    useInnerText: true,
+  });
+});
