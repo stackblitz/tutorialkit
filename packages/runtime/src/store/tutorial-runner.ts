@@ -592,6 +592,14 @@ export class TutorialRunner {
       });
     };
 
+    /**
+     * Add a file to the list of files to read and schedule a read for later, effectively debouncing the reads.
+     *
+     * This does not cancel any existing requests because those are expected to be completed really
+     * fast. However every read request allocate memory that needs to be freed. The reason we debounce
+     * is to avoid running into OOM issues (which has happened in the past) and give time to the GC to
+     * cleanup the allocated buffers.
+     */
     const scheduleReadFor = (filePath: string, encoding: 'utf-8' | null) => {
       filesToRead.set(filePath, encoding);
 

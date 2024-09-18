@@ -1,0 +1,12 @@
+---
+type: lesson
+title: Watch
+focus: /bar.txt
+---
+
+import { ButtonWriteToFile } from '@components/ButtonWriteToFile';
+
+# Watch filesystem test
+
+<ButtonWriteToFile client:load access="webcontainer" filePath="/bar.txt" newContent='Something else' />
+<ButtonWriteToFile client:load access="webcontainer" filePath="/a/b/baz.txt" newContent='Foo' testId='write-to-file-in-subfolder' />

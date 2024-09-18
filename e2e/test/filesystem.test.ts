@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = '/tests/filesystem-sync';
+const BASE_URL = '/tests/filesystem';
 
 test('editor should reflect changes made from webcontainer', async ({ page }) => {
-  const testCase = 'happy-path';
+  const testCase = 'watch';
   await page.goto(`${BASE_URL}/${testCase}`);
 
   await expect(page.getByRole('textbox', { name: 'Editor' })).toHaveText('Initial content\n', {
@@ -18,7 +18,7 @@ test('editor should reflect changes made from webcontainer', async ({ page }) =>
 });
 
 test('editor should reflect changes made from webcontainer in file in nested folder', async ({ page }) => {
-  const testCase = 'happy-path';
+  const testCase = 'watch';
   await page.goto(`${BASE_URL}/${testCase}`);
 
   await page.getByRole('button', { name: 'baz.txt' }).click();
