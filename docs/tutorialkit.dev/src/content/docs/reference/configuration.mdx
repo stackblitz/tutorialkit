@@ -85,6 +85,34 @@ type I18nText = {
   filesTitleText?: string,
 
   /**
+   * Text shown on file tree's context menu's file creation button.
+   *
+   * @default 'Create file'
+   */
+  fileTreeCreateFileText?: string,
+
+  /**
+   * Text shown on file tree's context menu's folder creation button.
+   *
+   * @default 'Create folder'
+   */
+  fileTreeCreateFolderText?: string,
+
+  /**
+   * Text shown on dialog when user attempts to edit files that don't match allowed patterns.
+   *
+   * @default 'This action is not allowed'
+   */
+  fileTreeActionNotAllowed?: string,
+
+  /**
+   * Text shown on dialog describing allowed patterns when file or folder createion failed.
+   *
+   * @default 'Created files and folders must match following patterns:'
+   */
+  fileTreeAllowedPatternsText?: string,
+
+  /**
    * Text shown on top of the steps section.
    *
    * @default 'Preparing Environment'
@@ -144,9 +172,11 @@ File tree can be set to allow file editing from right clicks by setting `fileTre
 The `Editor` type has the following shape:
 
 ```ts
+type GlobPattern = string
+
 type Editor =
     | false
-    | { editor: { allowEdits: boolean } }
+    | { editor: { allowEdits: boolean | GlobPattern | GlobPattern[] } }
 
 ```
 
@@ -161,6 +191,18 @@ editor: # Editor is visible
 editor: # Editor is visible
   fileTree: # File tree is visible
     allowEdits: true # User can add new files and folders from the file tree
+
+
+editor: # Editor is visible
+  fileTree: # File tree is visible
+    allowEdits: "/src/**" # User can add files and folders anywhere inside "/src/"
+
+editor: # Editor is visible
+  fileTree: # File tree is visible
+    allowEdits:
+      - "/*" # User can add files and folders directly in the root
+      - "/first-level/allowed-filename-only.js" # Only "allowed-filename-only.js" inside "/first-level" folder
+      - "**/second-level/**" # Anything inside "second-level" folders anywhere
 ```
 
 ##### `previews`

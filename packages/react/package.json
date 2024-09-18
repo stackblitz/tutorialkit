@@ -75,6 +75,7 @@
     "@nanostores/react": "0.7.2",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-context-menu": "^2.2.1",
+    "@radix-ui/react-dialog": "^1.1.1",
     "@replit/codemirror-lang-svelte": "^6.0.0",
     "@tutorialkit/runtime": "workspace:*",
     "@tutorialkit/theme": "workspace:*",
@@ -85,12 +86,14 @@
     "codemirror": "^6.0.1",
     "framer-motion": "^11.2.11",
     "nanostores": "^0.10.3",
+    "picomatch": "^4.0.2",
     "react": "^18.3.1",
     "react-resizable-panels": "^2.0.19"
   },
   "devDependencies": {
     "@codemirror/search": "^6.5.6",
     "@tutorialkit/types": "workspace:*",
+    "@types/picomatch": "^3.0.1",
     "@types/react": "^18.3.3",
     "chokidar": "3.6.0",
     "execa": "^9.2.0",

@@ -160,7 +160,8 @@ function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
         helpAction={helpAction}
         onHelpClick={lessonFullyLoaded ? onHelpClick : undefined}
         onFileSelect={(filePath) => tutorialStore.setSelectedFile(filePath)}
-        onFileTreeChange={editorConfig.fileTree.allowEdits ? onFileTreeChange : undefined}
+        onFileTreeChange={onFileTreeChange}
+        allowEditPatterns={editorConfig.fileTree.allowEdits || undefined}
         selectedFile={selectedFile}
         onEditorScroll={(position) => tutorialStore.setCurrentDocumentScrollPosition(position)}
         onEditorChange={(update) => tutorialStore.setCurrentDocumentContent(update.content)}
