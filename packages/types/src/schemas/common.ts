@@ -55,6 +55,15 @@ export const previewSchema = z.union([
 
 export type PreviewSchema = z.infer<typeof previewSchema>;
 
+export const fileSystemSchema = z.object({
+  watch: z
+    .boolean()
+    .optional()
+    .describe('When set to true, file changes in WebContainer are updated in the editor as well.'),
+});
+
+export type FileSystemSchema = z.infer<typeof fileSystemSchema>;
+
 const panelTypeSchema = z
   .union([z.literal('output'), z.literal('terminal')])
   .describe(`The type of the terminal which can either be 'output' or 'terminal'.`);
@@ -208,6 +217,11 @@ export const webcontainerSchema = commandsSchema.extend({
     .optional()
     .describe(
       'Navigating to a lesson that specifies autoReload will always reload the preview. This is typically only needed if your server does not support HMR.',
+    ),
+  filesystem: fileSystemSchema
+    .optional()
+    .describe(
+      'Configure how changes happening on the filesystem should impact the Tutorial. For instance, when new files are being changed, whether those change should be reflected in the editor.',
     ),
   template: z
     .string()

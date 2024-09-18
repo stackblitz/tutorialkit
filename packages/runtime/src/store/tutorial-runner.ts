@@ -1,11 +1,13 @@
 import type { CommandsSchema, Files } from '@tutorialkit/types';
-import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
-import type { TerminalStore } from './store/terminal.js';
-import { newTask, type Task, type TaskCancelled } from './tasks.js';
-import { clearTerminal, escapeCodes, type ITerminal } from './utils/terminal.js';
-import { Command, Commands } from './webcontainer/command.js';
-import { StepsController } from './webcontainer/steps.js';
-import { diffFiles, toFileTree } from './webcontainer/utils/files.js';
+import type { IFSWatcher, WebContainer, WebContainerProcess } from '@webcontainer/api';
+import { newTask, type Task, type TaskCancelled } from '../tasks.js';
+import { MultiCounter } from '../utils/multi-counter.js';
+import { clearTerminal, escapeCodes, type ITerminal } from '../utils/terminal.js';
+import { Command, Commands } from '../webcontainer/command.js';
+import { StepsController } from '../webcontainer/steps.js';
+import { diffFiles, toFileTree } from '../webcontainer/utils/files.js';
+import type { EditorStore } from './editor.js';
+import type { TerminalStore } from './terminal.js';
 
 interface LoadFilesOptions {
   /**
@@ -60,6 +62,12 @@ export class TutorialRunner {
   private _currentTemplate: Files | undefined = undefined;
   private _currentFiles: Files | undefined = undefined;
   private _currentRunCommands: Commands | undefined = undefined;
+
+  private _ignoreFileEvents = new MultiCounter();
+  private _watcher: IFSWatcher | undefined;
+  private _watchContentFromWebContainer = false;
+  private _readyToWatch = false;
+
   private _packageJsonDirty = false;
   private _commandsChanged = false;
 
@@ -70,8 +78,19 @@ export class TutorialRunner {
   constructor(
     private _webcontainer: Promise<WebContainer>,
     private _terminalStore: TerminalStore,
+    private _editorStore: EditorStore,
     private _stepController: StepsController,
   ) {}
+
+  setWatchFromWebContainer(value: boolean) {
+    this._watchContentFromWebContainer = value;
+
+    if (this._readyToWatch && this._watchContentFromWebContainer) {
+      this._webcontainer.then((webcontainer) => this._setupWatcher(webcontainer));
+    } else if (!this._watchContentFromWebContainer) {
+      this._stopWatcher();
+    }
+  }
 
   /**
    * Set the commands to run. This updates the reported `steps` if any have changed.
@@ -109,6 +128,8 @@ export class TutorialRunner {
 
         signal.throwIfAborted();
 
+        this._ignoreFileEvents.increment(folderPath);
+
         await webcontainer.fs.mkdir(folderPath);
       },
       { ignoreCancel: true },
@@ -131,6 +152,8 @@ export class TutorialRunner {
         const webcontainer = await this._webcontainer;
 
         signal.throwIfAborted();
+
+        this._ignoreFileEvents.increment(filePath);
 
         await webcontainer.fs.writeFile(filePath, content);
 
@@ -155,6 +178,8 @@ export class TutorialRunner {
         const webcontainer = await this._webcontainer;
 
         signal.throwIfAborted();
+
+        this._ignoreFileEvents.increment(Object.keys(files));
 
         await webcontainer.mount(toFileTree(files));
 
@@ -184,6 +209,12 @@ export class TutorialRunner {
     this._currentLoadTask = newTask(
       async (signal) => {
         await previousLoadPromise;
+
+        // no watcher should be installed
+        this._readyToWatch = false;
+
+        // stop current watcher if they are any
+        this._stopWatcher();
 
         const webcontainer = await this._webcontainer;
 
@@ -375,7 +406,7 @@ export class TutorialRunner {
     const abortListener = () => this._currentCommandProcess?.kill();
     signal.addEventListener('abort', abortListener, { once: true });
 
-    const hasMainCommand = !!commands.mainCommand;
+    let shouldClearDirtyFlag = true;
 
     try {
       const commandList = [...commands];
@@ -419,6 +450,9 @@ export class TutorialRunner {
         }
 
         if (isMainCommand) {
+          shouldClearDirtyFlag = false;
+
+          this._setupWatcher(webcontainer);
           this._clearDirtyState();
         }
 
@@ -431,6 +465,13 @@ export class TutorialRunner {
           });
 
           this._stepController.skipRemaining(index + 1);
+
+          /**
+           * We don't clear the dirty flag in that case as there was an error and re-running all commands
+           * is the probably better than not running anything.
+           */
+          shouldClearDirtyFlag = false;
+
           break;
         } else {
           this._stepController.updateStep(index, {
@@ -447,9 +488,17 @@ export class TutorialRunner {
         }
       }
 
-      if (!hasMainCommand) {
+      /**
+       * All commands were run but we didn't clear the dirty state.
+       * We have to, otherwise we would re-run those commands when moving
+       * to a lesson that has the exact same set of commands.
+       */
+      if (shouldClearDirtyFlag) {
         this._clearDirtyState();
       }
+
+      // make sure the watcher is configured
+      this._setupWatcher(webcontainer);
     } finally {
       signal.removeEventListener('abort', abortListener);
     }
@@ -501,6 +550,85 @@ export class TutorialRunner {
     }
 
     this._updateDirtyState(files);
+  }
+
+  private _stopWatcher(): void {
+    // if there was a watcher terminate it
+    if (this._watcher) {
+      this._watcher.close();
+      this._watcher = undefined;
+    }
+  }
+
+  private _setupWatcher(webcontainer: WebContainer) {
+    // inform that the watcher could be installed if we wanted to
+    this._readyToWatch = true;
+
+    // if the watcher is alreay setup or we don't sync content we exit
+    if (this._watcher || !this._watchContentFromWebContainer) {
+      return;
+    }
+
+    const filesToRead = new Map<string, 'utf-8' | null>();
+
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+    const readFiles = () => {
+      const files = [...filesToRead.entries()];
+
+      filesToRead.clear();
+
+      Promise.all(
+        files.map(async ([filePath, encoding]) => {
+          // casts could be removed with an `if` but it feels weird
+          const content = (await webcontainer.fs.readFile(filePath, encoding as any)) as Uint8Array | string;
+
+          return [filePath, content] as const;
+        }),
+      ).then((fileContents) => {
+        for (const [filePath, content] of fileContents) {
+          this._editorStore.updateFile(filePath, content);
+        }
+      });
+    };
+
+    /**
+     * Add a file to the list of files to read and schedule a read for later, effectively debouncing the reads.
+     *
+     * This does not cancel any existing requests because those are expected to be completed really
+     * fast. However every read request allocate memory that needs to be freed. The reason we debounce
+     * is to avoid running into OOM issues (which has happened in the past) and give time to the GC to
+     * cleanup the allocated buffers.
+     */
+    const scheduleReadFor = (filePath: string, encoding: 'utf-8' | null) => {
+      filesToRead.set(filePath, encoding);
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(readFiles, 100);
+    };
+
+    this._watcher = webcontainer.fs.watch('.', { recursive: true }, (eventType, filename) => {
+      const filePath = `/${filename}`;
+
+      // events we should ignore because we caused them in the TutorialRunner
+      if (!this._ignoreFileEvents.decrement(filePath)) {
+        return;
+      }
+
+      // for now we only care about 'change' event
+      if (eventType !== 'change') {
+        return;
+      }
+
+      // we ignore all paths that aren't exposed in the `_editorStore`
+      const file = this._editorStore.documents.get()[filePath];
+
+      if (!file) {
+        return;
+      }
+
+      scheduleReadFor(filePath, typeof file.value === 'string' ? 'utf-8' : null);
+    });
   }
 
   private _clearDirtyState() {
