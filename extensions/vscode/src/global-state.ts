@@ -1,6 +1,6 @@
 import type { TreeView } from 'vscode';
-import type { LessonsTreeDataProvider } from './views/lessonsTree';
 import type { Node } from './models/Node';
+import type { LessonsTreeDataProvider } from './views/lessonsTree';
 
 let lessonsTreeDataProvider: LessonsTreeDataProvider;
 let lessonsTreeView: TreeView<Node>;

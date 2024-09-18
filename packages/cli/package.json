@@ -53,7 +53,7 @@
     "esbuild-node-externals": "^1.13.1",
     "fs-extra": "^11.2.0",
     "tempy": "^3.1.0",
-    "vitest": "^1.6.0"
+    "vitest": "^2.1.1"
   },
   "engines": {
     "node": ">=18.18.0"

@@ -1,7 +1,7 @@
-import * as prompts from '@clack/prompts';
-import chalk from 'chalk';
 import fs from 'node:fs';
 import path from 'node:path';
+import * as prompts from '@clack/prompts';
+import chalk from 'chalk';
 import { pkg } from '../../pkg.js';
 import { warnLabel } from '../../utils/messages.js';
 import { runShellCommand } from '../../utils/shell.js';

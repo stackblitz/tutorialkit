@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import type { Step, TutorialStore } from '@tutorialkit/runtime';
+import { useEffect, useState } from 'react';
 import { classNames } from './utils/classnames.js';
 
 interface Props {

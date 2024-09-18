@@ -1,9 +1,9 @@
 import * as serverProtocol from '@volar/language-server/protocol';
 import { createLabsInfo } from '@volar/vscode';
 import * as vscode from 'vscode';
+import * as lsp from 'vscode-languageclient/node';
 import { useCommands } from './commands';
 import { useLessonTree } from './views/lessonsTree';
-import * as lsp from 'vscode-languageclient/node';
 
 export let extContext: vscode.ExtensionContext;
 

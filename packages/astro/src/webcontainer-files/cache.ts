@@ -1,6 +1,6 @@
+import path from 'node:path';
 import type { AstroIntegrationLogger } from 'astro';
 import { dim } from 'kleur/colors';
-import path from 'node:path';
 import type { ViteDevServer } from '../types.js';
 import { withResolvers } from '../utils.js';
 import { FILES_FOLDER_NAME, SOLUTION_FOLDER_NAME } from './constants.js';

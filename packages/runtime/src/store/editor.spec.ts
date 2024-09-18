@@ -1,7 +1,7 @@
+import type { FileDescriptor } from '@tutorialkit/types';
 import { expect, test } from 'vitest';
 
 import { EditorStore } from './editor.js';
-import type { FileDescriptor } from '@tutorialkit/types';
 
 test('empty directories are removed when new content is added', () => {
   const store = new EditorStore();

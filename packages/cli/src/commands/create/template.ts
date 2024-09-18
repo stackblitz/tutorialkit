@@ -1,8 +1,8 @@
-import * as prompts from '@clack/prompts';
-import ignore from 'ignore';
 import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';
+import * as prompts from '@clack/prompts';
+import ignore from 'ignore';
 import { warnLabel } from '../../utils/messages.js';
 import { templatePath, type CreateOptions } from './options.js';
 

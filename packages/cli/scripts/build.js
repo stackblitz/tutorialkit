@@ -1,6 +1,6 @@
+import fs from 'node:fs';
 import esbuild from 'esbuild';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
-import fs from 'node:fs';
 import { distFolder, outDir } from './_constants.js';
 
 const isWatch = process.argv.includes('--watch');

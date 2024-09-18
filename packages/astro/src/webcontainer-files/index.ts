@@ -1,8 +1,8 @@
-import { FSWatcher, watch } from 'chokidar';
-import { dim } from 'kleur/colors';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { FSWatcher, watch } from 'chokidar';
+import { dim } from 'kleur/colors';
 import type { AstroBuildDoneOptions, AstroServerSetupOptions } from '../types.js';
 import { FilesMapCache } from './cache.js';
 import { FILES_FOLDER_NAME, IGNORED_FILES, SOLUTION_FOLDER_NAME } from './constants.js';

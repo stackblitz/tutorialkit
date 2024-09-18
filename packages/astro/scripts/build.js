@@ -1,11 +1,11 @@
 import assert from 'node:assert';
-import path from 'node:path';
 import { existsSync, rmSync, copyFileSync } from 'node:fs';
 import { cp, rm } from 'node:fs/promises';
-import { execa } from 'execa';
+import path from 'node:path';
 import chokidar from 'chokidar';
 import esbuild from 'esbuild';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
+import { execa } from 'execa';
 
 const isWatch = process.argv.includes('--watch');
 
@@ -46,6 +46,7 @@ async function buildJS() {
     outdir: 'dist',
     define: {
       'process.env.TUTORIALKIT_DEV': JSON.stringify(process.env.TUTORIALKIT_DEV ?? null),
+      'process.env.TUTORIALKIT_VITE_INSPECT': JSON.stringify(process.env.TUTORIALKIT_VITE_INSPECT ?? null),
     },
     plugins: [nodeExternalsPlugin()],
   });

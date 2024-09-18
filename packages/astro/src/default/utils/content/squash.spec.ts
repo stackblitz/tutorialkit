@@ -1,5 +1,5 @@
-import { describe, it, test, expect } from 'vitest';
 import type { Lesson } from '@tutorialkit/types';
+import { describe, it, test, expect } from 'vitest';
 import { squash } from './squash.js';
 
 type Metadata = Partial<Lesson['data']>;

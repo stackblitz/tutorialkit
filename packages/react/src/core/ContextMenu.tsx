@@ -1,8 +1,8 @@
-import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
 import { Root, Portal, Content, Item, Trigger } from '@radix-ui/react-context-menu';
 import * as RadixDialog from '@radix-ui/react-dialog';
-import picomatch from 'picomatch/posix';
 import { interpolateString, type FileDescriptor, type I18n } from '@tutorialkit/types';
+import picomatch from 'picomatch/posix';
+import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
 
 interface FileChangeEvent {
   type: FileDescriptor['type'];

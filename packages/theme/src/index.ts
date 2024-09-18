@@ -1,12 +1,12 @@
 import fs from 'node:fs/promises';
-import { basename, dirname, resolve } from 'node:path';
 import { createRequire } from 'node:module';
+import { basename, dirname, resolve } from 'node:path';
 import * as fastGlob from 'fast-glob';
 import { mergeConfigs, presetIcons, presetUno, transformerDirectives, type UserConfig } from 'unocss';
 
-import { toCSSRules } from './utils.js';
 import { theme } from './theme.js';
 import { transitionTheme } from './transition-theme.js';
+import { toCSSRules } from './utils.js';
 
 const { globSync, convertPathToPattern } = fastGlob.default;
 const require = createRequire(import.meta.url);
