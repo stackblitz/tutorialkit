@@ -1,6 +1,6 @@
 import { Root, Portal, Content, Item, Trigger } from '@radix-ui/react-context-menu';
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { DEFAULT_LOCALIZATION, type FileDescriptor, type I18n } from '@tutorialkit/types';
+import { DEFAULT_LOCALIZATION, type FileDescriptor, type I18n, type FilesystemError } from '@tutorialkit/types';
 import picomatch from 'picomatch/posix';
 import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
 import { Button } from '../Button.js';
@@ -18,8 +18,8 @@ interface FileRenameEvent extends FileChangeEvent {
 }
 
 interface Props extends ComponentProps<'div'> {
-  /** Callback invoked when file is changed. */
-  onFileChange?: (event: FileChangeEvent | FileRenameEvent) => void;
+  /** Callback invoked when file is changed. This callback should throw errors with {@link FilesystemError} messages. */
+  onFileChange?: (event: FileChangeEvent | FileRenameEvent) => Promise<void>;
 
   /** Glob patterns for paths that allow editing files and folders. Disabled by default. */
   allowEditPatterns?: string[];
@@ -37,6 +37,7 @@ interface Props extends ComponentProps<'div'> {
     | 'fileTreeCreateFolderText'
     | 'fileTreeActionNotAllowedText'
     | 'fileTreeAllowedPatternsText'
+    | 'fileTreeFileExistsAlreadyText'
     | 'confirmationText'
   >;
 
@@ -54,14 +55,16 @@ export function ContextMenu({
   triggerProps,
   ...props
 }: Props) {
-  const [state, setState] = useState<'idle' | 'add_file' | 'add_folder' | 'add_failed'>('idle');
+  const [state, setState] = useState<
+    'idle' | 'add_file' | 'add_folder' | 'add_failed_not_allowed' | 'add_failed_exists'
+  >('idle');
   const inputRef = useRef<HTMLInputElement>(null);
 
   if (!allowEditPatterns?.length) {
     return children;
   }
 
-  function onFileNameEnd(event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>) {
+  async function onFileNameEnd(event: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>) {
     if (state !== 'add_file' && state !== 'add_folder') {
       return;
     }
@@ -72,14 +75,22 @@ export function ContextMenu({
       const value = `${directory}/${name}`;
       const isAllowed = picomatch.isMatch(value, allowEditPatterns!);
 
-      if (isAllowed) {
-        onFileChange?.({
+      if (!isAllowed) {
+        return setState('add_failed_not_allowed');
+      }
+
+      try {
+        await onFileChange?.({
           value,
           type: state === 'add_file' ? 'file' : 'folder',
           method: 'add',
         });
-      } else {
-        return setState('add_failed');
+      } catch (error: any) {
+        const message: FilesystemError | (string & {}) | undefined = error?.message;
+
+        if (message === 'FILE_EXISTS' || message === 'FOLDER_EXISTS') {
+          return setState('add_failed_exists');
+        }
       }
     }
 
@@ -140,20 +151,20 @@ export function ContextMenu({
         </Content>
       </Portal>
 
-      {state === 'add_failed' && (
+      {(state === 'add_failed_not_allowed' || state === 'add_failed_exists') && (
         <Dialog
           title={i18n?.fileTreeActionNotAllowedText || DEFAULT_LOCALIZATION.fileTreeActionNotAllowedText}
           confirmText={i18n?.confirmationText || DEFAULT_LOCALIZATION.confirmationText}
           onClose={() => setState('idle')}
         >
-          {i18n?.fileTreeAllowedPatternsText || DEFAULT_LOCALIZATION.fileTreeAllowedPatternsText}
-          <ul className={classNames('mt-2', allowEditPatterns.length > 1 && 'list-disc ml-4')}>
-            {allowEditPatterns.map((pattern) => (
-              <li key={pattern} className="mb-1">
-                <code>{pattern}</code>
-              </li>
-            ))}
-          </ul>
+          {state === 'add_failed_not_allowed' ? (
+            <>
+              {i18n?.fileTreeAllowedPatternsText || DEFAULT_LOCALIZATION.fileTreeAllowedPatternsText}
+              <AllowPatternsList allowEditPatterns={allowEditPatterns} />
+            </>
+          ) : (
+            <>{i18n?.fileTreeFileExistsAlreadyText || DEFAULT_LOCALIZATION.fileTreeFileExistsAlreadyText}</>
+          )}
         </Dialog>
       )}
     </Root>
@@ -201,5 +212,17 @@ function Dialog({
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
+  );
+}
+
+function AllowPatternsList({ allowEditPatterns }: Required<Pick<Props, 'allowEditPatterns'>>) {
+  return (
+    <ul className={classNames('mt-2', allowEditPatterns.length > 1 && 'list-disc ml-4')}>
+      {allowEditPatterns.map((pattern) => (
+        <li key={pattern} className="mb-1">
+          <code>{pattern}</code>
+        </li>
+      ))}
+    </ul>
   );
 }

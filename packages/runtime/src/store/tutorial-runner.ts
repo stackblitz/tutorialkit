@@ -189,6 +189,62 @@ export class TutorialRunner {
     );
   }
 
+  async fileExists(filepath: string) {
+    const previousLoadPromise = this._currentLoadTask?.promise;
+
+    return new Promise<boolean>((resolve, reject) => {
+      this._currentLoadTask = newTask(
+        async (signal) => {
+          await previousLoadPromise;
+
+          const webcontainer = await this._webcontainer;
+
+          if (signal.aborted) {
+            reject(new Error('Task was aborted'));
+          }
+
+          signal.throwIfAborted();
+
+          try {
+            await webcontainer.fs.readFile(filepath);
+            resolve(true);
+          } catch {
+            resolve(false);
+          }
+        },
+        { ignoreCancel: true },
+      );
+    });
+  }
+
+  async folderExists(folderPath: string) {
+    const previousLoadPromise = this._currentLoadTask?.promise;
+
+    return new Promise<boolean>((resolve, reject) => {
+      this._currentLoadTask = newTask(
+        async (signal) => {
+          await previousLoadPromise;
+
+          const webcontainer = await this._webcontainer;
+
+          if (signal.aborted) {
+            reject(new Error('Task was aborted'));
+          }
+
+          signal.throwIfAborted();
+
+          try {
+            await webcontainer.fs.readdir(folderPath);
+            resolve(true);
+          } catch {
+            resolve(false);
+          }
+        },
+        { ignoreCancel: true },
+      );
+    });
+  }
+
   /**
    * Load the provided files into WebContainer and remove any other files that had been loaded previously.
    *

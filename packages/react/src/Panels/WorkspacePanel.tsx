@@ -122,7 +122,7 @@ function EditorSection({ theme, tutorialStore, hasEditor }: PanelProps) {
     }
   }
 
-  function onFileTreeChange({ method, type, value }: FileTreeChangeEvent) {
+  async function onFileTreeChange({ method, type, value }: FileTreeChangeEvent) {
     if (method === 'add' && type === 'file') {
       return tutorialStore.addFile(value);
     }

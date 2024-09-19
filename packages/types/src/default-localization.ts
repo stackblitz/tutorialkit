@@ -10,6 +10,7 @@ export const DEFAULT_LOCALIZATION = {
   fileTreeCreateFileText: 'Create file',
   fileTreeCreateFolderText: 'Create folder',
   fileTreeActionNotAllowedText: 'This action is not allowed',
+  fileTreeFileExistsAlreadyText: 'File exists on filesystem already',
   fileTreeAllowedPatternsText: 'Created files and folders must match following patterns:',
   confirmationText: 'OK',
   prepareEnvironmentTitleText: 'Preparing Environment',

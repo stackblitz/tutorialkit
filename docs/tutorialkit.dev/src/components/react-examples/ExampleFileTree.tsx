@@ -13,7 +13,7 @@ export default function ExampleFileTree() {
       hiddenFiles={['package-lock.json']}
       selectedFile={selectedFile}
       onFileSelect={setSelectedFile}
-      onFileChange={(event) => {
+      onFileChange={async (event) => {
         if (event.method === 'add') {
           setFiles([...files, { path: event.value, type: event.type }]);
         }
