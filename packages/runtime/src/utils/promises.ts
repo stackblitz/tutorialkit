@@ -28,7 +28,7 @@ export function wait(ms: number): Promise<void> {
  * @returns A promise that resolves after the tick.
  */
 export function tick() {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     setTimeout(resolve);
   });
 }

@@ -3,7 +3,6 @@ import type { WebContainer } from '@webcontainer/api';
 import { atom, type ReadableAtom } from 'nanostores';
 import { LessonFilesFetcher } from '../lesson-files.js';
 import { newTask, type Task } from '../tasks.js';
-import { TutorialRunner } from '../tutorial-runner.js';
 import type { ITerminal } from '../utils/terminal.js';
 import type { EditorConfig } from '../webcontainer/editor-config.js';
 import { bootStatus, unblockBoot, type BootStatus } from '../webcontainer/on-demand-boot.js';
@@ -13,6 +12,7 @@ import type { TerminalConfig } from '../webcontainer/terminal-config.js';
 import { EditorStore, type EditorDocument, type EditorDocuments, type ScrollPosition } from './editor.js';
 import { PreviewsStore } from './previews.js';
 import { TerminalStore } from './terminal.js';
+import { TutorialRunner } from './tutorial-runner.js';
 
 interface StoreOptions {
   webcontainer: Promise<WebContainer>;
@@ -59,7 +59,7 @@ export class TutorialStore {
     this._lessonFilesFetcher = new LessonFilesFetcher(basePathname);
     this._previewsStore = new PreviewsStore(this._webcontainer);
     this._terminalStore = new TerminalStore(this._webcontainer, useAuth);
-    this._runner = new TutorialRunner(this._webcontainer, this._terminalStore, this._stepController);
+    this._runner = new TutorialRunner(this._webcontainer, this._terminalStore, this._editorStore, this._stepController);
 
     /**
      * By having this code under `import.meta.hot`, it gets:
@@ -149,6 +149,8 @@ export class TutorialStore {
     if (options.ssr) {
       return;
     }
+
+    this._runner.setWatchFromWebContainer(lesson.data.filesystem?.watch ?? false);
 
     this._lessonTask = newTask(
       async (signal) => {

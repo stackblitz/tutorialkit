@@ -142,6 +142,22 @@
   --tk-elements-link-secondaryColor: var(--tk-text-secondary);
   --tk-elements-link-secondaryColorHover: var(--tk-text-primary);
 
+  /* Primary Button */
+  --tk-elements-primaryButton-backgroundColor: var(--tk-background-accent-secondary);
+  --tk-elements-primaryButton-backgroundColorHover: var(--tk-background-accent-active);
+  --tk-elements-primaryButton-textColor: var(--tk-text-primary-inverted);
+  --tk-elements-primaryButton-textColorHover: var(--tk-text-primary-inverted);
+  --tk-elements-primaryButton-iconColor: var(--tk-text-primary-inverted);
+  --tk-elements-primaryButton-iconColorHover: var(--tk-text-primary-inverted);
+
+  /* Secondary Button */
+  --tk-elements-secondaryButton-backgroundColor: var(--tk-elements-app-backgroundColor);
+  --tk-elements-secondaryButton-backgroundColorHover: var(--tk-background-secondary);
+  --tk-elements-secondaryButton-textColor: var(--tk-text-secondary);
+  --tk-elements-secondaryButton-textColorHover: var(--tk-text-primary);
+  --tk-elements-secondaryButton-iconColor: var(--tk-text-secondary);
+  --tk-elements-secondaryButton-iconColorHover: var(--tk-text-primary);
+
   /* Content */
   --tk-elements-content-textColor: var(--tk-text-body);
   --tk-elements-content-headingTextColor: var(--tk-text-primary);
@@ -162,22 +178,6 @@
   /* Top Bar > Logo */
   --tk-elements-topBar-logo-color: var(--tk-text-active);
   --tk-elements-topBar-logo-colorHover: var(--tk-text-active);
-
-  /* Top Bar > Primary Button */
-  --tk-elements-topBar-primaryButton-backgroundColor: var(--tk-background-accent-secondary);
-  --tk-elements-topBar-primaryButton-backgroundColorHover: var(--tk-background-accent-active);
-  --tk-elements-topBar-primaryButton-textColor: var(--tk-text-primary-inverted);
-  --tk-elements-topBar-primaryButton-textColorHover: var(--tk-text-primary-inverted);
-  --tk-elements-topBar-primaryButton-iconColor: var(--tk-text-primary-inverted);
-  --tk-elements-topBar-primaryButton-iconColorHover: var(--tk-text-primary-inverted);
-
-  /* Top Bar > Secondary Button */
-  --tk-elements-topBar-secondaryButton-backgroundColor: var(--tk-elements-topBar-backgroundColor);
-  --tk-elements-topBar-secondaryButton-backgroundColorHover: var(--tk-background-secondary);
-  --tk-elements-topBar-secondaryButton-textColor: var(--tk-text-secondary);
-  --tk-elements-topBar-secondaryButton-textColorHover: var(--tk-text-primary);
-  --tk-elements-topBar-secondaryButton-iconColor: var(--tk-text-secondary);
-  --tk-elements-topBar-secondaryButton-iconColorHover: var(--tk-text-primary);
 
   /* Previews */
   --tk-elements-previews-borderColor: theme('colors.gray.200');

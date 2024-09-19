@@ -25,6 +25,7 @@ interface Props {
   helpAction?: 'solve' | 'reset';
   editorDocument?: EditorDocument;
   selectedFile?: string | undefined;
+  allowEditPatterns?: ComponentProps<typeof FileTree>['allowEditPatterns'];
   onEditorChange?: OnEditorChange;
   onEditorScroll?: OnEditorScroll;
   onHelpClick?: () => void;
@@ -43,6 +44,7 @@ export function EditorPanel({
   helpAction,
   editorDocument,
   selectedFile,
+  allowEditPatterns,
   onEditorChange,
   onEditorScroll,
   onHelpClick,
@@ -83,6 +85,7 @@ export function EditorPanel({
           hideRoot={hideRoot ?? true}
           files={files}
           scope={fileTreeScope}
+          allowEditPatterns={allowEditPatterns}
           onFileSelect={onFileSelect}
           onFileChange={onFileTreeChange}
         />

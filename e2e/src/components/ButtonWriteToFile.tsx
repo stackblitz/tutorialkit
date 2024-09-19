@@ -1,22 +1,30 @@
 import tutorialStore from 'tutorialkit:store';
+import { webcontainer } from 'tutorialkit:core';
 
 interface Props {
   filePath: string;
   newContent: string;
+
+  // default to 'store'
+  access?: 'store' | 'webcontainer';
   testId?: string;
 }
 
-export function ButtonWriteToFile({ filePath, newContent, testId = 'write-to-file' }: Props) {
+export function ButtonWriteToFile({ filePath, newContent, access = 'store', testId = 'write-to-file' }: Props) {
   async function writeFile() {
-    await new Promise<void>((resolve) => {
-      tutorialStore.lessonFullyLoaded.subscribe((value) => {
-        if (value) {
-          resolve();
-        }
-      });
-    });
+    switch (access) {
+      case 'webcontainer': {
+        const webcontainerInstance = await webcontainer;
 
-    tutorialStore.updateFile(filePath, newContent);
+        await webcontainerInstance.fs.writeFile(filePath, newContent);
+
+        return;
+      }
+      case 'store': {
+        tutorialStore.updateFile(filePath, newContent);
+        return;
+      }
+    }
   }
 
   return (

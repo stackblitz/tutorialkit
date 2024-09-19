@@ -150,6 +150,22 @@ export const theme = {
           secondaryColor: 'var(--tk-elements-link-secondaryColor)',
           secondaryColorHover: 'var(--tk-elements-link-secondaryColorHover)',
         },
+        primaryButton: {
+          backgroundColor: 'var(--tk-elements-primaryButton-backgroundColor)',
+          backgroundColorHover: 'var(--tk-elements-primaryButton-backgroundColorHover)',
+          textColor: 'var(--tk-elements-primaryButton-textColor)',
+          textColorHover: 'var(--tk-elements-primaryButton-textColorHover)',
+          iconColor: 'var(--tk-elements-primaryButton-iconColor)',
+          iconColorHover: 'var(--tk-elements-primaryButton-iconColorHover)',
+        },
+        secondaryButton: {
+          backgroundColor: 'var(--tk-elements-secondaryButton-backgroundColor)',
+          backgroundColorHover: 'var(--tk-elements-secondaryButton-backgroundColorHover)',
+          textColor: 'var(--tk-elements-secondaryButton-textColor)',
+          textColorHover: 'var(--tk-elements-secondaryButton-textColorHover)',
+          iconColor: 'var(--tk-elements-secondaryButton-iconColor)',
+          iconColorHover: 'var(--tk-elements-secondaryButton-iconColorHover)',
+        },
         content: {
           textColor: 'var(--tk-elements-content-textColor)',
           headingTextColor: 'var(--tk-elements-content-headingTextColor)',
@@ -169,22 +185,6 @@ export const theme = {
           logo: {
             color: 'var(--tk-elements-topBar-logo-color)',
             colorHover: 'var(--tk-elements-topBar-logo-colorHover)',
-          },
-          primaryButton: {
-            backgroundColor: 'var(--tk-elements-topBar-primaryButton-backgroundColor)',
-            backgroundColorHover: 'var(--tk-elements-topBar-primaryButton-backgroundColorHover)',
-            textColor: 'var(--tk-elements-topBar-primaryButton-textColor)',
-            textColorHover: 'var(--tk-elements-topBar-primaryButton-textColorHover)',
-            iconColor: 'var(--tk-elements-topBar-primaryButton-iconColor)',
-            iconColorHover: 'var(--tk-elements-topBar-primaryButton-iconColorHover)',
-          },
-          secondaryButton: {
-            backgroundColor: 'var(--tk-elements-topBar-secondaryButton-backgroundColor)',
-            backgroundColorHover: 'var(--tk-elements-topBar-secondaryButton-backgroundColorHover)',
-            textColor: 'var(--tk-elements-topBar-secondaryButton-textColor)',
-            textColorHover: 'var(--tk-elements-topBar-secondaryButton-textColorHover)',
-            iconColor: 'var(--tk-elements-topBar-secondaryButton-iconColor)',
-            iconColorHover: 'var(--tk-elements-topBar-secondaryButton-iconColorHover)',
           },
         },
         panel: {

@@ -5,7 +5,7 @@
  * @link http://jedwatson.github.io/classnames
  */
 
-type ClassNamesArg = undefined | string | Record<string, boolean> | ClassNamesArg[];
+type ClassNamesArg = undefined | false | string | Record<string, boolean> | ClassNamesArg[];
 
 /**
  * A simple JavaScript utility for conditionally joining classNames together.
