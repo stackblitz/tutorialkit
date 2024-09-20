@@ -6,7 +6,6 @@ import { LoginButton } from './LoginButton';
 import { OpenInStackblitzLink } from './OpenInStackblitzLink';
 import Logo from './Logo.astro';
 import { useAuth } from './setup';
-import { Github } from './Github';
 
 interface Props {
   logoLink: string;
@@ -22,8 +21,6 @@ const { logoLink, openInStackBlitz } = Astro.props;
   {openInStackBlitz && <OpenInStackblitzLink client:load transition:persist slot="open-in-stackblitz-link" />}
 
   <ThemeSwitch client:load transition:persist slot="theme-switch" />
-
-  <Github client:load transition:persist slot="github" />
 
   {useAuth && <LoginButton client:load transition:persist slot="login-button" />}
 </TopBar>
