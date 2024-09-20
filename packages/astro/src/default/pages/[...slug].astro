@@ -17,7 +17,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { lesson, logoLink, navList, title } = Astro.props as Props;
 ---
 
-<Layout title={title}>
+<Layout title={title} description="A TutorialKit interactive lesson">
   <PageLoadingIndicator />
   <div id="previews-container"></div>
   <main class="max-w-full flex flex-col h-full overflow-hidden" data-swap-root>
