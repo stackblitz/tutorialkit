@@ -2,7 +2,7 @@ export function Github() {
   return (
     <a
       href="https://github.com/stackblitz/tutorialkit/tree/main/docs/demo"
-      className="flex items-center text-2xl text-tk-elements-topBar-iconButton-iconColor hover:text-tk-elements-topBar-iconButton-iconColorHover bg-tk-elements-topBar-iconButton-backgroundColor hover:bg-tk-elements-topBar-iconButton-backgroundColorHover p-1 rounded-md"
+      className="flex items-center text-2xl text-tk-elements-topBar-iconButton-iconColor hover:text-tk-elements-topBar-iconButton-iconColorHover bg-tk-elements-topBar-iconButton-backgroundColor hover:bg-tk-elements-topBar-iconButton-backgroundColorHover p-1 mr-2 transition-theme rounded-md"
       title="Github"
     >
       <svg
