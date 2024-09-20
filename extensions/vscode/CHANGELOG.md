@@ -4,6 +4,10 @@ All notable changes to the "tutorialkit" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.1.2]
+
+- Prevent running extension on non-TutorialKit projects (#242)
+
 ## [0.1.1]
 
 All the following changes are for the Tutorial Panel:
