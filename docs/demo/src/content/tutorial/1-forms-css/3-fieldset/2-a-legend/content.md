@@ -3,6 +3,7 @@ type: lesson
 title: A legend
 slug: a-legend
 focus: /index.html
+editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/docs/demo/src/content/tutorial/1-forms-css/3-fieldset/2-a-legend/content.md?plain=1
 ---
 
 Even with the default styling `<fieldset>` already visually separates one group of form controls from another.

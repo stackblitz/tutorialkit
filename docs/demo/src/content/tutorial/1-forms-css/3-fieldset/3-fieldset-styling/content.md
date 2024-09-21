@@ -3,6 +3,7 @@ type: lesson
 title: Styling fieldsets
 slug: fieldset-styling
 focus: /style.css
+editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/docs/demo/src/content/tutorial/1-forms-css/3-fieldset/3-fieldset-styling/content.md?plain=1
 ---
 
 Our HTML looks great, but the default styles leave a lot of room for improvements. Thankfully, the way `<fieldset>` and `<legend>` look like can be customized with a standard CSS.

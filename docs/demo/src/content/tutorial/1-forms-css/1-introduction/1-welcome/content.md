@@ -3,6 +3,7 @@ type: lesson
 title: Style up your forms!
 slug: welcome
 focus: /welcome.css
+editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/docs/demo/src/content/tutorial/1-forms-css/1-introduction/1-welcome/content.md?plain=1 
 ---
 
 :::info{noBorder=true title="Welcome!"}

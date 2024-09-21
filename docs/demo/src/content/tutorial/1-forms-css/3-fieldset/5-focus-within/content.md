@@ -3,6 +3,7 @@ type: lesson
 title: Focus within
 slug: focus-within
 focus: /style.css
+editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/docs/demo/src/content/tutorial/1-forms-css/3-fieldset/5-focus-within/content.md?plain=1
 ---
 A great way to give our visitors a pointer to where they are in the form is the `:focus` state. The most common way to apply it is by highlighting the currently focused form controls like buttons and inputs. But now that the fieldset provides us with a higher level of organization for the form, we can also highlight it to give even better visual guidance!
 
