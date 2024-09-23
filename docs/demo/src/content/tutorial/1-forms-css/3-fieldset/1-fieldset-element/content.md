@@ -2,7 +2,7 @@
 type: lesson
 title: Fieldset element
 slug: fieldset-element
-focus: /index.html 
+focus: /index.html
 ---
 
 The `<fieldset>` HTML element groups related form controls, such as buttons, inputs, textareas, and labels, within a web form.
