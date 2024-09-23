@@ -4,7 +4,6 @@ title: Progress bar
 slug: progress-bar
 focus: /style.css
 template: default
-editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/docs/demo/src/content/tutorial/1-forms-css/2-colors/2-progressbar/content.md?plain=1 
 ---
 
 ## Styling the `<progress>`

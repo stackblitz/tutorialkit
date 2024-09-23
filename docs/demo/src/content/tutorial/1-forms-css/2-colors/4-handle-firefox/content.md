@@ -4,7 +4,6 @@ title: Handle Firefox
 slug: handle-firefox
 focus: /style.css
 template: default
-editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/docs/demo/src/content/tutorial/1-forms-css/2-colors/4-handle-firefox/content.md?plain=1
 ---
 
 ## What about Firefox?

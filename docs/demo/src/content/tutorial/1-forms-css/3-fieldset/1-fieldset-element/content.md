@@ -2,8 +2,7 @@
 type: lesson
 title: Fieldset element
 slug: fieldset-element
-focus: /index.html
-editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/docs/demo/src/content/tutorial/1-forms-css/3-fieldset/1-fieldset-element/content.md?plain=1 
+focus: /index.html 
 ---
 
 The `<fieldset>` HTML element groups related form controls, such as buttons, inputs, textareas, and labels, within a web form.

@@ -3,7 +3,6 @@ type: lesson
 title: Accent Color
 focus: /style.css
 slug: accent-color
-editPageLink: https://github.com/stackblitz/tutorialkit/blob/main/docs/demo/src/content/tutorial/1-forms-css/2-colors/1-accent-color/content.md?plain=1  
 ---
 
 ## Customize the input colors
