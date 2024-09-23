@@ -17,6 +17,7 @@
  *     tutorialkit({
  *       components: {
  *         TopBar: './CustomTopBar.astro',
+ *         Dialog: './CustomDialog.tsx',
  *       },
  *     }),
  *   ],
@@ -29,8 +30,9 @@ export interface OverrideComponentsOptions {
   /**
    * Component for overriding the top bar.
    *
-   * This component has 3 slots that are used to pass TutorialKit's default components:
+   * This component has slots that are used to pass TutorialKit's default components:
    *   - `logo`: Logo of the application
+   *   - `open-in-stackblitz-link`: Link for opening current lesson in StackBlitz
    *   - `theme-switch`:  Switch for changing the theme
    *   - `login-button`: For StackBlitz Enterprise user, the login button
    *
@@ -38,11 +40,20 @@ export interface OverrideComponentsOptions {
    *
    * ```jsx
    *   <slot name="logo" />
+   *   <slot name="open-in-stackblitz-link" />
    *   <slot name="theme-switch" />
    *   <slot name="login-button" />
    * ```
    */
   TopBar?: string;
+
+  /**
+   * Component for overriding confirmation dialogs.
+   *
+   * This component has to be a React component.
+   * It will receive same props that `@tutorialkit/react/dialog` supports.
+   */
+  Dialog?: string;
 }
 
 interface Options {
@@ -66,9 +77,11 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
     async load(id) {
       if (id === resolvedId) {
         const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes);
+        const dialog = components?.Dialog || '@tutorialkit/react/dialog';
 
         return `
           export { default as TopBar } from '${topBar}';
+          export { default as Dialog } from '${dialog}';
         `;
       }
 

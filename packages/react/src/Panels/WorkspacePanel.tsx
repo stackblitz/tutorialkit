@@ -3,6 +3,7 @@ import type { TutorialStore } from '@tutorialkit/runtime';
 import type { I18n } from '@tutorialkit/types';
 import { useCallback, useEffect, useRef, useState, type ComponentProps } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from 'react-resizable-panels';
+import { DialogProvider } from '../core/Dialog.js';
 import type { Theme } from '../core/types.js';
 import resizePanelStyles from '../styles/resize-panel.module.css';
 import { classNames } from '../utils/classnames.js';
@@ -17,9 +18,10 @@ type FileTreeChangeEvent = Parameters<NonNullable<ComponentProps<typeof EditorPa
 interface Props {
   tutorialStore: TutorialStore;
   theme: Theme;
+  dialog: NonNullable<ComponentProps<typeof DialogProvider>['value']>;
 }
 
-interface PanelProps extends Props {
+interface PanelProps extends Omit<Props, 'dialog'> {
   hasEditor: boolean;
   hasPreviews: boolean;
   hideTerminalPanel: boolean;
@@ -33,7 +35,7 @@ interface TerminalProps extends PanelProps {
 /**
  * This component is the orchestrator between various interactive components.
  */
-export function WorkspacePanel({ tutorialStore, theme }: Props) {
+export function WorkspacePanel({ tutorialStore, theme, dialog }: Props) {
   /**
    * Re-render when lesson changes.
    * The `tutorialStore.hasEditor()` and other methods below access
@@ -50,13 +52,15 @@ export function WorkspacePanel({ tutorialStore, theme }: Props) {
 
   return (
     <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
-      <EditorSection
-        theme={theme}
-        tutorialStore={tutorialStore}
-        hasEditor={hasEditor}
-        hasPreviews={hasPreviews}
-        hideTerminalPanel={hideTerminalPanel}
-      />
+      <DialogProvider value={dialog}>
+        <EditorSection
+          theme={theme}
+          tutorialStore={tutorialStore}
+          hasEditor={hasEditor}
+          hasPreviews={hasPreviews}
+          hideTerminalPanel={hideTerminalPanel}
+        />
+      </DialogProvider>
 
       <PanelResizeHandle
         className={resizePanelStyles.PanelResizeHandle}

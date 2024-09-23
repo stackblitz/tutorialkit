@@ -1,10 +1,9 @@
 import { Root, Portal, Content, Item, Trigger } from '@radix-ui/react-context-menu';
-import * as RadixDialog from '@radix-ui/react-dialog';
 import { DEFAULT_LOCALIZATION, type FileDescriptor, type I18n, type FilesystemError } from '@tutorialkit/types';
 import picomatch from 'picomatch/posix';
-import { useRef, useState, type ComponentProps, type ReactNode } from 'react';
-import { Button } from '../Button.js';
+import { useRef, useState, type ComponentProps } from 'react';
 import { classNames } from '../utils/classnames.js';
+import { useDialog } from './Dialog.js';
 
 interface FileChangeEvent {
   type: FileDescriptor['type'];
@@ -59,6 +58,7 @@ export function ContextMenu({
     'idle' | 'add_file' | 'add_folder' | 'add_failed_not_allowed' | 'add_failed_exists'
   >('idle');
   const inputRef = useRef<HTMLInputElement>(null);
+  const Dialog = useDialog();
 
   if (!allowEditPatterns?.length) {
     return children;
@@ -180,38 +180,6 @@ function MenuItem({ icon, children, ...props }: { icon: string } & ComponentProp
       <span className={`${icon} scale-120 shrink-0`}></span>
       <span>{children}</span>
     </Item>
-  );
-}
-
-function Dialog({
-  title,
-  confirmText,
-  onClose,
-  children,
-}: {
-  title: string;
-  confirmText: string;
-  onClose: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <RadixDialog.Root open={true} onOpenChange={(open) => !open && onClose()}>
-      <RadixDialog.Portal>
-        <RadixDialog.Overlay className="fixed inset-0 opacity-50 bg-black" />
-
-        <RadixDialog.Content className="fixed top-50% left-50% transform-translate--50% w-90vw max-w-450px max-h-85vh rounded-xl text-tk-text-primary bg-tk-background-primary">
-          <div className="relative p-10">
-            <RadixDialog.Title className="text-6">{title}</RadixDialog.Title>
-
-            <div className="my-4">{children}</div>
-
-            <RadixDialog.Close asChild>
-              <Button className="min-w-20 justify-center">{confirmText}</Button>
-            </RadixDialog.Close>
-          </div>
-        </RadixDialog.Content>
-      </RadixDialog.Portal>
-    </RadixDialog.Root>
   );
 }
 

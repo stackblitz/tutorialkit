@@ -3,6 +3,7 @@ title: 'Overriding Components'
 description: "Override TutorialKit's default components to fit your needs."
 ---
 import { Image } from 'astro:assets';
+import uiDialog from './images/ui-dialog.png';
 import uiTopBar from './images/ui-top-bar.png';
 
 TutorialKit's default components are customizable with [theming](/reference/theming/) options.
@@ -65,3 +66,11 @@ When overriding `TopBar` you can place TutorialKit's default components using fo
   <slot name="login-button" />
 </nav>
 ```
+
+### Dialog
+
+<Image src={uiDialog} alt="TutorialKit's Dialog" />
+
+Component for overriding confirmation dialogs. This component has to be a React component.
+
+It will receive same props that `@tutorialkit/react/dialog` supports.

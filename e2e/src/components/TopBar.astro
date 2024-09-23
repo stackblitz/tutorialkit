@@ -1,0 +1,21 @@
+<nav
+  class="bg-tk-elements-topBar-backgroundColor border-b border-tk-elements-app-borderColor flex gap-1 max-w-full items-center p-3 px-4 min-h-[56px]"
+>
+  <div class="flex flex-1">
+    <slot name="logo" />
+  </div>
+
+  <div class="mr-2 color-tk-text-primary">Custom Top Bar Mounted</div>
+
+  <div class="mr-2">
+    <slot name="open-in-stackblitz-link" />
+  </div>
+
+  <div>
+    <slot name="theme-switch" />
+  </div>
+
+  <div>
+    <slot name="login-button" />
+  </div>
+</nav>

@@ -8,6 +8,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+e2e/dist-*
 *.local
 !.vscode/extensions.json
 .idea

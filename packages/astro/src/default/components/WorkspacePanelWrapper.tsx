@@ -2,6 +2,7 @@ import { useStore } from '@nanostores/react';
 import { WorkspacePanel } from '@tutorialkit/react';
 import type { Lesson } from '@tutorialkit/types';
 import { useEffect } from 'react';
+import { Dialog } from 'tutorialkit:override-components';
 import { themeStore } from '../stores/theme-store.js';
 import { tutorialStore } from './webcontainer.js';
 
@@ -20,5 +21,5 @@ export function WorkspacePanelWrapper({ lesson }: Props) {
     tutorialStore.setLesson(lesson, { ssr: import.meta.env.SSR });
   }
 
-  return <WorkspacePanel tutorialStore={tutorialStore} theme={theme} />;
+  return <WorkspacePanel dialog={Dialog} tutorialStore={tutorialStore} theme={theme} />;
 }
