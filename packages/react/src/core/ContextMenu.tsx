@@ -200,7 +200,7 @@ function Dialog({
         <RadixDialog.Overlay className="fixed inset-0 opacity-50 bg-black" />
 
         <RadixDialog.Content className="fixed top-50% left-50% transform-translate--50% w-90vw max-w-450px max-h-85vh rounded-xl text-tk-text-primary bg-tk-background-primary">
-          <div className="relative py-4 px-10">
+          <div className="relative p-10">
             <RadixDialog.Title className="text-6">{title}</RadixDialog.Title>
 
             <div className="my-4">{children}</div>
