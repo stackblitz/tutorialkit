@@ -83,6 +83,18 @@ export const i18nSchema = z.object({
     .describe("Text shown on dialog when user attempts to edit files that don't match allowed patterns."),
 
   /**
+   * Text shown on dialog when user attempts create file or folder that already exists on filesystem but is not visible on file tree, e.g. template files.
+   *
+   * @default 'File exists on filesystem already'
+   */
+  fileTreeFileExistsAlreadyText: z
+    .string()
+    .optional()
+    .describe(
+      'Text shown on dialog when user attempts create file or folder that already exists on filesystem but is not visible on file tree, e.g. template files.',
+    ),
+
+  /**
    * Text shown on dialog describing allowed patterns when file or folder creation failed.
    *
    * @default 'Created files and folders must match following patterns:'

@@ -189,6 +189,45 @@ export class TutorialRunner {
     );
   }
 
+  async fileExists(filepath: string) {
+    return this._fsExists(filepath, 'file');
+  }
+
+  async folderExists(folderPath: string) {
+    return this._fsExists(folderPath, 'folder');
+  }
+
+  private async _fsExists(filepath: string, type: 'file' | 'folder') {
+    if (this._currentFiles?.[filepath] || this._currentTemplate?.[filepath]) {
+      return true;
+    }
+
+    const previousLoadPromise = this._currentLoadTask?.promise;
+
+    return new Promise<boolean>((resolve) => {
+      this._currentLoadTask = newTask(
+        async () => {
+          await previousLoadPromise;
+
+          const webcontainer = await this._webcontainer;
+
+          try {
+            if (type === 'file') {
+              await webcontainer.fs.readFile(filepath);
+            } else {
+              await webcontainer.fs.readdir(filepath);
+            }
+
+            resolve(true);
+          } catch {
+            resolve(false);
+          }
+        },
+        { ignoreCancel: true },
+      );
+    });
+  }
+
   /**
    * Load the provided files into WebContainer and remove any other files that had been loaded previously.
    *

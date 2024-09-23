@@ -222,3 +222,29 @@ test('user cannot create files or folders in disallowed directories', async ({ p
     await expect(dialog).not.toBeVisible();
   }
 });
+
+test('user cannot create files or folders that exist on template', async ({ page }) => {
+  await page.goto(`${BASE_URL}/allow-edits-enabled`);
+  await expect(page.getByRole('heading', { level: 1, name: 'File Tree test - Allow Edits enabled' })).toBeVisible();
+
+  // wait for terminal to start
+  const terminalOutput = page.getByRole('tabpanel', { name: 'Terminal' });
+  await expect(terminalOutput).toContainText('~/tutorial', { useInnerText: true });
+
+  for (const [name, type] of [
+    ['file-on-template.js', 'file'],
+    ['folder-on-template', 'folder'],
+  ] as const) {
+    await page.getByTestId('file-tree-root-context-menu').click({ button: 'right' });
+    await page.getByRole('menuitem', { name: `Create ${type}` }).click();
+
+    await page.locator('*:focus').fill(name);
+    await page.locator('*:focus').press('Enter');
+
+    const dialog = page.getByRole('dialog', { name: 'This action is not allowed' });
+    await expect(dialog.getByText('File exists on filesystem already')).toBeVisible();
+
+    await dialog.getByRole('button', { name: 'OK' }).click();
+    await expect(dialog).not.toBeVisible();
+  }
+});

@@ -107,13 +107,15 @@ A component to list files in a tree view.
 
 * `onFileSelect: (file: string) => void` - A callback that will be called when a file is clicked. The path of the file that was clicked will be passed as an argument.
 
-* `onFileChange: (event: FileChangeEvent) => void` - An optional callback that will be called when a new file or folder is created from the file tree's context menu. When callback is not passed, file tree does not allow adding new files.
+* `onFileChange: (event: FileChangeEvent) => Promise<void>` - An optional callback that will be called when a new file or folder is created from the file tree's context menu. This callback should throw errors with `FilesystemError` messages.
   ```ts
   interface FileChangeEvent {
     type: 'file' | 'folder';
     method: 'add' | 'remove' | 'rename';
     value: string;
   }
+
+  type FilesystemError = 'FILE_EXISTS' | 'FOLDER_EXISTS';
   ```
 
 * `allowEditPatterns?: string[]` - Glob patterns for paths that allow editing files and folders. Disabled by default.

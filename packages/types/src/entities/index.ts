@@ -6,6 +6,8 @@ export type * from './nav.js';
 export type FileDescriptor = { path: string; type: 'file' | 'folder' };
 export type Files = Record<string, string | Uint8Array>;
 
+export type FilesystemError = 'FILE_EXISTS' | 'FOLDER_EXISTS';
+
 /**
  * This tuple contains a "ref" which points to a file to fetch with the `LessonFilesFetcher` and
  * the list of file paths included by that ref.

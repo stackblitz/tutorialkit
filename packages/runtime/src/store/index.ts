@@ -1,4 +1,4 @@
-import type { FileDescriptor, Files, Lesson } from '@tutorialkit/types';
+import type { FileDescriptor, Files, FilesystemError, Lesson } from '@tutorialkit/types';
 import type { WebContainer } from '@webcontainer/api';
 import { atom, type ReadableAtom } from 'nanostores';
 import { LessonFilesFetcher } from '../lesson-files.js';
@@ -312,7 +312,7 @@ export class TutorialStore {
     this._editorStore.setSelectedFile(filePath);
   }
 
-  addFile(filePath: string) {
+  async addFile(filePath: string): Promise<void> {
     // always select the existing or newly created file
     this.setSelectedFile(filePath);
 
@@ -321,14 +321,22 @@ export class TutorialStore {
       return;
     }
 
+    if (await this._runner.fileExists(filePath)) {
+      throw new Error('FILE_EXISTS' satisfies FilesystemError);
+    }
+
     this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
     this._runner.updateFile(filePath, '');
   }
 
-  addFolder(folderPath: string) {
+  async addFolder(folderPath: string) {
     // prevent creating duplicates
     if (this._editorStore.files.get().some((file) => file.path.startsWith(folderPath))) {
       return;
+    }
+
+    if (await this._runner.folderExists(folderPath)) {
+      throw new Error('FOLDER_EXISTS' satisfies FilesystemError);
     }
 
     this._editorStore.addFileOrFolder({ path: folderPath, type: 'folder' });
