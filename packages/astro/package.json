@@ -23,7 +23,8 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "types.d.ts"
   ],
   "scripts": {
     "build": "node ./scripts/build.js",
