@@ -50,7 +50,7 @@ export interface OverrideComponentsOptions {
   /**
    * Component for overriding confirmation dialogs.
    *
-   * This component has to be a React component.
+   * This component has to be a React component and be the default export of that module.
    * It will receive same props that `@tutorialkit/react/dialog` supports.
    */
   Dialog?: string;

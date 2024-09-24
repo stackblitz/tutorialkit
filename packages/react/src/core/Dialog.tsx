@@ -12,6 +12,7 @@ interface Props {
   /** Callback invoked when dialog is closed */
   onClose: () => void;
 
+  /** Content of the dialog */
   children: ReactNode;
 }
 

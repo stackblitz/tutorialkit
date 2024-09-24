@@ -71,6 +71,22 @@ When overriding `TopBar` you can place TutorialKit's default components using fo
 
 <Image src={uiDialog} alt="TutorialKit's Dialog" />
 
-Component for overriding confirmation dialogs. This component has to be a React component.
+Component for overriding confirmation dialogs. This component has to be a React component and be the default export of that module.
 
-It will receive same props that `@tutorialkit/react/dialog` supports.
+It will receive same props that `@tutorialkit/react/dialog` supports:
+
+```ts
+interface Props {
+  /** Title of the dialog */
+  title: string;
+
+  /** Text for the confirmation button */
+  confirmText: string;
+
+  /** Callback invoked when dialog is closed */
+  onClose: () => void;
+
+  /** Content of the dialog */
+  children: ReactNode;
+}
+```
