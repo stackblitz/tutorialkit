@@ -44,6 +44,12 @@
         "default": "./dist/core/Terminal/index.js"
       }
     },
+    "./dialog": {
+      "import": {
+        "types": "./dist/core/Dialog.d.ts",
+        "default": "./dist/core/Dialog.js"
+      }
+    },
     "./package.json": "./package.json"
   },
   "files": [

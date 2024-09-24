@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "preview": "astro build && astro preview",
+    "dev:override-components": "astro dev --config ./configs/override-components.ts",
+    "preview:override-components": "astro build --config ./configs/override-components.ts && astro preview --config ./configs/override-components.ts",
     "test": "playwright test",
     "test:ui": "pnpm run test --ui"
   },
@@ -18,8 +20,9 @@
     "@tutorialkit/runtime": "workspace:*",
     "@tutorialkit/theme": "workspace:*",
     "@tutorialkit/types": "workspace:*",
-    "@types/react": "^18.3.3",
     "@types/node": "^22.2.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@unocss/reset": "^0.59.4",
     "@unocss/transformer-directives": "^0.62.0",
     "astro": "^4.15.0",

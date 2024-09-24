@@ -8,6 +8,6 @@
       "@*": ["src/*"]
     }
   },
-  "include": ["src", "./*.ts"],
+  "include": ["src", "./*.ts", "configs/astro.config.override-components.ts"],
   "exclude": ["node_modules", "dist"]
 }
