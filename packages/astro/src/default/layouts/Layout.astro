@@ -9,8 +9,8 @@ interface Props {
 }
 
 const { title, description = 'TutorialKit' } = Astro.props;
-const baseURL = import.meta.env.BASE_URL;
-const logoUrl = joinPaths(baseURL, '/logo.svg');
+const logoUrl = readLogoFile();
+const faviconUrl = readFaviconFile();
 ---
 
 <!doctype html>
@@ -22,10 +22,10 @@ const logoUrl = joinPaths(baseURL, '/logo.svg');
     <meta name="generator" content={Astro.generator} />
     <meta name="og:title" content={title} />
     <meta name="og:description" content={description} />
-    <meta name="og:image" content={logoUrl} />
+    {logoUrl ? <meta name="og:image" content={logoUrl} /> : null}
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={logoUrl} />
+    {logoUrl ? <meta name="twitter:image" content={logoUrl} /> : null}
     <title>{title}</title>
     {faviconUrl ? <link rel="icon" type="image/svg+xml" href={faviconUrl} /> : null}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
