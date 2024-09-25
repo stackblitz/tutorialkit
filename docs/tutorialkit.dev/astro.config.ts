@@ -67,6 +67,10 @@ export default defineConfig({
               label: 'Overriding Components',
               link: '/guides/overriding-components/',
             },
+            {
+              label: 'Using low level APIs',
+              link: '/guides/using-low-level-apis/',
+            },
           ],
         },
         {
