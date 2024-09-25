@@ -1,7 +1,7 @@
 ---
 title: Using low level APIs
 ---
-
+import taskListVideo from "./images/tk-task-list.webm";
 import { HelpButton } from "@components/react-examples/HelpButton";
 import '@tutorialkit/astro/default-theme.css';
 
@@ -57,7 +57,7 @@ import { useState } from "react";
 export function HelpButton() {
   const [message, setMessage] = useState<string | null>(null);
 
-  async function onClick() {
+  function onClick() {
     const files = tutorialStore.documents.value;
     const index = files["/index.js"].value as string;
 
@@ -101,4 +101,89 @@ import { HelpButton } from "@/components/HelpButton";
 
 In this lesson we'll learn about...
 Click this button if you need help: <HelpButton client:load />
+```
+
+## Tutorial Core
+
+You can access Tutorial Core by importing the `tutorialkit:core` entrypoint.
+
+```ts
+import * as core from "tutorialkit:core";
+```
+
+The Tutorial Core provides access to webcontainer APIs. You can use it for example to read and modify files on the virtual file system.
+
+```ts
+import * as core from "tutorialkit:core";
+
+const webcontainer = await core.webcontainer;
+const contents = await webcontainer.fs.readdir("/", "utf8");
+
+console.log(contents);
+[
+  "index.html",
+  "node_modules",
+  "package-lock.json",
+  "package.json",
+  "vite.config.ts"
+]
+```
+
+### Example usage in React component
+
+Here is an example of custom React component that looks for updates in `/index.js` and provides user information about their lesson status.
+
+<video src={taskListVideo} controls />
+
+```tsx title="src/components/TaskList.tsx"
+import * as core from "tutorialkit:core";
+import { useEffect, useState } from "react";
+
+export function TaskList() {
+  const [hasDefaultExport, setDefaultExport] = useState<boolean>(false);
+  const [hasSumFunction, setSumFunction] = useState<boolean>(false);
+
+  useEffect(() => {
+    const unsubscribe = subscribeFileChanges("/index.js", (content) => {
+      // Naive text based checking just for example. Use proper AST analysis in real lessons.
+      setDefaultExport(content.includes("export default"));
+      setSumFunction(content.includes("function sum"));
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <ol>
+      <li>Add default export to index.js {hasDefaultExport ? "✅" : "❌"}</li>
+      <li>Add <code>function sum</code> to index.js {hasSumFunction ? "✅" : "❌"}</li>
+    </ol>
+  );
+}
+
+function subscribeFileChanges(filename: string, callback: (content: string) => void) {
+  const controller = new AbortController();
+
+  core.webcontainer.then((webcontainer) => {
+    const watcher = webcontainer.fs.watch(filename, async () => {
+      const content = await webcontainer.fs.readFile(filename, "utf8");
+      callback(content);
+    });
+
+    controller.signal.addEventListener("abort", () => watcher.close());
+  });
+
+  return () => controller.abort();
+}
+```
+
+```mdx title="content.mdx"
+---
+type: lesson
+title: Lesson Topic
+---
+
+import { TaskList } from "@/components/TaskList";
+
+<TaskList client:load />
 ```
