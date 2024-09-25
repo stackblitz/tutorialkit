@@ -1,28 +1,9 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
-import { joinPaths } from '../utils/url';
-
-const LOGO_EXTENSIONS = ['svg', 'png', 'jpeg', 'jpg'];
+import { LOGO_EXTENSIONS } from '../utils/constants';
+import { readLogoFile } from '../utils/logo';
 
 interface Props {
   logoLink: string;
-}
-
-function readLogoFile(logoPrefix: string) {
-  let logo;
-
-  for (const logoExt of LOGO_EXTENSIONS) {
-    const logoFilename = `${logoPrefix}.${logoExt}`;
-    const exists = fs.existsSync(path.join('public', logoFilename));
-
-    if (exists) {
-      logo = joinPaths(import.meta.env.BASE_URL, logoFilename);
-      break;
-    }
-  }
-
-  return logo;
 }
 
 const { logoLink } = Astro.props;

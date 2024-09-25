@@ -34,6 +34,16 @@ This will generate a `dist` directory containing the static files that make up y
 
 You can learn more about the build process in the [Astro documentation](https://docs.astro.build/en/reference/cli-reference/#astro-build).
 
+## Environment variables
+
+The `BASE_URL` environment variable should point to your website's absolute URL.
+This will allow to compute absolute URLs for SEO metadata.
+
+Example:
+```
+BASE_URL="https://tutorialkit.dev"
+```
+
 ## Headers configuration
 
 The preview and terminal features in TutorialKit rely on WebContainers technology. To ensure that this technology works correctly, you need to configure the headers of your web server to ensure the site is cross-origin isolated (you can read more about this at [webcontainers.io](https://webcontainers.io/guides/configuring-headers)).
