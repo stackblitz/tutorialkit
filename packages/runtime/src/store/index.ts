@@ -254,11 +254,14 @@ export class TutorialStore {
 
   /**
    * Steps that the runner is or will be executing.
+   *
+   * @internal
    */
   get steps() {
     return this._stepController.steps;
   }
 
+  /** Check if file tree is visible */
   hasFileTree(): boolean {
     if (!this._lesson) {
       return false;
@@ -267,6 +270,7 @@ export class TutorialStore {
     return this.editorConfig.get().fileTree.visible;
   }
 
+  /** Check if editor is visible */
   hasEditor(): boolean {
     if (!this._lesson) {
       return false;
@@ -275,6 +279,7 @@ export class TutorialStore {
     return this.editorConfig.get().visible;
   }
 
+  /** Check if lesson has any previews set */
   hasPreviews(): boolean {
     if (!this._lesson) {
       return false;
@@ -285,10 +290,12 @@ export class TutorialStore {
     return previews !== false;
   }
 
+  /** Check if lesson has any terminals set */
   hasTerminalPanel(): boolean {
     return this._terminalStore.hasTerminalPanel();
   }
 
+  /** Check if lesson has solution files set */
   hasSolution(): boolean {
     return !!this._lesson && Object.keys(this._lesson.solution[1]).length >= 1;
   }

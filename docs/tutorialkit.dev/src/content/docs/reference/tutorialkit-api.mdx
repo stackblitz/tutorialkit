@@ -13,6 +13,14 @@ You can access Tutorial Store by importing the `tutorialkit:store` entrypoint.
 import tutorialStore from "tutorialkit:store";
 ```
 
+:::note
+Using `tutorialkit:store` is **experimental** at the moment.
+This module may introduce breaking changes in patch and minor version updates. Pay extra attention when updating the versions.
+
+You can help us stabilize the API by providing feedback at [Stabilizing `tutorialkit:store` API | Github Discussions](https://github.com/stackblitz/tutorialkit/discussions).
+Please let us know how you are using this API.
+:::
+
 ### Common types
 
 - `ReadableAtom` from [`nanostores`](https://www.npmjs.com/package/nanostores)
@@ -56,7 +64,7 @@ Instances of the preview tabs.
 Type: `ReadableAtom<TerminalConfig>`
 
 ```ts
-import type { TerminalSchema } from '@tutorialkit/types';
+import type { TerminalPanelType, TerminalSchema } from '@tutorialkit/types';
 import type { WebContainerProcess } from '@webcontainer/api';
 
 class TerminalConfig {
@@ -95,7 +103,7 @@ interface ITerminal {
 }
 ```
 
-Configuration and instances of the terminal
+Configuration and instances of the terminal.
 
 #### `editorConfig`
 
@@ -117,11 +125,32 @@ Configuration of the editor and file tree.
 
 Type: `ReadableAtom<EditorDocument | undefined>`
 
+```ts
+import type { FileDescriptor } from '@tutorialkit/types';
+
+interface EditorDocument {
+    value: string | Uint8Array;
+    loading: boolean;
+    filePath: string;
+    type: FileDescriptor['type'];
+    scroll?: ScrollPosition;
+}
+
+interface ScrollPosition {
+    top: number;
+    left: number;
+}
+```
+
 File that's currently open in the editor.
 
 #### `bootStatus`
 
 Type: `ReadableAtom<BootStatus>`
+
+```ts
+type BootStatus = 'unknown' | 'blocked' | 'booting' | 'booted';
+```
 
 Status of the webcontainer's booting.
 
@@ -129,17 +158,33 @@ Status of the webcontainer's booting.
 
 Type: `ReadableAtom<EditorDocuments>`
 
+```ts
+// See type of `EditorDocument` above
+type EditorDocuments = Record<string, EditorDocument | undefined>
+```
+
 Files that are available in the editor.
 
 #### `files`
 
 Type: `ReadableAtom<FileDescriptor[]>`
 
+```ts
+type FileDescriptor = {
+    path: string;
+    type: 'file' | 'folder';
+}
+```
+
 Paths of the files that are available in the lesson.
 
 #### `template`
 
 Type: `Files | undefined`
+
+```ts
+type Files = Record<string, string | Uint8Array>
+```
 
 Files of the template.
 
@@ -153,6 +198,37 @@ File that's currently selected in the file tree.
 
 Type: `Readonly<Lesson> | undefined`
 
+```ts
+interface Lesson<T = unknown> {
+    id: string;
+    order: number;
+    data: LessonSchema;
+    part: {
+        id: string;
+        title: string;
+    };
+    chapter: {
+        id: string;
+        title: string;
+    };
+    slug: string;
+    filepath: string;
+    editPageLink?: string;
+    files: FilesRefList;
+    solution: FilesRefList;
+    next?: LessonLink;
+    prev?: LessonLink;
+    Markdown: T;
+}
+
+interface LessonLink {
+    href: string;
+    title: string;
+}
+
+type FilesRefList = [ref: string, files: string[]]
+```
+
 Currently active lesson.
 
 ### Methods
@@ -161,25 +237,37 @@ Currently active lesson.
 
 Type: `() => boolean`
 
+Check if file tree is visible.
+
 #### `hasEditor`
 
 Type: `() => boolean`
+
+Check if editor is visible.
 
 #### `hasPreviews`
 
 Type: `() => boolean`
 
+Check if lesson has any previews set.
+
 #### `hasTerminalPanel`
 
 Type: `() => boolean`
+
+Check if lesson has any terminals set.
 
 #### `hasSolution`
 
 Type: `() => boolean`
 
+Check if lesson has solution files set.
+
 #### `unblockBoot`
 
 Type: `() => void`
+
+Unlock webcontainer's boot process if it was in `'blocked'` state.
 
 #### `reset`
 
