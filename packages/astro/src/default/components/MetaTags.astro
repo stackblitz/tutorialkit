@@ -8,15 +8,16 @@ interface Props {
   meta?: MetaTagsConfig;
 }
 const { meta = {} } = Astro.props;
+const site = Astro.site?.toString();
 let imageUrl;
 if (meta.image) {
-  imageUrl = readPublicImage(meta.image);
+  imageUrl = readPublicImage(meta.image, site);
   if (!imageUrl) {
     console.warn(`Image ${meta.image} not found in "/public" folder`);
   }
 }
-imageUrl ??= readLogoFile();
-const faviconUrl = readFaviconFile();
+imageUrl ??= readLogoFile('logo', site);
+const faviconUrl = readFaviconFile('favicon', site);
 ---
 
 <meta charset="UTF-8" />
