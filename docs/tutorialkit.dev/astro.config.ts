@@ -67,6 +67,10 @@ export default defineConfig({
               label: 'Overriding Components',
               link: '/guides/overriding-components/',
             },
+            {
+              label: 'How to',
+              link: '/guides/how-to/',
+            },
           ],
         },
         {
