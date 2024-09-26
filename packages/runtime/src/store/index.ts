@@ -129,6 +129,7 @@ export class TutorialStore {
     }
   }
 
+  /** @internal */
   setLesson(lesson: Lesson, options: { ssr?: boolean } = {}) {
     if (lesson === this._lesson) {
       return;
@@ -191,50 +192,62 @@ export class TutorialStore {
     );
   }
 
+  /** Instances of the preview tabs. */
   get previews(): ReadableAtom<PreviewInfo[]> {
     return this._previewsStore.previews;
   }
 
+  /** Configuration and instances of the terminal */
   get terminalConfig(): ReadableAtom<TerminalConfig> {
     return this._terminalStore.terminalConfig;
   }
 
+  /** Configuration of the editor and file tree */
   get editorConfig(): ReadableAtom<EditorConfig> {
     return this._editorStore.editorConfig;
   }
 
+  /** File that's currently open in the editor */
   get currentDocument(): ReadableAtom<EditorDocument | undefined> {
     return this._editorStore.currentDocument;
   }
 
+  /** Status of the webcontainer's booting */
   get bootStatus(): ReadableAtom<BootStatus> {
     return bootStatus;
   }
 
+  /** Files that are available in the editor. */
   get documents(): ReadableAtom<EditorDocuments> {
     return this._editorStore.documents;
   }
 
+  /** Paths of the files that are available in the lesson */
   get files(): ReadableAtom<FileDescriptor[]> {
     return this._editorStore.files;
   }
 
+  /** Files of the template */
   get template(): Files | undefined {
     return this._lessonTemplate;
   }
 
+  /** File that's currently selected in the file tree */
   get selectedFile(): ReadableAtom<string | undefined> {
     return this._editorStore.selectedFile;
   }
 
+  /** Currently active lesson */
   get lesson(): Readonly<Lesson> | undefined {
     return this._lesson;
   }
 
+  /** @internal */
   get ref(): ReadableAtom<unknown> {
     return this._ref;
   }
 
+  /** @internal */
   get themeRef(): ReadableAtom<unknown> {
     return this._themeRef;
   }
@@ -377,6 +390,7 @@ export class TutorialStore {
     this._editorStore.updateScrollPosition(filePath, position);
   }
 
+  /** @internal */
   attachTerminal(id: string, terminal: ITerminal) {
     this._terminalStore.attachTerminal(id, terminal);
   }

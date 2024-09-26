@@ -84,6 +84,10 @@ export default defineConfig({
               label: 'React Components',
               link: '/reference/react-components',
             },
+            {
+              label: 'TutorialKit API',
+              link: '/reference/tutorialkit-api',
+            },
           ],
         },
       ],
