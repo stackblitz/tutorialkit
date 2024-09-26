@@ -1,33 +1,18 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import { readFaviconFile } from '../utils/favicon';
-import { readLogoFile } from '../utils/logo';
+import type { MetaTagsConfig } from '@tutorialkit/types';
+import MetaTags from '../components/MetaTags.astro';
 
 interface Props {
-  title: string;
-  description?: string;
+  meta?: MetaTagsConfig;
 }
-
-const { title, description = 'TutorialKit' } = Astro.props;
-const logoUrl = readLogoFile();
-const faviconUrl = readFaviconFile();
+const { meta } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" transition:animate="none" class="h-full overflow-hidden">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="og:title" content={title} />
-    <meta name="og:description" content={description} />
-    {logoUrl ? <meta name="og:image" content={logoUrl} /> : null}
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    {logoUrl ? <meta name="twitter:image" content={logoUrl} /> : null}
-    <title>{title}</title>
-    {faviconUrl ? <link rel="icon" type="image/svg+xml" href={faviconUrl} /> : null}
+    <MetaTags meta={meta} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />

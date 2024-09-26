@@ -245,6 +245,7 @@ export async function getTutorial(): Promise<Tutorial> {
           'editor',
           'focus',
           'i18n',
+          'meta',
           'editPageLink',
           'openInStackBlitz',
           'filesystem',

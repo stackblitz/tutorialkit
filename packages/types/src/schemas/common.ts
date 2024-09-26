@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { i18nSchema } from './i18n.js';
+import { metaTagsSchema } from './metatags.js';
 
 export const commandSchema = z.union([
   // a single string, the command to run
@@ -286,6 +287,7 @@ export const webcontainerSchema = commandsSchema.extend({
 
 export const baseSchema = webcontainerSchema.extend({
   title: z.string().describe('The title of the part, chapter, or lesson.'),
+  meta: metaTagsSchema.optional(),
   slug: z
     .string()
     .optional()
