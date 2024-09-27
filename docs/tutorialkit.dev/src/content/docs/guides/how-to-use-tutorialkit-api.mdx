@@ -5,6 +5,68 @@ description: "Examples showing how to utilize TutorialKit APIs"
 
 ## Access tutorial state
 
+In this example we'll read contents of `index.js` using Tutorial Store APIs.
+
+When user clicks `Help` button, we check the contents of `index.js` and provide them hints about next steps.
+
+<a class="my-4 inline-block" href="https://stackblitz.com/edit/tutorialkit-api-use-helpbutton?file=src/components/HelpButton.tsx&file=src/content/tutorial/1-basics/1-introduction/1-welcome/content.mdx">
+  <img alt="Open in StackBlitz" src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" />
+</a>
+
+```tsx
+import tutorialStore from "tutorialkit:store";
+import { Dialog } from "@tutorialkit/react";
+import { useState } from "react";
+import { parseModule } from "magicast";
+
+export default function HelpButton() {
+  const [message, setMessage] = useState<string | null>(null);
+
+  function onClick() {
+    const files = tutorialStore.documents.value;
+    const index = files["/index.js"].value as string;
+
+    const message = verifyIndexJs(index);
+    setMessage(message);
+  }
+
+  return (
+    <>
+      <button onClick={onClick} className="px-4 py-1 rounded-md bg-tk-elements-primaryButton-backgroundColor text-tk-elements-primaryButton-textColor">
+        Help
+      </button>
+
+      {message && (
+        <Dialog title="Help" confirmText="OK" onClose={() => setMessage(null)}>
+          {message}
+        </Dialog>
+      )}
+    </>
+  );
+}
+
+function verifyIndexJs(code: string) {
+  const mod = parseModule(code);
+
+  const hasSumFunction =
+    mod.$ast.type === "Program" &&
+    mod.$ast.body.some(
+      (node) => node.type === "FunctionDeclaration" && node.id.name === "sum"
+    );
+
+  if (!hasSumFunction) {
+    return "Your index.js should have a sum function";
+  }
+
+  if (mod.exports.default?.$name !== "sum") {
+    return "Your index.js should export sum as default export";
+  }
+
+  return "All good";
+}
+```
+
+
 ## Write to terminal
 
 ## Provide feedback to user when lesson is solved
