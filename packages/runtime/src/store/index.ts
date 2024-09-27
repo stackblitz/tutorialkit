@@ -227,11 +227,6 @@ export class TutorialStore {
     return this._editorStore.files;
   }
 
-  /** Files of the template */
-  get template(): Files | undefined {
-    return this._lessonTemplate;
-  }
-
   /** File that's currently selected in the file tree */
   get selectedFile(): ReadableAtom<string | undefined> {
     return this._editorStore.selectedFile;
@@ -300,10 +295,12 @@ export class TutorialStore {
     return !!this._lesson && Object.keys(this._lesson.solution[1]).length >= 1;
   }
 
+  /** Unlock webcontainer's boot process if it was in `'blocked'` state */
   unblockBoot() {
     unblockBoot();
   }
 
+  /** Reset changed files back to lesson's initial state */
   reset() {
     const isReady = this.lessonFullyLoaded.value;
 
@@ -315,6 +312,7 @@ export class TutorialStore {
     this._runner.updateFiles(this._lessonFiles);
   }
 
+  /** Apply lesson solution into the lesson files */
   solve() {
     const isReady = this.lessonFullyLoaded.value;
 
@@ -328,10 +326,12 @@ export class TutorialStore {
     this._runner.updateFiles(files);
   }
 
+  /** Set file from file tree as selected */
   setSelectedFile(filePath: string | undefined) {
     this._editorStore.setSelectedFile(filePath);
   }
 
+  /** Add new file to file tree */
   async addFile(filePath: string): Promise<void> {
     // always select the existing or newly created file
     this.setSelectedFile(filePath);
@@ -349,6 +349,7 @@ export class TutorialStore {
     this._runner.updateFile(filePath, '');
   }
 
+  /** Add new folder to file tree */
   async addFolder(folderPath: string) {
     // prevent creating duplicates
     if (this._editorStore.files.get().some((file) => file.path.startsWith(folderPath))) {
@@ -363,6 +364,7 @@ export class TutorialStore {
     this._runner.createFolder(folderPath);
   }
 
+  /** Update contents of file */
   updateFile(filePath: string, content: string) {
     const hasChanged = this._editorStore.updateFile(filePath, content);
 
@@ -371,10 +373,7 @@ export class TutorialStore {
     }
   }
 
-  updateFiles(files: Files) {
-    this._runner.updateFiles(files);
-  }
-
+  /** Update content of the active file */
   setCurrentDocumentContent(newContent: string) {
     const filePath = this.currentDocument.get()?.filePath;
 
@@ -385,6 +384,7 @@ export class TutorialStore {
     this.updateFile(filePath, newContent);
   }
 
+  /** Update scroll position of the file in editor */
   setCurrentDocumentScrollPosition(position: ScrollPosition) {
     const editorDocument = this.currentDocument.get();
 
@@ -402,6 +402,7 @@ export class TutorialStore {
     this._terminalStore.attachTerminal(id, terminal);
   }
 
+  /** Callback that should be called when terminal resizes */
   onTerminalResize(cols: number, rows: number) {
     if (cols && rows) {
       this._terminalStore.onTerminalResize(cols, rows);
@@ -409,14 +410,12 @@ export class TutorialStore {
     }
   }
 
+  /** Listen for file changes made in the editor */
   onDocumentChanged(filePath: string, callback: (document: Readonly<EditorDocument>) => void) {
     return this._editorStore.onDocumentChanged(filePath, callback);
   }
 
-  refreshStyles() {
-    this._themeRef.set(this._themeRef.get() + 1);
-  }
-
+  /** Take snapshot of the current state of the lesson */
   takeSnapshot() {
     return this._runner.takeSnapshot();
   }

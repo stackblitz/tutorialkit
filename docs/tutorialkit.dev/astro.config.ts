@@ -68,8 +68,8 @@ export default defineConfig({
               link: '/guides/overriding-components/',
             },
             {
-              label: 'How to',
-              link: '/guides/how-to/',
+              label: 'How to use TutorialKit API',
+              link: '/guides/how-to-use-tutorialkit-api/',
             },
           ],
         },

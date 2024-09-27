@@ -4,6 +4,7 @@ description: Use TutorialKit's lower level APIs
 ---
 
 TutorialKit exposes low level APIs that authors can utilize to provide highly custom experience in their tutorials.
+These APIs allow authors to control internal parts of TutorialKit. See [How to use TutorialKit API](/guides/how-to-use-tutorialkit-api/) guide for examples.
 
 ## Tutorial Store
 
@@ -19,11 +20,14 @@ This module may introduce breaking changes in patch and minor version updates. P
 
 You can help us stabilize the API by providing feedback at [Stabilizing `tutorialkit:store` API | Github Discussions](https://github.com/stackblitz/tutorialkit/discussions).
 Please let us know how you are using this API.
+
+TODO UPDATE THIS LINK
 :::
 
 ### Common types
 
 - `ReadableAtom` from [`nanostores`](https://www.npmjs.com/package/nanostores)
+- `WebContainerProcess` from  [`@webcontainer/api`](https://www.npmjs.com/package/@webcontainer/api)
 
 ### Properties
 
@@ -159,8 +163,22 @@ Status of the webcontainer's booting.
 Type: `ReadableAtom<EditorDocuments>`
 
 ```ts
-// See type of `EditorDocument` above
+import type { FileDescriptor } from '@tutorialkit/types';
+
 type EditorDocuments = Record<string, EditorDocument | undefined>
+
+interface EditorDocument {
+    value: string | Uint8Array;
+    loading: boolean;
+    filePath: string;
+    type: FileDescriptor['type'];
+    scroll?: ScrollPosition;
+}
+
+interface ScrollPosition {
+    top: number;
+    left: number;
+}
 ```
 
 Files that are available in the editor.
@@ -178,16 +196,6 @@ type FileDescriptor = {
 
 Paths of the files that are available in the lesson.
 
-#### `template`
-
-Type: `Files | undefined`
-
-```ts
-type Files = Record<string, string | Uint8Array>
-```
-
-Files of the template.
-
 #### `selectedFile`
 
 Type: `ReadableAtom<string | undefined>`
@@ -199,34 +207,7 @@ File that's currently selected in the file tree.
 Type: `Readonly<Lesson> | undefined`
 
 ```ts
-interface Lesson<T = unknown> {
-    id: string;
-    order: number;
-    data: LessonSchema;
-    part: {
-        id: string;
-        title: string;
-    };
-    chapter: {
-        id: string;
-        title: string;
-    };
-    slug: string;
-    filepath: string;
-    editPageLink?: string;
-    files: FilesRefList;
-    solution: FilesRefList;
-    next?: LessonLink;
-    prev?: LessonLink;
-    Markdown: T;
-}
-
-interface LessonLink {
-    href: string;
-    title: string;
-}
-
-type FilesRefList = [ref: string, files: string[]]
+import type { Lesson } from '@tutorialkit/types';
 ```
 
 Currently active lesson.
@@ -273,53 +254,93 @@ Unlock webcontainer's boot process if it was in `'blocked'` state.
 
 Type: `() => void`
 
+Reset changed files back to lesson's initial state.
+
 #### `solve`
 
 Type: `() => void`
+
+Apply lesson solution into the lesson files.
 
 #### `setSelectedFile`
 
 Type: `(filePath: string | undefined) => void`
 
+Set file from file tree as selected.
+
 #### `addFile`
 
 Type: `(filePath: string) => Promise<void>`
+
+Add new file to file tree.
+Throws error with message `FILE_EXISTS` if file exists already on file system.
 
 #### `addFolder`
 
 Type: `(folderPath: string) => Promise<void>`
 
+Add new file to file tree.
+Throws error with message `FOLDER_EXISTS` if folder exists already on file system.
+
 #### `updateFile`
 
 Type: `(filePath: string, content: string) => void`
 
-#### `updateFiles`
-
-Type: `(files: Files) => void`
+Update contents of file.
 
 #### `setCurrentDocumentContent`
 
 Type: `(newContent: string) => void`
 
+Update content of the active file.
+
 #### `setCurrentDocumentScrollPosition`
 
 Type: `(position: ScrollPosition) => void`
+
+```ts
+interface ScrollPosition {
+  top: number;
+  left: number;
+}
+```
+
+Update scroll position of the file in editor.
 
 #### `onTerminalResize`
 
 Type: `(cols: number, rows: number) => void`
 
+Callback that should be called when terminal resizes.
+
 #### `onDocumentChanged`
 
 Type: `(filePath: string, callback: (document: Readonly<EditorDocument>) => void) => () => void`
 
-#### `refreshStyles`
+```ts
+import type { FileDescriptor } from '@tutorialkit/types';
 
-Type: `() => void`
+interface EditorDocument {
+    value: string | Uint8Array;
+    loading: boolean;
+    filePath: string;
+    type: FileDescriptor['type'];
+    scroll?: ScrollPosition;
+}
+
+interface ScrollPosition {
+    top: number;
+    left: number;
+}
+```
+
+Listen for file changes made in the editor.
 
 #### `takeSnapshot`
 
 Type: `() => { files: Record<string, string> }`
+
+Take snapshot of the current state of the lesson.
 
 ## Tutorial Core
 
