@@ -1,6 +1,6 @@
 import { readPublicImage } from './publicImage';
 
-export function readFaviconFile(faviconPrefix: string = 'favicon', site?: string) {
+export function readFaviconFile(faviconPrefix: string = 'favicon', absolute?: boolean) {
   const faviconFilename = `${faviconPrefix}.svg`;
-  return readPublicImage(faviconFilename, site);
+  return readPublicImage(faviconFilename, absolute);
 }

@@ -11,13 +11,13 @@ const { meta = {} } = Astro.props;
 const site = Astro.site?.toString();
 let imageUrl;
 if (meta.image) {
-  imageUrl = readPublicImage(meta.image, site);
+  imageUrl = readPublicImage(meta.image, true);
   if (!imageUrl) {
     console.warn(`Image ${meta.image} not found in "/public" folder`);
   }
 }
-imageUrl ??= readLogoFile('logo', site);
-const faviconUrl = readFaviconFile('favicon', site);
+imageUrl ??= readLogoFile('logo', true);
+const faviconUrl = readFaviconFile('favicon', true);
 ---
 
 <meta charset="UTF-8" />

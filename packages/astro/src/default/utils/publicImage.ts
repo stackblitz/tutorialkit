@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { joinPaths } from './url';
 
-export function readPublicImage(filename: string, site?: string) {
+export function readPublicImage(filename: string, absolute?: boolean) {
   let image;
   const exists = fs.existsSync(path.join('public', filename));
 
@@ -12,8 +12,14 @@ export function readPublicImage(filename: string, site?: string) {
 
   image = joinPaths(import.meta.env.BASE_URL, filename);
 
-  if (site) {
-    image = joinPaths(site, image);
+  if (absolute) {
+    const site = import.meta.env.SITE;
+
+    if (!site) {
+      console.warn('Trying to compute an absolute file URL but Astro.site is not set.');
+    } else {
+      image = joinPaths(site, image);
+    }
   }
 
   return image;
