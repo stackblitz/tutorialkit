@@ -3,6 +3,8 @@ title: How to use TutorialKit API
 description: "Examples showing how to utilize TutorialKit APIs"
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## Access tutorial state
 
 In this example we'll read contents of `index.js` using Tutorial Store APIs.
@@ -13,7 +15,10 @@ When user clicks `Help` button, we check the contents of `index.js` and provide 
   <img alt="Open in StackBlitz" src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" />
 </a>
 
-```tsx
+<Tabs>
+  <TabItem label="HelpButton.tsx">
+
+```tsx title="src/components/HelpButton.tsx"
 import tutorialStore from "tutorialkit:store";
 import { Dialog } from "@tutorialkit/react";
 import { useState } from "react";
@@ -66,8 +71,86 @@ function verifyIndexJs(code: string) {
 }
 ```
 
+  </TabItem>
+  <TabItem label="content.mdx">
+
+```mdx title=" title="src/content/tutorial/chapter/part/lesson/content.mdx"
+---
+type: lesson
+title: TutorialKit API usage example
+focus: /index.js
+---
+
+import HelpButton from '@components/HelpButton';
+
+# TutorialKit API usage example
+
+Click this button if you get stuck:
+
+<HelpButton client:load />
+
+```
+
+  </TabItem>
+</Tabs>
+
 
 ## Write to terminal
+
+In this example we'll write commands to the terminal using Tutorial Store APIs.
+
+When user clicks `Run tests` button, we run `npm run test` command into the terminal.
+This command starts our `test` command defined in template's `package.json`.
+
+<a class="my-4 inline-block" href="https://stackblitz.com/edit/stackblitz-starters-1qz1r8?file=src/components/TerminalWriter.tsx&file=src/content/tutorial/1-basics/1-introduction/1-welcome/content.mdx">
+  <img alt="Open in StackBlitz" src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" />
+</a>
+
+<Tabs>
+  <TabItem label="TerminalWriter.tsx">
+
+```tsx title="src/components/TerminalWriter.tsx"
+import tutorialStore from 'tutorialkit:store';
+
+export default function TerminalWriter() {
+  async function onClick() {
+    const terminal = tutorialStore.terminalConfig.value!.panels[0];
+    terminal.input('npm run test\n');
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      className="px-4 py-1 my-3 cursor-pointer border-1 border-tk-border-primary rounded-md bg-tk-elements-primaryButton-backgroundColor text-tk-elements-primaryButton-textColor"
+    >
+      Run tests
+    </button>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem label="content.mdx">
+
+```mdx title="src/content/tutorial/chapter/part/lesson/content.mdx"
+---
+type: lesson
+title: Write to Terminal example
+---
+
+import TerminalWriter from "@components/TerminalWriter";
+
+# Write to Terminal example
+
+Fix <code>counter.js</code> and run the tests!
+
+<TerminalWriter client:load />
+```
+
+</TabItem>
+
+</Tabs>
 
 ## Provide feedback to user when lesson is solved
 
