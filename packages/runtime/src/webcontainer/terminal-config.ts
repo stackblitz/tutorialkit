@@ -67,6 +67,7 @@ export class TerminalPanel implements ITerminal {
   private _terminal?: ITerminal;
   private _process?: WebContainerProcess;
   private _data: string[] = [];
+  private _input: string[] = [];
   private _onData?: (data: string) => void;
 
   constructor(
@@ -127,9 +128,15 @@ export class TerminalPanel implements ITerminal {
       this._terminal.reset();
     } else {
       this._data = [];
+      this._input = [];
     }
   }
 
+  /**
+   * Write data to stdout.
+   *
+   * @internal
+   */
   write(data: string) {
     if (this._terminal) {
       this._terminal.write(data);
@@ -138,6 +145,20 @@ export class TerminalPanel implements ITerminal {
     }
   }
 
+  /** Write data to stdin */
+  input(data: string) {
+    if (this.type !== 'terminal') {
+      throw new Error('Cannot write data to output-only terminal');
+    }
+
+    if (this._terminal) {
+      this._terminal.input(data);
+    } else {
+      this._input.push(data);
+    }
+  }
+
+  /** Callback invoked when data is written to stdin */
   onData(callback: (data: string) => void) {
     if (this._terminal) {
       this._terminal.onData(callback);
@@ -170,7 +191,12 @@ export class TerminalPanel implements ITerminal {
       terminal.write(data);
     }
 
+    for (const data of this._input) {
+      terminal.input(data);
+    }
+
     this._data = [];
+    this._input = [];
     this._terminal = terminal;
 
     if (this._onData) {
