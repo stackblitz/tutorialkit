@@ -1,7 +1,7 @@
 ---
 import type { MetaTagsConfig } from '@tutorialkit/types';
 import { readLogoFile } from '../utils/logo';
-import { readPublicImage } from '../utils/publicImage';
+import { readPublicAsset } from '../utils/publicAsset';
 
 interface Props {
   meta?: MetaTagsConfig;
@@ -9,7 +9,7 @@ interface Props {
 const { meta = {} } = Astro.props;
 let imageUrl;
 if (meta.image) {
-  imageUrl = readPublicImage(meta.image, true);
+  imageUrl = readPublicAsset(meta.image, true);
   if (!imageUrl) {
     console.warn(`Image ${meta.image} not found in "/public" folder`);
   }

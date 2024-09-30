@@ -2,14 +2,14 @@
 import { ViewTransitions } from 'astro:transitions';
 import type { MetaTagsConfig } from '@tutorialkit/types';
 import MetaTags from '../components/MetaTags.astro';
-import { readPublicImage } from '../utils/publicImage';
+import { readPublicAsset } from '../utils/publicAsset';
 
 interface Props {
   title: string;
   meta?: MetaTagsConfig;
 }
 const { title, meta } = Astro.props;
-const faviconUrl = readPublicImage('favicon.svg');
+const faviconUrl = readPublicAsset('favicon.svg');
 ---
 
 <!doctype html>
