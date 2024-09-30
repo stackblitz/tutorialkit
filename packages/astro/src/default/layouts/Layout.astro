@@ -9,7 +9,7 @@ interface Props {
   meta?: MetaTagsConfig;
 }
 const { title, meta } = Astro.props;
-const faviconUrl = readPublicImage('favicon.svg', true);
+const faviconUrl = readPublicImage('favicon.svg');
 ---
 
 <!doctype html>
