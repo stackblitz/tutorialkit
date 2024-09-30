@@ -4,6 +4,7 @@ export interface ITerminal {
 
   reset: () => void;
   write: (data: string) => void;
+  input: (data: string) => void;
   onData: (cb: (data: string) => void) => void;
 }
 
