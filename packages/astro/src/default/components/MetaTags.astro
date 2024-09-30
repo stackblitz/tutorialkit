@@ -1,6 +1,5 @@
 ---
 import type { MetaTagsConfig } from '@tutorialkit/types';
-import { readFaviconFile } from '../utils/favicon';
 import { readLogoFile } from '../utils/logo';
 import { readPublicImage } from '../utils/publicImage';
 
@@ -8,7 +7,6 @@ interface Props {
   meta?: MetaTagsConfig;
 }
 const { meta = {} } = Astro.props;
-const site = Astro.site?.toString();
 let imageUrl;
 if (meta.image) {
   imageUrl = readPublicImage(meta.image, true);
@@ -17,15 +15,12 @@ if (meta.image) {
   }
 }
 imageUrl ??= readLogoFile('logo', true);
-const faviconUrl = readFaviconFile('favicon', true);
 ---
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
 <meta name="generator" content={Astro.generator} />
 {meta.description ? <meta name="description" content={meta.description} /> : null}
-{meta.title ? <title>{meta.title}</title> : null}
-{faviconUrl ? <link rel="icon" type="image/svg+xml" href={faviconUrl} /> : null}
 {/* open graph */}
 {meta.title ? <meta name="og:title" content={meta.title} /> : null}
 {meta.description ? <meta name="og:description" content={meta.description} /> : null}
