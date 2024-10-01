@@ -66,7 +66,7 @@ export class TerminalPanel implements ITerminal {
 
   private _terminal?: ITerminal;
   private _process?: WebContainerProcess;
-  private _data: string[] = [];
+  private _data: { data: string; type: 'input' | 'echo' }[] = [];
   private _onData?: (data: string) => void;
 
   constructor(
@@ -130,11 +130,24 @@ export class TerminalPanel implements ITerminal {
     }
   }
 
+  /** @internal*/
   write(data: string) {
     if (this._terminal) {
       this._terminal.write(data);
     } else {
-      this._data.push(data);
+      this._data.push({ data, type: 'echo' });
+    }
+  }
+
+  input(data: string) {
+    if (this.type !== 'terminal') {
+      throw new Error('Cannot write data to output-only terminal');
+    }
+
+    if (this._terminal) {
+      this._terminal.input(data);
+    } else {
+      this._data.push({ data, type: 'input' });
     }
   }
 
@@ -166,8 +179,12 @@ export class TerminalPanel implements ITerminal {
    * @param terminal The terminal.
    */
   attachTerminal(terminal: ITerminal) {
-    for (const data of this._data) {
-      terminal.write(data);
+    for (const { type, data } of this._data) {
+      if (type === 'echo') {
+        terminal.write(data);
+      } else {
+        terminal.input(data);
+      }
     }
 
     this._data = [];
