@@ -1,3 +1,28 @@
+# [1.0.0](https://github.com/stackblitz/tutorialkit/compare/0.2.3...1.0.0) (2024-10-01)
+
+
+### Bug Fixes
+
+* **astro:** published package missing `@tutorialkit/astro/types` ([#347](https://github.com/stackblitz/tutorialkit/issues/347)) ([f49e910](https://github.com/stackblitz/tutorialkit/commit/f49e9107d35b98079a0fb16c74b9f37a45357661))
+* prevent overwriting template files via `<FileTree>` ([#336](https://github.com/stackblitz/tutorialkit/issues/336)) ([23ed41c](https://github.com/stackblitz/tutorialkit/commit/23ed41c827073a205a2ceaa78973a9200a84c72d))
+
+
+### Features
+
+* add files via file tree ([#314](https://github.com/stackblitz/tutorialkit/issues/314)) ([7782bdc](https://github.com/stackblitz/tutorialkit/commit/7782bdc6e7da0429061c881ac2f95829f149a907))
+* **astro:** override components to support `Dialog` ([#345](https://github.com/stackblitz/tutorialkit/issues/345)) ([61a542e](https://github.com/stackblitz/tutorialkit/commit/61a542e7e13b3eaf52b04624954398a8d95a8d46))
+* mark `@tutorialkit/react` component API as experimental feature ([#346](https://github.com/stackblitz/tutorialkit/issues/346)) ([67042ef](https://github.com/stackblitz/tutorialkit/commit/67042efba00dbfa738d2eeff06e3104b4292a486))
+* **runtime:** add `terminal.input` for writing to stdin ([#350](https://github.com/stackblitz/tutorialkit/issues/350)) ([c0b8f41](https://github.com/stackblitz/tutorialkit/commit/c0b8f41a28259cc19d7049be2506a5b246d6f32d))
+* support glob patterns in `editor.fileTree.allowEdits` ([#332](https://github.com/stackblitz/tutorialkit/issues/332)) ([c1a59f5](https://github.com/stackblitz/tutorialkit/commit/c1a59f54c5b5700b8ec8ed5a4a3ebf2169b2409c))
+* sync files from WebContainer to editor ([#334](https://github.com/stackblitz/tutorialkit/issues/334)) ([5c1de69](https://github.com/stackblitz/tutorialkit/commit/5c1de69c0e4e233a25a2f9b70fbb1f6c93f12356))
+
+
+### BREAKING CHANGES
+
+* mark `@tutorialkit/react` component API as experimental feature (#346)
+
+
+
 ## [0.2.3](https://github.com/stackblitz/tutorialkit/compare/0.2.2...0.2.3) (2024-09-10)
 
 
