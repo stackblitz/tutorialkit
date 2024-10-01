@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/theme",
-  "version": "0.2.3",
+  "version": "1.0.0",
   "description": "TutorialKit theme configuration",
   "author": "StackBlitz Inc.",
   "type": "module",
