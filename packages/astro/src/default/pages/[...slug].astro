@@ -15,9 +15,14 @@ export async function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { lesson, logoLink, navList, title } = Astro.props as Props;
+const meta = lesson.data?.meta ?? {};
+
+// use lesson's default title and a default description for SEO metadata
+meta.title ??= title;
+meta.description ??= 'A TutorialKit interactive lesson';
 ---
 
-<Layout title={title}>
+<Layout title={title} meta={meta}>
   <PageLoadingIndicator />
   <div id="previews-container"></div>
   <main class="max-w-full flex flex-col h-full overflow-hidden" data-swap-root>

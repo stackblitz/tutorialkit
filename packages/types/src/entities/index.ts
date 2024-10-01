@@ -1,5 +1,6 @@
 import type { I18nSchema } from '../schemas/i18n.js';
 import type { ChapterSchema, LessonSchema, PartSchema } from '../schemas/index.js';
+import type { MetaTagsSchema } from '../schemas/metatags.js';
 
 export type * from './nav.js';
 
@@ -56,6 +57,8 @@ export interface Lesson<T = unknown> {
 }
 
 export type I18n = Required<NonNullable<I18nSchema>>;
+
+export type MetaTagsConfig = MetaTagsSchema;
 
 export interface Tutorial {
   logoLink?: string;

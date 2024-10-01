@@ -1,0 +1,31 @@
+---
+import type { MetaTagsConfig } from '@tutorialkit/types';
+import { readLogoFile } from '../utils/logo';
+import { readPublicAsset } from '../utils/publicAsset';
+
+interface Props {
+  meta?: MetaTagsConfig;
+}
+const { meta = {} } = Astro.props;
+let imageUrl;
+if (meta.image) {
+  imageUrl = readPublicAsset(meta.image, true);
+  if (!imageUrl) {
+    console.warn(`Image ${meta.image} not found in "/public" folder`);
+  }
+}
+imageUrl ??= readLogoFile('logo', true);
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<meta name="generator" content={Astro.generator} />
+{meta.description ? <meta name="description" content={meta.description} /> : null}
+{/* open graph */}
+{meta.title ? <meta name="og:title" content={meta.title} /> : null}
+{meta.description ? <meta name="og:description" content={meta.description} /> : null}
+{imageUrl ? <meta name="og:image" content={imageUrl} /> : null}
+{/* twitter */}
+{meta.title ? <meta name="twitter:title" content={meta.title} /> : null}
+{meta.description ? <meta name="twitter:description" content={meta.description} /> : null}
+{imageUrl ? <meta name="twitter:image" content={imageUrl} /> : null}

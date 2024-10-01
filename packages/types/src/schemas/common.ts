@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { i18nSchema } from './i18n.js';
+import { metaTagsSchema } from './metatags.js';
 
 export const commandSchema = z.union([
   // a single string, the command to run
@@ -207,6 +208,8 @@ export type TerminalSchema = z.infer<typeof terminalSchema>;
 export type EditorSchema = z.infer<typeof editorSchema>;
 
 export const webcontainerSchema = commandsSchema.extend({
+  meta: metaTagsSchema.optional(),
+
   previews: previewSchema
     .optional()
     .describe(
