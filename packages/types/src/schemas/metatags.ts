@@ -5,10 +5,10 @@ export const metaTagsSchema = z.object({
     .string()
     .optional()
     /**
-     * Ideally we would have want to use image from:
+     * Ideally we would want to use `image` from:
      * https://docs.astro.build/en/guides/images/#images-in-content-collections .
      */
-    .describe('An image to show on social previews, should point to the public folder: "/foobar.png"'),
+    .describe('A relative path to an image that lives in the public folder to show on social previews.'),
   description: z.string().optional().describe('A description for metadata'),
   title: z.string().optional().describe('A title to use specifically for metadata'),
 });
