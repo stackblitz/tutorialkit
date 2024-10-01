@@ -1,0 +1,260 @@
+---
+title: How to use TutorialKit API
+description: "Examples showing how to utilize TutorialKit APIs"
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+TutorialKit's API can be used in custom components to provide highly custom experience in the tutorials.
+Below are listed few examples to solve real-world use cases. See [TutorialKit API](/reference/tutorialkit-api/) for API documentation.
+
+## Access tutorial state
+
+In this example we'll read contents of `index.js` using Tutorial Store APIs.
+
+When user clicks `Help` button, we check the contents of `index.js` and provide them hints about next steps.
+
+<a class="my-4 inline-block" href="https://stackblitz.com/edit/tutorialkit-api-use-helpbutton?file=src/components/HelpButton.tsx&file=src/content/tutorial/1-basics/1-introduction/1-welcome/content.mdx">
+  <img alt="Open in StackBlitz" src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" />
+</a>
+
+<Tabs>
+  <TabItem label="HelpButton.tsx">
+
+```tsx title="src/components/HelpButton.tsx"
+import tutorialStore from "tutorialkit:store";
+import { Dialog } from "@tutorialkit/react";
+import { useState } from "react";
+import { parseModule } from "magicast";
+
+export default function HelpButton() {
+  const [message, setMessage] = useState<string | null>(null);
+
+  function onClick() {
+    const files = tutorialStore.documents.value;
+    const index = files["/index.js"].value as string;
+
+    const message = verifyIndexJs(index);
+    setMessage(message);
+  }
+
+  return (
+    <>
+      <button onClick={onClick} className="px-4 py-1 rounded-md bg-tk-elements-primaryButton-backgroundColor text-tk-elements-primaryButton-textColor">
+        Help
+      </button>
+
+      {message && (
+        <Dialog title="Help" confirmText="OK" onClose={() => setMessage(null)}>
+          {message}
+        </Dialog>
+      )}
+    </>
+  );
+}
+
+function verifyIndexJs(code: string) {
+  const mod = parseModule(code);
+
+  const hasSumFunction =
+    mod.$ast.type === "Program" &&
+    mod.$ast.body.some(
+      (node) => node.type === "FunctionDeclaration" && node.id.name === "sum"
+    );
+
+  if (!hasSumFunction) {
+    return "Your index.js should have a sum function";
+  }
+
+  if (mod.exports.default?.$name !== "sum") {
+    return "Your index.js should export sum as default export";
+  }
+
+  return "All good";
+}
+```
+
+  </TabItem>
+  <TabItem label="content.mdx">
+
+```mdx title="src/content/tutorial/chapter/part/lesson/content.mdx"
+---
+type: lesson
+title: TutorialKit API usage example
+focus: /index.js
+---
+
+import HelpButton from '@components/HelpButton';
+
+# TutorialKit API usage example
+
+Click this button if you get stuck:
+
+<HelpButton client:load />
+
+```
+
+  </TabItem>
+</Tabs>
+
+
+## Write to terminal
+
+In this example we'll write commands to the terminal using Tutorial Store APIs.
+
+When user clicks `Run tests` button, we run `npm run test` command into the terminal.
+This command starts our `test` command defined in template's `package.json`.
+
+<a class="my-4 inline-block" href="https://stackblitz.com/edit/stackblitz-starters-1qz1r8?file=src/components/TerminalWriter.tsx&file=src/content/tutorial/1-basics/1-introduction/1-welcome/content.mdx">
+  <img alt="Open in StackBlitz" src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" />
+</a>
+
+<Tabs>
+  <TabItem label="TerminalWriter.tsx">
+
+```tsx title="src/components/TerminalWriter.tsx"
+import tutorialStore from 'tutorialkit:store';
+
+export default function TerminalWriter() {
+  async function onClick() {
+    const terminal = tutorialStore.terminalConfig.value!.panels[0];
+    terminal.input('npm run test\n');
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      className="px-4 py-1 my-3 cursor-pointer border-1 border-tk-border-primary rounded-md bg-tk-elements-primaryButton-backgroundColor text-tk-elements-primaryButton-textColor"
+    >
+      Run tests
+    </button>
+  );
+}
+```
+
+  </TabItem>
+
+  <TabItem label="content.mdx">
+
+```mdx title="src/content/tutorial/chapter/part/lesson/content.mdx"
+---
+type: lesson
+title: Write to Terminal example
+---
+
+import TerminalWriter from "@components/TerminalWriter";
+
+# Write to Terminal example
+
+Fix <code>counter.js</code> and run the tests!
+
+<TerminalWriter client:load />
+```
+
+  </TabItem>
+</Tabs>
+
+## Provide feedback to user when lesson is solved
+
+In this example we'll use the Tutorial Core APIs to congratulate user when they solve the lesson code.
+
+Every time user edits the `math.js`, we run `node check-lesson.js` in the webcontainer and see if the process exits with non-erroneous exit code.
+Once the exit code indicates success, we inform user with message.
+
+<a class="my-4 inline-block" href="https://stackblitz.com/edit/stackblitz-starters-b9ie5x?file=src/components/LessonChecker.tsx&file=src/templates/default/check-lesson.mjs&file=src/content/tutorial/1-basics/1-introduction/1-welcome/content.mdx">
+  <img alt="Open in StackBlitz" src="https://developer.stackblitz.com/img/open_in_stackblitz.svg" />
+</a>
+
+<Tabs>
+   <TabItem label="LessonChecker.tsx">
+
+```tsx title="src/components/LessonChecker.tsx"
+import { Dialog } from '@tutorialkit/react';
+import { useEffect, useState } from 'react';
+import { webcontainer } from 'tutorialkit:core';
+import tutorialStore from 'tutorialkit:store';
+
+export default function LessonChecker() {
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
+
+    const unsubscribe = tutorialStore.onDocumentChanged('/math.js', () => {
+      clearTimeout(timeout);
+
+      timeout = setTimeout(async () => {
+        if (await checkLesson()) {
+          setSuccess(true);
+          unsubscribe();
+        }
+      }, 250);
+    });
+
+    return function cleanup() {
+      unsubscribe();
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  return (
+    <>
+      {success && (
+        <Dialog title="Lesson complete" confirmText="OK" onClose={() => setSuccess(false)}>
+          Lesson complete, congratulations! 🎉
+        </Dialog>
+      )}
+    </>
+  );
+}
+
+async function checkLesson(): Promise<boolean> {
+  const webcontainerInstance = await webcontainer;
+  const process = await webcontainerInstance.spawn('node', ['./check-lesson.mjs']);
+
+  const exitCode = await process.exit;
+
+  return exitCode === 0;
+}
+```
+
+   </TabItem>
+
+   <TabItem label="check-lesson.mjs">
+
+```js title="src/templates/default/check-lesson.mjs"
+import * as math from './math.js';
+
+if (math.sum(25, 32) !== 57) {
+  process.exit(1);
+}
+
+if (math.multiply(3, 25) !== 75) {
+  process.exit(1);
+}
+
+process.exit(0);
+```
+
+   </TabItem>
+
+   <TabItem label="content.mdx">
+
+```mdx title="src/content/tutorial/chapter/part/lesson/content.mdx"
+---
+type: lesson
+title: TutorialKit API usage example
+focus: /math.js
+---
+
+import LessonChecker from '@components/LessonChecker';
+
+# TutorialKit API usage example
+
+Solve <code>math.js</code> and you'll see notification about completed lesson!
+
+<LessonChecker client:load />
+```
+
+   </TabItem>
+</Tabs>

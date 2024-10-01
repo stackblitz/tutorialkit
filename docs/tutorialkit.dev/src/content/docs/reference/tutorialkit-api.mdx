@@ -1,0 +1,363 @@
+---
+title: TutorialKit API
+description: Use TutorialKit's lower level APIs
+---
+
+TutorialKit exposes low level APIs that authors can utilize to provide highly custom experience in their tutorials.
+These APIs allow authors to control internal parts of TutorialKit. See [How to use TutorialKit API](/guides/how-to-use-tutorialkit-api/) guide for examples.
+
+## Tutorial Store
+
+You can access Tutorial Store by importing the `tutorialkit:store` entrypoint.
+
+```ts
+import tutorialStore from "tutorialkit:store";
+```
+
+:::note
+Using `tutorialkit:store` is **experimental** at the moment.
+This module may introduce breaking changes in patch and minor version updates. Pay extra attention when updating the versions.
+
+You can help us stabilize the API by providing feedback at [Stabilizing `tutorialkit:store` API | Github Discussions](https://github.com/stackblitz/tutorialkit/discussions/351).
+Please let us know how you are using this API.
+:::
+
+### Common types
+
+- `ReadableAtom` from [`nanostores`](https://www.npmjs.com/package/nanostores)
+- `WebContainerProcess` from  [`@webcontainer/api`](https://www.npmjs.com/package/@webcontainer/api)
+
+### Properties
+
+#### `previews`
+
+Type: `ReadableAtom<PreviewInfo[]>`
+
+```ts
+import type { PreviewSchema } from '@tutorialkit/types';
+
+class PreviewInfo {
+    readonly portInfo: PortInfo;
+    title?: string;
+    pathname?: string;
+    get url(): string | undefined;
+    get port(): number;
+    get baseUrl(): string | undefined;
+    get ready(): boolean;
+    static parse(preview: Exclude<PreviewSchema, boolean>[0]): Preview;
+    static equals(a: PreviewInfo, b: PreviewInfo): boolean;
+}
+class PortInfo {
+    readonly port: number;
+    origin?: string | undefined;
+    ready: boolean;
+}
+interface Preview {
+    port: number;
+    pathname?: string;
+    title?: string;
+}
+```
+
+Instances of the preview tabs.
+
+#### `terminalConfig`
+
+Type: `ReadableAtom<TerminalConfig>`
+
+```ts
+import type { TerminalPanelType, TerminalSchema } from '@tutorialkit/types';
+import type { WebContainerProcess } from '@webcontainer/api';
+
+class TerminalConfig {
+    get panels(): TerminalPanel[];
+    get activePanel(): number;
+    get defaultOpen(): boolean;
+}
+
+class TerminalPanel implements ITerminal {
+    readonly type: TerminalPanelType;
+    static panelCount: Record<TerminalPanelType, number>;
+    static resetCount(): void;
+    readonly id: string;
+    readonly title: string;
+    get terminal(): ITerminal | undefined;
+    get process(): WebContainerProcess | undefined;
+    get processOptions(): {
+        allowRedirects: boolean;
+        allowCommands: string[] | undefined;
+    } | undefined;
+    get cols(): number | undefined;
+    get rows(): number | undefined;
+    reset(): void;
+    write(data: string): void;
+    onData(callback: (data: string) => void): void;
+    attachProcess(process: WebContainerProcess): void;
+    attachTerminal(terminal: ITerminal): void;
+}
+
+interface ITerminal {
+    readonly cols?: number;
+    readonly rows?: number;
+    reset: () => void;
+    write: (data: string) => void;
+    onData: (cb: (data: string) => void) => void;
+}
+```
+
+Configuration and instances of the terminal.
+
+#### `editorConfig`
+
+Type: `ReadableAtom<EditorConfig>`
+
+```ts
+class EditorConfig {
+    get visible(): boolean;
+    get fileTree(): {
+        visible: boolean;
+        allowEdits: false | string[];
+    };
+}
+```
+
+Configuration of the editor and file tree.
+
+#### `currentDocument`
+
+Type: `ReadableAtom<EditorDocument | undefined>`
+
+```ts
+import type { FileDescriptor } from '@tutorialkit/types';
+
+interface EditorDocument {
+    value: string | Uint8Array;
+    loading: boolean;
+    filePath: string;
+    type: FileDescriptor['type'];
+    scroll?: ScrollPosition;
+}
+
+interface ScrollPosition {
+    top: number;
+    left: number;
+}
+```
+
+File that's currently open in the editor.
+
+#### `bootStatus`
+
+Type: `ReadableAtom<BootStatus>`
+
+```ts
+type BootStatus = 'unknown' | 'blocked' | 'booting' | 'booted';
+```
+
+Status of the webcontainer's booting.
+
+#### `documents`
+
+Type: `ReadableAtom<EditorDocuments>`
+
+```ts
+import type { FileDescriptor } from '@tutorialkit/types';
+
+type EditorDocuments = Record<string, EditorDocument | undefined>
+
+interface EditorDocument {
+    value: string | Uint8Array;
+    loading: boolean;
+    filePath: string;
+    type: FileDescriptor['type'];
+    scroll?: ScrollPosition;
+}
+
+interface ScrollPosition {
+    top: number;
+    left: number;
+}
+```
+
+Files that are available in the editor.
+
+#### `files`
+
+Type: `ReadableAtom<FileDescriptor[]>`
+
+```ts
+type FileDescriptor = {
+    path: string;
+    type: 'file' | 'folder';
+}
+```
+
+Paths of the files that are available in the lesson.
+
+#### `selectedFile`
+
+Type: `ReadableAtom<string | undefined>`
+
+File that's currently selected in the file tree.
+
+#### `lesson`
+
+Type: `Readonly<Lesson> | undefined`
+
+```ts
+import type { Lesson } from '@tutorialkit/types';
+```
+
+Currently active lesson.
+
+### Methods
+
+#### `hasFileTree`
+
+Type: `() => boolean`
+
+Check if file tree is visible.
+
+#### `hasEditor`
+
+Type: `() => boolean`
+
+Check if editor is visible.
+
+#### `hasPreviews`
+
+Type: `() => boolean`
+
+Check if lesson has any previews set.
+
+#### `hasTerminalPanel`
+
+Type: `() => boolean`
+
+Check if lesson has any terminals set.
+
+#### `hasSolution`
+
+Type: `() => boolean`
+
+Check if lesson has solution files set.
+
+#### `unblockBoot`
+
+Type: `() => void`
+
+Unlock webcontainer's boot process if it was in `'blocked'` state.
+
+#### `reset`
+
+Type: `() => void`
+
+Reset changed files back to lesson's initial state.
+
+#### `solve`
+
+Type: `() => void`
+
+Apply lesson solution into the lesson files.
+
+#### `setSelectedFile`
+
+Type: `(filePath: string | undefined) => void`
+
+Set file from file tree as selected.
+
+#### `addFile`
+
+Type: `(filePath: string) => Promise<void>`
+
+Add new file to file tree.
+Throws error with message `FILE_EXISTS` if file exists already on file system.
+
+#### `addFolder`
+
+Type: `(folderPath: string) => Promise<void>`
+
+Add new file to file tree.
+Throws error with message `FOLDER_EXISTS` if folder exists already on file system.
+
+#### `updateFile`
+
+Type: `(filePath: string, content: string) => void`
+
+Update contents of file.
+
+#### `setCurrentDocumentContent`
+
+Type: `(newContent: string) => void`
+
+Update content of the active file.
+
+#### `setCurrentDocumentScrollPosition`
+
+Type: `(position: ScrollPosition) => void`
+
+```ts
+interface ScrollPosition {
+  top: number;
+  left: number;
+}
+```
+
+Update scroll position of the file in editor.
+
+#### `onTerminalResize`
+
+Type: `(cols: number, rows: number) => void`
+
+Callback that should be called when terminal resizes.
+
+#### `onDocumentChanged`
+
+Type: `(filePath: string, callback: (document: Readonly<EditorDocument>) => void) => () => void`
+
+```ts
+import type { FileDescriptor } from '@tutorialkit/types';
+
+interface EditorDocument {
+    value: string | Uint8Array;
+    loading: boolean;
+    filePath: string;
+    type: FileDescriptor['type'];
+    scroll?: ScrollPosition;
+}
+
+interface ScrollPosition {
+    top: number;
+    left: number;
+}
+```
+
+Listen for file changes made in the editor.
+
+#### `takeSnapshot`
+
+Type: `() => { files: Record<string, string> }`
+
+Take snapshot of the current state of the lesson.
+
+## Tutorial Core
+
+You can access Tutorial Core by importing the `tutorialkit:core` entrypoint.
+
+```ts
+import * as core from "tutorialkit:core";
+```
+
+The Tutorial Core provides access to webcontainer APIs. You can use it for example to read and modify files on the virtual file system.
+
+### Common Types
+
+- `WebContainer` from [`@webcontainer/api`](https://www.npmjs.com/package/@webcontainer/api)
+
+### Properties
+
+#### `webcontainer`
+
+Type: `Promise<WebContainer>`
+
+Promise that resolves to the webcontainer that's running in the current lesson.

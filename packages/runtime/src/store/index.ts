@@ -129,6 +129,7 @@ export class TutorialStore {
     }
   }
 
+  /** @internal */
   setLesson(lesson: Lesson, options: { ssr?: boolean } = {}) {
     if (lesson === this._lesson) {
       return;
@@ -191,61 +192,71 @@ export class TutorialStore {
     );
   }
 
+  /** Instances of the preview tabs. */
   get previews(): ReadableAtom<PreviewInfo[]> {
     return this._previewsStore.previews;
   }
 
+  /** Configuration and instances of the terminal */
   get terminalConfig(): ReadableAtom<TerminalConfig> {
     return this._terminalStore.terminalConfig;
   }
 
+  /** Configuration of the editor and file tree */
   get editorConfig(): ReadableAtom<EditorConfig> {
     return this._editorStore.editorConfig;
   }
 
+  /** File that's currently open in the editor */
   get currentDocument(): ReadableAtom<EditorDocument | undefined> {
     return this._editorStore.currentDocument;
   }
 
+  /** Status of the webcontainer's booting */
   get bootStatus(): ReadableAtom<BootStatus> {
     return bootStatus;
   }
 
+  /** Files that are available in the editor. */
   get documents(): ReadableAtom<EditorDocuments> {
     return this._editorStore.documents;
   }
 
+  /** Paths of the files that are available in the lesson */
   get files(): ReadableAtom<FileDescriptor[]> {
     return this._editorStore.files;
   }
 
-  get template(): Files | undefined {
-    return this._lessonTemplate;
-  }
-
+  /** File that's currently selected in the file tree */
   get selectedFile(): ReadableAtom<string | undefined> {
     return this._editorStore.selectedFile;
   }
 
+  /** Currently active lesson */
   get lesson(): Readonly<Lesson> | undefined {
     return this._lesson;
   }
 
+  /** @internal */
   get ref(): ReadableAtom<unknown> {
     return this._ref;
   }
 
+  /** @internal */
   get themeRef(): ReadableAtom<unknown> {
     return this._themeRef;
   }
 
   /**
    * Steps that the runner is or will be executing.
+   *
+   * @internal
    */
   get steps() {
     return this._stepController.steps;
   }
 
+  /** Check if file tree is visible */
   hasFileTree(): boolean {
     if (!this._lesson) {
       return false;
@@ -254,6 +265,7 @@ export class TutorialStore {
     return this.editorConfig.get().fileTree.visible;
   }
 
+  /** Check if editor is visible */
   hasEditor(): boolean {
     if (!this._lesson) {
       return false;
@@ -262,6 +274,7 @@ export class TutorialStore {
     return this.editorConfig.get().visible;
   }
 
+  /** Check if lesson has any previews set */
   hasPreviews(): boolean {
     if (!this._lesson) {
       return false;
@@ -272,18 +285,22 @@ export class TutorialStore {
     return previews !== false;
   }
 
+  /** Check if lesson has any terminals set */
   hasTerminalPanel(): boolean {
     return this._terminalStore.hasTerminalPanel();
   }
 
+  /** Check if lesson has solution files set */
   hasSolution(): boolean {
     return !!this._lesson && Object.keys(this._lesson.solution[1]).length >= 1;
   }
 
+  /** Unlock webcontainer's boot process if it was in `'blocked'` state */
   unblockBoot() {
     unblockBoot();
   }
 
+  /** Reset changed files back to lesson's initial state */
   reset() {
     const isReady = this.lessonFullyLoaded.value;
 
@@ -295,6 +312,7 @@ export class TutorialStore {
     this._runner.updateFiles(this._lessonFiles);
   }
 
+  /** Apply lesson solution into the lesson files */
   solve() {
     const isReady = this.lessonFullyLoaded.value;
 
@@ -308,10 +326,12 @@ export class TutorialStore {
     this._runner.updateFiles(files);
   }
 
+  /** Set file from file tree as selected */
   setSelectedFile(filePath: string | undefined) {
     this._editorStore.setSelectedFile(filePath);
   }
 
+  /** Add new file to file tree */
   async addFile(filePath: string): Promise<void> {
     // always select the existing or newly created file
     this.setSelectedFile(filePath);
@@ -329,6 +349,7 @@ export class TutorialStore {
     this._runner.updateFile(filePath, '');
   }
 
+  /** Add new folder to file tree */
   async addFolder(folderPath: string) {
     // prevent creating duplicates
     if (this._editorStore.files.get().some((file) => file.path.startsWith(folderPath))) {
@@ -343,6 +364,7 @@ export class TutorialStore {
     this._runner.createFolder(folderPath);
   }
 
+  /** Update contents of file */
   updateFile(filePath: string, content: string) {
     const hasChanged = this._editorStore.updateFile(filePath, content);
 
@@ -351,10 +373,7 @@ export class TutorialStore {
     }
   }
 
-  updateFiles(files: Files) {
-    this._runner.updateFiles(files);
-  }
-
+  /** Update content of the active file */
   setCurrentDocumentContent(newContent: string) {
     const filePath = this.currentDocument.get()?.filePath;
 
@@ -365,6 +384,7 @@ export class TutorialStore {
     this.updateFile(filePath, newContent);
   }
 
+  /** Update scroll position of the file in editor */
   setCurrentDocumentScrollPosition(position: ScrollPosition) {
     const editorDocument = this.currentDocument.get();
 
@@ -377,10 +397,12 @@ export class TutorialStore {
     this._editorStore.updateScrollPosition(filePath, position);
   }
 
+  /** @internal */
   attachTerminal(id: string, terminal: ITerminal) {
     this._terminalStore.attachTerminal(id, terminal);
   }
 
+  /** Callback that should be called when terminal resizes */
   onTerminalResize(cols: number, rows: number) {
     if (cols && rows) {
       this._terminalStore.onTerminalResize(cols, rows);
@@ -388,14 +410,12 @@ export class TutorialStore {
     }
   }
 
+  /** Listen for file changes made in the editor */
   onDocumentChanged(filePath: string, callback: (document: Readonly<EditorDocument>) => void) {
     return this._editorStore.onDocumentChanged(filePath, callback);
   }
 
-  refreshStyles() {
-    this._themeRef.set(this._themeRef.get() + 1);
-  }
-
+  /** Take snapshot of the current state of the lesson */
   takeSnapshot() {
     return this._runner.takeSnapshot();
   }
