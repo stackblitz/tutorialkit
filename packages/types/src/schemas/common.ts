@@ -208,6 +208,8 @@ export type TerminalSchema = z.infer<typeof terminalSchema>;
 export type EditorSchema = z.infer<typeof editorSchema>;
 
 export const webcontainerSchema = commandsSchema.extend({
+  meta: metaTagsSchema.optional(),
+
   previews: previewSchema
     .optional()
     .describe(
@@ -287,7 +289,6 @@ export const webcontainerSchema = commandsSchema.extend({
 
 export const baseSchema = webcontainerSchema.extend({
   title: z.string().describe('The title of the part, chapter, or lesson.'),
-  meta: metaTagsSchema.optional(),
   slug: z
     .string()
     .optional()
