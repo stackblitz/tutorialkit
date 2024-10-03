@@ -1,3 +1,4 @@
+// where is global?
 import { describe, test, expect, beforeAll, vi, afterAll, beforeEach } from 'vitest';
 import { LessonFilesFetcher } from './lesson-files.js';
 

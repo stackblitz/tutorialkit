@@ -27,6 +27,13 @@ export class TerminalStore {
   }
 
   hasTerminalPanel() {
+   // This condition checks if the 'metadata' object exists and whether the 'terminal' property within the metadata is explicitly set to 'false'.
+// If the 'terminal' property is false, it returns 'false', which likely disables or hides the terminal in the user interface.
+// However, if the 'metadata' object itself or the 'terminal' property is undefined or true, this condition is bypassed, and the terminal remains enabled.
+
+    /*if(this.metadata && this.metadata.terminal === false) {
+      return false;
+    }*/
     return this.terminalConfig.get().panels.length > 0;
   }
 
