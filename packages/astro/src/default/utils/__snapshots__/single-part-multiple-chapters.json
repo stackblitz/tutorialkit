@@ -1,0 +1,165 @@
+{
+  "parts": {
+    "1-part": {
+      "id": "1-part",
+      "order": 0,
+      "data": {
+        "type": "part",
+        "title": "Basics"
+      },
+      "slug": "part-slug",
+      "chapters": {
+        "1-chapter": {
+          "id": "1-chapter",
+          "order": 0,
+          "data": {
+            "title": "The first chapter in part 1",
+            "type": "chapter"
+          },
+          "slug": "chapter-slug",
+          "lessons": {
+            "1-first": {
+              "data": {
+                "type": "lesson",
+                "title": "Welcome to TutorialKit",
+                "template": "default",
+                "i18n": {
+                  "mocked": "default localization"
+                },
+                "openInStackBlitz": true
+              },
+              "id": "1-first",
+              "filepath": "1-part/1-chapter/1-first/content.md",
+              "order": 0,
+              "part": {
+                "id": "1-part",
+                "title": "Basics"
+              },
+              "chapter": {
+                "id": "1-chapter",
+                "title": "The first chapter in part 1"
+              },
+              "Markdown": "Markdown for tutorial",
+              "slug": "lesson-slug",
+              "files": [
+                "1-part-1-chapter-1-first-files.json",
+                []
+              ],
+              "solution": [
+                "1-part-1-chapter-1-first-solution.json",
+                []
+              ],
+              "next": {
+                "title": "Welcome to TutorialKit",
+                "href": "/part-slug/chapter-slug/lesson-slug"
+              }
+            }
+          },
+          "firstLessonId": "1-first"
+        },
+        "2-chapter": {
+          "id": "2-chapter",
+          "order": 1,
+          "data": {
+            "title": "The first chapter in part 1",
+            "type": "chapter"
+          },
+          "slug": "chapter-slug",
+          "lessons": {
+            "1-second": {
+              "data": {
+                "type": "lesson",
+                "title": "Welcome to TutorialKit",
+                "template": "default",
+                "i18n": {
+                  "mocked": "default localization"
+                },
+                "openInStackBlitz": true
+              },
+              "id": "1-second",
+              "filepath": "1-part/2-chapter/1-second/content.md",
+              "order": 0,
+              "part": {
+                "id": "1-part",
+                "title": "Basics"
+              },
+              "chapter": {
+                "id": "2-chapter",
+                "title": "The first chapter in part 1"
+              },
+              "Markdown": "Markdown for tutorial",
+              "slug": "lesson-slug",
+              "files": [
+                "1-part-2-chapter-1-second-files.json",
+                []
+              ],
+              "solution": [
+                "1-part-2-chapter-1-second-solution.json",
+                []
+              ],
+              "prev": {
+                "title": "Welcome to TutorialKit",
+                "href": "/part-slug/chapter-slug/lesson-slug"
+              },
+              "next": {
+                "title": "Welcome to TutorialKit",
+                "href": "/part-slug/chapter-slug/lesson-slug"
+              }
+            }
+          },
+          "firstLessonId": "1-second"
+        },
+        "3-chapter": {
+          "id": "3-chapter",
+          "order": 2,
+          "data": {
+            "title": "The first chapter in part 1",
+            "type": "chapter"
+          },
+          "slug": "chapter-slug",
+          "lessons": {
+            "1-third": {
+              "data": {
+                "type": "lesson",
+                "title": "Welcome to TutorialKit",
+                "template": "default",
+                "i18n": {
+                  "mocked": "default localization"
+                },
+                "openInStackBlitz": true
+              },
+              "id": "1-third",
+              "filepath": "1-part/3-chapter/1-third/content.md",
+              "order": 0,
+              "part": {
+                "id": "1-part",
+                "title": "Basics"
+              },
+              "chapter": {
+                "id": "3-chapter",
+                "title": "The first chapter in part 1"
+              },
+              "Markdown": "Markdown for tutorial",
+              "slug": "lesson-slug",
+              "files": [
+                "1-part-3-chapter-1-third-files.json",
+                []
+              ],
+              "solution": [
+                "1-part-3-chapter-1-third-solution.json",
+                []
+              ],
+              "prev": {
+                "title": "Welcome to TutorialKit",
+                "href": "/part-slug/chapter-slug/lesson-slug"
+              }
+            }
+          },
+          "firstLessonId": "1-third"
+        }
+      },
+      "firstChapterId": "1-chapter"
+    }
+  },
+  "firstPartId": "1-part"
+}
