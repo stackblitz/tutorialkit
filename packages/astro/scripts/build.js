@@ -67,7 +67,7 @@ async function copyDefaultFolder() {
   // copy default folder unmodified, without test files
   await cp(src, dist, {
     recursive: true,
-    filter: (filename) => !filename.endsWith('.spec.ts'),
+    filter: (filename) => !filename.endsWith('.spec.ts') && !filename.includes('__snapshots__'),
   });
 
   if (isWatch) {
