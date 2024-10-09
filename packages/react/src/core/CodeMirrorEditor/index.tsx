@@ -21,6 +21,7 @@ import { BinaryContent } from './BinaryContent.js';
 import { getTheme, reconfigureTheme } from './cm-theme.js';
 import { indentKeyBinding } from './indent.js';
 import { getLanguage } from './languages.js';
+import { isBinaryImagePath, ImageContent, uint8ArrayToDataUrl } from './ImageContent.js';
 
 export interface EditorDocument {
   value: string | Uint8Array;
@@ -90,6 +91,7 @@ export function CodeMirrorEditor({
   const onChangeRef = useRef(onChange);
 
   const isBinaryFile = doc?.value instanceof Uint8Array;
+  const isBinaryImageFile = isBinaryFile && doc?.filePath && isBinaryImagePath(doc?.filePath);
 
   onScrollRef.current = onScroll;
   onChangeRef.current = onChange;
@@ -187,7 +189,11 @@ export function CodeMirrorEditor({
 
   return (
     <div className={classNames('relative', className)}>
-      {isBinaryFile && <BinaryContent />}
+      {isBinaryImageFile ? (
+        <ImageContent src={uint8ArrayToDataUrl(doc?.value as Uint8Array)} />
+      ) : isBinaryFile ? (
+        <BinaryContent />
+      ) : null}
       <div className="h-full overflow-hidden" ref={containerRef} />
     </div>
   );
