@@ -8,29 +8,23 @@ export async function generateStaticRoutes() {
   const tutorial = await getTutorial();
 
   const routes = [];
+  const lessons = Object.values(tutorial.lessons);
 
-  const parts = Object.values(tutorial.parts);
+  for (const lesson of lessons) {
+    const part = tutorial.parts[lesson.part.id];
+    const chapter = part.chapters[lesson.chapter.id];
 
-  for (const part of parts) {
-    const chapters = Object.values(part.chapters);
-
-    for (const chapter of chapters) {
-      const lessons = Object.values(chapter.lessons);
-
-      for (const lesson of lessons) {
-        routes.push({
-          params: {
-            slug: `/${part.slug}/${chapter.slug}/${lesson.slug}`,
-          },
-          props: {
-            logoLink: tutorial.logoLink,
-            navList: generateNavigationList(tutorial, import.meta.env.BASE_URL),
-            title: `${part.data.title} / ${chapter.data.title} / ${lesson.data.title}`,
-            lesson: lesson as Lesson<AstroComponentFactory>,
-          },
-        } satisfies GetStaticPathsItem);
-      }
-    }
+    routes.push({
+      params: {
+        slug: `/${part.slug}/${chapter.slug}/${lesson.slug}`,
+      },
+      props: {
+        title: `${lesson.part.title} / ${lesson.chapter.title} / ${lesson.data.title}`,
+        lesson: lesson as Lesson<AstroComponentFactory>,
+        logoLink: tutorial.logoLink,
+        navList: generateNavigationList(tutorial, import.meta.env.BASE_URL),
+      },
+    } satisfies GetStaticPathsItem);
   }
 
   return routes satisfies ReturnType<GetStaticPaths>;

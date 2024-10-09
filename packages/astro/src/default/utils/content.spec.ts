@@ -45,7 +45,7 @@ test('single part, chapter and multiple lessons', async (ctx) => {
 
   const collection = await getTutorial();
 
-  const lessons = collection.parts['1-part'].chapters['1-chapter'].lessons;
+  const lessons = collection.lessons;
   expect(Object.keys(lessons)).toHaveLength(3);
 
   await expect(collection).toMatchFileSnapshot(snapshotName(ctx));
@@ -119,11 +119,21 @@ test('lessons with identical names in different chapters', async () => {
   ]);
 
   const collection = await getTutorial();
-  const chapters = collection.parts['1-part'].chapters;
+  const lessons = collection.lessons;
 
   // verify that lesson.id is not used to define what makes a lesson unique (part.id + chapter.id too)
-  expect(chapters['1-chapter'].lessons['identical-lesson-name']).toBeDefined();
-  expect(chapters['2-chapter'].lessons['identical-lesson-name']).toBeDefined();
+  expect(lessons).toHaveLength(2);
+  expect(lessons[0].id).toBe('identical-lesson-name');
+  expect(lessons[1].id).toBe('identical-lesson-name');
+
+  expect(lessons[0].data.focus).toBe('/first.js');
+  expect(lessons[1].data.focus).toBe('/second.js');
+
+  expect(lessons[0].chapter.id).toBe('1-chapter');
+  expect(lessons[1].chapter.id).toBe('2-chapter');
+
+  expect(lessons[0].part.id).toBe('1-part');
+  expect(lessons[1].part.id).toBe('1-part');
 });
 
 describe('metadata inheriting', () => {
@@ -152,7 +162,7 @@ describe('metadata inheriting', () => {
     ]);
 
     const collection = await getTutorial();
-    const { data: lessonData } = collection.parts['1-part'].chapters['1-chapter'].lessons['1-lesson'];
+    const { data: lessonData } = collection.lessons[0];
 
     expect(lessonData).toStrictEqual({ ...data, type: 'lesson', title: lesson.data.title });
   });
@@ -197,7 +207,7 @@ describe('metadata inheriting', () => {
     ]);
 
     const collection = await getTutorial();
-    const { data: lessonData } = collection.parts['1-part'].chapters['1-chapter'].lessons['1-lesson'];
+    const { data: lessonData } = collection.lessons[0];
 
     expect(lessonData.editPageLink).toBe('edit link from tutorial');
     expect(lessonData.focus).toBe('focus from part');
@@ -339,11 +349,16 @@ describe('ordering', () => {
     ]);
 
     const collection = await getTutorial();
-    const lessons = collection.parts['1-part'].chapters['1-chapter'].lessons;
+    const lessons = collection.lessons;
 
-    expect(lessons['1-lesson'].order).toBe(0);
-    expect(lessons['2-lesson'].order).toBe(1);
-    expect(lessons['3-lesson'].order).toBe(2);
+    expect(lessons[0].order).toBe(0);
+    expect(lessons[0].id).toBe('1-lesson');
+
+    expect(lessons[1].order).toBe(1);
+    expect(lessons[1].id).toBe('2-lesson');
+
+    expect(lessons[2].order).toBe(2);
+    expect(lessons[2].id).toBe('3-lesson');
   });
 
   test('lessons are ordered by metadata', async () => {
@@ -364,11 +379,16 @@ describe('ordering', () => {
     ]);
 
     const collection = await getTutorial();
-    const lessons = collection.parts['1-part'].chapters['1-chapter'].lessons;
+    const lessons = collection.lessons;
 
-    expect(lessons['3-lesson'].order).toBe(0);
-    expect(lessons['1-lesson'].order).toBe(1);
-    expect(lessons['2-lesson'].order).toBe(2);
+    expect(lessons[0].order).toBe(0);
+    expect(lessons[0].id).toBe('3-lesson');
+
+    expect(lessons[1].order).toBe(1);
+    expect(lessons[1].id).toBe('1-lesson');
+
+    expect(lessons[2].order).toBe(2);
+    expect(lessons[2].id).toBe('2-lesson');
   });
 
   test('lessons not mention in order are excluded ', async () => {
@@ -388,11 +408,11 @@ describe('ordering', () => {
     ]);
 
     const collection = await getTutorial();
-    const lessons = collection.parts['1-part'].chapters['1-chapter'].lessons;
+    const lessons = collection.lessons;
 
-    expect(Object.keys(lessons)).toHaveLength(2);
-    expect(lessons['1-lesson']).toBeDefined();
-    expect(lessons['2-lesson']).toBeDefined();
+    expect(lessons).toHaveLength(2);
+    expect(lessons[0].id).toBe('2-lesson');
+    expect(lessons[1].id).toBe('1-lesson');
 
     expect(vi.mocked(logger.warn).mock.calls[0][0]).toMatchInlineSnapshot(
       `"An order was specified for chapter '1-chapter' but lesson 'excluded-lesson' is not included, so it won't be visible."`,
