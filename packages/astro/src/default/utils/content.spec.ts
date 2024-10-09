@@ -1,6 +1,7 @@
 import * as content from 'astro:content';
 import { describe, expect, test, vi, type TaskContext } from 'vitest';
 import { getTutorial, type CollectionEntryTutorial } from './content';
+import { logger } from './logger';
 
 const getCollection = vi.mocked<() => Omit<CollectionEntryTutorial, 'render'>[]>(content.getCollection);
 vi.mock('astro:content', () => ({ getCollection: vi.fn() }));
@@ -10,6 +11,8 @@ vi.mock(import('@tutorialkit/types'), async (importOriginal) => ({
   ...(await importOriginal()),
   DEFAULT_LOCALIZATION: { mocked: 'default localization' } as any,
 }));
+
+vi.mock(import('./logger'), async (importOriginal) => importOriginal());
 
 expect.addSnapshotSerializer({
   serialize: (val) => JSON.stringify(val, null, 2),
@@ -93,6 +96,34 @@ test('multiple parts', async (ctx) => {
   expect(Object.keys(collection.parts)).toHaveLength(3);
 
   await expect(collection).toMatchFileSnapshot(snapshotName(ctx));
+});
+
+test('lessons with identical names in different chapters', async () => {
+  getCollection.mockReturnValueOnce([
+    { id: 'meta.md', ...tutorial },
+    { id: '1-part/meta.md', ...part },
+
+    { id: '1-part/1-chapter/meta.md', ...chapter },
+    {
+      id: '1-part/1-chapter/identical-lesson-name/content.md',
+      ...lesson,
+      data: { ...lesson.data, focus: '/first.js' },
+    },
+
+    { id: '1-part/2-chapter/meta.md', ...chapter },
+    {
+      id: '1-part/2-chapter/identical-lesson-name/content.md',
+      ...lesson,
+      data: { ...lesson.data, focus: '/second.js' },
+    },
+  ]);
+
+  const collection = await getTutorial();
+  const chapters = collection.parts['1-part'].chapters;
+
+  // verify that lesson.id is not used to define what makes a lesson unique (part.id + chapter.id too)
+  expect(chapters['1-chapter'].lessons['identical-lesson-name']).toBeDefined();
+  expect(chapters['2-chapter'].lessons['identical-lesson-name']).toBeDefined();
 });
 
 describe('metadata inheriting', () => {
@@ -212,6 +243,33 @@ describe('ordering', () => {
     expect(parts['2-part'].order).toBe(2);
   });
 
+  test('parts not mention in order are excluded ', async () => {
+    vi.spyOn(logger, 'warn').mockImplementationOnce(vi.fn());
+
+    getCollection.mockReturnValueOnce([
+      {
+        id: 'meta.md',
+        ...tutorial,
+        data: { ...tutorial.data, parts: ['2-part', '1-part'] },
+      },
+      { id: '2-part/meta.md', ...part },
+      { id: 'excluded-part/meta.md', ...part },
+      { id: '1-part/meta.md', ...part },
+    ]);
+
+    const collection = await getTutorial();
+    const parts = collection.parts;
+
+    expect(Object.keys(parts)).toHaveLength(2);
+    expect(parts['excluded-part']).toBeUndefined();
+    expect(parts['1-part']).toBeDefined();
+    expect(parts['2-part']).toBeDefined();
+
+    expect(vi.mocked(logger.warn).mock.calls[0][0]).toMatchInlineSnapshot(
+      `"An order was specified for the parts of the tutorial but 'excluded-part' is not included so it won't be visible."`,
+    );
+  });
+
   test('chapters are ordered by default', async () => {
     getCollection.mockReturnValueOnce([
       { id: 'meta.md', ...tutorial },
@@ -244,6 +302,30 @@ describe('ordering', () => {
     expect(chapters['3-chapter'].order).toBe(0);
     expect(chapters['1-chapter'].order).toBe(1);
     expect(chapters['2-chapter'].order).toBe(2);
+  });
+
+  test('chapters not mention in order are excluded ', async () => {
+    vi.spyOn(logger, 'warn').mockImplementationOnce(vi.fn());
+
+    getCollection.mockReturnValueOnce([
+      { id: 'meta.md', ...tutorial },
+      { id: '1-part/meta.md', ...part, data: { ...part.data, chapters: ['2-chapter', '1-chapter'] } },
+      { id: '1-part/2-chapter/meta.md', ...chapter },
+      { id: '1-part/excluded-chapter/meta.md', ...chapter },
+      { id: '1-part/1-chapter/meta.md', ...chapter },
+    ]);
+
+    const collection = await getTutorial();
+    const chapters = collection.parts['1-part'].chapters;
+
+    expect(Object.keys(chapters)).toHaveLength(2);
+    expect(chapters['excluded-part']).toBeUndefined();
+    expect(chapters['1-chapter']).toBeDefined();
+    expect(chapters['2-chapter']).toBeDefined();
+
+    expect(vi.mocked(logger.warn).mock.calls[0][0]).toMatchInlineSnapshot(
+      `"An order was specified for part '1-part' but chapter 'excluded-chapter' is not included, so it won't be visible."`,
+    );
   });
 
   test('lessons are ordered by default', async () => {
@@ -287,6 +369,34 @@ describe('ordering', () => {
     expect(lessons['3-lesson'].order).toBe(0);
     expect(lessons['1-lesson'].order).toBe(1);
     expect(lessons['2-lesson'].order).toBe(2);
+  });
+
+  test('lessons not mention in order are excluded ', async () => {
+    vi.spyOn(logger, 'warn').mockImplementationOnce(vi.fn());
+
+    getCollection.mockReturnValueOnce([
+      { id: 'meta.md', ...tutorial },
+      { id: '1-part/meta.md', ...part },
+      {
+        id: '1-part/1-chapter/meta.md',
+        ...chapter,
+        data: { ...chapter.data, lessons: ['2-lesson', '1-lesson'] },
+      },
+      { id: '1-part/1-chapter/excluded-lesson/meta.md', ...lesson },
+      { id: '1-part/1-chapter/1-lesson/meta.md', ...lesson },
+      { id: '1-part/1-chapter/2-lesson/meta.md', ...lesson },
+    ]);
+
+    const collection = await getTutorial();
+    const lessons = collection.parts['1-part'].chapters['1-chapter'].lessons;
+
+    expect(Object.keys(lessons)).toHaveLength(2);
+    expect(lessons['1-lesson']).toBeDefined();
+    expect(lessons['2-lesson']).toBeDefined();
+
+    expect(vi.mocked(logger.warn).mock.calls[0][0]).toMatchInlineSnapshot(
+      `"An order was specified for chapter '1-chapter' but lesson 'excluded-lesson' is not included, so it won't be visible."`,
+    );
   });
 });
 
