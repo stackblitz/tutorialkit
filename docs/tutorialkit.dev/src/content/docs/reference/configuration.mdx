@@ -403,3 +403,47 @@ type OpenInStackBlitz =
 type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "javascript" | "polymer" | "typescript" | "vue"
 
 ```
+
+## Configure the Tutorialkit Astro integration
+
+`@tutorialkit/astro` is an integration for Astro. You can configure the integration in your `astro.config.ts` file.
+
+```ts "tutorialkit()" title="astro.config.ts"
+import tutorialkit from "@tutorialkit/astro";
+import { defineConfig } from "astro/config";
+
+export default defineConfig({
+  devToolbar: {
+    enabled: false,
+  },
+  integrations: [
+    tutorialkit(),
+  ],
+});
+```
+
+You can pass the following options to the `tutorialkit` integration:
+
+### `components`
+
+**type**: `OverrideComponentsOptions`
+
+Provide the path to the components you want to override.
+
+```ts
+tutorialkit({
+  components: {
+    TopBar: './src/components/CustomTopBar.astro',
+  },
+});
+```
+
+See [Overriding Components](/guides/overriding-components/) for details of all the components that you can override.
+
+### `defaultRoutes`
+
+**type**: `boolean | "tutorial-only"`<br/>
+**default**: `true`
+
+Controls whether the tutorial routes are automatically added to your project. When set to `true`, it additionally adds a redirect from `/` to the first tutorial.
+Use `"tutorial-only"` to only add the tutorial routes without the redirect.
