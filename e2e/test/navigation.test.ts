@@ -23,7 +23,13 @@ test('user can navigate between lessons using nav bar links', async ({ page }) =
 test('user can navigate between lessons using breadcrumbs', async ({ page }) => {
   await page.goto(`${BASE_URL}/page-one`);
 
-  await page.getByRole('button', { name: 'Tests / Navigation / Page one' }).click({ force: true });
+  // navigation select can take a while to hydrate on page load, click until responsive
+  await expect(async () => {
+    const button = page.getByRole('button', { name: 'Tests / Navigation / Page one' });
+    await button.click();
+    await expect(page.locator('[data-state="open"]', { has: button })).toBeVisible({ timeout: 50 });
+  }).toPass();
+
   await page.getByRole('region', { name: 'Navigation' }).getByRole('link', { name: 'Page three' }).click();
 
   await expect(page.getByRole('heading', { level: 1, name: 'Navigation test - Page three' })).toBeVisible();

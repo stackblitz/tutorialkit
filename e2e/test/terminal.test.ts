@@ -15,10 +15,14 @@ test('user can open terminal', async ({ page }) => {
   // await expect(tab).not.toBeVisible();
   // await expect(panel).not.toBeVisible();
 
-  await page.getByRole('button', { name: 'Toggle Terminal' }).click();
+  // terminal toggle can take a while to hydrate on page load, click until responsive
+  await expect(async () => {
+    await page.getByRole('button', { name: 'Toggle Terminal' }).click();
 
-  await expect(tab).toBeVisible();
-  await expect(panel).toBeVisible();
+    await expect(tab).toBeVisible({ timeout: 100 });
+    await expect(panel).toBeVisible({ timeout: 100 });
+  }).toPass();
+
   await expect(panel).toContainText('~/tutorial', { useInnerText: true });
 });
 
