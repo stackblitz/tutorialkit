@@ -5,8 +5,22 @@ import { joinPaths } from '../utils/url';
 const tutorial = await getTutorial();
 
 const part = tutorial.parts[tutorial.firstPartId!];
-const chapter = part.chapters[part?.firstChapterId!];
-const lesson = chapter.lessons[chapter?.firstLessonId!];
+const chapter = part.chapters[part.firstChapterId!];
+const lesson = tutorial.lessons.find((l) => l.id === chapter.firstLessonId)!;
+
+if (!lesson) {
+  throw new Error(
+    `Unable to find lesson for ${JSON.stringify(
+      {
+        partId: tutorial.firstPartId || null,
+        chapterId: part.firstChapterId || null,
+        lessonId: chapter.firstLessonId || null,
+      },
+      null,
+      2,
+    )}`,
+  );
+}
 
 const redirect = joinPaths(import.meta.env.BASE_URL, `/${part.slug}/${chapter.slug}/${lesson.slug}`);
 ---

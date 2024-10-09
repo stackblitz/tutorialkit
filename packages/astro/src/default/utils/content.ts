@@ -1,5 +1,14 @@
 import path from 'node:path';
-import type { ChapterSchema, Lesson, LessonSchema, PartSchema, Tutorial, TutorialSchema } from '@tutorialkit/types';
+import type {
+  Chapter,
+  ChapterSchema,
+  Lesson,
+  LessonSchema,
+  Part,
+  PartSchema,
+  Tutorial,
+  TutorialSchema,
+} from '@tutorialkit/types';
 import { interpolateString, DEFAULT_LOCALIZATION } from '@tutorialkit/types';
 import { getCollection } from 'astro:content';
 import { getFilesRefList } from './content/files-ref';
@@ -12,10 +21,10 @@ export async function getTutorial(): Promise<Tutorial> {
 
   const _tutorial: Tutorial = {
     parts: {},
+    lessons: [],
   };
 
   let tutorialMetaData: TutorialSchema | undefined;
-  let lessons: Lesson[] = [];
 
   for (const entry of collection) {
     const { id, data } = entry;
@@ -50,7 +59,6 @@ export async function getTutorial(): Promise<Tutorial> {
         order: -1,
         data,
         slug: getSlug(entry),
-        lessons: {},
       };
     } else if (type === 'lesson') {
       if (!_tutorial.parts[partId]) {
@@ -89,9 +97,7 @@ export async function getTutorial(): Promise<Tutorial> {
         solution,
       };
 
-      lessons.push(lesson);
-
-      _tutorial.parts[partId].chapters[chapterId].lessons[lessonId] = lesson;
+      _tutorial.lessons.push(lesson);
     }
   }
 
@@ -107,7 +113,7 @@ export async function getTutorial(): Promise<Tutorial> {
     const part = _tutorial.parts[partId];
 
     if (!part) {
-      logger.warn(`Could not find '${partId}', it won't be part of the tutorial.`);
+      logger.warn(`Could not find part '${partId}', it won't be part of the tutorial.`);
       continue;
     }
 
@@ -124,7 +130,7 @@ export async function getTutorial(): Promise<Tutorial> {
       const chapter = part.chapters[chapterId];
 
       if (!chapter) {
-        logger.warn(`Could not find '${chapterId}', it won't be part of the part '${partId}'.`);
+        logger.warn(`Could not find chapter '${chapterId}', it won't be part of the part '${partId}'.`);
         continue;
       }
 
@@ -134,14 +140,18 @@ export async function getTutorial(): Promise<Tutorial> {
 
       chapter.order = c;
 
-      const lessonOrder = getOrder(chapter.data.lessons, chapter.lessons);
+      const chapterLessons = _tutorial.lessons.filter((l) => l.part.id === partId && l.chapter.id === chapterId);
+      const lessonOrder = getOrder(
+        chapter.data.lessons,
+        chapterLessons.map((l) => l.id),
+      );
 
       for (let l = 0; l < lessonOrder.length; ++l) {
         const lessonId = lessonOrder[l];
-        const lesson = chapter.lessons[lessonId];
+        const lesson = chapterLessons.find((l) => l.id === lessonId);
 
         if (!lesson) {
-          logger.warn(`Could not find '${lessonId}', it won't be part of the chapter '${chapterId}'.`);
+          logger.warn(`Could not find lesson '${lessonId}', it won't be part of the chapter '${chapterId}'.`);
           continue;
         }
 
@@ -153,14 +163,6 @@ export async function getTutorial(): Promise<Tutorial> {
       }
     }
   }
-
-  // removed orphaned lessons
-  lessons = lessons.filter(
-    (lesson) =>
-      lesson.order !== -1 &&
-      _tutorial.parts[lesson.part.id].order !== -1 &&
-      _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].order !== -1,
-  );
 
   // find orphans discard them and print warnings
   for (const partId in _tutorial.parts) {
@@ -185,13 +187,12 @@ export async function getTutorial(): Promise<Tutorial> {
         continue;
       }
 
-      for (const lessonId in chapter.lessons) {
-        const lesson = chapter.lessons[lessonId];
+      const chapterLessons = _tutorial.lessons.filter((l) => l.chapter.id === chapterId);
 
+      for (const lesson of chapterLessons) {
         if (lesson.order === -1) {
-          delete chapter.lessons[lessonId];
           logger.warn(
-            `An order was specified for chapter '${chapterId}' but lesson '${lessonId}' is not included, so it won't be visible.`,
+            `An order was specified for chapter '${chapterId}' but lesson '${lesson.id}' is not included, so it won't be visible.`,
           );
           continue;
         }
@@ -199,8 +200,16 @@ export async function getTutorial(): Promise<Tutorial> {
     }
   }
 
+  // removed orphaned lessons
+  _tutorial.lessons = _tutorial.lessons.filter(
+    (lesson) =>
+      lesson.order !== -1 &&
+      _tutorial.parts[lesson.part.id].order !== -1 &&
+      _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].order !== -1,
+  );
+
   // sort lessons
-  lessons.sort((a, b) => {
+  _tutorial.lessons.sort((a, b) => {
     const partsA = [
       _tutorial.parts[a.part.id].order,
       _tutorial.parts[a.part.id].chapters[a.chapter.id].order,
@@ -224,9 +233,9 @@ export async function getTutorial(): Promise<Tutorial> {
   const baseURL = import.meta.env.BASE_URL;
 
   // now we link all lessons together
-  for (const [i, lesson] of lessons.entries()) {
-    const prevLesson = i > 0 ? lessons.at(i - 1) : undefined;
-    const nextLesson = lessons.at(i + 1);
+  for (const [i, lesson] of _tutorial.lessons.entries()) {
+    const prevLesson = i > 0 ? _tutorial.lessons.at(i - 1) : undefined;
+    const nextLesson = _tutorial.lessons.at(i + 1);
 
     const partMetadata = _tutorial.parts[lesson.part.id].data;
     const chapterMetadata = _tutorial.parts[lesson.part.id].chapters[lesson.chapter.id].data;
@@ -281,13 +290,20 @@ export async function getTutorial(): Promise<Tutorial> {
   return _tutorial;
 }
 
-function getOrder(order: string[] | undefined, fallbackSourceForOrder: Record<string, any>): string[] {
+function getOrder(
+  order: string[] | undefined,
+  fallbackSourceForOrder: Record<string, Part | Chapter> | Lesson['id'][],
+): string[] {
   if (order) {
     return order;
   }
 
+  const keys = Array.isArray(fallbackSourceForOrder)
+    ? [...fallbackSourceForOrder]
+    : Object.keys(fallbackSourceForOrder);
+
   // default to an order based on having each folder prefixed by their order: `1-foo`, `2-bar`, etc.
-  return Object.keys(fallbackSourceForOrder).sort((a, b) => {
+  return keys.sort((a, b) => {
     const numA = parseInt(a, 10);
     const numB = parseInt(b, 10);
 

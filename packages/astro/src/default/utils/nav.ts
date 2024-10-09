@@ -7,10 +7,14 @@ export function generateNavigationList(tutorial: Tutorial, baseURL: string): Nav
       id: part.id,
       title: part.data.title,
       sections: objectToSortedArray(part.chapters).map((chapter) => {
+        const lessons = tutorial.lessons.filter(
+          (lesson) => lesson.part.id === part.id && lesson.chapter.id === chapter.id,
+        );
+
         return {
           id: chapter.id,
           title: chapter.data.title,
-          sections: objectToSortedArray(chapter.lessons).map((lesson) => {
+          sections: lessons.sort(sortByOrder).map((lesson) => {
             return {
               id: lesson.id,
               title: lesson.data.title,
@@ -26,5 +30,9 @@ export function generateNavigationList(tutorial: Tutorial, baseURL: string): Nav
 function objectToSortedArray<T extends Record<any, { order: number }>>(object: T): Array<T[keyof T]> {
   return Object.keys(object)
     .map((key) => object[key] as T[keyof T])
-    .sort((a, b) => a.order - b.order);
+    .sort(sortByOrder);
+}
+
+function sortByOrder<T extends { order: number }>(a: T, b: T) {
+  return a.order - b.order;
 }
