@@ -183,6 +183,7 @@ interface FileProps {
 }
 
 function File({ file: { depth, name }, onClick, selected }: FileProps) {
+  const fileIcon = name ? getFileTreeIcon(name) : '';
   return (
     <NodeButton
       className={classNames('group transition-theme', {
@@ -192,7 +193,7 @@ function File({ file: { depth, name }, onClick, selected }: FileProps) {
           selected,
       })}
       depth={depth}
-      iconClasses={classNames('i-ph-file-duotone', {
+      iconClasses={classNames(fileIcon, {
         'text-tk-elements-fileTree-file-iconColor group-hover:text-tk-elements-fileTree-file-iconColorHover': !selected,
         'text-tk-elements-fileTree-file-iconColorSelected': selected,
       })}
@@ -357,4 +358,49 @@ function compareString(a: string, b: string) {
   }
 
   return 0;
+}
+
+function getFileTreeIcon(fileName: string) {
+  const extension = fileName.split('.').at(-1);
+
+  if (!extension) {
+    console.error('Cannot infer file type');
+    return '';
+  }
+
+  switch (extension) {
+    case 'ts': {
+      return 'i-ph-file-ts-duotone';
+    }
+    case 'cjs':
+    case 'mjs':
+    case 'js': {
+      return 'i-ph-file-js-duotone';
+    }
+    case 'html': {
+      return 'i-ph-file-html-duotone';
+    }
+    case 'css': {
+      return 'i-ph-file-css-duotone';
+    }
+    // case 'scss':
+    // case 'sass': {
+    //   return 'i-languages-sass?mask';
+    // }
+    case 'md': {
+      return 'i-ph-file-md-duotone';
+    }
+    // case 'json': {
+    //   return 'i-languages-json?mask';
+    // }
+    case 'gif':
+    case 'jpg':
+    case 'jpeg':
+    case 'png': {
+      return 'i-ph-file-image-duotone';
+    }
+    default: {
+      return 'i-ph-file-duotone';
+    }
+  }
 }
