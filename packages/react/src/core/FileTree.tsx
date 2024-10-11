@@ -204,6 +204,7 @@ interface FileProps {
 function File({ file: { depth, name }, onClick, selected }: FileProps) {
   const extension = getFileExtension(name);
   const fileIcon = extensionsToIcons.get(extension) || 'i-ph-file-duotone';
+  
   return (
     <NodeButton
       className={classNames('group transition-theme', {
