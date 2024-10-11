@@ -19,6 +19,25 @@ interface Props {
   className?: string;
 }
 
+const extensionsToIcons = new Map([
+  ['ts', 'i-ph-file-ts-duotone'],
+
+  ['cjs', 'i-ph-file-js-duotone'],
+  ['mjs', 'i-ph-file-js-duotone'],
+  ['js', 'i-ph-file-js-duotone'],
+
+  ['html', 'i-ph-file-html-duotone'],
+
+  ['css', 'i-ph-file-css-duotone'],
+
+  ['md', 'i-ph-file-md-duotone'],
+
+  ['gif', 'i-ph-file-image-duotone'],
+  ['jpg', 'i-ph-file-image-duotone'],
+  ['jpeg', 'i-ph-file-image-duotone'],
+  ['png', 'i-ph-file-image-duotone'],
+]);
+
 export function FileTree({
   files,
   onFileSelect,
@@ -183,7 +202,8 @@ interface FileProps {
 }
 
 function File({ file: { depth, name }, onClick, selected }: FileProps) {
-  const fileIcon = name ? getFileTreeIcon(name) : '';
+  const extension = getFileExtension(name);
+  const fileIcon = extensionsToIcons.get(extension) || 'i-ph-file-duotone';
   return (
     <NodeButton
       className={classNames('group transition-theme', {
@@ -360,47 +380,12 @@ function compareString(a: string, b: string) {
   return 0;
 }
 
-function getFileTreeIcon(fileName: string) {
-  const extension = fileName.split('.').at(-1);
+function getFileExtension(filename: string) {
+  const parts = filename.split('.');
 
-  if (!extension) {
-    console.error('Cannot infer file type');
-    return '';
-  }
+  parts.shift();
 
-  switch (extension) {
-    case 'ts': {
-      return 'i-ph-file-ts-duotone';
-    }
-    case 'cjs':
-    case 'mjs':
-    case 'js': {
-      return 'i-ph-file-js-duotone';
-    }
-    case 'html': {
-      return 'i-ph-file-html-duotone';
-    }
-    case 'css': {
-      return 'i-ph-file-css-duotone';
-    }
-    // case 'scss':
-    // case 'sass': {
-    //   return 'i-languages-sass?mask';
-    // }
-    case 'md': {
-      return 'i-ph-file-md-duotone';
-    }
-    // case 'json': {
-    //   return 'i-languages-json?mask';
-    // }
-    case 'gif':
-    case 'jpg':
-    case 'jpeg':
-    case 'png': {
-      return 'i-ph-file-image-duotone';
-    }
-    default: {
-      return 'i-ph-file-duotone';
-    }
-  }
+  const extension = parts.at(-1) || '';
+
+  return extension;
 }
