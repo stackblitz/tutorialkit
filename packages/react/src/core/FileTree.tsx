@@ -374,10 +374,16 @@ function getFileExtension(filename: string) {
 
 const extensionsToIcons = new Map([
   ['ts', 'i-ph-file-ts-duotone'],
+  ['cts', 'i-ph-file-ts-duotone'],
+  ['mts', 'i-ph-file-ts-duotone'],
 
+  ['tsx', 'i-ph-file-tsx-duotone'],
+
+  ['js', 'i-ph-file-js-duotone'],
   ['cjs', 'i-ph-file-js-duotone'],
   ['mjs', 'i-ph-file-js-duotone'],
-  ['js', 'i-ph-file-js-duotone'],
+
+  ['jsx', 'i-ph-file-jsx-duotone'],
 
   ['html', 'i-ph-file-html-duotone'],
 
@@ -385,8 +391,12 @@ const extensionsToIcons = new Map([
 
   ['md', 'i-ph-file-md-duotone'],
 
+  ['vue', 'i-ph-file-vue-duotone'],
+
   ['gif', 'i-ph-file-image-duotone'],
   ['jpg', 'i-ph-file-image-duotone'],
   ['jpeg', 'i-ph-file-image-duotone'],
   ['png', 'i-ph-file-image-duotone'],
+
+  ['svg', 'i-ph-file-svg-duotone'],
 ]);
