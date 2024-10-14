@@ -19,25 +19,6 @@ interface Props {
   className?: string;
 }
 
-const extensionsToIcons = new Map([
-  ['ts', 'i-ph-file-ts-duotone'],
-
-  ['cjs', 'i-ph-file-js-duotone'],
-  ['mjs', 'i-ph-file-js-duotone'],
-  ['js', 'i-ph-file-js-duotone'],
-
-  ['html', 'i-ph-file-html-duotone'],
-
-  ['css', 'i-ph-file-css-duotone'],
-
-  ['md', 'i-ph-file-md-duotone'],
-
-  ['gif', 'i-ph-file-image-duotone'],
-  ['jpg', 'i-ph-file-image-duotone'],
-  ['jpeg', 'i-ph-file-image-duotone'],
-  ['png', 'i-ph-file-image-duotone'],
-]);
-
 export function FileTree({
   files,
   onFileSelect,
@@ -390,3 +371,22 @@ function getFileExtension(filename: string) {
 
   return extension;
 }
+
+const extensionsToIcons = new Map([
+  ['ts', 'i-ph-file-ts-duotone'],
+
+  ['cjs', 'i-ph-file-js-duotone'],
+  ['mjs', 'i-ph-file-js-duotone'],
+  ['js', 'i-ph-file-js-duotone'],
+
+  ['html', 'i-ph-file-html-duotone'],
+
+  ['css', 'i-ph-file-css-duotone'],
+
+  ['md', 'i-ph-file-md-duotone'],
+
+  ['gif', 'i-ph-file-image-duotone'],
+  ['jpg', 'i-ph-file-image-duotone'],
+  ['jpeg', 'i-ph-file-image-duotone'],
+  ['png', 'i-ph-file-image-duotone'],
+]);
