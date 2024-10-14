@@ -44,6 +44,7 @@ async function runCommand(cmd: CLICommand, flags: yargs.Arguments): Promise<numb
         tables: {
           Commands: [
             ['create', 'Create new tutorial app'],
+            ['eject', 'Eject routes'],
             ['help', 'Show this help message'],
           ],
         },
