@@ -144,3 +144,72 @@ src/templates
     │   # Overrides "index.js" from "shared-template"
     └── index.js
 ```
+
+## Markdown and MDX Support
+
+TutorialKit comes with built-in support for both Markdown and MDX, powered by Astro. This means you can leverage all Markdown and MDX features when creating lesson content. To explore the full capabilities, check out Astro's [Markdown support](https://docs.astro.build/en/guides/markdown-content/) and [MDX support](https://docs.astro.build/en/guides/integrations-guide/mdx/) documentation for more details.
+
+### Callouts
+
+Callouts are visual elements designed to highlight specific information or provide additional context within a document or user interface. They are ideal for drawing attention to important tips, warnings, and other key messages.
+
+You can create callouts using the following types: `tip`, `info`, `warn`, `danger` and `success`.
+
+```
+:::info
+Some info with some markdown `syntax` and a [`link`](https://tutorialkit.dev/).
+
+Here's a normal [link](https://tutorialkit.dev/).
+:::
+```
+
+![Content](../reference/images/theming-callout.png)
+
+To customize the styles of a callout, check out the [theming reference](/reference/theming/#callouts).
+
+
+### Code blocks
+
+TutorialKit offers a comprehensive set of code block features powered by Expressive Code. It includes all core features, along with optional plugins like collapsible sections and line numbers. For a full overview, check out the [Expressive Code documentation](https://expressive-code.com/).
+
+````md title="content.md"
+```js title="code.js" ins={4} del={5} {6} "greeting"
+const greeting = 'Hello, World!';
+
+// This is a comment
+const added = 'This line was added';
+const removed = 'This line was removed';
+const highlighted = 'This line is highlighted';
+```
+````
+
+```js title="code.js" ins={4} del={5} {6} "greeting"
+const greeting = 'Hello, World!';
+
+// This is a comment
+const added = 'This line was added';
+const removed = 'This line was removed';
+const highlighted = 'This line is highlighted';
+```
+
+#### Importing files
+
+In addition to Expressive Code features, you can import files from your code template `_files` and `_solution` folders using the file or solution shortcodes. These shortcodes insert the content of the specified file directly into your lesson content.
+
+- `file` shortcode is used to reference files from the lesson `_files` or code template folder.
+- `solution` shortcode is used to reference files from the lesson `_solution` folder.
+
+For example, the following code will insert the content of the `box.css` file from the `_files` folder:
+
+````md "file"
+```file:/box.css
+```
+````
+
+```css
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}
+```

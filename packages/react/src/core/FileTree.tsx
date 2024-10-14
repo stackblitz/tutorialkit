@@ -183,6 +183,9 @@ interface FileProps {
 }
 
 function File({ file: { depth, name }, onClick, selected }: FileProps) {
+  const extension = getFileExtension(name);
+  const fileIcon = extensionsToIcons.get(extension) || 'i-ph-file-duotone';
+
   return (
     <NodeButton
       className={classNames('group transition-theme', {
@@ -192,7 +195,7 @@ function File({ file: { depth, name }, onClick, selected }: FileProps) {
           selected,
       })}
       depth={depth}
-      iconClasses={classNames('i-ph-file-duotone', {
+      iconClasses={classNames(fileIcon, {
         'text-tk-elements-fileTree-file-iconColor group-hover:text-tk-elements-fileTree-file-iconColorHover': !selected,
         'text-tk-elements-fileTree-file-iconColorSelected': selected,
       })}
@@ -358,3 +361,42 @@ function compareString(a: string, b: string) {
 
   return 0;
 }
+
+function getFileExtension(filename: string) {
+  const parts = filename.split('.');
+
+  parts.shift();
+
+  const extension = parts.at(-1) || '';
+
+  return extension;
+}
+
+const extensionsToIcons = new Map([
+  ['ts', 'i-ph-file-ts-duotone'],
+  ['cts', 'i-ph-file-ts-duotone'],
+  ['mts', 'i-ph-file-ts-duotone'],
+
+  ['tsx', 'i-ph-file-tsx-duotone'],
+
+  ['js', 'i-ph-file-js-duotone'],
+  ['cjs', 'i-ph-file-js-duotone'],
+  ['mjs', 'i-ph-file-js-duotone'],
+
+  ['jsx', 'i-ph-file-jsx-duotone'],
+
+  ['html', 'i-ph-file-html-duotone'],
+
+  ['css', 'i-ph-file-css-duotone'],
+
+  ['md', 'i-ph-file-md-duotone'],
+
+  ['vue', 'i-ph-file-vue-duotone'],
+
+  ['gif', 'i-ph-file-image-duotone'],
+  ['jpg', 'i-ph-file-image-duotone'],
+  ['jpeg', 'i-ph-file-image-duotone'],
+  ['png', 'i-ph-file-image-duotone'],
+
+  ['svg', 'i-ph-file-svg-duotone'],
+]);
