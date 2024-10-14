@@ -243,7 +243,7 @@ test('--help prints out message', async () => {
 
     Commands:
       create  Create new tutorial app
-      eject   Eject routes
+      eject   Move all default pages and components into your project, providing full control over the Astro app
       help    Show this help message"
   `);
 });
