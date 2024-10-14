@@ -44,6 +44,10 @@ async function runCommand(cmd: CLICommand, flags: yargs.Arguments): Promise<numb
         tables: {
           Commands: [
             ['create', 'Create new tutorial app'],
+            [
+              'eject',
+              'Move all default pages and components into your project, providing full control over the Astro app',
+            ],
             ['help', 'Show this help message'],
           ],
         },
