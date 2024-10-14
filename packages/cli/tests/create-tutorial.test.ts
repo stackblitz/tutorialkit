@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { execa } from 'execa';
 import { afterAll, beforeAll, expect, test } from 'vitest';
+import { version } from '../package.json';
 
 // on CI on windows we want to make sure to use the same drive, so we use a custom logic
 const tmpDir =
@@ -228,6 +229,23 @@ test('cannot eject on an astro project that is not using TutorialKit 2', async (
       cwd: tmpDir,
     }),
   ).rejects.toThrow(`Could not find import to '@tutorialkit/astro'`);
+});
+
+test('--help prints out message', async () => {
+  const { stdout } = await execa('node', [cli, '--help']);
+
+  expect(stdout.replace(version, '[version]')).toMatchInlineSnapshot(`
+    "
+     @tutorialkit/cli  v[version] Create tutorial apps powered by WebContainer API
+
+    Usage: @tutorialkit/cli [command] [...options]
+           @tutorialkit/cli [ -h | --help | -v | --version ]
+
+    Commands:
+      create  Create new tutorial app
+      eject   Eject routes
+      help    Show this help message"
+  `);
 });
 
 function normaliseSlash(filePath: string) {
