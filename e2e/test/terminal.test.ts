@@ -34,3 +34,15 @@ test('user can see terminal open by default', async ({ page }) => {
   await expect(page.getByRole('tab', { name: 'Terminal', selected: true })).toBeVisible();
   await expect(page.getByRole('tabpanel', { name: 'Terminal' })).toContainText('~/tutorial', { useInnerText: true });
 });
+
+test('user should not see "Toggle terminal" button when terminal is disabled', async ({ page }) => {
+  await page.goto(`${BASE_URL}/disabled`);
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Terminal test - Disabled' })).toBeVisible();
+
+  // wait for webcontainer to boot by checking preview
+  const preview = page.frameLocator('[title="Example"]');
+  await expect(preview.getByText('Index page')).toBeVisible();
+
+  await expect(page.getByRole('button', { name: 'Toggle Terminal' })).not.toBeVisible();
+});
