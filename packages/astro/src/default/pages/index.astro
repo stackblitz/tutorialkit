@@ -4,25 +4,13 @@ import { joinPaths } from '../utils/url';
 
 const tutorial = await getTutorial();
 
-const part = tutorial.parts[tutorial.firstPartId!];
-const chapter = part.chapters[part.firstChapterId!];
-const lesson = tutorial.lessons.find((l) => l.id === chapter.firstLessonId)!;
+const lesson = tutorial.lessons[0];
+const part = lesson.part && tutorial.parts[lesson.part.id];
+const chapter = lesson.chapter && part?.chapters[lesson.chapter.id];
 
-if (!lesson) {
-  throw new Error(
-    `Unable to find lesson for ${JSON.stringify(
-      {
-        partId: tutorial.firstPartId || null,
-        chapterId: part.firstChapterId || null,
-        lessonId: chapter.firstLessonId || null,
-      },
-      null,
-      2,
-    )}`,
-  );
-}
+const slug = [part?.slug, chapter?.slug, lesson.slug].filter(Boolean).join('/');
 
-const redirect = joinPaths(import.meta.env.BASE_URL, `/${part.slug}/${chapter.slug}/${lesson.slug}`);
+const redirect = joinPaths(import.meta.env.BASE_URL, `/${slug}`);
 ---
 
 <!doctype html>

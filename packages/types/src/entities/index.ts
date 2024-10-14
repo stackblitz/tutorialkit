@@ -41,8 +41,8 @@ export interface Lesson<T = unknown> {
   id: string;
   order: number;
   data: LessonSchema;
-  part: { id: Part['id']; title: string };
-  chapter: { id: Chapter['id']; title: string };
+  part?: { id: Part['id']; title: string };
+  chapter?: { id: Chapter['id']; title: string };
   slug: string;
   filepath: string;
   editPageLink?: string;
