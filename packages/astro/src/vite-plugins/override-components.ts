@@ -18,6 +18,7 @@
  *       components: {
  *         TopBar: './CustomTopBar.astro',
  *         Dialog: './CustomDialog.tsx',
+ *         HeadLinks: './CustomHeadLinks.astro',
  *       },
  *     }),
  *   ],
@@ -54,6 +55,18 @@ export interface OverrideComponentsOptions {
    * It will receive same props that `@tutorialkit/react/dialog` supports.
    */
   Dialog?: string;
+
+  /**
+   * Component for overriding links in the head tag.
+   *
+   * It will receive TutorialKit default links within the "default-links" slot.
+   *
+   * ```jsx
+   * <slot name="default-links"></slot>
+   * <link rel="sitemap" href="/sitemap-index.xml" />
+   * ```
+   */
+  HeadLinks: string;
 }
 
 interface Options {
@@ -77,11 +90,13 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
     async load(id) {
       if (id === resolvedId) {
         const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes);
+        const headLinks = components?.HeadLinks || resolveDefaultHeadLinks(defaultRoutes);
         const dialog = components?.Dialog || '@tutorialkit/react/dialog';
 
         return `
           export { default as TopBar } from '${topBar}';
           export { default as Dialog } from '${dialog}';
+          export { default as HeadLinks } from '${headLinks}';
         `;
       }
 
@@ -97,4 +112,13 @@ function resolveDefaultTopBar(defaultRoutes: boolean) {
 
   // default `TopBar` is used from local file when `defaultRoutes` is disabled
   return './src/components/TopBar.astro';
+}
+
+function resolveDefaultHeadLinks(defaultRoutes: boolean) {
+  if (defaultRoutes) {
+    return '@tutorialkit/astro/default/components/HeadLinks.astro';
+  }
+
+  // default `HeadLinks` is used from local file when `defaultRoutes` is disabled
+  return './src/components/HeadLinks.astro';
 }
