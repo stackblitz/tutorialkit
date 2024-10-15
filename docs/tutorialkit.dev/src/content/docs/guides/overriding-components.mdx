@@ -91,13 +91,20 @@ interface Props {
 }
 ```
 
-### HeadLinks
+### HeadTags
 
 Component for overriding links in the head tag.
 
-When overriding `HeadLinks` you can place TutorialKit's default links using the `default-links` [Astro slot](https://docs.astro.build/en/basics/astro-components/#named-slots).
+When overriding `HeadTags` you can place TutorialKit's default components using following [Astro slots](https://docs.astro.build/en/basics/astro-components/#named-slots):
+
+- `title`: The page title
+- `links`: Links for the favicon, fonts and other assets
+- `meta`:  Metadata and Open Graph tags
 
 ```jsx title="src/components/CustomHeadLinks.astro"
-<slot name="default-links" />
+<slot name="title" />
+<slot name="links" />
+<slot name="meta" />
+{/** Add your own tags */}
 <link rel="sitemap" href="/sitemap-index.xml" />
 ```

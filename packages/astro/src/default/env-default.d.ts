@@ -9,10 +9,10 @@ interface WebContainerConfig {
 
 declare module 'tutorialkit:override-components' {
   const topBar: typeof import('./src/default/components/TopBar.astro').default;
-  const headLinks: typeof import('./src/default/components/HeadLinks.astro').default;
+  const headLinks: typeof import('./src/default/components/HeadTags.astro').default;
   const dialog: typeof import('@tutorialkit/react/dialog').default;
 
-  export { topBar as TopBar, dialog as Dialog, headLinks as HeadLinks };
+  export { topBar as TopBar, dialog as Dialog, headLinks as HeadTags };
 }
 
 declare const __ENTERPRISE__: boolean;

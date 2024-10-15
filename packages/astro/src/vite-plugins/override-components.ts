@@ -18,7 +18,7 @@
  *       components: {
  *         TopBar: './CustomTopBar.astro',
  *         Dialog: './CustomDialog.tsx',
- *         HeadLinks: './CustomHeadLinks.astro',
+ *         HeadTags: './CustomHeadLinks.astro',
  *       },
  *     }),
  *   ],
@@ -66,7 +66,7 @@ export interface OverrideComponentsOptions {
    * <link rel="sitemap" href="/sitemap-index.xml" />
    * ```
    */
-  HeadLinks: string;
+  HeadTags: string;
 }
 
 interface Options {
@@ -90,13 +90,13 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
     async load(id) {
       if (id === resolvedId) {
         const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes);
-        const headLinks = components?.HeadLinks || resolveDefaultHeadLinks(defaultRoutes);
+        const headLinks = components?.HeadTags || resolveDefaultHeadLinks(defaultRoutes);
         const dialog = components?.Dialog || '@tutorialkit/react/dialog';
 
         return `
           export { default as TopBar } from '${topBar}';
           export { default as Dialog } from '${dialog}';
-          export { default as HeadLinks } from '${headLinks}';
+          export { default as HeadTags } from '${headLinks}';
         `;
       }
 
@@ -116,9 +116,9 @@ function resolveDefaultTopBar(defaultRoutes: boolean) {
 
 function resolveDefaultHeadLinks(defaultRoutes: boolean) {
   if (defaultRoutes) {
-    return '@tutorialkit/astro/default/components/HeadLinks.astro';
+    return '@tutorialkit/astro/default/components/HeadTags.astro';
   }
 
-  // default `HeadLinks` is used from local file when `defaultRoutes` is disabled
-  return './src/components/HeadLinks.astro';
+  // default `HeadTags` is used from local file when `defaultRoutes` is disabled
+  return './src/components/HeadTags.astro';
 }

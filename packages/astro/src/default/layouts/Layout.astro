@@ -1,5 +1,5 @@
 ---
-import { HeadLinks } from 'tutorialkit:override-components';
+import { HeadTags } from 'tutorialkit:override-components';
 import { ViewTransitions } from 'astro:transitions';
 import type { MetaTagsConfig } from '@tutorialkit/types';
 import MetaTags from '../components/MetaTags.astro';
@@ -16,11 +16,10 @@ const faviconUrl = readPublicAsset('favicon.svg');
 <!doctype html>
 <html lang="en" transition:animate="none" class="h-full overflow-hidden">
   <head>
-    <title>{title}</title>
-    {faviconUrl ? <link rel="icon" type="image/svg+xml" href={faviconUrl} /> : null}
-    <MetaTags meta={meta} />
-    <HeadLinks>
-      <Fragment slot="default-links">
+    <HeadTags>
+      <title slot="title">{title}</title>
+      <Fragment slot="links">
+        {faviconUrl ? <link rel="icon" type="image/svg+xml" href={faviconUrl} /> : null}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -29,7 +28,8 @@ const faviconUrl = readPublicAsset('favicon.svg');
         />
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
       </Fragment>
-    </HeadLinks>
+      <MetaTags slot="meta" meta={meta} />
+    </HeadTags>
     <ViewTransitions />
     <script is:inline>
       setTutorialKitTheme();

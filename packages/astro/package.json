@@ -20,7 +20,7 @@
     "./default/pages/index.astro": "./dist/default/pages/index.astro",
     "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro",
     "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro",
-    "./default/components/HeadLinks.astro": "./dist/default/components/HeadLinks.astro",
+    "./default/components/HeadTags.astro": "./dist/default/components/HeadTags.astro",
     "./package.json": "./package.json"
   },
   "files": [
