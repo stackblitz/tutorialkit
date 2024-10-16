@@ -90,7 +90,7 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
     async load(id) {
       if (id === resolvedId) {
         const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes);
-        const headLinks = components?.HeadTags || resolveDefaultHeadLinks(defaultRoutes);
+        const headTags = components?.HeadTags || resolveDefaultHeadTags(defaultRoutes);
         const dialog = components?.Dialog || '@tutorialkit/react/dialog';
 
         return `
