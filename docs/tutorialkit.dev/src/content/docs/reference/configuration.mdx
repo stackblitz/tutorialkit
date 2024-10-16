@@ -404,6 +404,28 @@ type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "java
 
 ```
 
+##### `custom`
+
+Assign custom fields to a chapter/part/lesson.
+<PropertyTable inherited type="Record<string,any>" />
+
+This is useful when you want to consume items for the default `tutorial` collection
+in order to implement custom features.
+
+```yaml
+custom:
+  publishedAt: 2024-16-10
+  tags: tutorialkit,astro,vite
+```
+
+```ts
+import { getCollection } from 'astro:content';
+const collection = await getCollection('tutorial');
+for (const entry of collection) {
+  console.log("This part was published at:", entry.data?.custom?.publishedAt)
+}
+```
+
 ## Configure the Tutorialkit Astro integration
 
 `@tutorialkit/astro` is an integration for Astro. You can configure the integration in your `astro.config.ts` file.
