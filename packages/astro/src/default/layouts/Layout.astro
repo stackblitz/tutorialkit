@@ -18,6 +18,7 @@ const faviconUrl = readPublicAsset('favicon.svg');
   <head>
     <HeadTags>
       <title slot="title">{title}</title>
+
       <Fragment slot="links">
         {faviconUrl ? <link rel="icon" type="image/svg+xml" href={faviconUrl} /> : null}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
