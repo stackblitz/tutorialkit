@@ -114,7 +114,7 @@ function resolveDefaultTopBar(defaultRoutes: boolean) {
   return './src/components/TopBar.astro';
 }
 
-function resolveDefaultHeadLinks(defaultRoutes: boolean) {
+function resolveDefaultHeadTags(defaultRoutes: boolean) {
   if (defaultRoutes) {
     return '@tutorialkit/astro/default/components/HeadTags.astro';
   }
