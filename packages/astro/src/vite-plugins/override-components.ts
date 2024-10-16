@@ -96,7 +96,7 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
         return `
           export { default as TopBar } from '${topBar}';
           export { default as Dialog } from '${dialog}';
-          export { default as HeadTags } from '${headLinks}';
+          export { default as HeadTags } from '${headTags}';
         `;
       }
 
