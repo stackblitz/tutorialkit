@@ -404,6 +404,25 @@ type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "java
 
 ```
 
+### `meta`
+
+**type**: `MetaTagsSchema`
+
+Configures `<meta>` tags for Open Graph protocole and Twitter.
+<PropertyTable inherited type="MetaTagsSchema" />
+
+Example value:
+```yaml
+meta:
+  image: /cover.png
+  title: Title shown on social media and search engines
+  description: Description shown on social media and search engines
+```
+
+TutorialKit will use your logo as the default image.
+If your logo uses the SVG format, it may not display on most social platforms.
+Use a raster format instead, such as WEBP or PNG.
+
 ## Configure the Tutorialkit Astro integration
 
 `@tutorialkit/astro` is an integration for Astro. You can configure the integration in your `astro.config.ts` file.
