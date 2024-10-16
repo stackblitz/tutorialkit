@@ -90,3 +90,21 @@ interface Props {
   children: ReactNode;
 }
 ```
+
+### HeadTags
+
+Component for overriding title, links and metadata in the `<head>` tag.
+
+When overriding `HeadTags` you can place TutorialKit's default components using following [Astro slots](https://docs.astro.build/en/basics/astro-components/#named-slots):
+
+- `title`: The page title
+- `links`: Links for the favicon, fonts and other assets
+- `meta`:  Metadata and Open Graph tags
+
+```jsx title="src/components/CustomHeadLinks.astro"
+<slot name="title" />
+<slot name="links" />
+<slot name="meta" />
+{/** Add your own tags */}
+<link rel="sitemap" href="/sitemap-index.xml" />
+```

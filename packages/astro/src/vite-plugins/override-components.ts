@@ -18,6 +18,7 @@
  *       components: {
  *         TopBar: './CustomTopBar.astro',
  *         Dialog: './CustomDialog.tsx',
+ *         HeadTags: './CustomHeadLinks.astro',
  *       },
  *     }),
  *   ],
@@ -54,6 +55,23 @@ export interface OverrideComponentsOptions {
    * It will receive same props that `@tutorialkit/react/dialog` supports.
    */
   Dialog?: string;
+
+  /**
+   * Component for overriding title, links and metadata in the `<head>` tag.
+   *
+   * This component has slots that are used to pass TutorialKit's default tags:
+   *
+   * - `title`: The page title
+   * - `links`: Links for the favicon, fonts and other assets
+   * - `meta`:  Metadata and Open Graph tags
+   *
+   * ```jsx
+   * <slot name="title" />
+   * <slot name="links" />
+   * <slot name="meta" />
+   * ```
+   */
+  HeadTags: string;
 }
 
 interface Options {
@@ -77,11 +95,13 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
     async load(id) {
       if (id === resolvedId) {
         const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes);
+        const headTags = components?.HeadTags || resolveDefaultHeadTags(defaultRoutes);
         const dialog = components?.Dialog || '@tutorialkit/react/dialog';
 
         return `
           export { default as TopBar } from '${topBar}';
           export { default as Dialog } from '${dialog}';
+          export { default as HeadTags } from '${headTags}';
         `;
       }
 
@@ -97,4 +117,13 @@ function resolveDefaultTopBar(defaultRoutes: boolean) {
 
   // default `TopBar` is used from local file when `defaultRoutes` is disabled
   return './src/components/TopBar.astro';
+}
+
+function resolveDefaultHeadTags(defaultRoutes: boolean) {
+  if (defaultRoutes) {
+    return '@tutorialkit/astro/default/components/HeadTags.astro';
+  }
+
+  // default `HeadTags` is used from local file when `defaultRoutes` is disabled
+  return './src/components/HeadTags.astro';
 }
