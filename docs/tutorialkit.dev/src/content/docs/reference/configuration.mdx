@@ -312,7 +312,7 @@ You can set terminal open by default by specifying the `open` value.
 
 An interactive terminal will disable the output redirect syntax by default. For instance, you cannot create a file `world.txt` with the contents `hello` using the command `echo hello > world.txt`. The reason is that this could disrupt the lesson if a user overwrites certain files. To allow output redirection, you can change the behavior with the `allowRedirects` setting. You can define this setting either per panel or for all panels at once.
 
-Additionally, you may not want users to run arbitrary commands. For example, if you are creating a lesson about `vitest`, you could specify that the only command the user can run is `vitest` by providing a list of `allowCommands`. Any other command executed by the user will be blocked. You can define the `allowCommands` setting either per panel or for all panels at once.
+Additionally, you may not want users to run arbitrary commands. For example, if you are creating a lesson about vitest, you could specify that the only command the user can run is vitest by providing a list of allowCommands. By default, the allowed commands are ls and echo. Providing a list of allowCommands will override these defaults, and specifying an empty list will allow all commands. Any other command executed by the user will be blocked. You can define the allowCommands setting either per panel or for all panels at once.
 
 By default, in every new lesson terminals start a new session. If you want to keep the terminal session between lessons, you can specify the `id` property for a given terminal panel and keep the same `id` across lessons.
 <PropertyTable inherited type="Terminal" />
