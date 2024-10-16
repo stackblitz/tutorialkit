@@ -12,8 +12,11 @@ prepareCommands:
 terminal:
   panels: ['terminal', 'output']
 meta: 
-    description: "This is lesson 1"
-    image: "/logo.svg"
+  description: "This is lesson 1"
+  image: "/logo.svg"
+custom:
+  publishedAt: "2024-10-16"
+  
 ---
 
 # Kitchen Sink [Heading 1]
