@@ -57,13 +57,18 @@ export interface OverrideComponentsOptions {
   Dialog?: string;
 
   /**
-   * Component for overriding links in the head tag.
+   * Component for overriding title, links and metadata in the `<head>` tag.
    *
-   * It will receive TutorialKit default links within the "default-links" slot.
+   * This component has slots that are used to pass TutorialKit's default tags:
+   *
+   * - `title`: The page title
+   * - `links`: Links for the favicon, fonts and other assets
+   * - `meta`:  Metadata and Open Graph tags
    *
    * ```jsx
-   * <slot name="default-links"></slot>
-   * <link rel="sitemap" href="/sitemap-index.xml" />
+   * <slot name="title" />
+   * <slot name="links" />
+   * <slot name="meta" />
    * ```
    */
   HeadTags: string;
