@@ -12,7 +12,7 @@ declare module 'tutorialkit:override-components' {
   const headTags: typeof import('./src/default/components/HeadTags.astro').default;
   const dialog: typeof import('@tutorialkit/react/dialog').default;
 
-  export { topBar as TopBar, dialog as Dialog, headLinks as HeadTags };
+  export { topBar as TopBar, dialog as Dialog, headTags as HeadTags };
 }
 
 declare const __ENTERPRISE__: boolean;
