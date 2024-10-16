@@ -8,7 +8,10 @@ test('developer can override HeadTags', async ({ page }) => {
     page.locator('meta[name="og:title"]'),
     page.locator('link[rel="stylesheet"]').first(),
   ];
-  const customElems = [page.locator('link[rel="sitemap"]')];
+  const customElems = [
+    page.locator('meta[name="e2e-test-custom-meta-tag"][content="custom-content"]'),
+    page.locator('link[rel="sitemap"]'),
+  ];
 
   for (const e of defaultElems) {
     await expect(e).toBeAttached();
