@@ -1,3 +1,18 @@
+# [1.1.0](https://github.com/stackblitz/tutorialkit/compare/1.0.0...1.1.0) "@tutorialkit/astro" (2024-10-18)
+
+
+### Bug Fixes
+
+* **astro:** correct error message when chapter not found ([#361](https://github.com/stackblitz/tutorialkit/issues/361)) ([0510474](https://github.com/stackblitz/tutorialkit/commit/05104741a73180dbaeb583317cd77df104d2d2c7))
+* **astro:** types of override components to optional ([#376](https://github.com/stackblitz/tutorialkit/issues/376)) ([0af3848](https://github.com/stackblitz/tutorialkit/commit/0af384889f5a3e7e46ea4803b1b1a631c15d331f))
+
+
+### Features
+
+* **astro:** override components to support `HeadTags` ([#375](https://github.com/stackblitz/tutorialkit/issues/375)) ([e93d11a](https://github.com/stackblitz/tutorialkit/commit/e93d11a11b8a01dc6de859842b0dc675b01008de))
+
+
+
 # [1.0.0](https://github.com/stackblitz/tutorialkit/compare/0.2.3...1.0.0) "@tutorialkit/astro" (2024-10-01)
 
 
