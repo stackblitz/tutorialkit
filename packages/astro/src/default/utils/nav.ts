@@ -1,30 +1,65 @@
-import type { Tutorial, NavList } from '@tutorialkit/types';
+import type { Tutorial, NavList, Part, Chapter } from '@tutorialkit/types';
 import { joinPaths } from './url';
 
-export function generateNavigationList(tutorial: Tutorial, baseURL: string): NavList {
-  return objectToSortedArray(tutorial.parts).map((part) => {
-    return {
-      id: part.id,
-      title: part.data.title,
-      sections: objectToSortedArray(part.chapters).map((chapter) => {
-        return {
-          id: chapter.id,
-          title: chapter.data.title,
-          sections: objectToSortedArray(chapter.lessons).map((lesson) => {
-            return {
-              id: lesson.id,
-              title: lesson.data.title,
-              href: joinPaths(baseURL, `/${part.slug}/${chapter.slug}/${lesson.slug}`),
-            };
-          }),
-        };
-      }),
-    };
-  });
-}
+type NavItem = Required<Omit<NavList[number], 'href'>>;
 
-function objectToSortedArray<T extends Record<any, { order: number }>>(object: T): Array<T[keyof T]> {
-  return Object.keys(object)
-    .map((key) => object[key] as T[keyof T])
-    .sort((a, b) => a.order - b.order);
+export function generateNavigationList(tutorial: Tutorial, baseURL: string): NavList {
+  const list: NavList = [];
+
+  // caches for higher level items
+  const chapterItems = new Map<Chapter['id'] | undefined, NavItem>();
+  const partItems = new Map<Part['id'] | undefined, NavItem>();
+
+  for (const lesson of tutorial.lessons) {
+    const part = lesson.part && tutorial.parts[lesson.part.id];
+    const chapter = lesson.chapter && part && part.chapters[lesson.chapter.id];
+
+    let partItem = partItems.get(part?.id);
+    let chapterItem = chapterItems.get(chapter?.id);
+
+    if (part && !partItem) {
+      partItem = {
+        id: part.id,
+        title: part.data.title,
+        type: 'part',
+        sections: [],
+      };
+      list.push(partItem);
+      partItems.set(part.id, partItem);
+    }
+
+    if (chapter && !chapterItem) {
+      if (!partItem) {
+        throw new Error('Failed to resolve part');
+      }
+
+      chapterItem = {
+        id: chapter.id,
+        title: chapter.data.title,
+        type: 'chapter',
+        sections: [],
+      };
+      chapterItems.set(chapter.id, chapterItem);
+      partItem.sections.push(chapterItem);
+    }
+
+    const slug = [part?.slug, chapter?.slug, lesson.slug].filter(Boolean).join('/');
+
+    const lessonItem: NavList[number] = {
+      id: lesson.id,
+      title: lesson.data.title,
+      type: 'lesson',
+      href: joinPaths(baseURL, `/${slug}`),
+    };
+
+    if (chapterItem) {
+      chapterItem.sections.push(lessonItem);
+    } else if (partItem) {
+      partItem.sections.push(lessonItem);
+    } else {
+      list.push(lessonItem);
+    }
+  }
+
+  return list;
 }
