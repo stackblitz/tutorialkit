@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/stackblitz/tutorialkit/compare/1.0.0...1.1.0) "@tutorialkit/react" (2024-10-18)
+
+
+### Features
+
+* add file extension based icons ([#369](https://github.com/stackblitz/tutorialkit/issues/369)) ([ff39cdc](https://github.com/stackblitz/tutorialkit/commit/ff39cdc258764c8d4d1bebe2dce2795fe10e1870))
+
+
+
 # [1.0.0](https://github.com/stackblitz/tutorialkit/compare/0.2.3...1.0.0) "@tutorialkit/react" (2024-10-01)
 
 
