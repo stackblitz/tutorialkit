@@ -1,3 +1,21 @@
+# [1.1.0](https://github.com/stackblitz/tutorialkit/compare/1.0.0...1.1.0) (2024-10-18)
+
+
+### Bug Fixes
+
+* **astro:** correct error message when chapter not found ([#361](https://github.com/stackblitz/tutorialkit/issues/361)) ([0510474](https://github.com/stackblitz/tutorialkit/commit/05104741a73180dbaeb583317cd77df104d2d2c7))
+* **astro:** types of override components to optional ([#376](https://github.com/stackblitz/tutorialkit/issues/376)) ([0af3848](https://github.com/stackblitz/tutorialkit/commit/0af384889f5a3e7e46ea4803b1b1a631c15d331f))
+* **cli:** list `eject` command in `--help` ([#373](https://github.com/stackblitz/tutorialkit/issues/373)) ([bc61229](https://github.com/stackblitz/tutorialkit/commit/bc61229f156db3043b57dd3f85f09b72702a70b0))
+
+
+### Features
+
+* add file extension based icons ([#369](https://github.com/stackblitz/tutorialkit/issues/369)) ([ff39cdc](https://github.com/stackblitz/tutorialkit/commit/ff39cdc258764c8d4d1bebe2dce2795fe10e1870))
+* **astro:** add `custom` configuration option for passing custom fields ([#378](https://github.com/stackblitz/tutorialkit/issues/378)) ([7c6ede9](https://github.com/stackblitz/tutorialkit/commit/7c6ede95730150b68be763d4c87f1da1bc42503c))
+* **astro:** override components to support `HeadTags` ([#375](https://github.com/stackblitz/tutorialkit/issues/375)) ([e93d11a](https://github.com/stackblitz/tutorialkit/commit/e93d11a11b8a01dc6de859842b0dc675b01008de))
+
+
+
 # [1.0.0](https://github.com/stackblitz/tutorialkit/compare/0.2.3...1.0.0) (2024-10-01)
 
 

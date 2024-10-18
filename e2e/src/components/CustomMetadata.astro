@@ -1,0 +1,11 @@
+---
+import { getCollection } from 'astro:content';
+const collection = await getCollection('tutorial');
+
+const lesson = collection.find((c) => c.data.type === 'lesson' && c.slug.startsWith(Astro.params.slug!))!;
+const { custom } = lesson.data;
+---
+
+<h2>Custom metadata</h2>
+
+<pre>{JSON.stringify(custom, null,2)}</pre>

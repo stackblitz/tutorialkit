@@ -1,3 +1,18 @@
+# [1.1.0](https://github.com/stackblitz/tutorialkit/compare/1.0.0...1.1.0) "@tutorialkit/cli" (2024-10-18)
+
+
+### Bug Fixes
+
+* **cli:** list `eject` command in `--help` ([#373](https://github.com/stackblitz/tutorialkit/issues/373)) ([bc61229](https://github.com/stackblitz/tutorialkit/commit/bc61229f156db3043b57dd3f85f09b72702a70b0))
+
+
+### Features
+
+* add file extension based icons ([#369](https://github.com/stackblitz/tutorialkit/issues/369)) ([ff39cdc](https://github.com/stackblitz/tutorialkit/commit/ff39cdc258764c8d4d1bebe2dce2795fe10e1870))
+* **astro:** override components to support `HeadTags` ([#375](https://github.com/stackblitz/tutorialkit/issues/375)) ([e93d11a](https://github.com/stackblitz/tutorialkit/commit/e93d11a11b8a01dc6de859842b0dc675b01008de))
+
+
+
 # [1.0.0](https://github.com/stackblitz/tutorialkit/compare/0.2.3...1.0.0) "@tutorialkit/cli" (2024-10-01)
 
 

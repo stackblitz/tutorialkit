@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/stackblitz/tutorialkit/compare/1.0.0...1.1.0) "@tutorialkit/types" (2024-10-18)
+
+
+### Features
+
+* **astro:** add `custom` configuration option for passing custom fields ([#378](https://github.com/stackblitz/tutorialkit/issues/378)) ([7c6ede9](https://github.com/stackblitz/tutorialkit/commit/7c6ede95730150b68be763d4c87f1da1bc42503c))
+
+
+
 # [1.0.0](https://github.com/stackblitz/tutorialkit/compare/0.2.3...1.0.0) "@tutorialkit/types" (2024-10-01)
 
 
