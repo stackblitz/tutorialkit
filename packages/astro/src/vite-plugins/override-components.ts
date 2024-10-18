@@ -71,7 +71,7 @@ export interface OverrideComponentsOptions {
    * <slot name="meta" />
    * ```
    */
-  HeadTags: string;
+  HeadTags?: string;
 }
 
 interface Options {
