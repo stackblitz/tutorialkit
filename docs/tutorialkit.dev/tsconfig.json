@@ -7,7 +7,7 @@
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["@types/gtag.js"]
+    "types": ["@types/gtag.js", "./starlight.d.ts"]
   },
   "include": ["src"]
 }
