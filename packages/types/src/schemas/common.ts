@@ -211,7 +211,7 @@ export type EditorSchema = z.infer<typeof editorSchema>;
 export type CustomSchema = z.infer<typeof customSchema>;
 
 export const webcontainerSchema = commandsSchema.extend({
-  meta: metaTagsSchema.optional(),
+  meta: metaTagsSchema.optional().describe('Configures `<meta>` tags for Open Graph protocole and Twitter.'),
 
   custom: customSchema.optional().describe('Assign custom fields to a chapter/part/lesson in the Astro collection'),
 
