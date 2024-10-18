@@ -203,12 +203,17 @@ export const editorSchema = z.union([
   }),
 ]);
 
+const customSchema = z.record(z.string(), z.any());
+
 export type TerminalPanelType = z.infer<typeof panelTypeSchema>;
 export type TerminalSchema = z.infer<typeof terminalSchema>;
 export type EditorSchema = z.infer<typeof editorSchema>;
+export type CustomSchema = z.infer<typeof customSchema>;
 
 export const webcontainerSchema = commandsSchema.extend({
   meta: metaTagsSchema.optional(),
+
+  custom: customSchema.optional().describe('Assign custom fields to a chapter/part/lesson in the Astro collection'),
 
   previews: previewSchema
     .optional()
