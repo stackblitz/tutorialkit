@@ -129,11 +129,41 @@ test('lessons with identical names in different chapters', async () => {
   expect(lessons[0].data.focus).toBe('/first.js');
   expect(lessons[1].data.focus).toBe('/second.js');
 
-  expect(lessons[0].chapter.id).toBe('1-chapter');
-  expect(lessons[1].chapter.id).toBe('2-chapter');
+  expect(lessons[0].chapter?.id).toBe('1-chapter');
+  expect(lessons[1].chapter?.id).toBe('2-chapter');
 
-  expect(lessons[0].part.id).toBe('1-part');
-  expect(lessons[1].part.id).toBe('1-part');
+  expect(lessons[0].part?.id).toBe('1-part');
+  expect(lessons[1].part?.id).toBe('1-part');
+});
+
+test('single part and lesson, no chapter', async (ctx) => {
+  getCollection.mockReturnValueOnce([
+    { id: 'meta.md', ...tutorial },
+    { id: '1-part/meta.md', ...part },
+    { id: '1-part/1-lesson/content.md', ...lesson },
+  ]);
+
+  const collection = await getTutorial();
+
+  const parts = Object.keys(collection.parts);
+  expect(parts).toHaveLength(1);
+  expect(Object.keys(collection.parts[parts[0]].chapters)).toHaveLength(0);
+  expect(collection.lessons).toHaveLength(1);
+
+  await expect(collection).toMatchFileSnapshot(snapshotName(ctx));
+});
+
+test('single lesson, no part', async (ctx) => {
+  getCollection.mockReturnValueOnce([
+    { id: 'meta.md', ...tutorial },
+    { id: '1-lesson/content.md', ...lesson },
+  ]);
+
+  const collection = await getTutorial();
+  expect(Object.keys(collection.parts)).toHaveLength(0);
+  expect(collection.lessons).toHaveLength(1);
+
+  await expect(collection).toMatchFileSnapshot(snapshotName(ctx));
 });
 
 describe('metadata inheriting', () => {
@@ -361,7 +391,7 @@ describe('ordering', () => {
     expect(lessons[2].id).toBe('3-lesson');
   });
 
-  test('lessons are ordered by metadata', async () => {
+  test("lessons are ordered by chapter's metadata", async () => {
     getCollection.mockReturnValueOnce([
       { id: 'meta.md', ...tutorial },
       { id: '1-part/meta.md', ...part },
@@ -376,6 +406,63 @@ describe('ordering', () => {
       { id: '1-part/1-chapter/2-lesson/meta.md', ...lesson },
       { id: '1-part/1-chapter/3-lesson/meta.md', ...lesson },
       { id: '1-part/1-chapter/1-lesson/meta.md', ...lesson },
+    ]);
+
+    const collection = await getTutorial();
+    const lessons = collection.lessons;
+
+    expect(lessons[0].order).toBe(0);
+    expect(lessons[0].id).toBe('3-lesson');
+
+    expect(lessons[1].order).toBe(1);
+    expect(lessons[1].id).toBe('1-lesson');
+
+    expect(lessons[2].order).toBe(2);
+    expect(lessons[2].id).toBe('2-lesson');
+  });
+
+  test("lessons are ordered by part's metadata", async () => {
+    getCollection.mockReturnValueOnce([
+      { id: 'meta.md', ...tutorial },
+      {
+        id: '1-part/meta.md',
+        ...part,
+        data: {
+          ...part.data,
+          lessons: ['3-lesson', '1-lesson', '2-lesson'],
+        },
+      },
+      { id: '1-part/2-lesson/meta.md', ...lesson },
+      { id: '1-part/3-lesson/meta.md', ...lesson },
+      { id: '1-part/1-lesson/meta.md', ...lesson },
+    ]);
+
+    const collection = await getTutorial();
+    const lessons = collection.lessons;
+
+    expect(lessons[0].order).toBe(0);
+    expect(lessons[0].id).toBe('3-lesson');
+
+    expect(lessons[1].order).toBe(1);
+    expect(lessons[1].id).toBe('1-lesson');
+
+    expect(lessons[2].order).toBe(2);
+    expect(lessons[2].id).toBe('2-lesson');
+  });
+
+  test("lessons are ordered by tutorial's metadata", async () => {
+    getCollection.mockReturnValueOnce([
+      {
+        id: 'meta.md',
+        ...tutorial,
+        data: {
+          ...tutorial.data,
+          lessons: ['3-lesson', '1-lesson', '2-lesson'],
+        },
+      },
+      { id: '2-lesson/meta.md', ...lesson },
+      { id: '3-lesson/meta.md', ...lesson },
+      { id: '1-lesson/meta.md', ...lesson },
     ]);
 
     const collection = await getTutorial();
@@ -433,12 +520,21 @@ describe('missing parts', () => {
     );
   });
 
-  test('throws when part not found', async () => {
+  test('throws when part not found for chapter', async () => {
     getCollection.mockReturnValueOnce([
       { id: 'meta.md', ...tutorial },
       { id: '2-part/meta.md', ...part },
       { id: '1-part/1-chapter/meta.md', ...chapter },
       { id: '1-part/1-chapter/1-first/content.md', ...lesson },
+    ]);
+
+    await expect(getTutorial).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Could not find part '1-part']`);
+  });
+
+  test('throws when part not found for lesson', async () => {
+    getCollection.mockReturnValueOnce([
+      { id: 'meta.md', ...tutorial },
+      { id: '1-part/1-first/content.md', ...lesson },
     ]);
 
     await expect(getTutorial).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Could not find part '1-part']`);
@@ -453,6 +549,33 @@ describe('missing parts', () => {
     ]);
 
     await expect(getTutorial).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Could not find chapter '1-chapter']`);
+  });
+});
+
+describe('mixed hierarchy', () => {
+  test('throws when tutorial has parts and lessons in same level', async () => {
+    getCollection.mockReturnValueOnce([
+      { id: 'meta.md', ...tutorial },
+      { id: '1-part/meta.md', ...part },
+      { id: '1-lesson/content.md', ...lesson },
+    ]);
+
+    await expect(getTutorial).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Cannot mix lessons and parts in a tutorial. Either remove the parts or move root level lessons into a part.]`,
+    );
+  });
+
+  test('throws when a part has chapters and lessons in same level', async () => {
+    getCollection.mockReturnValueOnce([
+      { id: 'meta.md', ...tutorial },
+      { id: '1-part/meta.md', ...part },
+      { id: '1-part/1-chapter/meta.md', ...chapter },
+      { id: '1-part/1-lesson/content.md', ...lesson },
+    ]);
+
+    await expect(getTutorial).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Cannot mix lessons and chapters in a part. Either remove the chapter from 1-part or move the lessons into a chapter.]`,
+    );
   });
 });
 

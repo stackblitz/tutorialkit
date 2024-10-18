@@ -8,17 +8,7 @@
         "title": "Basics"
       },
       "slug": "part-slug",
-      "chapters": {
-        "1-chapter": {
-          "id": "1-chapter",
-          "order": 0,
-          "data": {
-            "title": "The first chapter in part 1",
-            "type": "chapter"
-          },
-          "slug": "chapter-slug"
-        }
-      }
+      "chapters": {}
     }
   },
   "lessons": [
@@ -33,25 +23,21 @@
         "openInStackBlitz": true
       },
       "id": "1-lesson",
-      "filepath": "1-part/1-chapter/1-lesson/content.md",
+      "filepath": "1-part/1-lesson/content.md",
       "order": 0,
       "Markdown": "Markdown for tutorial",
       "slug": "lesson-slug",
       "files": [
-        "1-part-1-chapter-1-lesson-files.json",
+        "1-part-1-lesson-files.json",
         []
       ],
       "solution": [
-        "1-part-1-chapter-1-lesson-solution.json",
+        "1-part-1-lesson-solution.json",
         []
       ],
       "part": {
         "id": "1-part",
         "title": "Basics"
-      },
-      "chapter": {
-        "id": "1-chapter",
-        "title": "The first chapter in part 1"
       }
     }
   ]

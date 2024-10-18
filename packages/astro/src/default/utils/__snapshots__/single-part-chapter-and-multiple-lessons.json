@@ -16,11 +16,9 @@
             "title": "The first chapter in part 1",
             "type": "chapter"
           },
-          "slug": "chapter-slug",
-          "firstLessonId": "1-first"
+          "slug": "chapter-slug"
         }
-      },
-      "firstChapterId": "1-chapter"
+      }
     }
   },
   "lessons": [
@@ -37,14 +35,6 @@
       "id": "1-first",
       "filepath": "1-part/1-chapter/1-first/content.md",
       "order": 0,
-      "part": {
-        "id": "1-part",
-        "title": "Basics"
-      },
-      "chapter": {
-        "id": "1-chapter",
-        "title": "The first chapter in part 1"
-      },
       "Markdown": "Markdown for tutorial",
       "slug": "lesson-slug",
       "files": [
@@ -55,6 +45,14 @@
         "1-part-1-chapter-1-first-solution.json",
         []
       ],
+      "part": {
+        "id": "1-part",
+        "title": "Basics"
+      },
+      "chapter": {
+        "id": "1-chapter",
+        "title": "The first chapter in part 1"
+      },
       "next": {
         "title": "Welcome to TutorialKit",
         "href": "/part-slug/chapter-slug/lesson-slug"
@@ -73,14 +71,6 @@
       "id": "2-second",
       "filepath": "1-part/1-chapter/2-second/content.md",
       "order": 1,
-      "part": {
-        "id": "1-part",
-        "title": "Basics"
-      },
-      "chapter": {
-        "id": "1-chapter",
-        "title": "The first chapter in part 1"
-      },
       "Markdown": "Markdown for tutorial",
       "slug": "lesson-slug",
       "files": [
@@ -91,6 +81,14 @@
         "1-part-1-chapter-2-second-solution.json",
         []
       ],
+      "part": {
+        "id": "1-part",
+        "title": "Basics"
+      },
+      "chapter": {
+        "id": "1-chapter",
+        "title": "The first chapter in part 1"
+      },
       "prev": {
         "title": "Welcome to TutorialKit",
         "href": "/part-slug/chapter-slug/lesson-slug"
@@ -113,14 +111,6 @@
       "id": "3-third",
       "filepath": "1-part/1-chapter/3-third/content.md",
       "order": 2,
-      "part": {
-        "id": "1-part",
-        "title": "Basics"
-      },
-      "chapter": {
-        "id": "1-chapter",
-        "title": "The first chapter in part 1"
-      },
       "Markdown": "Markdown for tutorial",
       "slug": "lesson-slug",
       "files": [
@@ -131,11 +121,18 @@
         "1-part-1-chapter-3-third-solution.json",
         []
       ],
+      "part": {
+        "id": "1-part",
+        "title": "Basics"
+      },
+      "chapter": {
+        "id": "1-chapter",
+        "title": "The first chapter in part 1"
+      },
       "prev": {
         "title": "Welcome to TutorialKit",
         "href": "/part-slug/chapter-slug/lesson-slug"
       }
     }
-  ],
-  "firstPartId": "1-part"
+  ]
 }
