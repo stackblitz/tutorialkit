@@ -25,7 +25,6 @@ export interface Part {
   order: number;
   slug: string;
   data: PartSchema;
-  firstChapterId?: Chapter['id'];
   chapters: Record<Chapter['id'], Chapter>;
 }
 
@@ -34,15 +33,14 @@ export interface Chapter {
   order: number;
   slug: string;
   data: ChapterSchema;
-  firstLessonId?: Lesson['id'];
 }
 
 export interface Lesson<T = unknown> {
   id: string;
   order: number;
   data: LessonSchema;
-  part: { id: Part['id']; title: string };
-  chapter: { id: Chapter['id']; title: string };
+  part?: { id: Part['id']; title: string };
+  chapter?: { id: Chapter['id']; title: string };
   slug: string;
   filepath: string;
   editPageLink?: string;
@@ -63,7 +61,6 @@ export type CustomConfig = CustomSchema;
 
 export interface Tutorial {
   logoLink?: string;
-  firstPartId?: Part['id'];
   parts: Record<Part['id'], Part>;
   lessons: Lesson[];
 }

@@ -11,15 +11,18 @@ export async function generateStaticRoutes() {
   const lessons = Object.values(tutorial.lessons);
 
   for (const lesson of lessons) {
-    const part = tutorial.parts[lesson.part.id];
-    const chapter = part.chapters[lesson.chapter.id];
+    const part = lesson.part && tutorial.parts[lesson.part.id];
+    const chapter = lesson.chapter && part?.chapters[lesson.chapter.id];
+
+    const slug = [part?.slug, chapter?.slug, lesson.slug].filter(Boolean).join('/');
+    const title = [lesson.part?.title, lesson.chapter?.title, lesson.data.title].filter(Boolean).join(' / ');
 
     routes.push({
       params: {
-        slug: `/${part.slug}/${chapter.slug}/${lesson.slug}`,
+        slug: `/${slug}`,
       },
       props: {
-        title: `${lesson.part.title} / ${lesson.chapter.title} / ${lesson.data.title}`,
+        title,
         lesson: lesson as Lesson<AstroComponentFactory>,
         logoLink: tutorial.logoLink,
         navList: generateNavigationList(tutorial, import.meta.env.BASE_URL),

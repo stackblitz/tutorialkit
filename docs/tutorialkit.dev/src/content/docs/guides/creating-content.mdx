@@ -3,6 +3,7 @@ title: Content creation
 description: 'Creating content in TutorialKit.'
 ---
 import { FileTree } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 From an information architecture perspective, tutorial content is divided into **parts**, which are further divided into **chapters**, each consisting of **lessons**.
 
@@ -35,6 +36,64 @@ This structure is reflected in the directory structure of your TutorialKit proje
 </FileTree>
 
 Navigate into one of these folders to see another folder that represents a **chapter**. Inside the chapter folder, you will find one or more **lesson** folders.
+
+You can also omit parts and chapters, if your tutorial doesn't need that deep hierarchy.
+
+<Tabs>
+  <TabItem label="Structure">
+    ```plaintext
+    - Lesson 1: Getting started
+    - Lesson 2: Adding pages
+    ```
+  </TabItem>
+
+  <TabItem label="File tree">
+    <FileTree>
+      - src
+        - content
+          - tutorial
+            - getting-started
+              - _files/
+              - _solution/
+              - content.md
+            - adding-pages/
+            - meta.md
+        - config.ts
+        - templates/
+    </FileTree>
+  </TabItem>
+</Tabs>
+
+<Tabs>
+  <TabItem label="Structure">
+    ```plaintext
+    - Part 1: Introduction
+      - Lesson 1: What is Vite?
+      - Lesson 2: Installing
+        - …
+    - Part 2: Project structure
+        - …
+    ```
+  </TabItem>
+
+  <TabItem label="File tree">
+    <FileTree>
+      - src
+        - content
+          - tutorial
+            - introduction/
+              - what-is-vite/
+                - _files/
+                - _solution/
+                - content.md
+              - installing/
+            - project-structure/
+            - meta.md
+        - config.ts
+        - templates/
+    </FileTree>
+  </TabItem>
+</Tabs>
 
 ## A lesson content file
 
