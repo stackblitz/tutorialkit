@@ -213,7 +213,7 @@ export type CustomSchema = z.infer<typeof customSchema>;
 export const webcontainerSchema = commandsSchema.extend({
   meta: metaTagsSchema.optional(),
 
-  custom: customSchema.optional(),
+  custom: customSchema.optional().describe('Assign custom fields to a chapter/part/lesson in the Astro collection'),
 
   previews: previewSchema
     .optional()
