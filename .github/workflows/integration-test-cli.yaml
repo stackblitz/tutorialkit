@@ -8,8 +8,20 @@ jobs:
   cli-integration-test:
     name: CLI Integration Tests
     # Note: `prepare-release.yaml` sets this commit message
-    if: ${{ contains(github.event.pull_request.title, 'release CLI') || github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.title, 'release CLI') || github.event_name == 'workflow_dispatch' || github.ref_name == 'main' }}
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [18, 20, 22]
+        include:
+          - os: macos-latest
+            node_version: 20
+          - os: windows-latest
+            node_version: 20.13.1
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,6 +29,8 @@ jobs:
           fetch-depth: 0
 
       - uses: ./.github/actions/setup-and-build
+        with:
+          node-version: ${{ matrix.node-version }}
 
       - name: Update template's versions
         working-directory: ./packages/cli

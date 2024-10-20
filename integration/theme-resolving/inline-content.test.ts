@@ -26,6 +26,5 @@ test('getInlineContentForPackage finds files from @tutorialkit/astro', async () 
     root: `${tmp}/theme-test`,
   });
 
-  console.log(content);
   expect(content.length).toBeGreaterThan(0);
 });
