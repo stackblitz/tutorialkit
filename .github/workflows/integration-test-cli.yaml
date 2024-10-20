@@ -3,12 +3,15 @@ name: CLI Integration Tests
 on:
   pull_request:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   cli-integration-test:
     name: CLI Integration Tests
     # Note: `prepare-release.yaml` sets this commit message
-    if: ${{ contains(github.event.pull_request.title, 'release CLI') || github.event_name == 'workflow_dispatch' || github.ref_name == 'main' }}
+    if: ${{ contains(github.event.pull_request.title, 'release CLI') || github.event_name == 'workflow_dispatch' }}
 
     runs-on: ${{ matrix.os }}
     strategy:
