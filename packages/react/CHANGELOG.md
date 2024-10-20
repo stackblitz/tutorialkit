@@ -1,3 +1,7 @@
+## [1.1.1](https://github.com/stackblitz/tutorialkit/compare/1.1.0...1.1.1) "@tutorialkit/react" (2024-10-20)
+
+
+
 # [1.1.0](https://github.com/stackblitz/tutorialkit/compare/1.0.0...1.1.0) "@tutorialkit/react" (2024-10-18)
 
 

@@ -1,3 +1,12 @@
+## [1.1.1](https://github.com/stackblitz/tutorialkit/compare/1.1.0...1.1.1) (2024-10-20)
+
+
+### Bug Fixes
+
+* **theme:** apply `fast-glob` Windows work-around for all `\@` matches ([#383](https://github.com/stackblitz/tutorialkit/issues/383)) ([9f4bd13](https://github.com/stackblitz/tutorialkit/commit/9f4bd13270f877b9f52e6b85eca5693c283ee249))
+
+
+
 # [1.1.0](https://github.com/stackblitz/tutorialkit/compare/1.0.0...1.1.0) (2024-10-18)
 
 
