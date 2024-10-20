@@ -8,8 +8,15 @@ on:
       - main
 
 jobs:
-  cli-integration-test:
+  skip:
     name: CLI Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: skip
+        run: echo skip
+
+  cli-integration-test:
+    name: CLI Integration Test Matrix
     # Note: `prepare-release.yaml` sets this commit message
     if: ${{ contains(github.event.pull_request.title, 'release CLI') || github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
 
