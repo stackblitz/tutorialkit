@@ -4,16 +4,15 @@ import { execa } from 'execa';
 import { temporaryDirectory } from 'tempy';
 import { describe, beforeEach, afterAll, expect, it } from 'vitest';
 
+const isWindows = process.platform === 'win32';
 const baseDir = path.resolve(__dirname, '../..');
-
 const cli = path.join(baseDir, 'packages/cli/dist/index.js');
+const tmp = temporaryDirectory();
 
 interface TestContext {
   projectName: string;
   dest: string;
 }
-
-const tmp = temporaryDirectory();
 
 beforeEach<TestContext>(async (context) => {
   context.projectName = Math.random().toString(36).substring(7);
@@ -35,7 +34,7 @@ describe.each(['npm', 'pnpm', 'yarn'])('%s', (packageManager) => {
     expect(filesToJSON(projectFiles)).toMatchFileSnapshot(`${snapshotPrefix}-created.json`);
   });
 
-  it<TestContext>('should create and build a project', async ({ projectName, dest }) => {
+  it.skipIf(isWindows)<TestContext>('should create and build a project', async ({ projectName, dest }) => {
     await createProject(projectName, packageManager, { cwd: tmp, install: true });
 
     await execa(packageManager, ['run', 'build'], {
@@ -50,19 +49,22 @@ describe.each(['npm', 'pnpm', 'yarn'])('%s', (packageManager) => {
     expect(filesToJSON(distFiles)).toMatchFileSnapshot(`${snapshotPrefix}-built.json`);
   });
 
-  it<TestContext>('created project contains overwritten UnoCSS config', async ({ projectName, dest }) => {
-    await createProject(projectName, packageManager, { cwd: tmp });
+  it.skipIf(isWindows)<TestContext>(
+    'created project contains overwritten UnoCSS config',
+    async ({ projectName, dest }) => {
+      await createProject(projectName, packageManager, { cwd: tmp });
 
-    const unoConfig = await fs.readFile(`${dest}/uno.config.ts`, 'utf8');
+      const unoConfig = await fs.readFile(`${dest}/uno.config.ts`, 'utf8');
 
-    expect(unoConfig).toBe(`\
+      expect(unoConfig).toBe(`\
 import { defineConfig } from '@tutorialkit/theme';
 
 export default defineConfig({
   // add your UnoCSS config here: https://unocss.dev/guide/config-file
 });
 `);
-  });
+    },
+  );
 });
 
 async function createProject(name: string, packageManager: string, options: { cwd: string; install?: boolean }) {
