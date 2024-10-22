@@ -366,14 +366,16 @@ function assertTutorialStructure(tutorial: Tutorial) {
 }
 
 function sortTutorialLessons(tutorial: Tutorial, metadata: TutorialSchema) {
-  const lessonOrder: Lesson['id'][] = [];
   const lessonIds = tutorial.lessons.map((lesson) => lesson.id);
+
+  // lesson ID alone does not make a lesson unique - combination of lessonId + chapterId + partId does
+  const lessonOrder: { lessonId: Lesson['id']; chapterId?: Chapter['id']; partId?: Part['id'] }[] = [];
 
   const lessonsInRoot = Object.keys(tutorial.parts).length === 0;
 
   // if lessons in root, sort by tutorial.lessons and metadata.lessons
   if (lessonsInRoot) {
-    lessonOrder.push(...getOrder(metadata.lessons, lessonIds));
+    lessonOrder.push(...getOrder(metadata.lessons, lessonIds).map((lessonId) => ({ lessonId })));
   }
 
   // if no lessons in root, sort by parts and their possible chapters
@@ -393,7 +395,7 @@ function sortTutorialLessons(tutorial: Tutorial, metadata: TutorialSchema) {
 
       // all lessons are in part, no chapters
       if (partLessons.length) {
-        lessonOrder.push(...getOrder(part.data.lessons, partLessons));
+        lessonOrder.push(...getOrder(part.data.lessons, partLessons).map((lessonId) => ({ lessonId, partId })));
         continue;
       }
 
@@ -413,14 +415,16 @@ function sortTutorialLessons(tutorial: Tutorial, metadata: TutorialSchema) {
 
         const chapterLessonOrder = getOrder(chapter.data.lessons, chapterLessons);
 
-        lessonOrder.push(...chapterLessonOrder);
+        lessonOrder.push(...chapterLessonOrder.map((lessonId) => ({ lessonId, partId, chapterId })));
       }
     }
   }
 
   // finally apply overall order for lessons
   for (const lesson of tutorial.lessons) {
-    lesson.order = lessonOrder.indexOf(lesson.id);
+    lesson.order = lessonOrder.findIndex(
+      (l) => l.lessonId === lesson.id && l.chapterId === lesson.chapter?.id && l.partId === lesson.part?.id,
+    );
   }
 
   tutorial.lessons.sort((a, b) => a.order - b.order);

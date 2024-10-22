@@ -136,6 +136,41 @@ test('lessons with identical names in different chapters', async () => {
   expect(lessons[1].part?.id).toBe('1-part');
 });
 
+test('lessons with identical names in mixed hierarchy', async () => {
+  getCollection.mockReturnValueOnce([
+    { id: 'meta.md', ...tutorial },
+    { id: '1-part/meta.md', ...part },
+    { id: '2-part/meta.md', ...part },
+    { id: '2-part/2-chapter/meta.md', ...chapter },
+
+    { id: '1-part/identical-lesson-name/content.md', ...lesson },
+    { id: '1-part/2nd-identical-lesson-name/content.md', ...lesson },
+
+    { id: '2-part/2-chapter/identical-lesson-name/content.md', ...lesson },
+    { id: '2-part/2-chapter/2nd-identical-lesson-name/content.md', ...lesson },
+  ]);
+
+  const collection = await getTutorial();
+  const lessons = collection.lessons;
+
+  // verify that lesson.id is not used to define what makes a lesson unique (part.id + chapter.id too)
+  expect(lessons).toHaveLength(4);
+  expect(lessons[0].id).toBe('identical-lesson-name');
+  expect(lessons[1].id).toBe('2nd-identical-lesson-name');
+  expect(lessons[2].id).toBe('identical-lesson-name');
+  expect(lessons[3].id).toBe('2nd-identical-lesson-name');
+
+  expect(lessons[0].chapter?.id).toBe(undefined);
+  expect(lessons[1].chapter?.id).toBe(undefined);
+  expect(lessons[2].chapter?.id).toBe('2-chapter');
+  expect(lessons[3].chapter?.id).toBe('2-chapter');
+
+  expect(lessons[0].part?.id).toBe('1-part');
+  expect(lessons[1].part?.id).toBe('1-part');
+  expect(lessons[2].part?.id).toBe('2-part');
+  expect(lessons[3].part?.id).toBe('2-part');
+});
+
 test('single part and lesson, no chapter', async (ctx) => {
   getCollection.mockReturnValueOnce([
     { id: 'meta.md', ...tutorial },
