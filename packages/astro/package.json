@@ -56,8 +56,6 @@
     "mdast-util-directive": "^3.0.0",
     "mdast-util-to-markdown": "^2.1.0",
     "nanostores": "^0.10.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "remark-directive": "^3.0.0",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0",
@@ -70,11 +68,15 @@
     "esbuild": "^0.20.2",
     "esbuild-node-externals": "^1.13.1",
     "execa": "^9.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "typescript": "^5.4.5",
     "vite-plugin-inspect": "0.8.4",
     "vitest": "^2.1.1"
   },
   "peerDependencies": {
-    "astro": "^4.15.0"
+    "astro": "^4.15.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

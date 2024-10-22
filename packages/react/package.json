@@ -93,7 +93,6 @@
     "framer-motion": "^11.2.11",
     "nanostores": "^0.10.3",
     "picomatch": "^4.0.2",
-    "react": "^18.3.1",
     "react-resizable-panels": "^2.0.19"
   },
   "devDependencies": {
@@ -103,7 +102,11 @@
     "@types/react": "^18.3.3",
     "chokidar": "3.6.0",
     "execa": "^9.2.0",
+    "react": "^18.3.1",
     "typescript": "^5.4.5",
     "vitest": "^2.1.1"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
   }
 }
