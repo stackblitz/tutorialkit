@@ -221,8 +221,8 @@ editor: # Editor is visible
 
 ##### `previews`
 Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used.
-
-<PropertyTable inherited type={'Preview[]'} />
+Optionally you can hide the preview by providing `previews: false`.
+<PropertyTable inherited type={'Preview[] | false'} />
 
 The `Preview` type has the following shape:
 
@@ -230,7 +230,6 @@ The `Preview` type has the following shape:
 type Preview =
     | number
     | string
-    | false
     | [port: number, title: string]
     | [port: number, title: string, pathname: string]
     | { port: number, title: string, pathname?: string }
@@ -247,7 +246,9 @@ previews:
   - [3003, "Dev Server", "/docs"] # Preview is on :3003/docs/. Displayed title is "Dev Server".
   - { port: 3004, title: "Dev Server" } # Preview is on :3004/. Displayed title is "Dev Server".
   - { port: 3005, title: "Dev Server", pathname: "/docs" } # Preview is on :3005/docs/. Displayed title is "Dev Server".
+
 previews: false # Do not show preview panel
+
 ```
 
 ##### `mainCommand`
