@@ -17,3 +17,11 @@ declare module 'tutorialkit:override-components' {
 
 declare const __ENTERPRISE__: boolean;
 declare const __WC_CONFIG__: WebContainerConfig | undefined;
+
+declare namespace App {
+  interface Locals {
+    tk: {
+      lesson: import('@tutorialkit/types').Lesson<any>;
+    };
+  }
+}

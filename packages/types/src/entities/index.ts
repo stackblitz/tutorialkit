@@ -45,6 +45,9 @@ export interface Lesson<T = unknown> {
   part: { id: string; title: string };
   chapter: { id: string; title: string };
   slug: string;
+
+  // slug to pass to astro:content `getEntry`
+  entrySlug: string;
   filepath: string;
   editPageLink?: string;
   files: FilesRefList;
