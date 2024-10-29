@@ -1,5 +1,6 @@
 import type { CommandsSchema, Files } from '@tutorialkit/types';
 import type { IFSWatcher, WebContainer, WebContainerProcess } from '@webcontainer/api';
+import picomatch from 'picomatch';
 import { newTask, type Task, type TaskCancelled } from '../tasks.js';
 import { MultiCounter } from '../utils/multi-counter.js';
 import { clearTerminal, escapeCodes, type ITerminal } from '../utils/terminal.js';
@@ -65,7 +66,7 @@ export class TutorialRunner {
 
   private _ignoreFileEvents = new MultiCounter();
   private _watcher: IFSWatcher | undefined;
-  private _watchContentFromWebContainer = false;
+  private _watchContentFromWebContainer: string[] | boolean = false;
   private _readyToWatch = false;
 
   private _packageJsonDirty = false;
@@ -82,7 +83,7 @@ export class TutorialRunner {
     private _stepController: StepsController,
   ) {}
 
-  setWatchFromWebContainer(value: boolean) {
+  setWatchFromWebContainer(value: boolean | string[]) {
     this._watchContentFromWebContainer = value;
 
     if (this._readyToWatch && this._watchContentFromWebContainer) {
@@ -654,19 +655,39 @@ export class TutorialRunner {
         return;
       }
 
-      // for now we only care about 'change' event
-      if (eventType !== 'change') {
+      if (
+        Array.isArray(this._watchContentFromWebContainer) &&
+        !this._watchContentFromWebContainer.some((pattern) => picomatch.isMatch(filePath, pattern))
+      ) {
         return;
       }
 
-      // we ignore all paths that aren't exposed in the `_editorStore`
-      const file = this._editorStore.documents.get()[filePath];
+      if (eventType === 'change') {
+        // we ignore all paths that aren't exposed in the `_editorStore`
+        const file = this._editorStore.documents.get()[filePath];
 
-      if (!file) {
-        return;
+        if (!file) {
+          return;
+        }
+
+        scheduleReadFor(filePath, typeof file.value === 'string' ? 'utf-8' : null);
+      } else if (eventType === 'rename' && Array.isArray(this._watchContentFromWebContainer)) {
+        const segments = filePath.split('/');
+        segments.forEach((_, index) => {
+          if (index == segments.length - 1) {
+            return;
+          }
+
+          const folderPath = segments.slice(0, index + 1).join('/');
+
+          if (!this._editorStore.documents.get()[folderPath]) {
+            this._editorStore.addFileOrFolder({ path: folderPath, type: 'folder' });
+          }
+        });
+        this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
+        this._updateCurrentFiles({ [filePath]: 'test' });
+        scheduleReadFor(filePath, 'utf-8');
       }
-
-      scheduleReadFor(filePath, typeof file.value === 'string' ? 'utf-8' : null);
     });
   }
 

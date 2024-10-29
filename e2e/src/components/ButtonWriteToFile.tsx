@@ -16,6 +16,12 @@ export function ButtonWriteToFile({ filePath, newContent, access = 'store', test
       case 'webcontainer': {
         const webcontainerInstance = await webcontainer;
 
+        const folderPath = filePath.split('/').slice(0, -1).join('/');
+
+        if (folderPath) {
+          await webcontainerInstance.fs.mkdir(folderPath, { recursive: true });
+        }
+
         await webcontainerInstance.fs.writeFile(filePath, newContent);
 
         return;

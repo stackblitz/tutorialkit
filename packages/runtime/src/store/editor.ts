@@ -99,9 +99,9 @@ export class EditorStore {
 
   addFileOrFolder(file: FileDescriptor) {
     // when adding file or folder to empty folder, remove the empty folder from documents
-    const emptyFolder = this.files.get().find((f) => f.type === 'folder' && file.path.startsWith(f.path));
+    const emptyFolder = this.files.get().find((f) => file.path.startsWith(f.path));
 
-    if (emptyFolder && emptyFolder.type === 'folder') {
+    if (emptyFolder) {
       this.documents.setKey(emptyFolder.path, undefined);
     }
 
