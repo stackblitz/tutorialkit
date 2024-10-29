@@ -685,7 +685,7 @@ export class TutorialRunner {
           }
         });
         this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
-        this._updateCurrentFiles({ [filePath]: 'test' });
+        this._updateCurrentFiles({ [filePath]: '' });
         scheduleReadFor(filePath, 'utf-8');
       }
     });
