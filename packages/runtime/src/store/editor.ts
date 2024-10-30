@@ -133,6 +133,18 @@ export class EditorStore {
     return contentChanged;
   }
 
+  deleteFile(filePath: string): boolean {
+    const documentState = this.documents.get()[filePath];
+
+    if (!documentState) {
+      return false;
+    }
+
+    this.documents.setKey(filePath, undefined);
+
+    return true;
+  }
+
   onDocumentChanged(filePath: string, callback: (document: Readonly<EditorDocument>) => void) {
     const unsubscribeFromCurrentDocument = this.currentDocument.subscribe((document) => {
       if (document?.filePath === filePath) {

@@ -21,7 +21,10 @@ test('editor should reflect changes made from webcontainer in file in nested fol
   const testCase = 'watch';
   await page.goto(`${BASE_URL}/${testCase}`);
 
+  // set up actions that shouldn't do anything
   await page.getByTestId('write-new-ignored-file').click();
+  await page.getByTestId('delete-file').click();
+
   await page.getByRole('button', { name: 'baz.txt' }).click();
 
   await expect(page.getByRole('textbox', { name: 'Editor' })).toHaveText('Baz', {
@@ -33,7 +36,10 @@ test('editor should reflect changes made from webcontainer in file in nested fol
   await expect(page.getByRole('textbox', { name: 'Editor' })).toHaveText('Foo', {
     useInnerText: true,
   });
+
+  // test that ignored actions are ignored
   expect(await page.getByRole('button', { name: 'other.txt' }).count()).toEqual(0);
+  expect(await page.getByRole('button', { name: 'bar.txt' }).count()).toEqual(1);
 });
 
 test('editor should reflect changes made from webcontainer in specified paths', async ({ page }) => {
@@ -59,11 +65,25 @@ test('editor should reflect new files added in specified paths in webcontainer',
   await page.getByTestId('write-new-file').click();
 
   await page.getByRole('button', { name: 'new.txt' }).click();
-  expect(await page.getByRole('button', { name: 'other.txt' }).count()).toEqual(0);
+  await expect(async () => {
+    expect(await page.getByRole('button', { name: 'unknown' }).count()).toEqual(0);
+    expect(await page.getByRole('button', { name: 'other.txt' }).count()).toEqual(0);
+  }).toPass();
 
   await expect(page.getByRole('textbox', { name: 'Editor' })).toHaveText('New', {
     useInnerText: true,
   });
+});
+
+test('editor should remove deleted files in specified paths in webcontainer', async ({ page }) => {
+  const testCase = 'watch-glob';
+  await page.goto(`${BASE_URL}/${testCase}`);
+
+  await page.getByTestId('delete-file').click();
+
+  await expect(async () => {
+    expect(await page.getByRole('button', { name: 'bar.txt' }).count()).toEqual(0);
+  }).toPass();
 });
 
 test('editor should not reflect changes made from webcontainer if watch is not set', async ({ page }) => {

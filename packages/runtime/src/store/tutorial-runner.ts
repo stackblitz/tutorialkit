@@ -1,6 +1,6 @@
 import type { CommandsSchema, Files } from '@tutorialkit/types';
 import type { IFSWatcher, WebContainer, WebContainerProcess } from '@webcontainer/api';
-import picomatch from 'picomatch';
+import picomatch from 'picomatch/posix.js';
 import { newTask, type Task, type TaskCancelled } from '../tasks.js';
 import { MultiCounter } from '../utils/multi-counter.js';
 import { clearTerminal, escapeCodes, type ITerminal } from '../utils/terminal.js';
@@ -641,6 +641,23 @@ export class TutorialRunner {
      * cleanup the allocated buffers.
      */
     const scheduleReadFor = (filePath: string, encoding: 'utf-8' | null) => {
+      const segments = filePath.split('/');
+      segments.forEach((_, index) => {
+        if (index == segments.length - 1) {
+          return;
+        }
+
+        const folderPath = segments.slice(0, index + 1).join('/');
+
+        if (!this._editorStore.documents.get()[folderPath]) {
+          this._editorStore.addFileOrFolder({ path: folderPath, type: 'folder' });
+        }
+      });
+
+      if (!this._editorStore.documents.get()[filePath]) {
+        this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
+      }
+
       filesToRead.set(filePath, encoding);
 
       clearTimeout(timeoutId);
@@ -663,7 +680,10 @@ export class TutorialRunner {
       }
 
       if (eventType === 'change') {
-        // we ignore all paths that aren't exposed in the `_editorStore`
+        /**
+         * Update file
+         * we ignore all paths that aren't exposed in the `_editorStore`
+         */
         const file = this._editorStore.documents.get()[filePath];
 
         if (!file) {
@@ -672,21 +692,16 @@ export class TutorialRunner {
 
         scheduleReadFor(filePath, typeof file.value === 'string' ? 'utf-8' : null);
       } else if (eventType === 'rename' && Array.isArray(this._watchContentFromWebContainer)) {
-        const segments = filePath.split('/');
-        segments.forEach((_, index) => {
-          if (index == segments.length - 1) {
-            return;
-          }
+        const file = this._editorStore.documents.get()[filePath];
 
-          const folderPath = segments.slice(0, index + 1).join('/');
-
-          if (!this._editorStore.documents.get()[folderPath]) {
-            this._editorStore.addFileOrFolder({ path: folderPath, type: 'folder' });
-          }
-        });
-        this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
-        this._updateCurrentFiles({ [filePath]: '' });
-        scheduleReadFor(filePath, 'utf-8');
+        if (file) {
+          // remove file
+          this._editorStore.deleteFile(filePath);
+        } else {
+          // add file
+          this._updateCurrentFiles({ [filePath]: '' });
+          scheduleReadFor(filePath, 'utf-8');
+        }
       }
     });
   }
