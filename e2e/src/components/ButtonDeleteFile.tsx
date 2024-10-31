@@ -4,7 +4,7 @@ interface Props {
   filePath: string;
   newContent: string;
 
-  // default to 'store'
+  // default to 'webcontainer'
   access?: 'store' | 'webcontainer';
   testId?: string;
 }
