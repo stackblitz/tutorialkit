@@ -82,7 +82,7 @@ test('editor should remove deleted files in specified paths in webcontainer', as
   await page.getByTestId('delete-file').click();
 
   await expect(async () => {
-    expect(await page.getByRole('button', { name: 'bar.txt' }).count()).toEqual(0);
+    await expect(page.getByRole('button', { name: 'bar.txt' })).not.toBeVisible();
   }).toPass();
 });
 
