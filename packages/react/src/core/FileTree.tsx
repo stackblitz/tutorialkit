@@ -125,7 +125,7 @@ export function FileTree({
         directory=""
         onFileChange={onFileChange}
         allowEditPatterns={allowEditPatterns}
-        triggerProps={{ className: 'h-full', 'data-testid': 'file-tree-root-context-menu' }}
+        triggerProps={{ className: 'h-full min-h-4', 'data-testid': 'file-tree-root-context-menu' }}
       />
     </div>
   );
