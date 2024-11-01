@@ -58,7 +58,7 @@ export async function getTutorial(): Promise<Tutorial> {
       }
 
       if (!_tutorial.parts[partId].chapters[chapterId]) {
-        throw new Error(`Could not find chapter '${partId}'`);
+        throw new Error(`Could not find chapter '${chapterId}'`);
       }
 
       const { Content } = await entry.render();
@@ -321,7 +321,7 @@ function getSlug(entry: CollectionEntryTutorial) {
   return slug;
 }
 
-interface CollectionEntryTutorial {
+export interface CollectionEntryTutorial {
   id: string;
   slug: string;
   body: string;

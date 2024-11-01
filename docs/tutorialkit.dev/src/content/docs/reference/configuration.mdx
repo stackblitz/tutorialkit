@@ -221,8 +221,8 @@ editor: # Editor is visible
 
 ##### `previews`
 Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used.
-
-<PropertyTable inherited type={'Preview[]'} />
+Optionally you can hide the preview by providing `previews: false`.
+<PropertyTable inherited type={'Preview[] | false'} />
 
 The `Preview` type has the following shape:
 
@@ -246,6 +246,9 @@ previews:
   - [3003, "Dev Server", "/docs"] # Preview is on :3003/docs/. Displayed title is "Dev Server".
   - { port: 3004, title: "Dev Server" } # Preview is on :3004/. Displayed title is "Dev Server".
   - { port: 3005, title: "Dev Server", pathname: "/docs" } # Preview is on :3005/docs/. Displayed title is "Dev Server".
+
+previews: false # Do not show preview panel
+
 ```
 
 ##### `mainCommand`
@@ -403,3 +406,99 @@ type OpenInStackBlitz =
 type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "javascript" | "polymer" | "typescript" | "vue"
 
 ```
+
+##### `meta`
+
+Configures `<meta>` tags for Open Graph protocole and Twitter.
+TutorialKit will use your logo as the default image.
+<PropertyTable inherited type="MetaTagsSchema" />
+
+The `MetaTagsSchema` type has the following shape:
+
+```ts
+type MetaTagsSchema = {
+  image?: string;
+  description?: string;
+  title?: string;
+}
+
+```
+
+Example value:
+```yaml
+meta:
+  image: /cover.png
+  title: Title shown on social media and search engines
+  description: Description shown on social media and search engines
+```
+
+:::tip
+If your logo uses the SVG format, it may not display on most social platforms.
+Use a raster format instead, such as WEBP or PNG.
+:::
+
+##### `custom`
+
+Assign custom fields to a chapter/part/lesson.
+<PropertyTable inherited type="Record<string,any>" />
+
+This is useful when you want to consume items for the default `tutorial` collection
+in order to implement custom features.
+
+```yaml
+custom:
+  publishedAt: 2024-16-10
+  tags: tutorialkit,astro,vite
+```
+
+```ts
+import { getCollection } from 'astro:content';
+const collection = await getCollection('tutorial');
+for (const entry of collection) {
+  console.log("This part was published at:", entry.data?.custom?.publishedAt)
+}
+```
+
+## Configure the Tutorialkit Astro integration
+
+`@tutorialkit/astro` is an integration for Astro. You can configure the integration in your `astro.config.ts` file.
+
+```ts "tutorialkit()" title="astro.config.ts"
+import tutorialkit from "@tutorialkit/astro";
+import { defineConfig } from "astro/config";
+
+export default defineConfig({
+  devToolbar: {
+    enabled: false,
+  },
+  integrations: [
+    tutorialkit(),
+  ],
+});
+```
+
+You can pass the following options to the `tutorialkit` integration:
+
+### `components`
+
+**type**: `OverrideComponentsOptions`
+
+Provide the path to the components you want to override.
+
+```ts
+tutorialkit({
+  components: {
+    TopBar: './src/components/CustomTopBar.astro',
+  },
+});
+```
+
+See [Overriding Components](/guides/overriding-components/) for details of all the components that you can override.
+
+### `defaultRoutes`
+
+**type**: `boolean | "tutorial-only"`<br/>
+**default**: `true`
+
+Controls whether the tutorial routes are automatically added to your project. When set to `true`, it additionally adds a redirect from `/` to the first tutorial.
+Use `"tutorial-only"` to only add the tutorial routes without the redirect.

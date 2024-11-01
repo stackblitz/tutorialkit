@@ -65,14 +65,11 @@ async function copyDefaultFolder() {
   await rm(dist, { recursive: true, force: true });
 
   // copy default folder unmodified, without test files
-  await cp(src, dist, {
-    recursive: true,
-    filter: (filename) => !filename.endsWith('.spec.ts'),
-  });
+  await cp(src, dist, { recursive: true, filter });
 
   if (isWatch) {
     chokidar.watch(src).on('all', (event, filePath, stats) => {
-      if (stats?.isDirectory() !== true) {
+      if (stats?.isDirectory() !== true && filter(filePath)) {
         const target = path.join(dist, path.relative(src, filePath));
 
         if (event === 'unlink') {
@@ -82,5 +79,9 @@ async function copyDefaultFolder() {
         }
       }
     });
+  }
+
+  function filter(filename) {
+    return !filename.endsWith('.spec.ts') && !filename.includes('__snapshots__');
   }
 }

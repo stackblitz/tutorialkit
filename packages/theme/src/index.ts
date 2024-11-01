@@ -49,7 +49,7 @@ export function getInlineContentForPackage({ name, pattern, root }: { name: stri
     const packageRoot = resolve(require.resolve(`${name}/package.json`, { paths: [root] }), '..');
 
     // work-around for https://github.com/mrmlnc/fast-glob/issues/452
-    const packagePattern = convertPathToPattern(packageRoot.replace('\\@', '/@'));
+    const packagePattern = convertPathToPattern(packageRoot.replaceAll('\\@', '/@'));
 
     return globSync(`${packagePattern}${pattern}`).map((filePath) => () => fs.readFile(filePath, { encoding: 'utf8' }));
   } catch {

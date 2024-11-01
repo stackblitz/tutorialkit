@@ -9,7 +9,7 @@ slug: accent-color
 
 <img src="/images/accent-color.png" class="h-20 m-auto">
 
-In the Preview window, we've displayed several native elements: different `input` types and a `progress` bar. Depending on your operating system settings, these will have a different defalut colors.
+In the Preview window, we've displayed several native elements: different `input` types and a `progress` bar. Depending on your operating system settings, these will have a different default colors.
 
 Such colors might not fit your brand, or the current theme of your application.
 

@@ -10,6 +10,7 @@ export default defineConfig({
       components: {
         Dialog: './src/components/Dialog.tsx',
         TopBar: './src/components/TopBar.astro',
+        HeadTags: './src/components/CustomHeadTags.astro',
       },
     }),
   ],

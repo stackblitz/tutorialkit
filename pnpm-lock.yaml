@@ -272,6 +272,9 @@ importers:
 
   integration:
     dependencies:
+      '@tutorialkit/theme':
+        specifier: workspace:*
+        version: link:../packages/theme
       execa:
         specifier: ^9.2.0
         version: 9.2.0
@@ -714,6 +717,9 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.5.3
+      vitest:
+        specifier: ^2.1.1
+        version: 2.1.1(@types/node@22.4.2)
 
   packages/types:
     dependencies:

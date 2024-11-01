@@ -18,6 +18,7 @@ interface PackageJson {
 }
 
 const TUTORIALKIT_VERSION = pkg.version;
+
 const REQUIRED_DEPENDENCIES = [
   '@tutorialkit/runtime',
   '@webcontainer/api',
@@ -141,6 +142,8 @@ async function _eject(flags: EjectOptions) {
       }
     }
   }
+
+  return 0;
 }
 
 function validateDestination(folder: string, force: boolean) {

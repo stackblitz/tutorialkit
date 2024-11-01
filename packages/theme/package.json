@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/theme",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "TutorialKit theme configuration",
   "author": "StackBlitz Inc.",
   "type": "module",
@@ -28,7 +28,8 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "dev": "pnpm run build --watch --preserveWatchOutput"
+    "dev": "pnpm run build --watch --preserveWatchOutput",
+    "test": "vitest"
   },
   "dependencies": {
     "@iconify-json/ph": "^1.1.13",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.4.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^2.1.1"
   }
 }
