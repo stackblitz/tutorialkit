@@ -38,8 +38,8 @@ test('editor should reflect changes made from webcontainer in file in nested fol
   });
 
   // test that ignored actions are ignored
-  expect(await page.getByRole('button', { name: 'other.txt' }).count()).toEqual(0);
-  expect(await page.getByRole('button', { name: 'bar.txt' }).count()).toEqual(1);
+  await expect(page.getByRole('button', { name: 'other.txt' })).not.toBeVisible();
+  await expect(page.getByRole('button', { name: 'bar.txt' })).toBeVisible();
 });
 
 test('editor should reflect changes made from webcontainer in specified paths', async ({ page }) => {
