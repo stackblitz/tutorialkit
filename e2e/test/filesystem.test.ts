@@ -66,8 +66,8 @@ test('editor should reflect new files added in specified paths in webcontainer',
 
   await page.getByRole('button', { name: 'new.txt' }).click();
   await expect(async () => {
-    expect(await page.getByRole('button', { name: 'unknown' }).count()).toEqual(0);
-    expect(await page.getByRole('button', { name: 'other.txt' }).count()).toEqual(0);
+    await expect(page.getByRole('button', { name: 'unknown' })).not.toBeVisible();
+    await expect(page.getByRole('button', { name: 'other.txt' })).not.toBeVisible();
   }).toPass();
 
   await expect(page.getByRole('textbox', { name: 'Editor' })).toHaveText('New', {
