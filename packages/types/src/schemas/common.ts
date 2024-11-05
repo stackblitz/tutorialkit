@@ -58,9 +58,11 @@ export type PreviewSchema = z.infer<typeof previewSchema>;
 
 export const fileSystemSchema = z.object({
   watch: z
-    .boolean()
-    .optional()
-    .describe('When set to true, file changes in WebContainer are updated in the editor as well.'),
+    .union([z.boolean(), z.array(z.string())])
+    .describe(
+      'When set to true, file changes in WebContainer are updated in the editor as well. When set to an array, file changes or new files in the matching paths are updated in the editor.',
+    )
+    .optional(),
 });
 
 export type FileSystemSchema = z.infer<typeof fileSystemSchema>;
