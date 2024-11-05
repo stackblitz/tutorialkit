@@ -641,23 +641,6 @@ export class TutorialRunner {
      * cleanup the allocated buffers.
      */
     const scheduleReadFor = (filePath: string, encoding: 'utf-8' | null) => {
-      const segments = filePath.split('/');
-      segments.forEach((_, index) => {
-        if (index == segments.length - 1) {
-          return;
-        }
-
-        const folderPath = segments.slice(0, index + 1).join('/');
-
-        if (!this._editorStore.documents.get()[folderPath]) {
-          this._editorStore.addFileOrFolder({ path: folderPath, type: 'folder' });
-        }
-      });
-
-      if (!this._editorStore.documents.get()[filePath]) {
-        this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
-      }
-
       filesToRead.set(filePath, encoding);
 
       clearTimeout(timeoutId);
@@ -679,6 +662,8 @@ export class TutorialRunner {
         return;
       }
 
+      console.log(eventType, filename);
+
       if (eventType === 'change') {
         /**
          * Update file
@@ -699,6 +684,23 @@ export class TutorialRunner {
           this._editorStore.deleteFile(filePath);
         } else {
           // add file
+          const segments = filePath.split('/');
+          segments.forEach((_, index) => {
+            if (index == segments.length - 1) {
+              return;
+            }
+
+            const folderPath = segments.slice(0, index + 1).join('/');
+
+            if (!this._editorStore.documents.get()[folderPath]) {
+              this._editorStore.addFileOrFolder({ path: folderPath, type: 'folder' });
+            }
+          });
+
+          if (!this._editorStore.documents.get()[filePath]) {
+            this._editorStore.addFileOrFolder({ path: filePath, type: 'file' });
+          }
+
           this._updateCurrentFiles({ [filePath]: '' });
           scheduleReadFor(filePath, 'utf-8');
         }
