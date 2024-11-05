@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/stackblitz/tutorialkit/compare/1.1.1...1.2.0) (2024-11-05)
+
+
+### Bug Fixes
+
+* **react:** file tree scroll visibility ([#399](https://github.com/stackblitz/tutorialkit/issues/399)) ([e1e9160](https://github.com/stackblitz/tutorialkit/commit/e1e916044cc225dab925bd846d9208181f2080e1))
+
+
+### Features
+
+* **runtime:** `fs.watch` to support syncing new files from webcontainer ([#394](https://github.com/stackblitz/tutorialkit/issues/394)) ([3beda90](https://github.com/stackblitz/tutorialkit/commit/3beda905df20ed9c7d286fc02007cf5b2e74835a))
+
+
+
 ## [1.1.1](https://github.com/stackblitz/tutorialkit/compare/1.1.0...1.1.1) (2024-10-20)
 
 
