@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/stackblitz/tutorialkit/compare/1.1.1...1.2.0) "@tutorialkit/runtime" (2024-11-05)
+
+
+### Features
+
+* **runtime:** `fs.watch` to support syncing new files from webcontainer ([#394](https://github.com/stackblitz/tutorialkit/issues/394)) ([3beda90](https://github.com/stackblitz/tutorialkit/commit/3beda905df20ed9c7d286fc02007cf5b2e74835a))
+
+
+
 ## [1.1.1](https://github.com/stackblitz/tutorialkit/compare/1.1.0...1.1.1) "@tutorialkit/runtime" (2024-10-20)
 
 

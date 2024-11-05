@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/stackblitz/tutorialkit/compare/1.1.1...1.2.0) "@tutorialkit/react" (2024-11-05)
+
+
+### Bug Fixes
+
+* **react:** file tree scroll visibility ([#399](https://github.com/stackblitz/tutorialkit/issues/399)) ([e1e9160](https://github.com/stackblitz/tutorialkit/commit/e1e916044cc225dab925bd846d9208181f2080e1))
+
+
+
 ## [1.1.1](https://github.com/stackblitz/tutorialkit/compare/1.1.0...1.1.1) "@tutorialkit/react" (2024-10-20)
 
 
