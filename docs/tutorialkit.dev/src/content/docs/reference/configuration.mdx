@@ -221,8 +221,8 @@ editor: # Editor is visible
 
 ##### `previews`
 Configure which ports should be used for the previews allowing you to align the behavior with your demo application's dev server setup. If not specified, the lowest port will be used.
-
-<PropertyTable inherited type={'Preview[]'} />
+Optionally you can hide the preview by providing `previews: false`.
+<PropertyTable inherited type={'Preview[] | false'} />
 
 The `Preview` type has the following shape:
 
@@ -246,6 +246,9 @@ previews:
   - [3003, "Dev Server", "/docs"] # Preview is on :3003/docs/. Displayed title is "Dev Server".
   - { port: 3004, title: "Dev Server" } # Preview is on :3004/. Displayed title is "Dev Server".
   - { port: 3005, title: "Dev Server", pathname: "/docs" } # Preview is on :3005/docs/. Displayed title is "Dev Server".
+
+previews: false # Do not show preview panel
+
 ```
 
 ##### `mainCommand`
@@ -281,13 +284,15 @@ An example use case is when a user runs a command that modifies a file. For inst
 
 This property is by default set to `false` as it can impact performance. If you are creating a lesson where the user is expected to modify files outside the editor, you may want to keep this to `false`.
 
+If you would like files to be added or removed from the editor automatically, you need to specify an array of globs that will determine which folders and files to watch for changes.
+
 <PropertyTable inherited type={'FileSystem'} />
 
 The `FileSystem` type has the following shape:
 
 ```ts
 type FileSystem = {
-  watch: boolean
+  watch: boolean | string[]
 }
 
 ```
@@ -296,10 +301,13 @@ Example values:
 
 ```yaml
 filesystem:
-  watch: true  # Filesystem changes are reflected in the editor
+  watch: true  # Filesystem changes to files already in the editor are reflected in the editor
 
 filesystem:
   watch: false # Or if it's omitted, the default value is false
+
+filesystem:
+  watch: ['/*.json', '/src/**/*'] # Files changed, added or deleted that match one of the globs are updated in the editor
 ```
 
 

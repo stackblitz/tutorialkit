@@ -627,7 +627,13 @@ importers:
       nanostores:
         specifier: ^0.10.3
         version: 0.10.3
+      picomatch:
+        specifier: ^4.0.2
+        version: 4.0.2
     devDependencies:
+      '@types/picomatch':
+        specifier: ^3.0.1
+        version: 3.0.1
       typescript:
         specifier: ^5.4.5
         version: 5.5.3
@@ -4012,7 +4018,7 @@ packages:
       '@unocss/core': 0.59.4
       '@unocss/reset': 0.59.4
       '@unocss/vite': 0.59.4(vite@5.4.2)
-      vite: 5.4.2(@types/node@22.4.2)
+      vite: 5.4.2(@types/node@22.4.2)(sass@1.77.6)
     transitivePeerDependencies:
       - rollup
 
@@ -4211,7 +4217,7 @@ packages:
       chokidar: 3.6.0
       fast-glob: 3.3.2
       magic-string: 0.30.11
-      vite: 5.4.2(@types/node@22.4.2)
+      vite: 5.4.2(@types/node@22.4.2)(sass@1.77.6)
     transitivePeerDependencies:
       - rollup
 
@@ -6742,7 +6748,6 @@ packages:
 
   /immutable@4.3.6:
     resolution: {integrity: sha512-Ju0+lEMyzMVZarkTn/gqRpdqd5dOPaz1mCZ0SH3JV6iFw81PldE/PEB1hWVEA288HPt4WXW8O7AWxB10M+03QQ==}
-    dev: true
 
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -8835,7 +8840,6 @@ packages:
       chokidar: 3.6.0
       immutable: 4.3.6
       source-map-js: 1.2.0
-    dev: true
 
   /sax@1.4.1:
     resolution: {integrity: sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==}
@@ -9644,7 +9648,7 @@ packages:
       '@unocss/transformer-directives': 0.59.4
       '@unocss/transformer-variant-group': 0.59.4
       '@unocss/vite': 0.59.4(vite@5.4.2)
-      vite: 5.4.2(@types/node@22.4.2)
+      vite: 5.4.2(@types/node@22.4.2)(sass@1.77.6)
     transitivePeerDependencies:
       - postcss
       - rollup
@@ -9990,7 +9994,6 @@ packages:
       sass: 1.77.6
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /vitefu@0.2.5(vite@5.4.2):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}

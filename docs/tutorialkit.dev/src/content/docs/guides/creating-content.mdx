@@ -251,6 +251,39 @@ const removed = 'This line was removed';
 const highlighted = 'This line is highlighted';
 ```
 
+#### Useful Expressive Code Attributes
+
+- **`title`** - Sets the title of the code block.
+- **`frame`** - Defines the frame of the code block. Options: `"code"`, `"terminal"`, `"none"`, `"auto"`.
+- **`showLineNumbers`** - Displays line numbers. You can combine this with `startLineNumber=#` to begin numbering from a specific line.
+- **`wrap`** - Controls word wrapping. Use `preserveIndent` and `preserveIndent=false` to adjust indentation handling.
+
+##### Marking Lines
+
+- **`{x}`** - Marks specific lines. For example, `{6,10-18}` will mark lines 6 and 10 through 18.
+- **`ins`** - Marks inserted lines. Example: `ins={6,10-18}`.
+- **`del`** - Marks deleted lines. Example: `del={6,10-18}`.
+- **`{"Label":x}`** - Assigns a label to a line or range of lines. Works with `mark`, `ins`, and `del`. Example: `{"Label1":5} del={"Label2":7-8} ins={"Label3":10-12}`. If the label is long, consider placing an empty line in the code for better readability.
+- **`collapse={X-Y}`** - Collapses the specified lines. Example: `collapse={1-5,12-14}`.
+
+##### Marking Text
+
+You can highlight text using strings or regular expressions. For example:
+
+````md
+```jsx "hello" /ye[sp]/ add=/add[12]/ del=/remove[12]/
+console.log(
+  'Hello, the words yes and yep will be marked. Also add1, add2, remove1, remove2',
+)
+```
+````
+
+```jsx "hello" /ye[sp]/ add=/add[12]/ del=/remove[12]/
+console.log(
+  'Hello, the words yes and yep will be marked. Also add1, add2, remove1, remove2',
+)
+```
+
 #### Importing files
 
 In addition to Expressive Code features, you can import files from your code template `_files` and `_solution` folders using the file or solution shortcodes. These shortcodes insert the content of the specified file directly into your lesson content.

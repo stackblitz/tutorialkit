@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/runtime",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "TutorialKit runtime",
   "author": "StackBlitz Inc.",
   "type": "module",
@@ -35,9 +35,11 @@
   "dependencies": {
     "@tutorialkit/types": "workspace:*",
     "@webcontainer/api": "1.2.4",
-    "nanostores": "^0.10.3"
+    "nanostores": "^0.10.3",
+    "picomatch": "^4.0.2"
   },
   "devDependencies": {
+    "@types/picomatch": "^3.0.1",
     "typescript": "^5.4.5",
     "vite": "^5.3.1",
     "vite-tsconfig-paths": "^4.3.2",
