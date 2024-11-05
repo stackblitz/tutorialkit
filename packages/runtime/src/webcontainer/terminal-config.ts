@@ -273,7 +273,7 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
             id: panel.id,
             title: panel.title,
             allowRedirects: panel.allowRedirects ?? config.allowRedirects,
-            allowCommands: panel.allowCommands ?? DEFAULT_COMMANDS,
+            allowCommands: panel.allowCommands ? resolveAllowCommands(panel.allowCommands) : options.allowCommands,
           });
         }
 
