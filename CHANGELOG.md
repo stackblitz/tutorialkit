@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/stackblitz/tutorialkit/compare/1.2.0...1.2.1) (2024-11-05)
+
+
+### Bug Fixes
+
+* **astro:** optimize CJS dependency `picomatch` ([#406](https://github.com/stackblitz/tutorialkit/issues/406)) ([17a48a6](https://github.com/stackblitz/tutorialkit/commit/17a48a6858912277942d87b8af28a601adfad8da))
+
+
+
 # [1.2.0](https://github.com/stackblitz/tutorialkit/compare/1.1.1...1.2.0) (2024-11-05)
 
 
