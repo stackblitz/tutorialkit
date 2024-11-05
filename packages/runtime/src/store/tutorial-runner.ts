@@ -662,8 +662,6 @@ export class TutorialRunner {
         return;
       }
 
-      console.log(eventType, filename);
-
       if (eventType === 'change') {
         /**
          * Update file
