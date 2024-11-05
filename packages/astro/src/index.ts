@@ -87,7 +87,18 @@ export default function createPlugin({
           vite: {
             optimizeDeps: {
               entries: ['!**/src/(content|templates)/**'],
-              include: process.env.TUTORIALKIT_DEV ? [] : ['@tutorialkit/react'],
+              include: process.env.TUTORIALKIT_DEV
+                ? []
+                : [
+                    '@tutorialkit/react',
+
+                    /**
+                     * The `picomatch` is CJS dependency used by `@tutorialkit/runtime`.
+                     * When used via `@tutorialkit/astro`, it's a transitive dependency that's
+                     * not automatically transformed.
+                     */
+                    '@tutorialkit/astro > picomatch/posix.js',
+                  ],
             },
             define: {
               __ENTERPRISE__: `${!!enterprise}`,
