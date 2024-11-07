@@ -107,6 +107,24 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
   const dest = await getTutorialDirectory(tutorialName, flags);
   const resolvedDest = path.resolve(process.cwd(), dest);
 
+  const providers = await prompts.multiselect({
+    message: 'Select hosting providers for automatic configuration (use space to select):',
+    options: [
+      { value: 'Vercel', label: 'Vercel' },
+      { value: 'Netlify', label: 'Netlify' },
+      { value: 'Cloudflare', label: 'Cloudflare' },
+    ],
+    initialValues: [],
+  });
+
+  assertNotCanceled(providers);
+  prompts.log.info(`Configuring for: ${providers.join(', ')}`);
+
+  await generateHostingConfig(resolvedDest, providers);
+
+  await copyTemplate(resolvedDest, flags);
+  updatePackageJson(resolvedDest, tutorialName, flags);
+
   prompts.log.info(`Scaffolding tutorial in ${chalk.blue(resolvedDest)}`);
 
   if (fs.existsSync(resolvedDest) && !flags.force) {
@@ -317,5 +335,42 @@ function applyAliases(flags: CreateOptions & Record<string, any>) {
 function verifyFlags(flags: CreateOptions) {
   if (flags.install === false && flags.start) {
     throw new Error('Cannot start project without installing dependencies.');
+  }
+}
+
+function generateHostingConfig(dest: string, providers: string[]) {
+  if (providers.includes('Vercel')) {
+    fs.writeFileSync(
+      path.join(dest, 'vercel.json'),
+      JSON.stringify(
+        {
+          headers: [{ source: '/(.*)', headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }] }],
+        },
+        null,
+        2,
+      ),
+    );
+  }
+
+  if (providers.includes('Netlify')) {
+    fs.writeFileSync(
+      path.join(dest, 'netlify.toml'),
+      `[build]
+  publish = "build"
+  command = "npm run build"
+  
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"`,
+    );
+  }
+
+  if (providers.includes('Cloudflare')) {
+    fs.writeFileSync(
+      path.join(dest, '_headers'),
+      `/*
+  Access-Control-Allow-Origin: *`,
+    );
   }
 }
