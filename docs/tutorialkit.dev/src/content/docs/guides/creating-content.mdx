@@ -211,15 +211,15 @@ const highlighted = 'This line is highlighted';
 
 You can highlight text using strings or regular expressions. For example:
 
-````md
-```jsx "hello" /ye[sp]/ add=/add[12]/ del=/remove[12]/
+````md title="content.md"
+```jsx title="code.js" "hello" /ye[sp]/ add=/add[12]/ del=/remove[12]/
 console.log(
   'Hello, the words yes and yep will be marked. Also add1, add2, remove1, remove2',
 )
 ```
 ````
 
-```jsx "hello" /ye[sp]/ add=/add[12]/ del=/remove[12]/
+```jsx title="code.js" "hello" /ye[sp]/ add=/add[12]/ del=/remove[12]/
 console.log(
   'Hello, the words yes and yep will be marked. Also add1, add2, remove1, remove2',
 )
