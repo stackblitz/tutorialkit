@@ -11,6 +11,8 @@ const test = base.extend<{ menu: { navigate: (name: { from: string; to: string }
       }).toPass();
 
       await page.getByRole('region', { name: 'Navigation' }).getByRole('link', { name: to }).click();
+
+      await expect(page.getByRole('heading', { level: 1, name: `Navigation test - ${to}` })).toBeVisible();
     }
 
     await use({ navigate });
@@ -78,9 +80,14 @@ test('user should not see preview on lessons that disable it (#405)', async ({ p
 
   await menu.navigate({ from: 'Layout change from', to: 'Layout change all off' });
 
-  // page should open
-  await expect(page.getByRole('heading', { level: 1, name: 'Navigation test - Layout change all off' })).toBeVisible();
-
   // preview should not be visible
   await expect(page.locator('iframe[title="Custom preview"]')).not.toBeVisible();
+
+  // navigate back and check preview is visible once again
+  await menu.navigate({ from: 'Layout change all off', to: 'Layout change from' });
+
+  {
+    const preview = page.frameLocator('[title="Custom preview"]');
+    await expect(preview.getByText('Index page')).toBeVisible();
+  }
 });
