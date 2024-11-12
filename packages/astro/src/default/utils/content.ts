@@ -18,7 +18,7 @@ export async function getTutorial(): Promise<Tutorial> {
   let lessons: Lesson[] = [];
 
   for (const entry of collection) {
-    const { id, data } = entry;
+    const { id, data, slug: entrySlug } = entry;
     const { type } = data;
 
     const [partId, chapterId, lessonId] = id.split('/');
@@ -74,6 +74,7 @@ export async function getTutorial(): Promise<Tutorial> {
         data,
         id: lessonId,
         filepath: id,
+        entrySlug,
         order: -1,
         part: {
           id: partId,

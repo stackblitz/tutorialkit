@@ -1,0 +1,29 @@
+---
+import file from '@content/tutorial/tests/file-tree/allow-edits-disabled/_files/first-level/file';
+import { getCollection } from 'astro:content';
+import { getEntry, getEntries } from 'astro:content';
+
+if (!Astro.locals.tk) {
+  throw new Error('Not in the context of a lesson, Astro.locals.tk is not defined');
+}
+if (!Astro.locals.tk.lesson) {
+  throw new Error('Lesson not set in tutorialkit Astro.locals.tk context');
+}
+
+const { entrySlug } = Astro.locals.tk.lesson;
+
+const currentEntry = await getEntry('tutorial', entrySlug);
+if (!currentEntry) {
+  throw new Error(`Entry not found for slug: ${entrySlug}.`);
+}
+---
+
+<div>
+  <h2>Lesson</h2>
+  {
+    // @ts-ignore
+    JSON.stringify(Astro.locals.tk.lesson, null, 2)
+  }
+  <h2>Entry</h2>
+  {JSON.stringify(currentEntry, null, 2)}
+</div>

@@ -20,6 +20,7 @@ const meta = lesson.data?.meta ?? {};
 // use lesson's default title and a default description for SEO metadata
 meta.title ??= title;
 meta.description ??= 'A TutorialKit interactive lesson';
+Astro.locals.tk = { lesson };
 ---
 
 <Layout title={title} meta={meta}>
