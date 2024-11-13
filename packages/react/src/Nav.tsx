@@ -129,7 +129,7 @@ function NavListComponent({
     <Accordion.Root asChild collapsible type="single" defaultValue={`${level}-${activeItems[level]}`}>
       <ul className={classNames(className)}>
         {items.map((item, index) => (
-          <NavListItem key={index} {...item} index={index} level={level} activeItems={activeItems} i18n={i18n} />
+          <NavListItem key={item.id} {...item} index={index} level={level} activeItems={activeItems} i18n={i18n} />
         ))}
       </ul>
     </Accordion.Root>
@@ -171,11 +171,11 @@ function NavListItem({ level, type, index, i18n, activeItems, id, title, href, s
 
         <Accordion.Content className={navStyles.AccordionContent}>
           <NavListComponent
-            className="mt-1.5  pl-4.5"
+            className="mt-1.5 pl-4.5"
             items={sections}
             activeItems={activeItems}
             i18n={i18n}
-            level={1 + level}
+            level={level + 1}
           />
         </Accordion.Content>
       </li>
