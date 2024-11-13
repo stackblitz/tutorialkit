@@ -3,6 +3,7 @@ import { TopBar } from 'tutorialkit:override-components';
 import type { Lesson } from '@tutorialkit/types';
 import { ThemeSwitch } from './ThemeSwitch';
 import { LoginButton } from './LoginButton';
+import { DownloadButton } from './DownloadButton';
 import { OpenInStackblitzLink } from './OpenInStackblitzLink';
 import Logo from './Logo.astro';
 import { useAuth } from './setup';
@@ -10,13 +11,16 @@ import { useAuth } from './setup';
 interface Props {
   logoLink: string;
   openInStackBlitz: Lesson['data']['openInStackBlitz'];
+  downloadAsZip: Lesson['data']['downloadAsZip'];
 }
 
-const { logoLink, openInStackBlitz } = Astro.props;
+const { logoLink, openInStackBlitz, downloadAsZip } = Astro.props;
 ---
 
 <TopBar>
   <Logo slot="logo" logoLink={logoLink ?? '/'} />
+
+  {downloadAsZip && <DownloadButton client:load transition:persist slot="download-button" />}
 
   {openInStackBlitz && <OpenInStackblitzLink client:load transition:persist slot="open-in-stackblitz-link" />}
 

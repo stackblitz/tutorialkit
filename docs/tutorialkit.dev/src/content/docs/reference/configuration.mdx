@@ -412,6 +412,19 @@ type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "java
 
 ```
 
+### `downloadAsZip`
+Display a button for downloading the current lesson as `.zip` file.
+<PropertyTable inherited type="DownloadAsZip" />
+
+The `DownloadAsZip` type has the following shape:
+
+```ts
+type DownloadAsZip =
+    | boolean
+    | { filename?: string }
+
+```
+
 ##### `meta`
 
 Configures `<meta>` tags for Open Graph protocole and Twitter.
