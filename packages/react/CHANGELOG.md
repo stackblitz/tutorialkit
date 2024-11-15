@@ -1,3 +1,16 @@
+## [1.2.2](https://github.com/stackblitz/tutorialkit/compare/1.2.1...1.2.2) "@tutorialkit/react" (2024-11-12)
+
+
+### Bug Fixes
+
+* hide preview container when `previews: false` ([#412](https://github.com/stackblitz/tutorialkit/issues/412)) ([b35de43](https://github.com/stackblitz/tutorialkit/commit/b35de43d437492d124af232adddd2a30ec70ec0e))
+
+
+
+## [1.2.1](https://github.com/stackblitz/tutorialkit/compare/1.2.0...1.2.1) "@tutorialkit/react" (2024-11-05)
+
+
+
 # [1.2.0](https://github.com/stackblitz/tutorialkit/compare/1.1.1...1.2.0) "@tutorialkit/react" (2024-11-05)
 
 
