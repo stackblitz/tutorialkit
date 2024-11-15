@@ -24,9 +24,16 @@ meta.description ??= 'A TutorialKit interactive lesson';
 
 <Layout title={title} meta={meta}>
   <PageLoadingIndicator />
+
   <div id="previews-container" style="display: none;"></div>
+
   <main class="max-w-full flex flex-col h-full overflow-hidden" data-swap-root>
-    <TopBarWrapper logoLink={logoLink ?? '/'} openInStackBlitz={lesson.data.openInStackBlitz} />
+    <TopBarWrapper
+      logoLink={logoLink ?? '/'}
+      openInStackBlitz={lesson.data.openInStackBlitz}
+      downloadAsZip={lesson.data.downloadAsZip}
+    />
+
     <MainContainer lesson={lesson} navList={navList} />
   </main>
 </Layout>

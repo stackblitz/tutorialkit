@@ -30,7 +30,8 @@
         "i18n": {
           "mocked": "default localization"
         },
-        "openInStackBlitz": true
+        "openInStackBlitz": true,
+        "downloadAsZip": false
       },
       "id": "1-lesson",
       "filepath": "1-part/1-chapter/1-lesson/content.md",
