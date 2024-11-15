@@ -1,3 +1,18 @@
+# [1.3.0](https://github.com/stackblitz/tutorialkit/compare/1.2.2...1.3.0) (2024-11-15)
+
+
+### Bug Fixes
+
+* remove `downloadAsZip` from template for now ([#416](https://github.com/stackblitz/tutorialkit/issues/416)) ([705fead](https://github.com/stackblitz/tutorialkit/commit/705fead006988a4ae865c9171062bd7d3afb3206))
+
+
+### Features
+
+* **astro:** add "Download lesson as zip" button ([#415](https://github.com/stackblitz/tutorialkit/issues/415)) ([9c6e534](https://github.com/stackblitz/tutorialkit/commit/9c6e5349b6ab7e7399437839f6fc4cf11bd6c5c3))
+* **astro:** support lessons without parts or chapters ([#374](https://github.com/stackblitz/tutorialkit/issues/374)) ([8c44cbe](https://github.com/stackblitz/tutorialkit/commit/8c44cbec3f276a4f788b5d1652f67e4cf8cf7948))
+
+
+
 ## [1.2.2](https://github.com/stackblitz/tutorialkit/compare/1.2.1...1.2.2) (2024-11-12)
 
 

@@ -1,3 +1,7 @@
+# [1.3.0](https://github.com/stackblitz/tutorialkit/compare/1.2.2...1.3.0) "@tutorialkit/theme" (2024-11-15)
+
+
+
 ## [1.2.2](https://github.com/stackblitz/tutorialkit/compare/1.2.1...1.2.2) "@tutorialkit/theme" (2024-11-12)
 
 
