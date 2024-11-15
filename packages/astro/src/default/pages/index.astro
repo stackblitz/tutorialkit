@@ -4,11 +4,13 @@ import { joinPaths } from '../utils/url';
 
 const tutorial = await getTutorial();
 
-const part = tutorial.parts[tutorial.firstPartId!];
-const chapter = part.chapters[part?.firstChapterId!];
-const lesson = chapter.lessons[chapter?.firstLessonId!];
+const lesson = tutorial.lessons[0];
+const part = lesson.part && tutorial.parts[lesson.part.id];
+const chapter = lesson.chapter && part?.chapters[lesson.chapter.id];
 
-const redirect = joinPaths(import.meta.env.BASE_URL, `/${part.slug}/${chapter.slug}/${lesson.slug}`);
+const slug = [part?.slug, chapter?.slug, lesson.slug].filter(Boolean).join('/');
+
+const redirect = joinPaths(import.meta.env.BASE_URL, `/${slug}`);
 ---
 
 <!doctype html>
