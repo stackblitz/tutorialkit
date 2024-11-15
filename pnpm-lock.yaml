@@ -94,8 +94,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react
       '@webcontainer/api':
-        specifier: 1.5.0
-        version: 1.5.0
+        specifier: 1.5.1
+        version: 1.5.1
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -327,8 +327,8 @@ importers:
         specifier: ^0.62.2
         version: 0.62.3
       '@webcontainer/api':
-        specifier: 1.5.0
-        version: 1.5.0
+        specifier: 1.5.1
+        version: 1.5.1
       astro:
         specifier: ^4.15.0
         version: 4.15.0(@types/node@22.9.0)(typescript@5.5.3)
@@ -564,8 +564,8 @@ importers:
         specifier: workspace:*
         version: link:../theme
       '@webcontainer/api':
-        specifier: 1.5.0
-        version: 1.5.0
+        specifier: 1.5.1
+        version: 1.5.1
       '@xterm/addon-fit':
         specifier: ^0.10.0
         version: 0.10.0(@xterm/xterm@5.5.0)
@@ -625,8 +625,8 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@webcontainer/api':
-        specifier: 1.5.0
-        version: 1.5.0
+        specifier: 1.5.1
+        version: 1.5.1
       nanostores:
         specifier: ^0.10.3
         version: 0.10.3
@@ -696,8 +696,8 @@ importers:
   packages/test-utils:
     devDependencies:
       '@webcontainer/api':
-        specifier: 1.5.0
-        version: 1.5.0
+        specifier: 1.5.1
+        version: 1.5.1
       typescript:
         specifier: ^5.4.5
         version: 5.5.3
@@ -4434,8 +4434,8 @@ packages:
     resolution: {integrity: sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==}
     dev: true
 
-  /@webcontainer/api@1.5.0:
-    resolution: {integrity: sha512-Xb4PdQh5BjRbsndO9a5KmRw8n35GamRng6UrRA22XSCuT0Ze5HsKhq0//diIavnjURGm58PXeFwrN1oPfU/flQ==}
+  /@webcontainer/api@1.5.1:
+    resolution: {integrity: sha512-+ELk+TbTOUx0LawAUdB+nnxaofg/FxUXo/Ac/+CzHSP3SOc3ebBAW3fLo4UZfvJdUW+ygWZOiQMthPLQXvKZEg==}
 
   /@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0):
     resolution: {integrity: sha512-UFYkDm4HUahf2lnEyHvio51TNGiLK66mqP2JoATy7hRZeXaGMRDr00JiSF7m63vR5WKATF605yEggJKsw0JpMQ==}

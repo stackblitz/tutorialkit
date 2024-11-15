@@ -161,7 +161,7 @@ async function parseCollection(collection: CollectionEntryTutorial[]) {
       tutorialMetaData.template ??= 'default';
       tutorialMetaData.i18n = Object.assign({ ...DEFAULT_LOCALIZATION }, tutorialMetaData.i18n);
       tutorialMetaData.openInStackBlitz ??= true;
-      tutorialMetaData.downloadAsZip ??= true;
+      tutorialMetaData.downloadAsZip ??= false;
 
       tutorial.logoLink = data.logoLink;
     } else if (type === 'part') {

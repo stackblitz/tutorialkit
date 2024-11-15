@@ -25,7 +25,7 @@ async function onClick() {
   let filename =
     typeof lesson.data.downloadAsZip === 'object'
       ? lesson.data.downloadAsZip.filename
-      : `${lesson.part.id}-${lesson.chapter.id}-${lesson.id}.zip`;
+      : [lesson.part?.id, lesson.chapter?.id, lesson.id].filter(Boolean).join('-');
 
   if (!filename.endsWith('.zip')) {
     filename += '.zip';

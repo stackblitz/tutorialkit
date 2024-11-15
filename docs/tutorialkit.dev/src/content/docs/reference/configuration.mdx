@@ -413,7 +413,8 @@ type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "java
 ```
 
 ### `downloadAsZip`
-Display a button for downloading the current lesson as `.zip` file.
+Display a button for downloading the current lesson as `.zip` file. Defaults to `false`.
+The default filename is constructed by concatenating folder names of part,  chapter and lesson.
 <PropertyTable inherited type="DownloadAsZip" />
 
 The `DownloadAsZip` type has the following shape:
