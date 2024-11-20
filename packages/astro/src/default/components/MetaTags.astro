@@ -7,13 +7,16 @@ interface Props {
   meta?: MetaTagsConfig;
 }
 const { meta = {} } = Astro.props;
-let imageUrl;
-if (meta.image) {
-  imageUrl = readPublicAsset(meta.image, true);
+let imageUrl = meta.image;
+
+if (imageUrl?.startsWith('/') || imageUrl?.startsWith('.')) {
+  imageUrl = readPublicAsset(imageUrl, true);
+
   if (!imageUrl) {
     console.warn(`Image ${meta.image} not found in "/public" folder`);
   }
 }
+
 imageUrl ??= readLogoFile('logo', true);
 ---
 
