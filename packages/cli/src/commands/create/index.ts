@@ -338,10 +338,30 @@ function verifyFlags(flags: CreateOptions) {
   }
 }
 
-function generateHostingConfig(dest: string, providers: string[]) {
+async function generateHostingConfig(dest: string, providers: string[]) {
+  const resolvedDest = path.resolve(dest);
+
+  if (!fs.existsSync(resolvedDest)) {
+    console.log(`Directory does not exist. Creating directory: ${resolvedDest}`);
+    fs.mkdirSync(resolvedDest, { recursive: true });
+  } else {
+    console.log(`Directory already exists: ${resolvedDest}`);
+  }
+
+  const templateDir = path.resolve(__dirname, '_template');
+  console.log('Looking for template directory at:', templateDir);
+
+  if (!fs.existsSync(templateDir)) {
+    console.error('Template directory does not exist at:', templateDir);
+  } else {
+    console.log('Template directory found at:', templateDir);
+  }
+
   if (providers.includes('Vercel')) {
+    const vercelConfigPath = path.join(resolvedDest, 'vercel.json');
+    console.log('Vercel config file will be written to:', vercelConfigPath);
     fs.writeFileSync(
-      path.join(dest, 'vercel.json'),
+      vercelConfigPath,
       JSON.stringify(
         {
           headers: [{ source: '/(.*)', headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }] }],
@@ -353,24 +373,40 @@ function generateHostingConfig(dest: string, providers: string[]) {
   }
 
   if (providers.includes('Netlify')) {
+    const netlifyConfigPath = path.join(resolvedDest, 'netlify.toml');
+    console.log('Netlify config file will be written to:', netlifyConfigPath);
     fs.writeFileSync(
-      path.join(dest, 'netlify.toml'),
+      netlifyConfigPath,
       `[build]
   publish = "build"
   command = "npm run build"
   
-[[headers]]
+  [[headers]]
   for = "/*"
   [headers.values]
-    Access-Control-Allow-Origin = "*"`,
+  Access-Control-Allow-Origin = "*"`,
     );
   }
 
   if (providers.includes('Cloudflare')) {
+    const cloudflareConfigPath = path.join(resolvedDest, '_headers');
+    console.log('Cloudflare config file will be written to:', cloudflareConfigPath);
     fs.writeFileSync(
-      path.join(dest, '_headers'),
+      cloudflareConfigPath,
       `/*
   Access-Control-Allow-Origin: *`,
     );
+  }
+
+  if (fs.existsSync(templateDir)) {
+    const gitignoreTemplatePath = path.join(templateDir, '.gitignore');
+
+    if (fs.existsSync(gitignoreTemplatePath)) {
+      const gitignoreDestPath = path.join(resolvedDest, '.gitignore');
+      console.log('Copying .gitignore to:', gitignoreDestPath);
+      fs.copyFileSync(gitignoreTemplatePath, gitignoreDestPath);
+    } else {
+      console.warn('No .gitignore file found in template directory, skipping copy.');
+    }
   }
 }
