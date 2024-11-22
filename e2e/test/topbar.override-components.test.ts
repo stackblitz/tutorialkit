@@ -7,6 +7,7 @@ test('developer can override TopBar', async ({ page }) => {
   await expect(nav.getByText('Custom Top Bar Mounted')).toBeVisible();
 
   // default elements should also be visible
+  await expect(nav.getByRole('button', { name: 'Download lesson as zip-file' })).toBeVisible();
   await expect(nav.getByRole('button', { name: 'Open in StackBlitz' })).toBeVisible();
   await expect(nav.getByRole('button', { name: 'Toggle Theme' })).toBeVisible();
 });

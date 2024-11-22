@@ -284,13 +284,15 @@ An example use case is when a user runs a command that modifies a file. For inst
 
 This property is by default set to `false` as it can impact performance. If you are creating a lesson where the user is expected to modify files outside the editor, you may want to keep this to `false`.
 
+If you would like files to be added or removed from the editor automatically, you need to specify an array of globs that will determine which folders and files to watch for changes.
+
 <PropertyTable inherited type={'FileSystem'} />
 
 The `FileSystem` type has the following shape:
 
 ```ts
 type FileSystem = {
-  watch: boolean
+  watch: boolean | string[]
 }
 
 ```
@@ -299,10 +301,13 @@ Example values:
 
 ```yaml
 filesystem:
-  watch: true  # Filesystem changes are reflected in the editor
+  watch: true  # Filesystem changes to files already in the editor are reflected in the editor
 
 filesystem:
   watch: false # Or if it's omitted, the default value is false
+
+filesystem:
+  watch: ['/*.json', '/src/**/*'] # Files changed, added or deleted that match one of the globs are updated in the editor
 ```
 
 
@@ -404,6 +409,20 @@ type OpenInStackBlitz =
     | { projectTitle?: string, projectDescription?: string, projectTemplate?: TemplateType }
 
 type TemplateType = "html" | "node" | "angular-cli" | "create-react-app" | "javascript" | "polymer" | "typescript" | "vue"
+
+```
+
+### `downloadAsZip`
+Display a button for downloading the current lesson as `.zip` file. Defaults to `false`.
+The default filename is constructed by concatenating folder names of part,  chapter and lesson.
+<PropertyTable inherited type="DownloadAsZip" />
+
+The `DownloadAsZip` type has the following shape:
+
+```ts
+type DownloadAsZip =
+    | boolean
+    | { filename?: string }
 
 ```
 

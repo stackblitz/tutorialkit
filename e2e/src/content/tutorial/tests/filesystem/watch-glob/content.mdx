@@ -1,0 +1,19 @@
+---
+type: lesson
+title: Watch Glob
+focus: /bar.txt
+filesystem:
+  watch: ['/*.txt', '/a/**/*', '/src/**/*']
+---
+
+import { ButtonWriteToFile } from '@components/ButtonWriteToFile';
+import { ButtonDeleteFile } from '@components/ButtonDeleteFile';
+
+# Watch filesystem test
+
+<ButtonWriteToFile client:load access="webcontainer" filePath="/bar.txt" newContent='Something else' />
+<ButtonWriteToFile client:load access="webcontainer" filePath="/a/b/baz.txt" newContent='Foo' testId='write-to-file-in-subfolder' />
+<ButtonWriteToFile client:load access="webcontainer" filePath="/src/new.txt" newContent='New' testId='write-new-file' />
+<ButtonWriteToFile client:load access="webcontainer" filePath="/unknown/other.txt" newContent='Ignore this' testId='write-new-ignored-file' />
+
+<ButtonDeleteFile client:load access="webcontainer" filePath="/bar.txt" testId='delete-file' />

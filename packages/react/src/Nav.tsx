@@ -1,7 +1,7 @@
 import * as Accordion from '@radix-ui/react-accordion';
 import { interpolateString, type Lesson, type NavItem, type NavList } from '@tutorialkit/types';
 import { AnimatePresence, cubicBezier, motion } from 'framer-motion';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useOutsideClick } from './hooks/useOutsideClick.js';
 import navStyles from './styles/nav.module.css';
 import { classNames } from './utils/classnames.js';
@@ -13,16 +13,25 @@ interface Props {
   navList: NavList;
 }
 
+interface NavListItemProps {
+  level: number;
+  activeItems: NavItem['id'][];
+  index: number;
+  i18n: Lesson['data']['i18n'];
+}
+
 export function Nav({ lesson: currentLesson, navList }: Props) {
   const menuRef = useRef<HTMLDivElement>(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const { prev, next } = currentLesson;
 
-  const onOutsideClick = useCallback(() => {
-    setShowDropdown(false);
-  }, []);
+  const activeItems = [
+    currentLesson.part?.id || currentLesson.id,
+    currentLesson.chapter?.id || currentLesson.id,
+    currentLesson.id,
+  ];
 
-  useOutsideClick(menuRef, onOutsideClick);
+  useOutsideClick(menuRef, () => setShowDropdown(false));
 
   return (
     <header className="grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] h-[82px] gap-0.5 py-4 px-1 text-sm">
@@ -53,10 +62,18 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <div className="flex items-center gap-1 font-light truncate">
-              <span className="hidden sm:inline">{currentLesson.part.title}</span>
-              <span className={classNames('hidden sm:inline', navStyles.Divider)}>/</span>
-              <span className="hidden sm:inline">{currentLesson.chapter.title}</span>
-              <span className={classNames('hidden sm:inline', navStyles.Divider)}>/</span>
+              {currentLesson.part && (
+                <>
+                  <span className="hidden sm:inline">{currentLesson.part.title}</span>
+                  <span className={classNames('hidden sm:inline', navStyles.Divider)}>/</span>
+                </>
+              )}
+              {currentLesson.chapter && (
+                <>
+                  <span className="hidden sm:inline">{currentLesson.chapter.title}</span>
+                  <span className={classNames('hidden sm:inline', navStyles.Divider)}>/</span>
+                </>
+              )}
               <strong className="font-semibold">{currentLesson.data.title}</strong>
             </div>
             <div
@@ -75,7 +92,13 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
                 transition={{ duration: 0.2, ease: dropdownEasing }}
                 className=" overflow-hidden transition-theme bg-tk-elements-breadcrumbs-dropdown-backgroundColor"
               >
-                {renderParts(navList, currentLesson, onOutsideClick)}
+                <NavListComponent
+                  className="py-5 pl-5 border-t border-tk-elements-breadcrumbs-dropdown-borderColor overflow-auto max-h-[60dvh]"
+                  items={navList}
+                  activeItems={activeItems}
+                  i18n={currentLesson.data.i18n}
+                  level={0}
+                />
               </motion.nav>
             )}
           </AnimatePresence>
@@ -95,123 +118,67 @@ export function Nav({ lesson: currentLesson, navList }: Props) {
   );
 }
 
-function renderParts(navList: NavList, currentLesson: Lesson, onLinkClick: () => void) {
+function NavListComponent({
+  items,
+  level,
+  activeItems,
+  className,
+  i18n,
+}: Omit<NavListItemProps, 'index'> & { items: NavList; className?: string }) {
   return (
-    <ul className="py-5 pl-5 border-t border-tk-elements-breadcrumbs-dropdown-borderColor overflow-auto max-h-[60dvh]">
-      <Accordion.Root className="space-y-1.5" type="single" collapsible defaultValue={`part-${currentLesson.part.id}`}>
-        {navList.map((part, partIndex) => {
-          const isPartActive = part.id === currentLesson.part.id;
-
-          return (
-            <li key={partIndex}>
-              <Accordion.Item value={`part-${part.id}`}>
-                <Accordion.Trigger
-                  className={classNames(
-                    navStyles.AccordionTrigger,
-                    'flex items-center gap-1 w-full hover:text-primary-700',
-                    {
-                      [`font-semibold ${navStyles.AccordionTriggerActive}`]: isPartActive,
-                    },
-                  )}
-                >
-                  <span className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80`}></span>
-                  <span>
-                    {interpolateString(currentLesson.data.i18n!.partTemplate!, {
-                      index: partIndex + 1,
-                      title: part.title,
-                    })}
-                  </span>
-                </Accordion.Trigger>
-                <Accordion.Content className={navStyles.AccordionContent}>
-                  {renderChapters(currentLesson, part, isPartActive, onLinkClick)}
-                </Accordion.Content>
-              </Accordion.Item>
-            </li>
-          );
-        })}
-      </Accordion.Root>
-    </ul>
+    <Accordion.Root asChild collapsible type="single" defaultValue={`${level}-${activeItems[level]}`}>
+      <ul className={classNames(className)}>
+        {items.map((item, index) => (
+          <NavListItem key={item.id} {...item} index={index} level={level} activeItems={activeItems} i18n={i18n} />
+        ))}
+      </ul>
+    </Accordion.Root>
   );
 }
 
-function renderChapters(currentLesson: Lesson, part: NavItem, isPartActive: boolean, onLinkClick: () => void) {
+function NavListItem({ level, type, index, i18n, activeItems, id, title, href, sections }: NavItem & NavListItemProps) {
+  const isActive = activeItems[level] === id;
+
+  if (!sections) {
+    return (
+      <li className="mr-3 pl-4.5">
+        <a
+          className={classNames(
+            'w-full inline-block border border-transparent pr-3 transition-theme text-tk-elements-breadcrumbs-dropdown-lessonTextColor hover:text-tk-elements-breadcrumbs-dropdown-lessonTextColorHover px-3 py-1 rounded-1',
+            isActive
+              ? 'font-semibold text-tk-elements-breadcrumbs-dropdown-lessonTextColorSelected bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected'
+              : 'bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColor',
+          )}
+          href={href}
+        >
+          {title}
+        </a>
+      </li>
+    );
+  }
+
   return (
-    <ul className="pl-4.5 mt-1.5">
-      <Accordion.Root
-        className="mb-1 space-y-1.5"
-        type="single"
-        collapsible
-        defaultValue={`chapter-${currentLesson.chapter.id}`}
-      >
-        {part.sections?.map((chapter, chapterIndex) => {
-          const isChapterActive = isPartActive && currentLesson.chapter.id === chapter.id;
+    <Accordion.Item asChild value={`${level}-${id}`}>
+      <li className="mt-1.5">
+        <Accordion.Trigger
+          className={classNames(navStyles.AccordionTrigger, 'flex items-center gap-1 w-full hover:text-primary-700', {
+            [`font-semibold ${navStyles.AccordionTriggerActive}`]: isActive,
+          })}
+        >
+          <span className={`${navStyles.AccordionTriggerIcon} i-ph-caret-right-bold scale-80 text-gray-300`}></span>
+          <span>{type === 'part' ? interpolateString(i18n!.partTemplate!, { index: index + 1, title }) : title}</span>
+        </Accordion.Trigger>
 
-          return (
-            <li key={chapterIndex} className="">
-              <Accordion.Item value={`chapter-${chapter.id}`}>
-                <Accordion.Trigger
-                  className={classNames(
-                    navStyles.AccordionTrigger,
-                    'flex items-center gap-1 w-full hover:text-primary-700',
-                    {
-                      [`font-semibold ${navStyles.AccordionTriggerActive}`]: isChapterActive,
-                    },
-                  )}
-                >
-                  <span
-                    className={classNames(
-                      navStyles.AccordionTriggerIcon,
-                      'i-ph-caret-right-bold scale-80 text-gray-300',
-                      {
-                        [navStyles.AccordionTriggerActive]: isChapterActive,
-                      },
-                    )}
-                  ></span>
-                  <span>{chapter.title}</span>
-                </Accordion.Trigger>
-                <Accordion.Content className={navStyles.AccordionContent}>
-                  {renderLessons(currentLesson, chapter, isPartActive, isChapterActive, onLinkClick)}
-                </Accordion.Content>
-              </Accordion.Item>
-            </li>
-          );
-        })}
-      </Accordion.Root>
-    </ul>
-  );
-}
-
-function renderLessons(
-  currentLesson: Lesson,
-  chapter: NavItem,
-  isPartActive: boolean,
-  isChapterActive: boolean,
-  onLinkClick: () => void,
-) {
-  return (
-    <ul className="pl-9 mt-1.5">
-      {chapter.sections?.map((lesson, lessonIndex) => {
-        const isActiveLesson = isPartActive && isChapterActive && lesson.id === currentLesson.id;
-
-        return (
-          <li key={lessonIndex} className="mr-3">
-            <a
-              onClick={onLinkClick}
-              className={classNames(
-                'w-full inline-block border border-transparent pr-3 transition-theme text-tk-elements-breadcrumbs-dropdown-lessonTextColor hover:text-tk-elements-breadcrumbs-dropdown-lessonTextColorHover px-3 py-1 rounded-1',
-                {
-                  'bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColor': !isActiveLesson,
-                  'font-semibold text-tk-elements-breadcrumbs-dropdown-lessonTextColorSelected bg-tk-elements-breadcrumbs-dropdown-lessonBackgroundColorSelected':
-                    isActiveLesson,
-                },
-              )}
-              href={lesson.href}
-            >
-              {lesson.title}
-            </a>
-          </li>
-        );
-      })}
-    </ul>
+        <Accordion.Content className={navStyles.AccordionContent}>
+          <NavListComponent
+            className="mt-1.5 pl-4.5"
+            items={sections}
+            activeItems={activeItems}
+            i18n={i18n}
+            level={level + 1}
+          />
+        </Accordion.Content>
+      </li>
+    </Accordion.Item>
   );
 }
