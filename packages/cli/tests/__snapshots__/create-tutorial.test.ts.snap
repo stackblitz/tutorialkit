@@ -235,6 +235,8 @@ exports[`create and eject a project 1`] = `
   "public/logo.svg",
   "src",
   "src/components",
+  "src/components/Footer.astro",
+  "src/components/FooterWrapper.astro",
   "src/components/HeadTags.astro",
   "src/components/LoginButton.tsx",
   "src/components/Logo.astro",
