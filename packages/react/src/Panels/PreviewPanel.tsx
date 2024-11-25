@@ -62,7 +62,14 @@ export const PreviewPanel = memo(
     useEffect(() => {
       // we update the iframes position at max fps if we have any
       if (hasPreviews) {
-        return requestAnimationFrameLoop(onResize);
+        const cancel = requestAnimationFrameLoop(onResize);
+
+        previewsContainer.style.display = 'block';
+
+        return () => {
+          previewsContainer.style.display = 'none';
+          cancel();
+        };
       }
 
       return undefined;

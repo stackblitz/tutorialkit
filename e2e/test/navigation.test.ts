@@ -1,4 +1,23 @@
-import { test, expect } from '@playwright/test';
+import { test as base, expect } from '@playwright/test';
+
+const test = base.extend<{ menu: { navigate: (name: { from: string; to: string }) => Promise<void> } }>({
+  menu: async ({ page }, use) => {
+    async function navigate({ from, to }: { from: string; to: string }) {
+      // navigation select can take a while to hydrate on page load, click until responsive
+      await expect(async () => {
+        const button = page.getByRole('button', { name: `Tests / Navigation / ${from}` });
+        await button.click();
+        await expect(page.locator('[data-state="open"]', { has: button })).toBeVisible({ timeout: 50 });
+      }).toPass();
+
+      await page.getByRole('region', { name: 'Navigation' }).getByRole('link', { name: to }).click();
+
+      await expect(page.getByRole('heading', { level: 1, name: `Navigation test - ${to}` })).toBeVisible();
+    }
+
+    await use({ navigate });
+  },
+});
 
 const BASE_URL = '/tests/navigation';
 
@@ -20,17 +39,10 @@ test('user can navigate between lessons using nav bar links', async ({ page }) =
   }
 });
 
-test('user can navigate between lessons using breadcrumbs', async ({ page }) => {
+test('user can navigate between lessons using breadcrumbs', async ({ page, menu }) => {
   await page.goto(`${BASE_URL}/page-one`);
 
-  // navigation select can take a while to hydrate on page load, click until responsive
-  await expect(async () => {
-    const button = page.getByRole('button', { name: 'Tests / Navigation / Page one' });
-    await button.click();
-    await expect(page.locator('[data-state="open"]', { has: button })).toBeVisible({ timeout: 50 });
-  }).toPass();
-
-  await page.getByRole('region', { name: 'Navigation' }).getByRole('link', { name: 'Page three' }).click();
+  await menu.navigate({ from: 'Page one', to: 'Page three' });
 
   await expect(page.getByRole('heading', { level: 1, name: 'Navigation test - Page three' })).toBeVisible();
 });
@@ -55,4 +67,27 @@ test("user should see metadata's layout changes after navigation (#318)", async 
   await expect(page.getByRole('tabpanel', { name: 'Custom Terminal' })).toContainText('~/tutorial', {
     useInnerText: true,
   });
+});
+
+test('user should not see preview on lessons that disable it (#405)', async ({ page, menu }) => {
+  await page.goto(`${BASE_URL}/layout-change-from`);
+
+  // first page should have preview visible
+  await expect(page.getByRole('heading', { level: 1, name: 'Navigation test - Layout change from' })).toBeVisible();
+
+  const preview = page.frameLocator('[title="Custom preview"]');
+  await expect(preview.getByText('Index page')).toBeVisible();
+
+  await menu.navigate({ from: 'Layout change from', to: 'Layout change all off' });
+
+  // preview should not be visible
+  await expect(page.locator('iframe[title="Custom preview"]')).not.toBeVisible();
+
+  // navigate back and check preview is visible once again
+  await menu.navigate({ from: 'Layout change all off', to: 'Layout change from' });
+
+  {
+    const preview = page.frameLocator('[title="Custom preview"]');
+    await expect(preview.getByText('Index page')).toBeVisible();
+  }
 });

@@ -3,13 +3,35 @@ name: CLI Integration Tests
 on:
   pull_request:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  cli-integration-test:
+  skip:
     name: CLI Integration Tests
-    # Note: `prepare-release.yaml` sets this commit message
-    if: ${{ contains(github.event.pull_request.title, 'release CLI') || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
+    steps:
+      - name: skip
+        run: echo skip
+
+  cli-integration-test:
+    name: CLI Integration Test Matrix
+    # Note: `prepare-release.yaml` sets this commit message
+    if: ${{ contains(github.event.pull_request.title, 'release CLI') || github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [18, 20, 22]
+        include:
+          - os: macos-latest
+            node_version: 20
+          - os: windows-latest
+            node_version: 20.13.1
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,6 +39,8 @@ jobs:
           fetch-depth: 0
 
       - uses: ./.github/actions/setup-and-build
+        with:
+          node-version: ${{ matrix.node-version }}
 
       - name: Update template's versions
         working-directory: ./packages/cli

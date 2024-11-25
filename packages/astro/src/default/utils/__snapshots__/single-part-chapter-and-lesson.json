@@ -16,46 +16,44 @@
             "title": "The first chapter in part 1",
             "type": "chapter"
           },
-          "slug": "chapter-slug",
-          "lessons": {
-            "1-lesson": {
-              "data": {
-                "type": "lesson",
-                "title": "Welcome to TutorialKit",
-                "template": "default",
-                "i18n": {
-                  "mocked": "default localization"
-                },
-                "openInStackBlitz": true
-              },
-              "id": "1-lesson",
-              "filepath": "1-part/1-chapter/1-lesson/content.md",
-              "order": 0,
-              "part": {
-                "id": "1-part",
-                "title": "Basics"
-              },
-              "chapter": {
-                "id": "1-chapter",
-                "title": "The first chapter in part 1"
-              },
-              "Markdown": "Markdown for tutorial",
-              "slug": "lesson-slug",
-              "files": [
-                "1-part-1-chapter-1-lesson-files.json",
-                []
-              ],
-              "solution": [
-                "1-part-1-chapter-1-lesson-solution.json",
-                []
-              ]
-            }
-          },
-          "firstLessonId": "1-lesson"
+          "slug": "chapter-slug"
         }
-      },
-      "firstChapterId": "1-chapter"
+      }
     }
   },
-  "firstPartId": "1-part"
+  "lessons": [
+    {
+      "data": {
+        "type": "lesson",
+        "title": "Welcome to TutorialKit",
+        "template": "default",
+        "i18n": {
+          "mocked": "default localization"
+        },
+        "openInStackBlitz": true,
+        "downloadAsZip": false
+      },
+      "id": "1-lesson",
+      "filepath": "1-part/1-chapter/1-lesson/content.md",
+      "order": 0,
+      "Markdown": "Markdown for tutorial",
+      "slug": "lesson-slug",
+      "files": [
+        "1-part-1-chapter-1-lesson-files.json",
+        []
+      ],
+      "solution": [
+        "1-part-1-chapter-1-lesson-solution.json",
+        []
+      ],
+      "part": {
+        "id": "1-part",
+        "title": "Basics"
+      },
+      "chapter": {
+        "id": "1-chapter",
+        "title": "The first chapter in part 1"
+      }
+    }
+  ]
 }
