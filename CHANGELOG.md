@@ -1,3 +1,14 @@
+## [1.3.1](https://github.com/stackblitz/tutorialkit/compare/1.3.0...1.3.1) (2024-11-25)
+
+
+### Bug Fixes
+
+* **astro:** allow URLs in `meta.image` ([#422](https://github.com/stackblitz/tutorialkit/issues/422)) ([3125547](https://github.com/stackblitz/tutorialkit/commit/3125547c043fe4a76dca95b1eb973362967ccf02))
+* switch default `meta.image` to `.png` ([#427](https://github.com/stackblitz/tutorialkit/issues/427)) ([d39bf40](https://github.com/stackblitz/tutorialkit/commit/d39bf404bc1947c48b5cb15164f20f67c0be49bc))
+* warn when using `.svg` in `meta.image` ([#377](https://github.com/stackblitz/tutorialkit/issues/377)) ([6e1edc1](https://github.com/stackblitz/tutorialkit/commit/6e1edc1af274d0eb65587f358e5db9557d259171))
+
+
+
 # [1.3.0](https://github.com/stackblitz/tutorialkit/compare/1.2.2...1.3.0) (2024-11-15)
 
 
