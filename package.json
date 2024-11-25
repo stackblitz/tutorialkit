@@ -51,6 +51,7 @@
     "node": ">=18.18.0",
     "pnpm": "8.15.6"
   },
+
   "resolutions": {
     "@typescript-eslint/utils": "^8.0.0-alpha.30"
   }
