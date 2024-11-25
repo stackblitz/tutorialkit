@@ -18,6 +18,10 @@ if (imageUrl?.startsWith('/') || imageUrl?.startsWith('.')) {
 }
 
 imageUrl ??= readLogoFile('logo', true);
+if (imageUrl?.endsWith('.svg')) {
+  console.warn(`Using a SVG open graph image "${imageUrl}". This is not supported by most social platforms. 
+  You should rather set "meta.image" to a raster image (PNG, WEBP).`);
+}
 ---
 
 <meta charset="UTF-8" />
