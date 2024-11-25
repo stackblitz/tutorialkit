@@ -24,7 +24,7 @@ jobs:
 
       - name: Publish to pkg.pr.new
         run: >
-          pnpm dlx pkg-pr-new@0.0 publish --compact --pnpm
+          pnpm dlx pkg-pr-new publish --compact --pnpm
           ./packages/astro
           ./packages/react
           ./packages/runtime
