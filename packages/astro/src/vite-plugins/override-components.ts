@@ -72,6 +72,19 @@ export interface OverrideComponentsOptions {
    * ```
    */
   HeadTags?: string;
+
+  /**
+   * Component for overriding the footer.
+   *
+   * This component can be customized to include your own footer elements.
+   *
+   * ```jsx
+   * <footer>
+   *   <p>Custom Footer Content</p>
+   * </footer>
+   * ```
+   */
+  Footer?: string;
 }
 
 interface Options {
@@ -97,11 +110,13 @@ export function overrideComponents({ components, defaultRoutes }: Options): Vite
         const topBar = components?.TopBar || resolveDefaultTopBar(defaultRoutes);
         const headTags = components?.HeadTags || resolveDefaultHeadTags(defaultRoutes);
         const dialog = components?.Dialog || '@tutorialkit/react/dialog';
+        const footer = components?.Footer || resolveDefaultFooter(defaultRoutes);
 
         return `
           export { default as TopBar } from '${topBar}';
           export { default as Dialog } from '${dialog}';
           export { default as HeadTags } from '${headTags}';
+          export { default as Footer } from '${footer}';
         `;
       }
 
@@ -126,4 +141,13 @@ function resolveDefaultHeadTags(defaultRoutes: boolean) {
 
   // default `HeadTags` is used from local file when `defaultRoutes` is disabled
   return './src/components/HeadTags.astro';
+}
+
+function resolveDefaultFooter(defaultRoutes: boolean) {
+  if (defaultRoutes) {
+    return '@tutorialkit/astro/default/components/Footer.astro';
+  }
+
+  // default `Footer` is used from local file when `defaultRoutes` is disabled
+  return './src/components/Footer.astro';
 }
