@@ -21,6 +21,7 @@
     "./default/pages/[...slug].astro": "./dist/default/pages/[...slug].astro",
     "./default/components/TopBar.astro": "./dist/default/components/TopBar.astro",
     "./default/components/HeadTags.astro": "./dist/default/components/HeadTags.astro",
+    "./default/components/Footer.astro": "./dist/default/components/Footer.astro",
     "./package.json": "./package.json"
   },
   "files": [

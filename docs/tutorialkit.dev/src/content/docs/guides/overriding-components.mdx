@@ -111,3 +111,30 @@ When overriding `HeadTags` you can place TutorialKit's default components using 
 {/** Add your own tags */}
 <link rel="sitemap" href="/sitemap-index.xml" />
 ```
+
+### Footer
+
+The `Footer` component can be overridden to customize the footer content, including legal terms, contact information, and copyrights.
+
+When overriding `Footer`, you can use the following [Astro slots](https://docs.astro.build/en/basics/astro-components/#named-slots) to customize specific parts of the default footer:
+
+- `legal-info`: Content for legal terms or disclaimers
+- `contact-info`: Contact details such as email or phone number
+- `copyright`: Copyright text for the website
+
+Example override:
+
+```jsx title="src/components/CustomFooter.astro"
+<footer>
+  <slot name="legal-info">
+    <p>Default legal info</p>
+  </slot>
+
+  <slot name="contact-info">
+    <p>Contact us at example@example.com</p>
+  </slot>
+
+  <slot name="copyright">
+    <p>© 2024 Example Company</p>
+  </slot>
+</footer>
