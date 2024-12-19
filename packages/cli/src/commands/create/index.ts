@@ -10,6 +10,7 @@ import { generateProjectName } from '../../utils/project.js';
 import { assertNotCanceled } from '../../utils/tasks.js';
 import { updateWorkspaceVersions } from '../../utils/workspace-version.js';
 import { setupEnterpriseConfig } from './enterprise.js';
+import { generateHostingConfig } from './generate-hosting-config.js';
 import { initGitRepo } from './git.js';
 import { installAndStart } from './install-start.js';
 import { DEFAULT_VALUES, type CreateOptions } from './options.js';
@@ -335,78 +336,5 @@ function applyAliases(flags: CreateOptions & Record<string, any>) {
 function verifyFlags(flags: CreateOptions) {
   if (flags.install === false && flags.start) {
     throw new Error('Cannot start project without installing dependencies.');
-  }
-}
-
-async function generateHostingConfig(dest: string, providers: string[]) {
-  const resolvedDest = path.resolve(dest);
-
-  if (!fs.existsSync(resolvedDest)) {
-    console.log(`Directory does not exist. Creating directory: ${resolvedDest}`);
-    fs.mkdirSync(resolvedDest, { recursive: true });
-  } else {
-    console.log(`Directory already exists: ${resolvedDest}`);
-  }
-
-  const templateDir = path.resolve(__dirname, '_template');
-  console.log('Looking for template directory at:', templateDir);
-
-  if (!fs.existsSync(templateDir)) {
-    console.error('Template directory does not exist at:', templateDir);
-  } else {
-    console.log('Template directory found at:', templateDir);
-  }
-
-  if (providers.includes('Vercel')) {
-    const vercelConfigPath = path.join(resolvedDest, 'vercel.json');
-    console.log('Vercel config file will be written to:', vercelConfigPath);
-    fs.writeFileSync(
-      vercelConfigPath,
-      JSON.stringify(
-        {
-          headers: [{ source: '/(.*)', headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }] }],
-        },
-        null,
-        2,
-      ),
-    );
-  }
-
-  if (providers.includes('Netlify')) {
-    const netlifyConfigPath = path.join(resolvedDest, 'netlify.toml');
-    console.log('Netlify config file will be written to:', netlifyConfigPath);
-    fs.writeFileSync(
-      netlifyConfigPath,
-      `[build]
-  publish = "build"
-  command = "npm run build"
-  
-  [[headers]]
-  for = "/*"
-  [headers.values]
-  Access-Control-Allow-Origin = "*"`,
-    );
-  }
-
-  if (providers.includes('Cloudflare')) {
-    const cloudflareConfigPath = path.join(resolvedDest, '_headers');
-    console.log('Cloudflare config file will be written to:', cloudflareConfigPath);
-    fs.writeFileSync(
-      cloudflareConfigPath,
-      `/*
-  Access-Control-Allow-Origin: *`,
-    );
-  }
-
-  if (fs.existsSync(templateDir)) {
-    const gitignoreTemplatePath = path.join(templateDir, '.gitignore');
-
-    if (fs.existsSync(gitignoreTemplatePath)) {
-      const gitignoreDestPath = path.join(resolvedDest, '.gitignore');
-      console.log('Copying .gitignore to:', gitignoreDestPath);
-      fs.copyFileSync(gitignoreTemplatePath, gitignoreDestPath);
-    } else {
-      console.warn('No .gitignore file found in template directory, skipping copy.');
-    }
   }
 }
