@@ -108,20 +108,20 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
   const dest = await getTutorialDirectory(tutorialName, flags);
   const resolvedDest = path.resolve(process.cwd(), dest);
 
-  const providers = await prompts.multiselect({
-    message: 'Select hosting providers for automatic configuration (use space to select):',
+  const provider = await prompts.select({
+    message: 'Select hosting providers for automatic configuration:',
     options: [
       { value: 'Vercel', label: 'Vercel' },
       { value: 'Netlify', label: 'Netlify' },
       { value: 'Cloudflare', label: 'Cloudflare' },
     ],
-    initialValues: [],
+    initialValue: 'Vercel',
   });
 
-  assertNotCanceled(providers);
-  prompts.log.info(`Configuring for: ${providers.join(', ')}`);
+  assertNotCanceled(provider);
+  prompts.log.info(`Configuring for: ${provider}`);
 
-  await generateHostingConfig(resolvedDest, providers);
+  await generateHostingConfig(resolvedDest, provider);
 
   await copyTemplate(resolvedDest, flags);
   updatePackageJson(resolvedDest, tutorialName, flags);
