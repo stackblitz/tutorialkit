@@ -150,7 +150,7 @@ describe('TerminalConfig', () => {
     expect(config.panels[1].title).toBe('TERM 2');
     expect(config.panels[1].processOptions).toEqual({
       allowRedirects: true,
-      allowCommands: ['ls', 'echo'],
+      allowCommands: ['echo'],
     });
 
     expect(config.panels[2].title).toBe('OUT');
@@ -171,7 +171,7 @@ describe('TerminalConfig', () => {
     expect(config.panels[0].title).toBe('TERM 1');
     expect(config.panels[0].processOptions).toEqual({
       allowRedirects: false,
-      allowCommands: ['ls', 'echo'],
+      allowCommands: ['echo'],
     });
 
     expect(config.panels[1].title).toBe('TERM 2');

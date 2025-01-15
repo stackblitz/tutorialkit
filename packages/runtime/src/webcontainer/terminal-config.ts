@@ -235,21 +235,21 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
 
   const panels: TerminalPanel[] = [];
 
-  const resolveAllowCommands = (allowCommands?: string[]): string[] | undefined => {
-    if (allowCommands === undefined) {
-      return DEFAULT_COMMANDS;
+  const resolveAllowCommands = (globalCommands?: string[], panelCommands?: string[]): string[] | undefined => {
+    if (panelCommands === undefined) {
+      return globalCommands ?? DEFAULT_COMMANDS;
     }
 
-    if (Array.isArray(allowCommands) && allowCommands.length === 0) {
+    if (Array.isArray(panelCommands) && panelCommands.length === 0) {
       return undefined;
     }
 
-    return allowCommands;
+    return panelCommands;
   };
 
   const options = {
     allowRedirects: config.allowRedirects,
-    allowCommands: resolveAllowCommands(config.allowCommands),
+    allowCommands: config.allowCommands,
   };
 
   if (config.panels) {
@@ -273,7 +273,7 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
             id: panel.id,
             title: panel.title,
             allowRedirects: panel.allowRedirects ?? config.allowRedirects,
-            allowCommands: panel.allowCommands ? resolveAllowCommands(panel.allowCommands) : options.allowCommands,
+            allowCommands: resolveAllowCommands(config.allowCommands, panel.allowCommands),
           });
         }
 
