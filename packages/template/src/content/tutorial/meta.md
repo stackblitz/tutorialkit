@@ -12,4 +12,6 @@ i18n:
 openInStackBlitz:
   projectTitle: Example Title
   projectDescription: Example Description
+downloadAsZip:
+  filename: custom-lesson-name-without-extension
 ---

@@ -6,15 +6,28 @@ import { readPublicAsset } from '../utils/publicAsset';
 interface Props {
   meta?: MetaTagsConfig;
 }
+
+const DEFAULT_OG_IMAGE = 'https://tutorialkit.dev/tutorialkit-opengraph.png';
+
 const { meta = {} } = Astro.props;
-let imageUrl;
-if (meta.image) {
-  imageUrl = readPublicAsset(meta.image, true);
+let imageUrl = meta.image;
+
+// Resolve relative paths to /public folder
+if (imageUrl?.startsWith('/') || imageUrl?.startsWith('.')) {
+  imageUrl = readPublicAsset(imageUrl, true);
+
   if (!imageUrl) {
-    console.warn(`Image ${meta.image} not found in "/public" folder`);
+    console.warn(`\nImage ${meta.image} not found in "/public" folder`);
   }
 }
-imageUrl ??= readLogoFile('logo', true);
+
+imageUrl ??= DEFAULT_OG_IMAGE;
+
+if (imageUrl?.endsWith('.svg')) {
+  console.warn(
+    `\nUsing a SVG open graph image "${imageUrl}". This is not supported by most social platforms. You should rather set "meta.image" to a raster image (PNG, WEBP).`,
+  );
+}
 ---
 
 <meta charset="UTF-8" />
