@@ -8,6 +8,9 @@ const currentYear = new Date().getFullYear();
 ---
 
 <Footer>
+  <slot name="edit-page-link" />
+  <slot name="lesson-links" />
+  <slot name="webcontainers-link" />
   <Terms slot="terms" />
   <ContactInfo slot="contact-info" />
   <p slot="copyright">© {currentYear} Your Company. All rights reserved.</p>
