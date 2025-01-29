@@ -108,24 +108,6 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
   const dest = await getTutorialDirectory(tutorialName, flags);
   const resolvedDest = path.resolve(process.cwd(), dest);
 
-  const provider = await prompts.select({
-    message: 'Select hosting providers for automatic configuration:',
-    options: [
-      { value: 'Vercel', label: 'Vercel' },
-      { value: 'Netlify', label: 'Netlify' },
-      { value: 'Cloudflare', label: 'Cloudflare' },
-    ],
-    initialValue: 'Vercel',
-  });
-
-  assertNotCanceled(provider);
-  prompts.log.info(`Configuring for: ${provider}`);
-
-  await generateHostingConfig(resolvedDest, provider);
-
-  await copyTemplate(resolvedDest, flags);
-  updatePackageJson(resolvedDest, tutorialName, flags);
-
   prompts.log.info(`Scaffolding tutorial in ${chalk.blue(resolvedDest)}`);
 
   if (fs.existsSync(resolvedDest) && !flags.force) {
@@ -161,6 +143,21 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
   }
 
   await copyTemplate(resolvedDest, flags);
+
+  const provider = await prompts.select({
+    message: 'Select hosting providers for automatic configuration:',
+    options: [
+      { value: 'Vercel', label: 'Vercel' },
+      { value: 'Netlify', label: 'Netlify' },
+      { value: 'Cloudflare', label: 'Cloudflare' },
+    ],
+    initialValue: 'Vercel',
+  });
+
+  assertNotCanceled(provider);
+  prompts.log.info(`Configuring for: ${provider}`);
+
+  await generateHostingConfig(resolvedDest, provider);
 
   updatePackageJson(resolvedDest, tutorialName, flags);
 
