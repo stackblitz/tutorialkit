@@ -320,6 +320,7 @@ describe('ordering', () => {
 
   test('parts not mention in order are excluded ', async () => {
     vi.spyOn(logger, 'warn').mockImplementationOnce(vi.fn());
+    vi.mocked(logger.warn).mockClear();
 
     getCollection.mockReturnValueOnce([
       {
@@ -381,6 +382,7 @@ describe('ordering', () => {
 
   test('chapters not mention in order are excluded ', async () => {
     vi.spyOn(logger, 'warn').mockImplementationOnce(vi.fn());
+    vi.mocked(logger.warn).mockClear();
 
     getCollection.mockReturnValueOnce([
       { id: 'meta.md', ...tutorial },
@@ -515,6 +517,7 @@ describe('ordering', () => {
 
   test('lessons not mention in order are excluded ', async () => {
     vi.spyOn(logger, 'warn').mockImplementationOnce(vi.fn());
+    vi.mocked(logger.warn).mockClear();
 
     getCollection.mockReturnValueOnce([
       { id: 'meta.md', ...tutorial },
