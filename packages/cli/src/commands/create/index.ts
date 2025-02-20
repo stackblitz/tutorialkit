@@ -10,6 +10,7 @@ import { generateProjectName } from '../../utils/project.js';
 import { assertNotCanceled } from '../../utils/tasks.js';
 import { updateWorkspaceVersions } from '../../utils/workspace-version.js';
 import { setupEnterpriseConfig } from './enterprise.js';
+import { generateHostingConfig } from './generate-hosting-config.js';
 import { initGitRepo } from './git.js';
 import { installAndStart } from './install-start.js';
 import { DEFAULT_VALUES, type CreateOptions } from './options.js';
@@ -142,6 +143,21 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
   }
 
   await copyTemplate(resolvedDest, flags);
+
+  const provider = await prompts.select({
+    message: 'Select hosting providers for automatic configuration:',
+    options: [
+      { value: 'Vercel', label: 'Vercel' },
+      { value: 'Netlify', label: 'Netlify' },
+      { value: 'Cloudflare', label: 'Cloudflare' },
+    ],
+    initialValue: 'Vercel',
+  });
+
+  assertNotCanceled(provider);
+  prompts.log.info(`Configuring for: ${provider}`);
+
+  await generateHostingConfig(resolvedDest, provider);
 
   updatePackageJson(resolvedDest, tutorialName, flags);
 

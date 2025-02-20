@@ -1,0 +1,17 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-crop"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "same-origin"
+        }
+      ]
+    }
+  ]
+}

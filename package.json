@@ -17,7 +17,8 @@
     "demo:build": "pnpm run build && pnpm run --filter=demo.tutorialkit.dev build",
     "lint": "eslint \"{packages,docs,extensions,integration}/**/*\"",
     "test": "pnpm run --stream --filter='@tutorialkit/*' test --run",
-    "test:e2e": "pnpm run --filter='./e2e' test"
+    "test:e2e": "pnpm run --filter='./e2e' test",
+    "postbuild": "cp _headers ./dist/"
   },
   "license": "MIT",
   "packageManager": "pnpm@8.15.6",
