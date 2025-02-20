@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/cli",
-  "version": "1.1.1",
+  "version": "1.3.1",
   "description": "Interactive tutorials powered by WebContainer API",
   "author": "StackBlitz Inc.",
   "type": "module",
@@ -53,7 +53,7 @@
     "esbuild-node-externals": "^1.13.1",
     "fs-extra": "^11.2.0",
     "tempy": "^3.1.0",
-    "vitest": "^2.1.1"
+    "vitest": "^3.0.5"
   },
   "engines": {
     "node": ">=18.18.0"

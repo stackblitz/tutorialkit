@@ -7,6 +7,10 @@
     "preview": "astro build && astro preview",
     "dev:override-components": "astro dev --config ./configs/override-components.ts",
     "preview:override-components": "astro build --config ./configs/override-components.ts && astro preview --config ./configs/override-components.ts",
+    "dev:lessons-in-root": "astro dev --config ./configs/lessons-in-root.ts",
+    "preview:lessons-in-root": "astro build --config ./configs/lessons-in-root.ts && astro preview --config ./configs/lessons-in-root.ts",
+    "dev:lessons-in-part": "astro dev --config ./configs/lessons-in-part.ts",
+    "preview:lessons-in-part": "astro build --config ./configs/lessons-in-part.ts && astro preview --config ./configs/lessons-in-part.ts",
     "test": "playwright test",
     "test:ui": "pnpm run test --ui"
   },
@@ -30,6 +34,7 @@
     "playwright": "^1.46.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "unocss": "^0.59.4"
+    "unocss": "^0.59.4",
+    "unzipper": "^0.12.3"
   }
 }

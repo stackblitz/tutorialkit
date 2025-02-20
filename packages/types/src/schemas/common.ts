@@ -58,9 +58,11 @@ export type PreviewSchema = z.infer<typeof previewSchema>;
 
 export const fileSystemSchema = z.object({
   watch: z
-    .boolean()
-    .optional()
-    .describe('When set to true, file changes in WebContainer are updated in the editor as well.'),
+    .union([z.boolean(), z.array(z.string())])
+    .describe(
+      'When set to true, file changes in WebContainer are updated in the editor as well. When set to an array, file changes or new files in the matching paths are updated in the editor.',
+    )
+    .optional(),
 });
 
 export type FileSystemSchema = z.infer<typeof fileSystemSchema>;
@@ -290,6 +292,17 @@ export const webcontainerSchema = commandsSchema.extend({
     ])
     .optional()
     .describe('Display a link for opening current lesson in StackBlitz.'),
+  downloadAsZip: z
+    .union([
+      // `false` for disabling the button
+      z.boolean(),
+
+      z.strictObject({
+        filename: z.string(),
+      }),
+    ])
+    .optional()
+    .describe('Display a button for downloading the current lesson as `.zip` file.'),
 });
 
 export const baseSchema = webcontainerSchema.extend({
