@@ -150,16 +150,14 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
       { value: 'Vercel', label: 'Vercel' },
       { value: 'Netlify', label: 'Netlify' },
       { value: 'Cloudflare', label: 'Cloudflare' },
+      { value: 'skip', label: 'Skip hosting configuration' },
     ],
     initialValue: 'Vercel',
   });
 
-  assertNotCanceled(provider);
-  prompts.log.info(`Configuring for: ${provider}`);
+  await generateHostingConfig(resolvedDest, String(provider), { dryRun: flags.dryRun });
 
-  await generateHostingConfig(resolvedDest, provider);
-
-  updatePackageJson(resolvedDest, tutorialName, flags);
+  updatePackageJson(resolvedDest, tutorialName, flags, String(provider));
 
   const selectedPackageManager = await selectPackageManager(resolvedDest, flags);
 
@@ -264,7 +262,7 @@ function printNextSteps(dest: string, packageManager: PackageManager, dependenci
   }
 }
 
-function updatePackageJson(dest: string, projectName: string, flags: CreateOptions) {
+function updatePackageJson(dest: string, projectName: string, flags: CreateOptions, provider: string) {
   if (flags.dryRun) {
     return;
   }
@@ -277,7 +275,12 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
   updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION);
   updateWorkspaceVersions(pkgJson.devDependencies, TUTORIALKIT_VERSION);
 
-  fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, undefined, 2));
+  if (provider === 'Netlify' || provider === 'Cloudflare') {
+    pkgJson.scripts = pkgJson.scripts || {};
+    pkgJson.scripts.postbuild = "cp _headers ./dist/";
+  }
+
+  fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, null, 2));
 
   try {
     const pkgLockPath = path.resolve(dest, 'package-lock.json');
@@ -290,7 +293,7 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
       defaultPackage.name = projectName;
     }
 
-    fs.writeFileSync(pkgLockPath, JSON.stringify(pkgLockJson, undefined, 2));
+    fs.writeFileSync(pkgLockPath, JSON.stringify(pkgLockJson, null, 2));
   } catch {
     // ignore any errors
   }

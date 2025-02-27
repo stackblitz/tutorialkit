@@ -25,6 +25,7 @@ export const DEFAULT_VALUES = {
   dryRun: false,
   force: false,
   packageManager: 'npm',
+  provider: 'skip',
 };
 
 type Flags = Omit<CreateOptions, '_'>;
