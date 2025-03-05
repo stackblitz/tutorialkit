@@ -277,7 +277,7 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
 
   if (provider === 'Netlify' || provider === 'Cloudflare') {
     pkgJson.scripts = pkgJson.scripts || {};
-    pkgJson.scripts.postbuild = "cp _headers ./dist/";
+    pkgJson.scripts.postbuild = 'cp _headers ./dist/';
   }
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, null, 2));

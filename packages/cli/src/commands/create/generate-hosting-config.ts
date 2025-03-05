@@ -39,12 +39,13 @@ export async function generateHostingConfig(dest: string, provider: string, flag
       task: async () => {
         const filepath = path.join(resolvedDest, filename);
         fs.writeFileSync(filepath, config);
+
         return `Added ${filepath}`;
       },
     });
   } else {
     prompts.log.message(
-      `${chalk.blue('hosting provider config [skip]')} You can configure hosting provider settings manually later. For more information see https://tutorialkit.dev/guides/deployment/#headers-configuration`
+      `${chalk.blue('hosting provider config [skip]')} You can configure hosting provider settings manually later. For more information see https://tutorialkit.dev/guides/deployment/#headers-configuration`,
     );
   }
 }
