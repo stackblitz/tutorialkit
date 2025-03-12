@@ -30,7 +30,7 @@ test('cannot create project without installing but with starting', async (contex
   const name = context.task.id;
 
   await expect(
-    execa('node', [cli, 'create', name, '--no-install', '--start'], {
+    execa('node', [cli, 'create', name, '--no-install', '--no-provider', '--start'], {
       cwd: tmpDir,
     }),
   ).rejects.toThrow('Cannot start project without installing dependencies.');
@@ -40,7 +40,7 @@ test('create a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--no-provider', '--defaults'], {
     cwd: tmpDir,
   });
 
@@ -53,7 +53,7 @@ test('create and build a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--no-provider', '--defaults'], {
     cwd: tmpDir,
   });
 
@@ -89,7 +89,7 @@ test('create and eject a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--no-provider', '--defaults'], {
     cwd: tmpDir,
   });
 
@@ -117,7 +117,7 @@ test('create, eject and build a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--no-provider', '--defaults'], {
     cwd: tmpDir,
   });
 

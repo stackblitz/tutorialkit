@@ -30,6 +30,7 @@ export async function createTutorial(flags: yargs.Arguments) {
           ['--install, --no-install', `Install dependencies (default ${chalk.yellow(DEFAULT_VALUES.install)})`],
           ['--start, --no-start', `Start project (default ${chalk.yellow(DEFAULT_VALUES.start)})`],
           ['--git, --no-git', `Initialize a local git repository (default ${chalk.yellow(DEFAULT_VALUES.git)})`],
+          ['--provider <name>, --no-provider', `Select a hosting provider (default ${chalk.yellow(DEFAULT_VALUES.provider)})`],
           ['--dry-run', `Walk through steps without executing (default ${chalk.yellow(DEFAULT_VALUES.dryRun)})`],
           [
             '--package-manager <name>, -p <name>',
@@ -155,7 +156,7 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
     initialValue: 'Vercel',
   });
 
-  await generateHostingConfig(resolvedDest, String(provider), { dryRun: flags.dryRun });
+  await generateHostingConfig(resolvedDest, { dryRun: flags.dryRun, provider: String(provider) });
 
   updatePackageJson(resolvedDest, tutorialName, flags, String(provider));
 

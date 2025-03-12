@@ -4,11 +4,34 @@ import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
 import { warnLabel } from 'src/utils/messages.js';
 import { runTask } from 'src/utils/tasks.js';
+import { DEFAULT_VALUES, readFlag } from './options.js';
 import cloudflareConfigRaw from './hosting-config/_headers.txt?raw';
 import netlifyConfigRaw from './hosting-config/netlify_toml.txt?raw';
 import vercelConfigRaw from './hosting-config/vercel.json?raw';
 
-export async function generateHostingConfig(dest: string, provider: string, flags: { dryRun: boolean }) {
+export async function generateHostingConfig(dest: string, flags: { dryRun: boolean, provider?: string }) {
+  let provider = readFlag(flags, 'provider' as any);
+  
+  if (provider === undefined) {
+    provider = await prompts.select({
+      message: 'Select hosting providers for automatic configuration:',
+      options: [
+        { value: 'Vercel', label: 'Vercel' },
+        { value: 'Netlify', label: 'Netlify' },
+        { value: 'Cloudflare', label: 'Cloudflare' },
+        { value: 'skip', label: 'Skip hosting configuration' },
+      ],
+      initialValue: DEFAULT_VALUES.provider,
+    });
+  }
+
+  if (provider === 'skip') {
+    prompts.log.message(
+      `${chalk.blue('hosting provider config [skip]')} You can configure hosting provider settings manually later. For more information see https://tutorialkit.dev/guides/deployment/#headers-configuration`,
+    );
+    return;
+  }
+
   prompts.log.info(`${chalk.blue('Hosting Configuration')} Setting up configuration for ${provider}`);
 
   const resolvedDest = path.resolve(dest);
@@ -43,9 +66,5 @@ export async function generateHostingConfig(dest: string, provider: string, flag
         return `Added ${filepath}`;
       },
     });
-  } else {
-    prompts.log.message(
-      `${chalk.blue('hosting provider config [skip]')} You can configure hosting provider settings manually later. For more information see https://tutorialkit.dev/guides/deployment/#headers-configuration`,
-    );
   }
 }
