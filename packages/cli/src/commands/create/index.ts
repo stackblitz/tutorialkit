@@ -30,7 +30,10 @@ export async function createTutorial(flags: yargs.Arguments) {
           ['--install, --no-install', `Install dependencies (default ${chalk.yellow(DEFAULT_VALUES.install)})`],
           ['--start, --no-start', `Start project (default ${chalk.yellow(DEFAULT_VALUES.start)})`],
           ['--git, --no-git', `Initialize a local git repository (default ${chalk.yellow(DEFAULT_VALUES.git)})`],
-          ['--provider <name>, --no-provider', `Select a hosting provider (default ${chalk.yellow(DEFAULT_VALUES.provider)})`],
+          [
+            '--provider <name>, --no-provider',
+            `Select a hosting provider (default ${chalk.yellow(DEFAULT_VALUES.provider)})`,
+          ],
           ['--dry-run', `Walk through steps without executing (default ${chalk.yellow(DEFAULT_VALUES.dryRun)})`],
           [
             '--package-manager <name>, -p <name>',

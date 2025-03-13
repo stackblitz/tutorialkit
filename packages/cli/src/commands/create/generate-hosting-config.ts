@@ -4,14 +4,14 @@ import * as prompts from '@clack/prompts';
 import chalk from 'chalk';
 import { warnLabel } from 'src/utils/messages.js';
 import { runTask } from 'src/utils/tasks.js';
-import { DEFAULT_VALUES, readFlag } from './options.js';
 import cloudflareConfigRaw from './hosting-config/_headers.txt?raw';
 import netlifyConfigRaw from './hosting-config/netlify_toml.txt?raw';
 import vercelConfigRaw from './hosting-config/vercel.json?raw';
+import { DEFAULT_VALUES, readFlag } from './options.js';
 
-export async function generateHostingConfig(dest: string, flags: { dryRun: boolean, provider?: string }) {
+export async function generateHostingConfig(dest: string, flags: { dryRun: boolean; provider?: string }) {
   let provider = readFlag(flags, 'provider' as any);
-  
+
   if (provider === undefined) {
     provider = await prompts.select({
       message: 'Select hosting providers for automatic configuration:',
