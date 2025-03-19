@@ -27,14 +27,20 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
 
   if (provider === 'skip') {
     prompts.log.message(
-      `${chalk.blue('hosting provider config [skip]')} You can configure hosting provider settings manually later.`
+      `${chalk.blue(
+        'hosting provider config [skip]'
+      )} You can configure hosting provider settings manually later.`
     );
+
     return provider;
   }
 
-  prompts.log.info(`${chalk.blue('Hosting Configuration')} Setting up configuration for ${provider}`);
+  prompts.log.info(
+    `${chalk.blue('Hosting Configuration')} Setting up configuration for ${provider}`
+  );
 
   const resolvedDest = path.resolve(dest);
+
   if (!fs.existsSync(resolvedDest)) {
     fs.mkdirSync(resolvedDest, { recursive: true });
   }
@@ -43,18 +49,24 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
   let filename: string | undefined;
 
   switch (provider) {
-    case 'Vercel':
-      config = typeof vercelConfigRaw === 'string' ? vercelConfigRaw : JSON.stringify(vercelConfigRaw, null, 2);
+    case 'Vercel': {
+      config =
+        typeof vercelConfigRaw === 'string'
+          ? vercelConfigRaw
+          : JSON.stringify(vercelConfigRaw, null, 2);
       filename = 'vercel.json';
       break;
-    case 'Netlify':
+    }
+    case 'Netlify': {
       config = netlifyConfigRaw;
       filename = 'netlify.toml';
       break;
-    case 'Cloudflare':
+    }
+    case 'Cloudflare': {
       config = cloudflareConfigRaw;
       filename = '_headers';
       break;
+    }
   }
 
   if (config && filename) {
@@ -72,4 +84,3 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
 
   return provider;
 }
-
