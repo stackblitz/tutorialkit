@@ -148,18 +148,7 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
 
   await copyTemplate(resolvedDest, flags);
 
-  const provider = await prompts.select({
-    message: 'Select hosting providers for automatic configuration:',
-    options: [
-      { value: 'Vercel', label: 'Vercel' },
-      { value: 'Netlify', label: 'Netlify' },
-      { value: 'Cloudflare', label: 'Cloudflare' },
-      { value: 'skip', label: 'Skip hosting configuration' },
-    ],
-    initialValue: 'Vercel',
-  });
-
-  await generateHostingConfig(resolvedDest, { dryRun: flags.dryRun, provider: String(provider) });
+  const provider = await generateHostingConfig(resolvedDest, flags);
 
   updatePackageJson(resolvedDest, tutorialName, flags, String(provider));
 

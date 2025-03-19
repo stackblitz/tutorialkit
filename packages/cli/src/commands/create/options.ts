@@ -12,6 +12,7 @@ export interface CreateOptions {
   defaults?: boolean;
   packageManager?: string;
   force?: boolean;
+  provider?: string;
 }
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
