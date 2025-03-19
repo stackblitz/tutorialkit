@@ -27,17 +27,13 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
 
   if (provider === 'skip') {
     prompts.log.message(
-      `${chalk.blue(
-        'hosting provider config [skip]'
-      )} You can configure hosting provider settings manually later.`
+      `${chalk.blue('hosting provider config [skip]')} You can configure hosting provider settings manually later.`,
     );
 
     return provider;
   }
 
-  prompts.log.info(
-    `${chalk.blue('Hosting Configuration')} Setting up configuration for ${provider}`
-  );
+  prompts.log.info(`${chalk.blue('Hosting Configuration')} Setting up configuration for ${provider}`);
 
   const resolvedDest = path.resolve(dest);
 
@@ -50,10 +46,7 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
 
   switch (provider) {
     case 'Vercel': {
-      config =
-        typeof vercelConfigRaw === 'string'
-          ? vercelConfigRaw
-          : JSON.stringify(vercelConfigRaw, null, 2);
+      config = typeof vercelConfigRaw === 'string' ? vercelConfigRaw : JSON.stringify(vercelConfigRaw, null, 2);
       filename = 'vercel.json';
       break;
     }
@@ -77,6 +70,7 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
       task: async () => {
         const filepath = path.join(resolvedDest, filename);
         fs.writeFileSync(filepath, config);
+
         return `Added ${filepath}`;
       },
     });
