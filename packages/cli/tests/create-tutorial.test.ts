@@ -70,7 +70,7 @@ test('create a project with Cloudflare as provider', async (context) => {
   });
 
   const projectFiles = await fs.readdir(dest, { recursive: true });
-  expect(projectFiles).toContain('wrangler.toml');
+  expect(projectFiles).toContain('_headers');
 
   const packageJson = await fs.readFile(`${dest}/package.json`, 'utf8');
   const json = JSON.parse(packageJson);
