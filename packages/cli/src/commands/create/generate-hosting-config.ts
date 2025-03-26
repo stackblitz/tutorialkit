@@ -25,7 +25,7 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
     })) as string;
   }
 
-  if (provider === 'skip') {
+  if (!provider || provider === 'skip') {
     prompts.log.message(
       `${chalk.blue('hosting provider config [skip]')} You can configure hosting provider settings manually later.`,
     );
@@ -44,18 +44,18 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
   let config: string | undefined;
   let filename: string | undefined;
 
-  switch (provider) {
-    case 'Vercel': {
+  switch (provider.toLowerCase()) {
+    case 'vercel': {
       config = typeof vercelConfigRaw === 'string' ? vercelConfigRaw : JSON.stringify(vercelConfigRaw, null, 2);
       filename = 'vercel.json';
       break;
     }
-    case 'Netlify': {
+    case 'netlify': {
       config = netlifyConfigRaw;
       filename = 'netlify.toml';
       break;
     }
-    case 'Cloudflare': {
+    case 'cloudflare': {
       config = cloudflareConfigRaw;
       filename = '_headers';
       break;

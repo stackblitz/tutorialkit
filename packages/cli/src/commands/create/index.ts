@@ -268,7 +268,7 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
   updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION);
   updateWorkspaceVersions(pkgJson.devDependencies, TUTORIALKIT_VERSION);
 
-  if (provider === 'Netlify' || provider === 'Cloudflare') {
+  if (provider.toLowerCase() === 'cloudflare') {
     pkgJson.scripts = pkgJson.scripts || {};
     pkgJson.scripts.postbuild = 'cp _headers ./dist/';
   }
