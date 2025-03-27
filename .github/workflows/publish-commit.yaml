@@ -1,65 +1,30 @@
-# PRs can be published by commenting `/pkg-pr-new` in the PR
+# PRs can be published by adding `pkg-pr-new` tag
 
-name: Publish Any Commit
+name: PR Preview Releases
 
 on:
-  issue_comment:
-    types: [created]
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, labeled]
 
 jobs:
-  build:
-    if: github.repository == 'stackblitz/tutorialkit' && (github.event_name == 'push' || github.event.issue.pull_request && startsWith(github.event.comment.body, '/pkg-pr-new'))
+  release:
+    if: github.repository == 'stackblitz/tutorialkit' && (github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'pkg-pr-new'))
     runs-on: ubuntu-latest
+    name: 'Release: pkg.pr.new'
 
     steps:
-      - if: github.event.issue.pull_request
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const user = context.payload.sender.login
-            console.log(`Validate user: ${user}`)
-
-            let hasTriagePermission = false
-            try {
-              const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                username: user,
-              });
-              hasTriagePermission = data.user.permissions.triage
-            } catch (e) {
-              console.warn(e)
-            }
-
-            if (hasTriagePermission) {
-              console.log('Allowed')
-              await github.rest.reactions.createForIssueComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: context.payload.comment.id,
-                content: '+1',
-              })
-            } else {
-              console.log('Not allowed')
-              await github.rest.reactions.createForIssueComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: context.payload.comment.id,
-                content: '-1',
-              })
-              throw new Error('not allowed')
-            }
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: refs/pull/${{ github.event.issue.number }}/head
+          fetch-depth: 0
 
       - uses: ./.github/actions/setup-and-build
 
       - name: Publish to pkg.pr.new
         run: >
-          pnpm dlx pkg-pr-new@0.0 publish --compact --pnpm
+          pnpm dlx pkg-pr-new publish --compact --pnpm
           ./packages/astro
           ./packages/react
           ./packages/runtime
