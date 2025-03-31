@@ -10,10 +10,10 @@ import vercelConfigRaw from './hosting-config/vercel.json?raw';
 import { DEFAULT_VALUES, readFlag, type CreateOptions } from './options.js';
 
 export async function generateHostingConfig(dest: string, flags: CreateOptions) {
-  let provider = readFlag(flags, 'provider');
+  let provider: string | false | symbol = readFlag(flags, 'provider');
 
   if (provider === undefined) {
-    provider = (await prompts.select({
+    provider = await prompts.select({
       message: 'Select hosting providers for automatic configuration:',
       options: [
         { value: 'Vercel', label: 'Vercel' },
@@ -22,7 +22,11 @@ export async function generateHostingConfig(dest: string, flags: CreateOptions) 
         { value: 'skip', label: 'Skip hosting configuration' },
       ],
       initialValue: DEFAULT_VALUES.provider,
-    })) as string;
+    });
+  }
+
+  if (typeof provider !== 'string') {
+    provider = 'skip';
   }
 
   if (!provider || provider === 'skip') {
