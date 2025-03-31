@@ -150,7 +150,7 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
 
   const provider = await generateHostingConfig(resolvedDest, flags);
 
-  updatePackageJson(resolvedDest, tutorialName, flags, String(provider));
+  updatePackageJson(resolvedDest, tutorialName, flags, provider);
 
   const selectedPackageManager = await selectPackageManager(resolvedDest, flags);
 
