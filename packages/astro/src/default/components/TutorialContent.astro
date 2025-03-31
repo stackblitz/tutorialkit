@@ -1,6 +1,8 @@
 ---
+// TutorialContent.astro
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import type { Lesson } from '@tutorialkit/types';
+import FooterWrapper from './FooterWrapper.astro';
 import NavCard from './NavCard.astro';
 
 interface Props {
@@ -16,33 +18,36 @@ const { Markdown, editPageLink, prev, next } = lesson;
     <Markdown />
   </div>
 
-  {
-    editPageLink && (
-      <div class="pb-4 mt-8 border-b border-tk-border-secondary">
-        <a
-          href={editPageLink}
-          class="inline-flex flex-items-center text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover hover:underline"
-        >
-          <span class="icon i-ph-note-pencil pointer-events-none h-5 w-5 mr-2" />
-          <span>{lesson.data.i18n!.editPageText}</span>
-        </a>
+  <FooterWrapper>
+    {
+      editPageLink && (
+        <div slot="edit-page-link" class="pb-4 mt-8 border-b border-tk-border-secondary">
+          <a
+            href={editPageLink}
+            class="inline-flex flex-items-center text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover hover:underline"
+          >
+            <span class="icon i-ph-note-pencil pointer-events-none h-5 w-5 mr-2" />
+            <span>{lesson.data.i18n!.editPageText}</span>
+          </a>
+        </div>
+      )
+    }
+
+    <div slot="lesson-links" class="grid grid-cols-[1fr_1fr] gap-4 mt-8 mb-6">
+      <div class="flex">
+        {prev && <NavCard lesson={prev} type="prev" />}
       </div>
-    )
-  }
-
-  <div class="grid grid-cols-[1fr_1fr] gap-4 mt-8 mb-6">
-    <div class="flex">
-      {prev && <NavCard lesson={prev} type="prev" />}
+      <div class="flex">
+        {next && <NavCard lesson={next} type="next" />}
+      </div>
     </div>
-    <div class="flex">
-      {next && <NavCard lesson={next} type="next" />}
-    </div>
-  </div>
 
-  <a
-    class="inline-block mt-auto font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover"
-    href="https://webcontainers.io/"
-  >
-    {lesson.data.i18n!.webcontainerLinkText}
-  </a>
+    <a
+      slot="webcontainers-link"
+      class="inline-block mt-auto font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover"
+      href="https://webcontainers.io/"
+    >
+      {lesson.data.i18n!.webcontainerLinkText}
+    </a>
+  </FooterWrapper>
 </div>
