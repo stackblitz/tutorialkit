@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/stackblitz/tutorialkit/compare/1.3.1...1.4.0) "@tutorialkit/cli" (2025-03-31)
+
+
+### Features
+
+* **cli:** project creation to prompt hosting provider settings ([#440](https://github.com/stackblitz/tutorialkit/issues/440)) ([efd7ee7](https://github.com/stackblitz/tutorialkit/commit/efd7ee73382dc4f627b38a7ee731cb96bc3420b8))
+
+
+
 ## [1.3.1](https://github.com/stackblitz/tutorialkit/compare/1.3.0...1.3.1) "@tutorialkit/cli" (2024-11-25)
 
 

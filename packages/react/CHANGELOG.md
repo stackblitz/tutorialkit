@@ -1,3 +1,7 @@
+# [1.4.0](https://github.com/stackblitz/tutorialkit/compare/1.3.1...1.4.0) "@tutorialkit/react" (2025-03-31)
+
+
+
 ## [1.3.1](https://github.com/stackblitz/tutorialkit/compare/1.3.0...1.3.1) "@tutorialkit/react" (2024-11-25)
 
 
