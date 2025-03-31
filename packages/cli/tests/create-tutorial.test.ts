@@ -30,7 +30,7 @@ test('cannot create project without installing but with starting', async (contex
   const name = context.task.id;
 
   await expect(
-    execa('node', [cli, 'create', name, '--no-install', '--start'], {
+    execa('node', [cli, 'create', name, '--no-install', '--no-provider', '--start'], {
       cwd: tmpDir,
     }),
   ).rejects.toThrow('Cannot start project without installing dependencies.');
@@ -40,7 +40,7 @@ test('create a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--no-provider', '--defaults'], {
     cwd: tmpDir,
   });
 
@@ -49,11 +49,54 @@ test('create a project', async (context) => {
   expect(projectFiles.map(normaliseSlash).sort()).toMatchSnapshot();
 });
 
+test('create a project with Netlify as provider', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--defaults', '--provider', 'netlify'], {
+    cwd: tmpDir,
+  });
+
+  const projectFiles = await fs.readdir(dest, { recursive: true });
+  expect(projectFiles).toContain('netlify.toml');
+});
+
+test('create a project with Cloudflare as provider', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--defaults', '--provider', 'cloudflare'], {
+    cwd: tmpDir,
+  });
+
+  const projectFiles = await fs.readdir(dest, { recursive: true });
+  expect(projectFiles).toContain('_headers');
+
+  const packageJson = await fs.readFile(`${dest}/package.json`, 'utf8');
+  const json = JSON.parse(packageJson);
+
+  expect(json).toHaveProperty('scripts');
+  expect(json.scripts).toHaveProperty('postbuild');
+  expect(json.scripts.postbuild).toBe('cp _headers ./dist/');
+});
+
+test('create a project with Vercel as provider', async (context) => {
+  const name = context.task.id;
+  const dest = path.join(tmpDir, name);
+
+  await execa('node', [cli, 'create', name, '--no-install', '--no-git', '--defaults', '--provider', 'vercel'], {
+    cwd: tmpDir,
+  });
+
+  const projectFiles = await fs.readdir(dest, { recursive: true });
+  expect(projectFiles).toContain('vercel.json');
+});
+
 test('create and build a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--no-provider', '--defaults'], {
     cwd: tmpDir,
   });
 
@@ -89,7 +132,7 @@ test('create and eject a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--no-provider', '--defaults'], {
     cwd: tmpDir,
   });
 
@@ -117,7 +160,7 @@ test('create, eject and build a project', async (context) => {
   const name = context.task.id;
   const dest = path.join(tmpDir, name);
 
-  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--defaults'], {
+  await execa('node', [cli, 'create', name, '--no-git', '--no-install', '--no-start', '--no-provider', '--defaults'], {
     cwd: tmpDir,
   });
 

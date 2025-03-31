@@ -10,6 +10,7 @@ import { generateProjectName } from '../../utils/project.js';
 import { assertNotCanceled } from '../../utils/tasks.js';
 import { updateWorkspaceVersions } from '../../utils/workspace-version.js';
 import { setupEnterpriseConfig } from './enterprise.js';
+import { generateHostingConfig } from './generate-hosting-config.js';
 import { initGitRepo } from './git.js';
 import { installAndStart } from './install-start.js';
 import { DEFAULT_VALUES, type CreateOptions } from './options.js';
@@ -29,6 +30,10 @@ export async function createTutorial(flags: yargs.Arguments) {
           ['--install, --no-install', `Install dependencies (default ${chalk.yellow(DEFAULT_VALUES.install)})`],
           ['--start, --no-start', `Start project (default ${chalk.yellow(DEFAULT_VALUES.start)})`],
           ['--git, --no-git', `Initialize a local git repository (default ${chalk.yellow(DEFAULT_VALUES.git)})`],
+          [
+            '--provider <name>, --no-provider',
+            `Select a hosting provider (default ${chalk.yellow(DEFAULT_VALUES.provider)})`,
+          ],
           ['--dry-run', `Walk through steps without executing (default ${chalk.yellow(DEFAULT_VALUES.dryRun)})`],
           [
             '--package-manager <name>, -p <name>',
@@ -143,7 +148,9 @@ async function _createTutorial(flags: CreateOptions): Promise<undefined> {
 
   await copyTemplate(resolvedDest, flags);
 
-  updatePackageJson(resolvedDest, tutorialName, flags);
+  const provider = await generateHostingConfig(resolvedDest, flags);
+
+  updatePackageJson(resolvedDest, tutorialName, flags, provider);
 
   const selectedPackageManager = await selectPackageManager(resolvedDest, flags);
 
@@ -248,7 +255,7 @@ function printNextSteps(dest: string, packageManager: PackageManager, dependenci
   }
 }
 
-function updatePackageJson(dest: string, projectName: string, flags: CreateOptions) {
+function updatePackageJson(dest: string, projectName: string, flags: CreateOptions, provider: string) {
   if (flags.dryRun) {
     return;
   }
@@ -261,7 +268,12 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
   updateWorkspaceVersions(pkgJson.dependencies, TUTORIALKIT_VERSION);
   updateWorkspaceVersions(pkgJson.devDependencies, TUTORIALKIT_VERSION);
 
-  fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, undefined, 2));
+  if (provider.toLowerCase() === 'cloudflare') {
+    pkgJson.scripts = pkgJson.scripts || {};
+    pkgJson.scripts.postbuild = 'cp _headers ./dist/';
+  }
+
+  fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, null, 2));
 
   try {
     const pkgLockPath = path.resolve(dest, 'package-lock.json');
@@ -274,7 +286,7 @@ function updatePackageJson(dest: string, projectName: string, flags: CreateOptio
       defaultPackage.name = projectName;
     }
 
-    fs.writeFileSync(pkgLockPath, JSON.stringify(pkgLockJson, undefined, 2));
+    fs.writeFileSync(pkgLockPath, JSON.stringify(pkgLockJson, null, 2));
   } catch {
     // ignore any errors
   }
