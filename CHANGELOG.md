@@ -1,3 +1,13 @@
+# [1.4.0](https://github.com/stackblitz/tutorialkit/compare/1.3.1...1.4.0) (2025-03-31)
+
+
+### Features
+
+* **astro:** add sensible default canonical url ([#437](https://github.com/stackblitz/tutorialkit/issues/437)) ([1a5ea33](https://github.com/stackblitz/tutorialkit/commit/1a5ea333744c524316a5d6348d8bd0ccf2e76ca7))
+* **cli:** project creation to prompt hosting provider settings ([#440](https://github.com/stackblitz/tutorialkit/issues/440)) ([efd7ee7](https://github.com/stackblitz/tutorialkit/commit/efd7ee73382dc4f627b38a7ee731cb96bc3420b8))
+
+
+
 ## [1.3.1](https://github.com/stackblitz/tutorialkit/compare/1.3.0...1.3.1) (2024-11-25)
 
 

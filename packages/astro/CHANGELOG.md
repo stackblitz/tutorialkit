@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/stackblitz/tutorialkit/compare/1.3.1...1.4.0) "@tutorialkit/astro" (2025-03-31)
+
+
+### Features
+
+* **astro:** add sensible default canonical url ([#437](https://github.com/stackblitz/tutorialkit/issues/437)) ([1a5ea33](https://github.com/stackblitz/tutorialkit/commit/1a5ea333744c524316a5d6348d8bd0ccf2e76ca7))
+
+
+
 ## [1.3.1](https://github.com/stackblitz/tutorialkit/compare/1.3.0...1.3.1) "@tutorialkit/astro" (2024-11-25)
 
 
