@@ -1,3 +1,12 @@
+## [1.3.1](https://github.com/stackblitz/tutorialkit/compare/1.3.0...1.3.1) "@tutorialkit/types" (2024-11-25)
+
+
+### Bug Fixes
+
+* **astro:** allow URLs in `meta.image` ([#422](https://github.com/stackblitz/tutorialkit/issues/422)) ([3125547](https://github.com/stackblitz/tutorialkit/commit/3125547c043fe4a76dca95b1eb973362967ccf02))
+
+
+
 # [1.3.0](https://github.com/stackblitz/tutorialkit/compare/1.2.2...1.3.0) "@tutorialkit/types" (2024-11-15)
 
 
