@@ -241,7 +241,7 @@ function PreviewsSection({
     <Panel
       id={hasPreviews ? 'previews-opened' : 'previews-closed'}
       defaultSize={hasPreviews ? 50 : 0}
-      minSize={10}
+      minSize={3}
       maxSize={hasPreviews ? 100 : 0}
       collapsible={!hasPreviews}
       className={classNames({
