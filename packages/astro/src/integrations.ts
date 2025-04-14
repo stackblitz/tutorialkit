@@ -4,14 +4,20 @@ import react from '@astrojs/react';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import { getInlineContentForPackage } from '@tutorialkit/theme';
-import expressiveCode from 'astro-expressive-code';
+import expressiveCode, { type ExpressiveCodePlugin } from 'astro-expressive-code';
 import UnoCSS from 'unocss/astro';
 
-export function extraIntegrations({ root }: { root: string }) {
+export function extraIntegrations({
+  root,
+  expressiveCodePlugins = [],
+}: {
+  root: string;
+  expressiveCodePlugins?: ExpressiveCodePlugin[];
+}) {
   return [
     react(),
     expressiveCode({
-      plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
+      plugins: [pluginCollapsibleSections(), pluginLineNumbers(), ...expressiveCodePlugins],
       themes: ['dark-plus', 'light-plus'],
       customizeTheme: (theme) => {
         const isDark = theme.type === 'dark';
