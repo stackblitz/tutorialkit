@@ -48,6 +48,7 @@ export function remarkImportFilePlugin(options: RemarkImportFilePluginOptions) {
 
           if (content) {
             node.value = content;
+            node.meta ||= '';
             node.meta += ' path=' + node.lang;
             node.lang = path.extname(relativeFilePath).slice(1);
           }
