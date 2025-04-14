@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import type { AstroConfig, AstroIntegration } from 'astro';
+import type { ExpressiveCodePlugin } from 'astro-expressive-code';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { tutorialkitCore } from './vite-plugins/core.js';
@@ -59,6 +60,13 @@ export interface Options {
      */
     scope: string;
   };
+
+  /**
+   * Expressive code plugins.
+   *
+   * @default []
+   */
+  expressiveCodePlugins?: ExpressiveCodePlugin[];
 }
 
 export default function createPlugin({
@@ -66,6 +74,7 @@ export default function createPlugin({
   components,
   isolation,
   enterprise,
+  expressiveCodePlugins = [],
 }: Options = {}): AstroIntegration {
   const webcontainerFiles = new WebContainerFiles();
 
@@ -137,7 +146,11 @@ export default function createPlugin({
 
         // inject the additional integrations right after ours
         const selfIndex = config.integrations.findIndex((integration) => integration.name === '@tutorialkit/astro');
-        config.integrations.splice(selfIndex + 1, 0, ...extraIntegrations({ root: fileURLToPath(config.root) }));
+        config.integrations.splice(
+          selfIndex + 1,
+          0,
+          ...extraIntegrations({ root: fileURLToPath(config.root), expressiveCodePlugins }),
+        );
       },
       'astro:config:done'({ config }) {
         _config = config;
