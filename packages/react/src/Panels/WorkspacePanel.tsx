@@ -51,7 +51,7 @@ export function WorkspacePanel({ tutorialStore, theme, dialog }: Props) {
   const terminalExpanded = useRef(false);
 
   return (
-    <PanelGroup className={resizePanelStyles.PanelGroup} direction="vertical">
+    <PanelGroup className={resizePanelStyles.PanelGroup} id="right-panel-group" direction="vertical">
       <DialogProvider value={dialog}>
         <EditorSection
           theme={theme}
@@ -237,11 +237,32 @@ function PreviewsSection({
     return () => unsubscribe();
   }, [storeRef]);
 
+  const MIN_SIZE_IN_PIXELS = 38;
+  const [panelMinSize, setPanelMinSize] = useState(10);
+
+  useEffect(() => {
+    const panelGroup: any = document.querySelector('[data-panel-group-id="right-panel-group"]');
+
+    if (!panelGroup) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      const height = panelGroup?.offsetHeight;
+      setPanelMinSize((MIN_SIZE_IN_PIXELS / height) * 100);
+    });
+    observer.observe(panelGroup);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <Panel
       id={hasPreviews ? 'previews-opened' : 'previews-closed'}
       defaultSize={hasPreviews ? 50 : 0}
-      minSize={3}
+      minSize={panelMinSize}
       maxSize={hasPreviews ? 100 : 0}
       collapsible={!hasPreviews}
       className={classNames({
