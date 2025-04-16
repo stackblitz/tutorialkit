@@ -1,3 +1,7 @@
+# [1.5.0](https://github.com/stackblitz/tutorialkit/compare/1.4.0...1.5.0) "@tutorialkit/runtime" (2025-04-16)
+
+
+
 # [1.4.0](https://github.com/stackblitz/tutorialkit/compare/1.3.1...1.4.0) "@tutorialkit/runtime" (2025-03-31)
 
 
