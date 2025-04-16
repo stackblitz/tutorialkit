@@ -1,3 +1,18 @@
+# [1.5.0](https://github.com/stackblitz/tutorialkit/compare/1.4.0...1.5.0) (2025-04-16)
+
+
+### Bug Fixes
+
+* **react:** allow preview panel to be fully collapsed ([#445](https://github.com/stackblitz/tutorialkit/issues/445)) ([11aa9ad](https://github.com/stackblitz/tutorialkit/commit/11aa9ad338de76cf0fe18d18d889504faea1c40c))
+
+
+### Features
+
+* **astro:** custom expressive code plugins ([#444](https://github.com/stackblitz/tutorialkit/issues/444)) ([d586225](https://github.com/stackblitz/tutorialkit/commit/d586225d11e900b6a63d7e3c9afdf1d04aa6485c))
+* **astro:** preserve file path for imported file code blocks ([#446](https://github.com/stackblitz/tutorialkit/issues/446)) ([df69da2](https://github.com/stackblitz/tutorialkit/commit/df69da20e01d4cbed26a3f314f787e4e1ed015b9))
+
+
+
 # [1.4.0](https://github.com/stackblitz/tutorialkit/compare/1.3.1...1.4.0) (2025-03-31)
 
 

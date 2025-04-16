@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/stackblitz/tutorialkit/compare/1.4.0...1.5.0) "@tutorialkit/react" (2025-04-16)
+
+
+### Bug Fixes
+
+* **react:** allow preview panel to be fully collapsed ([#445](https://github.com/stackblitz/tutorialkit/issues/445)) ([11aa9ad](https://github.com/stackblitz/tutorialkit/commit/11aa9ad338de76cf0fe18d18d889504faea1c40c))
+
+
+
 # [1.4.0](https://github.com/stackblitz/tutorialkit/compare/1.3.1...1.4.0) "@tutorialkit/react" (2025-03-31)
 
 
