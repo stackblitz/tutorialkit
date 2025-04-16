@@ -241,7 +241,7 @@ function PreviewsSection({
   const [panelMinSize, setPanelMinSize] = useState(10);
 
   useEffect(() => {
-    const panelGroup: any = document.querySelector('[data-panel-group-id="right-panel-group"]');
+    const panelGroup = document.querySelector('div[data-panel-group-id="right-panel-group"]' as 'div');
 
     if (!panelGroup) {
       return;
