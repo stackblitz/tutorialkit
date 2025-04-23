@@ -21,8 +21,7 @@ test('user can change theme', async ({ page }) => {
   await expect(heading).toHaveCSS('color', hexToRGB(theme.colors.gray[200]));
 });
 
-// TODO: Enable once https://github.com/stackblitz/tutorialkit/issues/447 is fixed
-test.skip('user can download project as zip', async ({ page }) => {
+test('user can download project as zip', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
 
   const downloadPromise = page.waitForEvent('download');
