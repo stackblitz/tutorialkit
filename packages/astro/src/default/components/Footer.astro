@@ -1,11 +1,29 @@
-<nav class="bg-tk-elements-footer-backgroundColor border-t border-tk-elements-app-borderColor flex justify-between p-4">
-  <div class="flex-1">
-    <slot name="terms" />
+<footer class="bg-tk-elements-footer-backgroundColor border-t border-tk-elements-app-borderColor">
+  <div class="max-w-7xl mx-auto px-4 py-6">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex-1">
+        <slot name="edit-page-link" />
+      </div>
+      <div class="flex-1">
+        <slot name="lesson-links" />
+      </div>
+      <div class="flex-1">
+        <slot name="webcontainers-link" />
+      </div>
+    </div>
+    
+    <div class="mt-6 pt-6 border-t border-tk-elements-app-borderColor">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex-1">
+          <slot name="terms" />
+        </div>
+        <div class="flex-1">
+          <slot name="contact-info" />
+        </div>
+        <div class="flex-1 text-right">
+          <slot name="copyright" />
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="flex-1">
-    <slot name="contact-info" />
-  </div>
-  <div class="flex-1">
-    <slot name="copyright" />
-  </div>
-</nav>
+</footer>

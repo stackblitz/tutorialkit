@@ -1,6 +1,8 @@
 ---
 // FooterWrapper.astro
 import { Footer } from 'tutorialkit:override-components';
+import Terms from './Terms.astro';
+import ContactInfo from './ContactInfo.astro';
 
 const currentYear = new Date().getFullYear();
 ---
@@ -9,7 +11,13 @@ const currentYear = new Date().getFullYear();
   <slot name="edit-page-link" />
   <slot name="lesson-links" />
   <slot name="webcontainers-link" />
-  <Terms slot="terms" />
-  <ContactInfo slot="contact-info" />
-  <p slot="copyright">© {currentYear} Your Company. All rights reserved.</p>
+  <slot name="terms">
+    <Terms />
+  </slot>
+  <slot name="contact-info">
+    <ContactInfo />
+  </slot>
+  <slot name="copyright">
+    <p>© {currentYear} Your Company. All rights reserved.</p>
+  </slot>
 </Footer>
