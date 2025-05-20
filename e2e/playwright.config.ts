@@ -56,6 +56,8 @@ export default defineConfig({
       ...serverOptions,
     },
   ],
+  reporter: process.env.CI ? [['list'], ['github']] : 'list',
+
   expect: {
     timeout: process.env.CI ? 30_000 : 10_000,
   },
