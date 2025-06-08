@@ -18,7 +18,7 @@ const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toStri
 <html lang="en" transition:animate="none" class="h-full overflow-hidden">
   <head>
     <HeadTags>
-      <title slot="title">{title}</title>
+      <title slot="title">{meta?.title || title}</title>
 
       <Fragment slot="links">
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
