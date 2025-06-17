@@ -1,3 +1,12 @@
+## [1.5.1](https://github.com/stackblitz/tutorialkit/compare/1.5.0...1.5.1) "@tutorialkit/cli" (2025-06-17)
+
+
+### Bug Fixes
+
+* headers not matching the documentation ([#451](https://github.com/stackblitz/tutorialkit/issues/451)) ([8588436](https://github.com/stackblitz/tutorialkit/commit/8588436a611bda02c7dbeec49b32d43f7ac1c8b5))
+
+
+
 # [1.5.0](https://github.com/stackblitz/tutorialkit/compare/1.4.0...1.5.0) "@tutorialkit/cli" (2025-04-16)
 
 
