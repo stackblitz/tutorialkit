@@ -20,7 +20,7 @@ const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toStri
     <HeadTags>
       <title slot="title">{meta?.title || title}</title>
 
-      <Fragment slot="links">
+      <div slot="links">
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         {faviconUrl ? <link rel="icon" type="image/svg+xml" href={faviconUrl} /> : null}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,7 +30,7 @@ const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toStri
           rel="stylesheet"
         />
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
-      </Fragment>
+      </div>
 
       <MetaTags slot="meta" meta={meta} />
     </HeadTags>
