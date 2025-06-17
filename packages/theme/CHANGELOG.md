@@ -1,3 +1,7 @@
+## [1.5.2](https://github.com/stackblitz/tutorialkit/compare/1.5.0...1.5.2) "@tutorialkit/theme" (2025-06-17)
+
+
+
 ## [1.5.1](https://github.com/stackblitz/tutorialkit/compare/1.5.0...1.5.1) "@tutorialkit/theme" (2025-06-17)
 
 
