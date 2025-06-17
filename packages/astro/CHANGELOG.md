@@ -1,3 +1,12 @@
+## [1.5.1](https://github.com/stackblitz/tutorialkit/compare/1.5.0...1.5.1) "@tutorialkit/astro" (2025-06-17)
+
+
+### Bug Fixes
+
+* use `meta.title` as default `<title>` ([#454](https://github.com/stackblitz/tutorialkit/issues/454)) ([482b0e3](https://github.com/stackblitz/tutorialkit/commit/482b0e3069a1177562dff44917e30e494769ace7))
+
+
+
 # [1.5.0](https://github.com/stackblitz/tutorialkit/compare/1.4.0...1.5.0) "@tutorialkit/astro" (2025-04-16)
 
 
