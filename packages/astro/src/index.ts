@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import type { AstroConfig, AstroIntegration } from 'astro';
-import type { ExpressiveCodePlugin } from 'astro-expressive-code';
+import type { ExpressiveCodePlugin, ThemeObjectOrShikiThemeName } from 'astro-expressive-code';
 import { extraIntegrations } from './integrations.js';
 import { updateMarkdownConfig } from './remark/index.js';
 import { tutorialkitCore } from './vite-plugins/core.js';
@@ -67,6 +67,15 @@ export interface Options {
    * @default []
    */
   expressiveCodePlugins?: ExpressiveCodePlugin[];
+
+  /**
+   * Themes for expressive code.
+   * Make sure to provide a light and a dark theme if you want support for both light and dark modes.
+   * Default values are ['light-plus', 'dark-plus']
+   *
+   * @default ['light-plus', 'dark-plus']
+   */
+  themes?: [ThemeObjectOrShikiThemeName, ThemeObjectOrShikiThemeName];
 }
 
 export default function createPlugin({
@@ -75,6 +84,7 @@ export default function createPlugin({
   isolation,
   enterprise,
   expressiveCodePlugins = [],
+  themes,
 }: Options = {}): AstroIntegration {
   const webcontainerFiles = new WebContainerFiles();
 
@@ -149,7 +159,7 @@ export default function createPlugin({
         config.integrations.splice(
           selfIndex + 1,
           0,
-          ...extraIntegrations({ root: fileURLToPath(config.root), expressiveCodePlugins }),
+          ...extraIntegrations({ root: fileURLToPath(config.root), expressiveCodePlugins, themes }),
         );
       },
       'astro:config:done'({ config }) {
