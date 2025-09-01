@@ -34,7 +34,7 @@ async function onClick() {
   const link = document.createElement('a');
   link.style.display = 'none';
   link.download = filename;
-  link.href = URL.createObjectURL(new Blob([data], { type: 'application/zip' }));
+  link.href = URL.createObjectURL(new Blob([data] as any, { type: 'application/zip' }));
 
   document.body.appendChild(link);
   link.click();
