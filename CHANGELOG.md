@@ -1,3 +1,12 @@
+# [1.6.0](https://github.com/stackblitz/tutorialkit/compare/1.5.2...1.6.0) (2025-09-01)
+
+
+### Features
+
+* **astro:** add `expressiveCodeThemes` option ([#461](https://github.com/stackblitz/tutorialkit/issues/461)) ([1fd2b53](https://github.com/stackblitz/tutorialkit/commit/1fd2b53ab083d063f30c0cc4f86037644e085347))
+
+
+
 ## [1.5.2](https://github.com/stackblitz/tutorialkit/compare/1.5.0...1.5.2) (2025-06-17)
 
 
