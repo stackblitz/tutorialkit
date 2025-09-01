@@ -13,18 +13,22 @@ afterAll(async () => {
   await fs.rm(tmp, { force: true, recursive: true });
 });
 
-test('getInlineContentForPackage finds files from @tutorialkit/astro', async () => {
-  await execa(
-    'node',
-    [cli, 'create', 'theme-test', '--install', '--no-git', '--no-start', '--package-manager', 'pnpm', '--defaults'],
-    { cwd: tmp },
-  );
+test(
+  'getInlineContentForPackage finds files from @tutorialkit/astro',
+  { timeout: process.env.CI ? 60_000 : 10_000 },
+  async () => {
+    await execa(
+      'node',
+      [cli, 'create', 'theme-test', '--install', '--no-git', '--no-start', '--package-manager', 'pnpm', '--defaults'],
+      { cwd: tmp },
+    );
 
-  const content = getInlineContentForPackage({
-    name: '@tutorialkit/astro',
-    pattern: '/dist/default/**/*.astro',
-    root: `${tmp}/theme-test`,
-  });
+    const content = getInlineContentForPackage({
+      name: '@tutorialkit/astro',
+      pattern: '/dist/default/**/*.astro',
+      root: `${tmp}/theme-test`,
+    });
 
-  expect(content.length).toBeGreaterThan(0);
-});
+    expect(content.length).toBeGreaterThan(0);
+  },
+);
