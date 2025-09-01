@@ -1,6 +1,6 @@
 {
   "name": "@tutorialkit/astro",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "TutorialKit integration for Astro (https://astro.build)",
   "author": "StackBlitz Inc.",
   "type": "module",
