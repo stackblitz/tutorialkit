@@ -529,3 +529,19 @@ See [Overriding Components](/guides/overriding-components/) for details of all t
 
 Controls whether the tutorial routes are automatically added to your project. When set to `true`, it additionally adds a redirect from `/` to the first tutorial.
 Use `"tutorial-only"` to only add the tutorial routes without the redirect.
+
+### `expressiveCodeThemes`
+
+**type**: `[ThemeObjectOrShikiThemeName, ThemeObjectOrShikiThemeName]`<br/>
+**default**: `['light-plus', 'dark-plus']`
+
+Controls which themes are applied to [Expressive Code](https://expressive-code.com/).
+
+```ts
+tutorialkit({
+  expressiveCodeThemes: ['catppuccin-latte', 'catppuccin-mocha'],
+});
+```
+
+Make sure to provide a light and a dark theme if you want support for both light and dark modes.
+See the [themes](https://expressive-code.com/guides/themes/) section of Expressive Code to learn more.

@@ -4,21 +4,28 @@ import react from '@astrojs/react';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers';
 import { getInlineContentForPackage } from '@tutorialkit/theme';
-import expressiveCode, { type ExpressiveCodePlugin } from 'astro-expressive-code';
+import expressiveCode, { type ExpressiveCodePlugin, type ThemeObjectOrShikiThemeName } from 'astro-expressive-code';
 import UnoCSS from 'unocss/astro';
 
 export function extraIntegrations({
   root,
   expressiveCodePlugins = [],
+  expressiveCodeThemes = ['light-plus', 'dark-plus'],
 }: {
   root: string;
   expressiveCodePlugins?: ExpressiveCodePlugin[];
+
+  /**
+   * Themes for Expressive Code.
+   * Takes a tuple of themes, e.g. `[lightTheme, darkTheme]`.
+   */
+  expressiveCodeThemes?: [ThemeObjectOrShikiThemeName, ThemeObjectOrShikiThemeName];
 }) {
   return [
     react(),
     expressiveCode({
       plugins: [pluginCollapsibleSections(), pluginLineNumbers(), ...expressiveCodePlugins],
-      themes: ['dark-plus', 'light-plus'],
+      themes: expressiveCodeThemes,
       customizeTheme: (theme) => {
         const isDark = theme.type === 'dark';
 
@@ -35,13 +42,7 @@ export function extraIntegrations({
         };
       },
       themeCssSelector: (theme) => {
-        let customThemeName = 'light';
-
-        if (theme.name === 'dark-plus') {
-          customThemeName = 'dark';
-        }
-
-        return `[data-theme='${customThemeName}']`;
+        return `[data-theme='${theme.type}']`;
       },
       defaultProps: {
         showLineNumbers: false,
