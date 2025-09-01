@@ -10,7 +10,7 @@ import UnoCSS from 'unocss/astro';
 export function extraIntegrations({
   root,
   expressiveCodePlugins = [],
-  themes = ['light-plus', 'dark-plus'],
+  expressiveCodeThemes = ['light-plus', 'dark-plus'],
 }: {
   root: string;
   expressiveCodePlugins?: ExpressiveCodePlugin[];
@@ -19,13 +19,13 @@ export function extraIntegrations({
    * Themes for Expressive Code.
    * Takes a tuple of themes, e.g. `[lightTheme, darkTheme]`.
    */
-  themes?: [ThemeObjectOrShikiThemeName, ThemeObjectOrShikiThemeName];
+  expressiveCodeThemes?: [ThemeObjectOrShikiThemeName, ThemeObjectOrShikiThemeName];
 }) {
   return [
     react(),
     expressiveCode({
       plugins: [pluginCollapsibleSections(), pluginLineNumbers(), ...expressiveCodePlugins],
-      themes,
+      themes: expressiveCodeThemes,
       customizeTheme: (theme) => {
         const isDark = theme.type === 'dark';
 

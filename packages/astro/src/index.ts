@@ -75,7 +75,7 @@ export interface Options {
    *
    * @default ['light-plus', 'dark-plus']
    */
-  themes?: [ThemeObjectOrShikiThemeName, ThemeObjectOrShikiThemeName];
+  expressiveCodeThemes?: [ThemeObjectOrShikiThemeName, ThemeObjectOrShikiThemeName];
 }
 
 export default function createPlugin({
@@ -84,7 +84,7 @@ export default function createPlugin({
   isolation,
   enterprise,
   expressiveCodePlugins = [],
-  themes,
+  expressiveCodeThemes,
 }: Options = {}): AstroIntegration {
   const webcontainerFiles = new WebContainerFiles();
 
@@ -159,7 +159,7 @@ export default function createPlugin({
         config.integrations.splice(
           selfIndex + 1,
           0,
-          ...extraIntegrations({ root: fileURLToPath(config.root), expressiveCodePlugins, themes }),
+          ...extraIntegrations({ root: fileURLToPath(config.root), expressiveCodePlugins, expressiveCodeThemes }),
         );
       },
       'astro:config:done'({ config }) {
