@@ -1,7 +1,7 @@
-import * as fastGlob from 'fast-glob';
 import fs from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { basename, dirname, resolve } from 'node:path';
+import * as fastGlob from 'fast-glob';
 import { mergeConfigs, presetIcons, presetWind4, transformerDirectives, type UserConfig } from 'unocss';
 
 import { theme } from './theme.js';
