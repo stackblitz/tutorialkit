@@ -3,7 +3,7 @@ import { readdirSync, readFileSync, rmSync } from 'node:fs';
 import type { Readable } from 'node:stream';
 import { test, expect } from '@playwright/test';
 import * as unzipper from 'unzipper';
-import { theme } from '../../packages/theme/src/theme';
+import { theme } from '../../packages/theme/src/theme.js';
 
 test('user can change theme', async ({ page }) => {
   await page.goto('/');
@@ -13,12 +13,43 @@ test('user can change theme', async ({ page }) => {
 
   // default light theme
   await expect(html).toHaveAttribute('data-theme', 'light');
-  await expect(heading).toHaveCSS('color', hexToRGB(theme.colors.gray[800]));
+
+  /**
+   * Normalize both the expected token and the computed style to canonical rgba(...) to
+   * avoid mismatches caused by different color-space serializations (oklab vs rgb)
+   */
+  const normalizeColor = (cssColor: string) =>
+    page.evaluate((c: string) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1;
+      canvas.height = 1;
+
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) {
+        return c;
+      }
+
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = c;
+      ctx.fillRect(0, 0, 1, 1);
+
+      const d = ctx.getImageData(0, 0, 1, 1).data;
+
+      return 'rgba(' + d[0] + ', ' + d[1] + ', ' + d[2] + ', ' + d[3] / 255 + ')';
+    }, cssColor);
+
+  const expectedLight = await normalizeColor(hexToRGB(theme.colors.gray[800]));
+  const observedLightRgba = await normalizeColor(await heading.evaluate((el) => getComputedStyle(el).color));
+  expect(observedLightRgba).toBe(expectedLight);
 
   await page.getByRole('navigation').getByRole('button', { name: 'Toggle Theme' }).click();
 
   await expect(html).toHaveAttribute('data-theme', 'dark');
-  await expect(heading).toHaveCSS('color', hexToRGB(theme.colors.gray[200]));
+
+  const expectedDark = await normalizeColor(hexToRGB(theme.colors.gray[200]));
+  const observedDarkRgba = await normalizeColor(await heading.evaluate((el) => getComputedStyle(el).color));
+  expect(observedDarkRgba).toBe(expectedDark);
 });
 
 test('user can download project as zip', async ({ page }) => {
