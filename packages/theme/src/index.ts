@@ -1,8 +1,8 @@
+import * as fastGlob from 'fast-glob';
 import fs from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { basename, dirname, resolve } from 'node:path';
-import * as fastGlob from 'fast-glob';
-import { mergeConfigs, presetIcons, presetUno, transformerDirectives, type UserConfig } from 'unocss';
+import { mergeConfigs, presetIcons, presetWind4, transformerDirectives, type UserConfig } from 'unocss';
 
 import { theme } from './theme.js';
 import { transitionTheme } from './transition-theme.js';
@@ -26,7 +26,7 @@ export function defineConfig(config: UserConfig) {
         }),
       },
       presets: [
-        presetUno({
+        presetWind4({
           dark: {
             dark: '[data-theme="dark"]',
           },
@@ -34,8 +34,8 @@ export function defineConfig(config: UserConfig) {
         presetIcons({
           collections: {
             ...readCustomIcons(),
-            ph: () => import('@iconify-json/ph').then((i) => i.icons),
-            'svg-spinners': () => import('@iconify-json/svg-spinners').then((i) => i.icons),
+            ph: () => loadIconifyCollection('ph'),
+            'svg-spinners': () => loadIconifyCollection('svg-spinners'),
           },
         }),
       ],
@@ -87,3 +87,51 @@ const shortcuts: UserConfig['shortcuts'] = {
   'panel-button':
     'flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm transition-theme bg-tk-elements-panel-headerButton-backgroundColor hover:bg-tk-elements-panel-headerButton-backgroundColorHover text-tk-elements-panel-headerButton-textColor hover:text-tk-elements-panel-headerButton-textColorHover',
 };
+
+async function loadIconifyCollection(name: string) {
+  // Try to require the package (works for CJS or when package exposes a CJS entry)
+  try {
+    // use createRequire to ensure resolution from the package context
+
+    const pkg = require(`@iconify-json/${name}`);
+
+    if (pkg && pkg.icons) {
+      return pkg.icons;
+    }
+  } catch {
+    // fallthrough to fs-based resolution
+  }
+
+  // Fall back: resolve package root and try to find a JSON file with icons
+  try {
+    const pkgJsonPath = require.resolve(`@iconify-json/${name}/package.json`, { paths: [process.cwd()] });
+    const pkgRoot = dirname(pkgJsonPath);
+
+    // Common icon file names
+    const candidates = ['icons.json', 'index.json', 'icons/index.json'];
+
+    for (const cand of candidates) {
+      try {
+        const full = resolve(pkgRoot, cand);
+        const text = await fs.readFile(full, 'utf8');
+        const parsed = JSON.parse(text);
+
+        if (parsed && parsed.icons) {
+          return parsed.icons;
+        }
+
+        // sometimes the package itself *is* the icons object
+        if (parsed && Object.keys(parsed).length) {
+          return parsed;
+        }
+      } catch {
+        // try next candidate
+      }
+    }
+  } catch {
+    // give up
+  }
+
+  // Last resort: return an empty collection to avoid throwing at build-time
+  return {};
+}
