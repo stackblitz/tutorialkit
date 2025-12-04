@@ -200,6 +200,9 @@ export class TerminalPanel implements ITerminal {
   }
 }
 
+// set the default commands for the terminal
+const DEFAULT_COMMANDS = ['ls', 'echo'];
+
 /**
  * Normalize the provided configuration to a configuration which is easier to parse.
  *
@@ -232,6 +235,18 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
 
   const panels: TerminalPanel[] = [];
 
+  const resolveAllowCommands = (globalCommands?: string[], panelCommands?: string[]): string[] | undefined => {
+    if (panelCommands === undefined) {
+      return globalCommands ?? DEFAULT_COMMANDS;
+    }
+
+    if (Array.isArray(panelCommands) && panelCommands.length === 0) {
+      return undefined;
+    }
+
+    return panelCommands;
+  };
+
   const options = {
     allowRedirects: config.allowRedirects,
     allowCommands: config.allowCommands,
@@ -258,7 +273,7 @@ function normalizeTerminalConfig(config?: TerminalSchema): NormalizedTerminalCon
             id: panel.id,
             title: panel.title,
             allowRedirects: panel.allowRedirects ?? config.allowRedirects,
-            allowCommands: panel.allowCommands ?? config.allowCommands,
+            allowCommands: resolveAllowCommands(config.allowCommands, panel.allowCommands),
           });
         }
 
