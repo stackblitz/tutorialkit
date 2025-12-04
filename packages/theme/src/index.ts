@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { basename, dirname, resolve } from 'node:path';
 import * as fastGlob from 'fast-glob';
-import { mergeConfigs, presetIcons, presetUno, transformerDirectives, type UserConfig } from 'unocss';
+import { mergeConfigs, presetIcons, presetWind4, transformerDirectives, type UserConfig } from 'unocss';
 
 import { theme } from './theme.js';
 import { transitionTheme } from './transition-theme.js';
@@ -26,7 +26,7 @@ export function defineConfig(config: UserConfig) {
         }),
       },
       presets: [
-        presetUno({
+        presetWind4({
           dark: {
             dark: '[data-theme="dark"]',
           },

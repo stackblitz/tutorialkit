@@ -106,9 +106,9 @@ export function remarkCalloutsPlugin() {
           const hideIcon = attributes.hideIcon === 'true';
 
           const classes = [
-            `callout callout-${variant} my-4 flex flex-col p-3 bg-tk-elements-markdown-callouts-backgroundColor text-tk-elements-markdown-callouts-textColor`,
+            `callout callout-${variant} my-4 flex flex-col p-3 bg-[var(--tk-elements-markdown-callouts-backgroundColor)] text-[var(--tk-elements-markdown-callouts-textColor)]`,
             attributes.class ?? '',
-            ...(noBorder ? [] : ['border-l-3', 'border-tk-elements-markdown-callouts-borderColor']),
+            ...(noBorder ? [] : ['border-l-3', 'border-[var(--tk-elements-markdown-callouts-borderColor)]']),
           ];
 
           node.attributes = {
@@ -139,7 +139,7 @@ function generate(title: string, children: any[], callout: Callout, hideIcon: bo
             data: {
               hName: 'div',
               hProperties: {
-                className: 'w-full flex gap-2 items-center text-tk-elements-markdown-callouts-titleTextColor',
+                className: 'w-full flex gap-2 items-center text-[var(--tk-elements-markdown-callouts-titleTextColor)]',
                 ariaHidden: true,
               },
             },
@@ -149,7 +149,7 @@ function generate(title: string, children: any[], callout: Callout, hideIcon: bo
                 : ([
                     {
                       type: 'html',
-                      value: `<span class="text-6 inline-block text-tk-elements-markdown-callouts-iconColor ${callout.icon}"></span>`,
+                      value: `<span class="text-6 inline-block text-[var(--tk-elements-markdown-callouts-iconColor)] ${callout.icon}"></span>`,
                     },
                   ] satisfies Children)),
               {
