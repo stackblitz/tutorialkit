@@ -11,7 +11,7 @@ This allows you to apply common styling and functional rules to the entire set o
 
 The current forms includes 6 inputs and we will want each pair to be visually and logically grouped together.
 
-Create **3 fieldsets** by wrapping them around the markup responsible for displaing the form fields:
+Create **3 fieldsets** by wrapping them around the markup responsible for displaying the form fields:
 
 ```html add={1,10}
   <fieldset>
